@@ -37,7 +37,6 @@ test.describe('Admin — smoke tests', () => {
     async ({ page }) => {
       const adminEmail = process.env.E2E_ADMIN_EMAIL
       const adminPassword = process.env.E2E_ADMIN_PASSWORD
-      test.skip(!adminEmail || !adminPassword, 'E2E_ADMIN_EMAIL / E2E_ADMIN_PASSWORD not set')
 
       await page.goto('/auth/login')
       await page.getByLabel(/email/i).fill(adminEmail!)
