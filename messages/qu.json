@@ -40,5 +40,34 @@
     "passwordTooShort": "Password must be at least 8 characters",
     "slugTaken": "This username is already taken",
     "slugInvalid": "Only letters, numbers, and hyphens"
+  },
+  "content": {
+    "readTime": "{minutes} min read",
+    "likes": "{count} likes",
+    "publishedOn": "Published {date}",
+    "by": "by",
+    "noResults": "No results found.",
+    "loadMore": "Load more",
+    "episode": "Episode",
+    "duration": "Duration",
+    "price": "Price",
+    "students": "students",
+    "rating": "Rating",
+    "freeLabel": "Free"
+  },
+  "search": {
+    "placeholder": "Search articles, videos, podcasts...",
+    "results": "{count} results for \"{query}\"",
+    "noResults": "No results for \"{query}\"",
+    "filterAll": "All",
+    "filterArticles": "Articles",
+    "filterVideos": "Videos",
+    "filterPodcasts": "Podcasts",
+    "filterPills": "Pills",
+    "filterCourses": "Courses"
+  },
+  "tag": {
+    "heading": "#{tag}",
+    "contentCount": "{count} pieces of content"
   }
 }
