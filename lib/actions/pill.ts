@@ -66,11 +66,15 @@ export async function updatePill(id: string, formData: FormData) {
   const accentColor = (formData.get('accent_color') as string)?.trim() || '#C45D3A'
   const imageUrl = (formData.get('image_url') as string)?.trim() || null
 
-  await (supabase as any)
+  const { data: owned } = await (supabase as any)
     .from('content')
     .update({ cover_image_url: imageUrl, updated_at: new Date().toISOString() })
     .eq('id', id)
     .eq('author_id', user.id)
+    .select('id')
+    .single()
+
+  if (!owned) return
 
   await (supabase as any)
     .from('content_translations')

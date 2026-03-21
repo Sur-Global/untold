@@ -8,7 +8,11 @@ import { getNavProps } from '@/lib/nav'
 import { Link } from '@/i18n/navigation'
 import { EditCourseForm } from './EditCourseForm'
 
-export default async function EditCoursePage({ params }: { params: Promise<{ id: string }> }) {
+interface EditCoursePageProps {
+  params: Promise<{ locale: string; id: string }>
+}
+
+export default async function EditCoursePage({ params }: EditCoursePageProps) {
   const { id } = await params
   const { user } = await requireCreator()
   const supabase = await createClient()

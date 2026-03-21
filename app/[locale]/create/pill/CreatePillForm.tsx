@@ -50,7 +50,7 @@ export function CreatePillForm() {
       </div>
 
       <div className="space-y-2">
-        <Label>Body *</Label>
+        <Label>Body</Label>
         <RichTextEditor
           value={body}
           onChange={setBody}

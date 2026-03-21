@@ -73,11 +73,15 @@ export async function updatePodcast(id: string, formData: FormData) {
   const duration = (formData.get('duration') as string)?.trim() || null
   const episodeNumber = (formData.get('episode_number') as string)?.trim() || null
 
-  await (supabase as any)
+  const { data: owned } = await (supabase as any)
     .from('content')
     .update({ cover_image_url: coverImageUrl, updated_at: new Date().toISOString() })
     .eq('id', id)
     .eq('author_id', user.id)
+    .select('id')
+    .single()
+
+  if (!owned) return
 
   await (supabase as any)
     .from('content_translations')

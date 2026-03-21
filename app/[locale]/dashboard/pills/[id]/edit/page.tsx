@@ -8,7 +8,11 @@ import { getNavProps } from '@/lib/nav'
 import { Link } from '@/i18n/navigation'
 import { EditPillForm } from './EditPillForm'
 
-export default async function EditPillPage({ params }: { params: Promise<{ id: string }> }) {
+interface EditPillPageProps {
+  params: Promise<{ locale: string; id: string }>
+}
+
+export default async function EditPillPage({ params }: EditPillPageProps) {
   const { id } = await params
   const { user } = await requireCreator()
   const supabase = await createClient()
