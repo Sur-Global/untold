@@ -70,7 +70,26 @@
     "heading": "#{tag}",
     "contentCount": "{count} pieces of content"
   },
+  "create": {
+    "pickType": "What are you creating?",
+    "article": "Article",
+    "articleDesc": "Written piece with rich text",
+    "video": "Video",
+    "videoDesc": "Embedded video with description",
+    "podcast": "Podcast",
+    "podcastDesc": "Audio episode with show notes",
+    "pill": "Knowledge Pill",
+    "pillDesc": "Bite-sized knowledge in a colorful card",
+    "course": "Course",
+    "courseDesc": "Structured curriculum with pricing"
+  },
   "dashboard": {
+    "myContent": "My Content",
+    "newContent": "Create",
+    "noContent": "You haven't created anything yet.",
+    "deleteContent": "Delete",
+    "editContent": "Edit",
+    "deleteContentConfirm": "Delete this item? This cannot be undone.",
     "myArticles": "My Articles",
     "newArticle": "New Article",
     "draft": "Draft",
@@ -86,11 +105,27 @@
     "saveAsDraft": "Save as draft"
   },
   "editor": {
-    "titlePlaceholder": "Article title",
+    "titlePlaceholder": "Title",
     "excerptPlaceholder": "Short summary shown in listings (optional)",
     "coverImagePlaceholder": "Cover image URL (optional)",
-    "bodyPlaceholder": "Start writing your article…",
+    "bodyPlaceholder": "Start writing…",
     "newArticle": "New article",
-    "backToDashboard": "← Dashboard"
+    "newVideo": "New video",
+    "newPodcast": "New podcast",
+    "newPill": "New knowledge pill",
+    "newCourse": "New course",
+    "backToDashboard": "← Dashboard",
+    "backToCreate": "← Create",
+    "embedUrlLabel": "Embed URL",
+    "embedUrlPlaceholder": "YouTube, Spotify, etc.",
+    "thumbnailUrlPlaceholder": "Thumbnail URL (optional)",
+    "durationPlaceholder": "Duration (e.g. 45:00)",
+    "episodeNumberPlaceholder": "Episode number (optional)",
+    "accentColorLabel": "Accent color",
+    "imageUrlPlaceholder": "Image URL (optional)",
+    "priceLabel": "Price",
+    "pricePlaceholder": "0.00",
+    "currencyLabel": "Currency",
+    "descriptionPlaceholder": "Description (optional)"
   }
 }
