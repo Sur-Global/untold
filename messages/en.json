@@ -69,5 +69,26 @@
   "tag": {
     "heading": "#{tag}",
     "contentCount": "{count} pieces of content"
+  },
+  "dashboard": {
+    "myArticles": "My Articles",
+    "newArticle": "New Article",
+    "draft": "Draft",
+    "published": "Published",
+    "editArticle": "Edit article",
+    "deleteArticle": "Delete article",
+    "deleteConfirm": "Delete this article? This cannot be undone.",
+    "noArticles": "You haven't written anything yet.",
+    "publish": "Publish",
+    "unpublish": "Unpublish",
+    "saveChanges": "Save changes",
+    "saving": "Saving…"
+  },
+  "editor": {
+    "titlePlaceholder": "Article title",
+    "excerptPlaceholder": "Short summary shown in listings (optional)",
+    "coverImagePlaceholder": "Cover image URL (optional)",
+    "bodyPlaceholder": "Start writing your article…",
+    "backToDashboard": "← Dashboard"
   }
 }
