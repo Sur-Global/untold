@@ -33,13 +33,15 @@ export async function createArticle(formData: FormData) {
 
   if (error || !content) throw new Error(error?.message ?? 'Failed to create article')
 
-  await (supabase as any).from('content_translations').insert({
+  const { error: translationError } = await (supabase as any).from('content_translations').insert({
     content_id: content.id,
     locale: 'en',
     title,
     excerpt,
     body: body ? JSON.parse(body) : null,
   })
+
+  if (translationError) throw new Error(translationError.message ?? 'Failed to save article content')
 
   revalidatePath('/dashboard/articles')
   redirect(`/dashboard/articles/${content.id}/edit`)
