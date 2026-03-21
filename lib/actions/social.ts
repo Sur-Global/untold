@@ -27,7 +27,10 @@ export async function toggleLike(contentId: string) {
       .insert({ user_id: user.id, content_id: contentId })
   }
 
-  revalidatePath('/', 'layout')
+  // Revalidate the specific content page (fetch slug+type to build path)
+  const { data: item } = await (supabase as any)
+    .from('content').select('type, slug').eq('id', contentId).single()
+  if (item) revalidatePath(`/${item.type}s/${item.slug}`)
 }
 
 export async function toggleBookmark(contentId: string) {
@@ -53,7 +56,7 @@ export async function toggleBookmark(contentId: string) {
       .insert({ user_id: user.id, content_id: contentId })
   }
 
-  revalidatePath('/', 'layout')
+  revalidatePath('/dashboard/bookmarks')
 }
 
 export async function toggleFollow(profileId: string) {
@@ -79,5 +82,8 @@ export async function toggleFollow(profileId: string) {
       .insert({ follower_id: user.id, following_id: profileId })
   }
 
-  revalidatePath('/', 'layout')
+  // Revalidate the specific author profile page
+  const { data: profile } = await (supabase as any)
+    .from('profiles').select('slug').eq('id', profileId).single()
+  if (profile) revalidatePath(`/author/${profile.slug}`)
 }
