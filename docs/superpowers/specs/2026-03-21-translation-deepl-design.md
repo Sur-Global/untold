@@ -6,9 +6,11 @@
 
 ## Overview
 
-Auto-translate all published content into 5 locales (es, pt, fr, de, da) using the DeepL API. Translations fire on publish (and re-publish after edits) as a fire-and-forget background call. An admin translations dashboard at `/admin/translations` shows per-locale status for all published content and allows manual retry of missing or failed translations.
+Auto-translate all published content into 5 locales (es, pt, fr, de, da) using the DeepL API. Translations fire on publish (and re-publish after edits) as a deferred background call. An admin translations dashboard at `/admin/translations` shows per-locale status for all published content and allows manual retry of missing or failed translations.
 
 Quechua (`qu`) is excluded from this plan entirely.
+
+**v1 constraint:** The pipeline always translates FROM the `en` row, regardless of `content.source_locale`. If an author wrote in a non-English locale, they must also provide an English translation manually. This simplification is intentional for v1.
 
 ---
 
@@ -31,20 +33,57 @@ Constant `SUPPORTED_LOCALES = ['es', 'pt', 'fr', 'de', 'da']` defined in `lib/de
 
 ### Translation Pipeline
 
-**Trigger:** Each publish server action calls `fetch('/api/translate', { method: 'POST', body: JSON.stringify({ contentId }) })` without `await` — fire and forget. On re-publish, existing auto-translations are overwritten.
+**Trigger:** Each publish server action uses Next.js 15's `after()` API to defer the translation call until after the response is sent:
+
+```ts
+import { after } from 'next/server'
+
+// Inside publishArticle (and all other publish actions):
+after(async () => {
+  await fetch(`${process.env.NEXT_PUBLIC_SITE_URL}/api/translate`, {
+    method: 'POST',
+    headers: {
+      'content-type': 'application/json',
+      'x-translate-secret': process.env.TRANSLATE_API_SECRET!,
+    },
+    body: JSON.stringify({ contentId: id }),
+  })
+})
+```
+
+`after()` runs after the response is committed. Vercel keeps the serverless function alive until it completes. This is reliable fire-and-forget on Vercel.
+
+On re-publish, existing **auto-translated** rows are overwritten. **Manually edited rows (`is_auto_translated = false`) are never overwritten** — the pipeline skips any locale that already has a manually-authored translation.
 
 **API route:** `app/api/translate/route.ts`
 - Accepts `POST { contentId: string, locale?: string }`
-- Validates `x-translate-secret` header against `TRANSLATE_API_SECRET` env var
-- Uses Supabase service role client to bypass RLS
+- Validates `x-translate-secret` header against `TRANSLATE_API_SECRET` env var — returns 401 if missing or wrong
+- Returns 400 if `contentId` is missing
+- Uses a service role Supabase client (see below) to bypass RLS
 - Fetches the `en` row from `content_translations` plus `content.type`
 - For each target locale (all 5 if `locale` omitted, one if specified):
+  - **Skips if an existing row has `is_auto_translated = false`** (manually authored — do not overwrite)
   - Translates applicable fields via `lib/deepl.ts`
   - Upserts into `content_translations` with `is_auto_translated = true`
 - Errors per locale are logged and skipped — partial success is fine
 - Returns `{ ok: true, translated: string[] }` (locale list that succeeded)
 
-**Security:** `TRANSLATE_API_SECRET` env var. The publish server actions include it as `x-translate-secret`. Requests without the header return 401.
+### Service role client — `lib/supabase/service-role.ts`
+
+New file. The anon-key client in `lib/supabase/server.ts` is insufficient for server-side operations that must bypass RLS. This file exports a service role client for use in API routes only.
+
+```ts
+import { createClient } from '@supabase/supabase-js'
+
+export function createServiceRoleClient() {
+  return createClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.SUPABASE_SERVICE_ROLE_KEY!,
+  )
+}
+```
+
+**Important:** Never import this from client components. Use only in API routes and server-only modules.
 
 ### DeepL wrapper — `lib/deepl.ts`
 
@@ -59,6 +98,15 @@ const DEEPL_LANG_MAP: Record<SupportedLocale, string> = {
   es: 'ES', pt: 'PT', fr: 'FR', de: 'DE', da: 'DA',
 }
 
+// DeepL endpoint auto-detected from API key:
+// keys ending in ':fx' use the free tier (api-free.deepl.com)
+// all others use the Pro tier (api.deepl.com)
+function getDeepLBaseUrl(apiKey: string): string {
+  return apiKey.endsWith(':fx')
+    ? 'https://api-free.deepl.com/v2'
+    : 'https://api.deepl.com/v2'
+}
+
 // Translates an array of strings in one DeepL API call.
 // Returns translated strings in the same order.
 export async function translateTexts(
@@ -67,7 +115,6 @@ export async function translateTexts(
 ): Promise<string[]>
 ```
 
-- Uses `https://api-free.deepl.com/v2/translate` (free tier) — switch to `api.deepl.com` for Pro
 - Single API call per locale (all fields batched as array)
 - Throws on non-2xx response
 
@@ -104,9 +151,7 @@ export function injectTextNodes(doc: TiptapDoc, translations: string[], paths: P
 
 ### Route: `/admin/translations`
 
-Server component. Requires admin role.
-
-Fetches all published content joined with their `content_translations` rows. Renders a table:
+Server component. Requires admin role. Fetches the 50 most recently published content items (ordered by `published_at DESC`) joined with their `content_translations` rows. Renders a table:
 
 | Column | Content |
 |---|---|
@@ -123,10 +168,18 @@ Fetches all published content joined with their `content_translations` rows. Ren
 
 **`components/admin/TranslateButton.tsx`** (`'use client'`)
 - Props: `contentId: string`, `locale: string`
-- On click: calls `POST /api/translate` with `{ contentId, locale }`
+- On click: calls the `retranslate` Server Action (see below)
 - Shows loading spinner during call
 - Calls `router.refresh()` on success to re-fetch server component data
-- Shows error toast on failure
+- Shows error message inline on failure
+
+**`lib/actions/translate.ts`** (new Server Action)
+- `retranslate(contentId, locale)` — server action callable from `TranslateButton`
+- Calls `fetch('/api/translate', { ..., headers: { 'x-translate-secret': process.env.TRANSLATE_API_SECRET! } })` with the secret
+- The secret is a server-only env var; it never reaches the client this way
+- Throws on error so the client component can catch and display it
+
+This pattern keeps the secret server-side while allowing a client component to trigger translation.
 
 ### Auth guard — `lib/require-admin.ts`
 
@@ -135,7 +188,7 @@ export async function requireAdmin() {
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) redirect('/auth/login')
-  const { data: profile } = await supabase
+  const { data: profile } = await (supabase as any)
     .from('profiles').select('role').eq('id', user.id).single()
   if (profile?.role !== 'admin') redirect('/')
   return { user }
@@ -148,6 +201,19 @@ Minimal layout: simple "Admin" header. Plan 7 (Admin Dashboard) will replace thi
 
 ---
 
+## Publish Actions
+
+Only `publishArticle` exists in `lib/actions/article.ts`. The other content types need publish actions created:
+
+- `publishVideo(id)` in `lib/actions/video.ts`
+- `publishPodcast(id)` in `lib/actions/podcast.ts`
+- `publishPill(id)` in `lib/actions/pill.ts`
+- `publishCourse(id)` in `lib/actions/course.ts` (admin only)
+
+Each follows the same pattern as `publishArticle`: update `content.status = 'published'`, set `published_at`, then use `after()` to fire the translate call.
+
+---
+
 ## Error Handling
 
 - DeepL errors per locale: logged to console, skipped — other locales continue
@@ -155,18 +221,19 @@ Minimal layout: simple "Admin" header. Plan 7 (Admin Dashboard) will replace thi
 - Failed translations show as ✗ in admin UI — retry available via "Translate" button
 - API route returns 401 if `x-translate-secret` header is missing or wrong
 - API route returns 400 if `contentId` is missing
+- `retranslate` Server Action throws on non-ok response so `TranslateButton` can display the error
 
 ---
 
 ## Environment Variables
 
 ```
-DEEPL_API_KEY=           # DeepL free or Pro API key
-TRANSLATE_API_SECRET=    # Shared secret for /api/translate endpoint
+DEEPL_API_KEY=            # DeepL free (ends in :fx) or Pro API key
+TRANSLATE_API_SECRET=     # High-entropy secret (32+ chars) for /api/translate
 SUPABASE_SERVICE_ROLE_KEY=  # Already present
 ```
 
-Add `TRANSLATE_API_SECRET` to `.env.local.example`.
+`DEEPL_API_KEY` is already in `.env.local.example`. Add `TRANSLATE_API_SECRET` to `.env.local.example`.
 
 ---
 
@@ -177,6 +244,8 @@ Add `TRANSLATE_API_SECRET` to `.env.local.example`.
 lib/deepl.ts
 lib/tiptap-translate.ts
 lib/require-admin.ts
+lib/supabase/service-role.ts
+lib/actions/translate.ts
 app/api/translate/route.ts
 app/[locale]/admin/layout.tsx
 app/[locale]/admin/translations/page.tsx
@@ -189,11 +258,11 @@ tests/e2e/translations.spec.ts
 
 ### Modified files
 ```
-lib/actions/article.ts      — add fire-and-forget translate call in publishArticle
-lib/actions/video.ts        — add fire-and-forget translate call in publishVideo
-lib/actions/podcast.ts      — add fire-and-forget translate call in publishPodcast
-lib/actions/pill.ts         — add fire-and-forget translate call in publishPill
-lib/actions/course.ts       — add fire-and-forget translate call in publishCourse
+lib/actions/article.ts      — add after() translate call in publishArticle
+lib/actions/video.ts        — add publishVideo + after() translate call
+lib/actions/podcast.ts      — add publishPodcast + after() translate call
+lib/actions/pill.ts         — add publishPill + after() translate call
+lib/actions/course.ts       — add publishCourse + after() translate call
 .env.local.example          — add TRANSLATE_API_SECRET
 ```
 
@@ -212,17 +281,22 @@ lib/actions/course.ts       — add fire-and-forget translate call in publishCou
 
 **`tests/unit/lib/deepl.test.ts`**
 - Mocks `fetch`; verifies correct DeepL API call shape (URL, auth header, body)
+- Uses free-tier URL when API key ends in `:fx`
+- Uses Pro URL when API key does not end in `:fx`
 - Returns translated strings in correct order
 - Throws on non-2xx response
 
 **`tests/unit/app/api/translate.test.ts`**
-- Returns 401 with missing/wrong secret header
+- Returns 401 with missing secret header
+- Returns 401 with wrong secret header
 - Returns 400 with missing contentId
 - Correct field selection per content type (article vs video)
 - Upserts `is_auto_translated = true`
+- Skips locale where existing row has `is_auto_translated = false`
 
 ### E2E tests
 
 **`tests/e2e/translations.spec.ts`**
 - `/admin/translations` redirects to login when unauthenticated
-- Page renders without 500 (smoke test — no real DeepL call)
+- `/admin/translations` redirects to `/` when authenticated as non-admin user
+- Page renders without 500 for admin (smoke test — no real DeepL call)
