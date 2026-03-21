@@ -90,14 +90,21 @@ export async function publishArticle(id: string, _formData: FormData) {
   revalidatePath(`/dashboard/articles/${id}/edit`)
 
   after(async () => {
-    await fetch(`${process.env.NEXT_PUBLIC_SITE_URL}/api/translate`, {
-      method: 'POST',
-      headers: {
-        'content-type': 'application/json',
-        'x-translate-secret': process.env.TRANSLATE_API_SECRET!,
-      },
-      body: JSON.stringify({ contentId: id }),
-    })
+    try {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_SITE_URL}/api/translate`, {
+        method: 'POST',
+        headers: {
+          'content-type': 'application/json',
+          'x-translate-secret': process.env.TRANSLATE_API_SECRET!,
+        },
+        body: JSON.stringify({ contentId: id }),
+      })
+      if (!res.ok) {
+        console.error(`Translation trigger failed for ${id}: ${res.status}`)
+      }
+    } catch (err) {
+      console.error(`Translation trigger error for ${id}:`, err)
+    }
   })
 }
 
