@@ -20,7 +20,8 @@ export async function translateTexts(
   texts: string[],
   targetLocale: SupportedLocale,
 ): Promise<string[]> {
-  const apiKey = process.env.DEEPL_API_KEY!
+  const apiKey = process.env.DEEPL_API_KEY
+  if (!apiKey) throw new Error('DEEPL_API_KEY is not set')
   const url = `${getDeepLBaseUrl()}/translate`
 
   const res = await fetch(url, {
