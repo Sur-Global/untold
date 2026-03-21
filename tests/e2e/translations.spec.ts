@@ -33,19 +33,15 @@ test.describe('Admin translations — admin smoke test', () => {
     // environment variables, then visit /admin/translations and assert success.
     const adminEmail = process.env.E2E_ADMIN_EMAIL
     const adminPassword = process.env.E2E_ADMIN_PASSWORD
-
-    if (!adminEmail || !adminPassword) {
-      // No admin credentials available — skip.
-      return
-    }
+    test.skip(!adminEmail || !adminPassword, 'E2E_ADMIN_EMAIL / E2E_ADMIN_PASSWORD not set')
 
     await page.goto('/auth/login')
-    await page.getByLabel(/email/i).fill(adminEmail)
-    await page.getByLabel(/password/i).fill(adminPassword)
+    await page.getByLabel(/email/i).fill(adminEmail!)
+    await page.getByLabel(/password/i).fill(adminPassword!)
     await page.getByRole('button', { name: /log in/i }).click()
 
     // Wait for redirect away from login
-    await expect(page).not.toHaveURL(/auth\/login/)
+    await page.waitForURL((url) => !url.toString().includes('auth/login'))
 
     const response = await page.goto('/admin/translations')
     expect(response?.status()).not.toBe(500)
