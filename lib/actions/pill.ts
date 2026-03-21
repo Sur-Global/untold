@@ -1,0 +1,96 @@
+'use server'
+
+import { revalidatePath } from 'next/cache'
+import { redirect } from 'next/navigation'
+import { createClient } from '@/lib/supabase/server'
+import { requireCreator } from '@/lib/require-creator'
+import { slugify } from '@/lib/utils'
+
+export async function createPill(formData: FormData) {
+  const { user } = await requireCreator()
+  const supabase = await createClient()
+
+  const title = (formData.get('title') as string).trim()
+  const body = formData.get('body') as string | null
+  const accentColor = (formData.get('accent_color') as string)?.trim() || '#C45D3A'
+  const imageUrl = (formData.get('image_url') as string)?.trim() || null
+
+  const slug = `${slugify(title)}-${Date.now().toString(36)}`
+
+  const { data: content, error } = await (supabase as any)
+    .from('content')
+    .insert({
+      type: 'pill',
+      author_id: user.id,
+      slug,
+      source_locale: 'en',
+      status: 'draft',
+      cover_image_url: imageUrl,
+    })
+    .select('id')
+    .single()
+
+  if (error || !content) throw new Error(error?.message ?? 'Failed to create pill')
+
+  const { error: translationError } = await (supabase as any)
+    .from('content_translations')
+    .insert({
+      content_id: content.id,
+      locale: 'en',
+      title,
+      body: body ? (() => { try { return JSON.parse(body) } catch { return null } })() : null,
+    })
+
+  if (translationError) throw new Error(translationError.message ?? 'Failed to save pill translation')
+
+  const { error: metaError } = await (supabase as any)
+    .from('pill_meta')
+    .insert({
+      content_id: content.id,
+      accent_color: accentColor,
+      image_url: imageUrl,
+    })
+
+  if (metaError) throw new Error(metaError.message ?? 'Failed to save pill metadata')
+
+  revalidatePath('/dashboard')
+  redirect(`/dashboard/pills/${content.id}/edit`)
+}
+
+export async function updatePill(id: string, formData: FormData) {
+  const { user } = await requireCreator()
+  const supabase = await createClient()
+
+  const title = (formData.get('title') as string).trim()
+  const body = formData.get('body') as string | null
+  const accentColor = (formData.get('accent_color') as string)?.trim() || '#C45D3A'
+  const imageUrl = (formData.get('image_url') as string)?.trim() || null
+
+  await (supabase as any)
+    .from('content')
+    .update({ cover_image_url: imageUrl, updated_at: new Date().toISOString() })
+    .eq('id', id)
+    .eq('author_id', user.id)
+
+  await (supabase as any)
+    .from('content_translations')
+    .upsert(
+      {
+        content_id: id,
+        locale: 'en',
+        title,
+        body: body ? (() => { try { return JSON.parse(body) } catch { return null } })() : null,
+      },
+      { onConflict: 'content_id,locale' }
+    )
+
+  await (supabase as any)
+    .from('pill_meta')
+    .upsert(
+      { content_id: id, accent_color: accentColor, image_url: imageUrl },
+      { onConflict: 'content_id' }
+    )
+
+  revalidatePath(`/dashboard/pills/${id}/edit`)
+  revalidatePath('/dashboard')
+}
