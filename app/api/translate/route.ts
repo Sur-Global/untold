@@ -16,6 +16,10 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'contentId required' }, { status: 400 })
   }
 
+  if (locale && !(SUPPORTED_LOCALES as readonly string[]).includes(locale)) {
+    return NextResponse.json({ error: 'Unsupported locale' }, { status: 400 })
+  }
+
   const supabase = createServiceRoleClient()
 
   const { data: content } = await (supabase as any)
@@ -85,7 +89,7 @@ export async function POST(req: NextRequest) {
         }
       }
 
-      await (supabase as any)
+      const { error: upsertError } = await (supabase as any)
         .from('content_translations')
         .upsert(
           {
@@ -97,6 +101,8 @@ export async function POST(req: NextRequest) {
           },
           { onConflict: 'content_id,locale' },
         )
+
+      if (upsertError) throw upsertError
 
       translated.push(targetLocale)
     } catch (err) {

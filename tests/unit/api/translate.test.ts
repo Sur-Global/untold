@@ -32,7 +32,7 @@ function makeRequest(body: object, secret?: string) {
 
 function makeChainMock(overrides: {
   singleValues?: Array<{ data: object | null }>
-  maybySingleValue?: { data: object | null }
+  maybeSingleValue?: { data: object | null }
   upsertMock?: ReturnType<typeof vi.fn>
 }) {
   const singleFn = vi.fn()
@@ -44,7 +44,7 @@ function makeChainMock(overrides: {
     select: vi.fn().mockReturnThis(),
     eq: vi.fn().mockReturnThis(),
     single: singleFn,
-    maybeSingle: vi.fn().mockResolvedValue(overrides.maybySingleValue ?? { data: null }),
+    maybeSingle: vi.fn().mockResolvedValue(overrides.maybeSingleValue ?? { data: null }),
     upsert: upsertMock,
   }
   // eq() returns the same chain (for chaining .eq().eq())
@@ -118,7 +118,7 @@ describe('POST /api/translate', () => {
         { data: { type: 'video' } },
         { data: { title: 'Hi', description: null, excerpt: null, body: null } },
       ],
-      maybySingleValue: { data: { is_auto_translated: false } },
+      maybeSingleValue: { data: { is_auto_translated: false } },
     })
     vi.mocked(createServiceRoleClient).mockReturnValue({ from } as any)
 
