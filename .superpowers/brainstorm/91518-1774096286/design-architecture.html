@@ -1,0 +1,75 @@
+<h2>Design: Architecture & Stack</h2>
+<p class="subtitle">Section 1 of 5 — does this look right so far?</p>
+
+<div class="section">
+  <p class="label">Stack</p>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-top:0.75rem;">
+    <div style="padding:1rem;background:rgba(160,82,45,0.08);border-radius:8px;border:1px solid rgba(160,82,45,0.2);">
+      <h3 style="font-size:0.85rem;margin-bottom:0.5rem;">Frontend</h3>
+      <ul style="font-size:0.85rem;line-height:1.8;list-style:none;padding:0;">
+        <li>⚙️ <strong>Next.js 15</strong> App Router</li>
+        <li>🎨 <strong>Tailwind CSS</strong> + shadcn/ui</li>
+        <li>✍️ <strong>Tiptap</strong> rich text editor</li>
+        <li>🌐 <strong>next-intl</strong> i18n routing</li>
+      </ul>
+    </div>
+    <div style="padding:1rem;background:rgba(107,142,35,0.08);border-radius:8px;border:1px solid rgba(107,142,35,0.2);">
+      <h3 style="font-size:0.85rem;margin-bottom:0.5rem;">Backend / Infra</h3>
+      <ul style="font-size:0.85rem;line-height:1.8;list-style:none;padding:0;">
+        <li>🗄️ <strong>Supabase</strong> Postgres + Auth + Storage</li>
+        <li>🔒 <strong>Row Level Security</strong> for permissions</li>
+        <li>🌍 <strong>DeepL API</strong> auto-translation</li>
+        <li>🚀 <strong>Vercel</strong> hosting + Edge Functions</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <p class="label">Request Flow</p>
+  <div class="mockup" style="margin-top:0.75rem;">
+    <div class="mockup-body" style="padding:1.5rem;font-size:0.82rem;">
+      <div style="display:flex;align-items:center;gap:0.5rem;flex-wrap:wrap;">
+        <div style="padding:0.4rem 0.8rem;background:#A0522D;color:white;border-radius:4px;">Browser</div>
+        <span>→</span>
+        <div style="padding:0.4rem 0.8rem;background:#8B4513;color:white;border-radius:4px;">Vercel Edge</div>
+        <span>→</span>
+        <div style="padding:0.4rem 0.8rem;background:#6B8E23;color:white;border-radius:4px;">Next.js App Router</div>
+        <span>→</span>
+        <div style="padding:0.4rem 0.8rem;background:#5A7A1F;color:white;border-radius:4px;">Supabase (DB + Auth)</div>
+      </div>
+      <div style="margin-top:1rem;display:grid;grid-template-columns:1fr 1fr 1fr;gap:0.75rem;">
+        <div style="padding:0.75rem;background:rgba(160,82,45,0.06);border-radius:6px;border:1px solid rgba(160,82,45,0.15);">
+          <strong style="font-size:0.75rem;">Public pages (SSR)</strong>
+          <p style="font-size:0.75rem;margin:0.25rem 0 0;">Homepage, article, author — rendered server-side for SEO</p>
+        </div>
+        <div style="padding:0.75rem;background:rgba(160,82,45,0.06);border-radius:6px;border:1px solid rgba(160,82,45,0.15);">
+          <strong style="font-size:0.75rem;">Auth-gated (RSC)</strong>
+          <p style="font-size:0.75rem;margin:0.25rem 0 0;">Dashboard, CMS, profile — server components with session check</p>
+        </div>
+        <div style="padding:0.75rem;background:rgba(160,82,45,0.06);border-radius:6px;border:1px solid rgba(160,82,45,0.15);">
+          <strong style="font-size:0.75rem;">API Routes</strong>
+          <p style="font-size:0.75rem;margin:0.25rem 0 0;">Likes, bookmarks, translation triggers — lightweight Next.js route handlers</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <p class="label">Translation Pipeline</p>
+  <div class="mockup" style="margin-top:0.75rem;">
+    <div class="mockup-body" style="padding:1rem;font-size:0.82rem;">
+      <div style="display:flex;align-items:center;gap:0.5rem;flex-wrap:wrap;">
+        <div style="padding:0.4rem 0.8rem;background:#2C2420;color:white;border-radius:4px;">Author publishes (ES or EN)</div>
+        <span>→</span>
+        <div style="padding:0.4rem 0.8rem;background:#A0522D;color:white;border-radius:4px;">Supabase DB trigger</div>
+        <span>→</span>
+        <div style="padding:0.4rem 0.8rem;background:#8B4513;color:white;border-radius:4px;">Edge Function calls DeepL</div>
+        <span>→</span>
+        <div style="padding:0.4rem 0.8rem;background:#6B8E23;color:white;border-radius:4px;">Stores both ES + EN in DB</div>
+      </div>
+      <p style="margin-top:0.75rem;font-size:0.75rem;color:#5A4A42;">DeepL free tier: 500K chars/month. A typical 1000-word article ≈ 6K chars. ~83 articles/month before any cost. Paid: $5.49/month for 1M chars.</p>
+    </div>
+  </div>
+</div>

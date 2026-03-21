@@ -1,0 +1,70 @@
+<h2>Architecture Approaches for UNTOLD.ink</h2>
+<p class="subtitle">Choose the foundation for the platform</p>
+
+<div class="options">
+  <div class="option" data-choice="a" onclick="toggleSelect(this)">
+    <div class="letter">A</div>
+    <div class="content">
+      <h3>Next.js App Router + Supabase — Recommended</h3>
+      <p>Next.js 14 App Router (SSR + SSG) · Supabase for auth, DB, storage, realtime · Supabase Auth with RLS for role-based access · Tailwind + shadcn/ui (matching Figma) · DeepL or OpenAI for auto-translation · Vercel hosting</p>
+      <div class="pros-cons">
+        <div class="pros"><h4>Pros</h4><ul>
+          <li>One coherent stack — auth, DB, storage, realtime in one place</li>
+          <li>RLS enforces role permissions at DB level (secure by default)</li>
+          <li>Matches Figma Make component library exactly (shadcn/ui)</li>
+          <li>SSR for SEO on articles, SSG for static pages</li>
+          <li>Lowest operational complexity</li>
+        </ul></div>
+        <div class="cons"><h4>Cons</h4><ul>
+          <li>Admin/editorial CMS is custom-built (not a plug-in)</li>
+          <li>Media handling (video/podcast) needs Supabase Storage + CDN config</li>
+        </ul></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="option" data-choice="b" onclick="toggleSelect(this)">
+    <div class="letter">B</div>
+    <div class="content">
+      <h3>Next.js + Supabase + Sanity CMS</h3>
+      <p>Same stack as A but adds Sanity as a headless CMS for content editing · Editors get a polished editorial UI (like Medium's editor) for free · Supabase still handles auth, users, likes/bookmarks</p>
+      <div class="pros-cons">
+        <div class="pros"><h4>Pros</h4><ul>
+          <li>Best editorial writing experience — rich text, drag-drop, image upload</li>
+          <li>Non-technical authors can publish without touching code</li>
+          <li>Structured content schema maps cleanly to content types</li>
+        </ul></div>
+        <div class="cons"><h4>Cons</h4><ul>
+          <li>Two backends to manage (Sanity + Supabase)</li>
+          <li>Extra cost ($99/mo+ for team plan)</li>
+          <li>Adds complexity to the translation pipeline</li>
+        </ul></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="option" data-choice="c" onclick="toggleSelect(this)">
+    <div class="letter">C</div>
+    <div class="content">
+      <h3>Next.js + Supabase + Tiptap Editor</h3>
+      <p>Approach A but with Tiptap (open source) as the rich text editor for article authoring · Full control over the writing experience · Powers the built-in CMS from the Figma design</p>
+      <div class="pros-cons">
+        <div class="pros"><h4>Pros</h4><ul>
+          <li>Custom editor that matches UNTOLD's brand — no generic admin UI</li>
+          <li>Open source, no extra cost</li>
+          <li>Stores content as structured JSON in Supabase — easy to translate</li>
+          <li>Can build exactly the CMS shown in Figma (ContentManagementSystem.tsx)</li>
+        </ul></div>
+        <div class="cons"><h4>Cons</h4><ul>
+          <li>More frontend work to build the editor experience</li>
+          <li>Collaborative editing not included (Tiptap Pro costs extra)</li>
+        </ul></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="section" style="margin-top:2rem;padding:1rem;background:rgba(160,82,45,0.1);border-radius:8px;border-left:3px solid #A0522D;">
+  <p class="label">My Recommendation</p>
+  <p><strong>Option C</strong> — Next.js + Supabase + Tiptap. The Figma already has a fully designed CMS editor (ContentManagementSystem.tsx, VisualEditor.tsx). Building it with Tiptap keeps everything in one stack, gives authors a great writing experience, and stores content as structured JSON that's easy to auto-translate. No extra cost, no second backend.</p>
+</div>

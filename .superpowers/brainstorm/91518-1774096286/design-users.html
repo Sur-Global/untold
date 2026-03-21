@@ -1,0 +1,78 @@
+<h2>Design: User System & Permissions</h2>
+<p class="subtitle">Section 4 of 5 — roles, content visibility, auth flow</p>
+
+<div class="section">
+  <p class="label">Three Roles</p>
+  <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:0.75rem;margin-top:0.75rem;">
+
+    <div style="padding:1rem;background:rgba(106,13,173,0.06);border-radius:8px;border:1px solid rgba(106,13,173,0.2);">
+      <h3 style="font-size:0.8rem;margin-bottom:0.5rem;">👑 Admin</h3>
+      <ul style="font-size:0.75rem;line-height:1.9;list-style:none;padding:0;">
+        <li>✅ All content types incl. courses</li>
+        <li>✅ Content appears on homepage</li>
+        <li>✅ Manage users & roles</li>
+        <li>✅ Moderation panel</li>
+        <li>✅ Analytics dashboard</li>
+        <li>✅ Platform settings</li>
+        <li>Profile at <code>/author/[slug]</code></li>
+      </ul>
+    </div>
+
+    <div style="padding:1rem;background:rgba(160,82,45,0.06);border-radius:8px;border:1px solid rgba(160,82,45,0.2);">
+      <h3 style="font-size:0.8rem;margin-bottom:0.5rem;">✍️ Author</h3>
+      <ul style="font-size:0.75rem;line-height:1.9;list-style:none;padding:0;">
+        <li>✅ Articles, videos, podcasts, pills</li>
+        <li>✅ Content appears on homepage</li>
+        <li>✅ Priority in search results</li>
+        <li>✅ Author badge on profile</li>
+        <li>❌ Cannot create courses</li>
+        <li>❌ No admin panel access</li>
+        <li>Profile at <code>/author/[slug]</code></li>
+      </ul>
+    </div>
+
+    <div style="padding:1rem;background:rgba(107,142,35,0.06);border-radius:8px;border:1px solid rgba(107,142,35,0.2);">
+      <h3 style="font-size:0.8rem;margin-bottom:0.5rem;">👤 User</h3>
+      <ul style="font-size:0.75rem;line-height:1.9;list-style:none;padding:0;">
+        <li>✅ Articles, videos, podcasts, pills</li>
+        <li>✅ Like & bookmark content</li>
+        <li>✅ Public profile page</li>
+        <li>❌ Content NOT on homepage</li>
+        <li>❌ Lower search priority</li>
+        <li>❌ Cannot create courses</li>
+        <li>Profile at <code>/user/[slug]</code></li>
+      </ul>
+    </div>
+
+  </div>
+</div>
+
+<div class="section">
+  <p class="label">Auth Flow</p>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.75rem;margin-top:0.75rem;">
+    <div style="padding:1rem;background:rgba(44,36,32,0.04);border-radius:8px;font-size:0.78rem;line-height:1.8;">
+      <strong>Sign up</strong>
+      <ol style="padding-left:1rem;margin:0.5rem 0 0;">
+        <li>Email + password via Supabase Auth</li>
+        <li>Email confirmation required</li>
+        <li>Profile created with role = <code>user</code></li>
+        <li>Redirected to complete profile (name, slug)</li>
+      </ol>
+    </div>
+    <div style="padding:1rem;background:rgba(44,36,32,0.04);border-radius:8px;font-size:0.78rem;line-height:1.8;">
+      <strong>Role promotion</strong>
+      <ol style="padding-left:1rem;margin:0.5rem 0 0;">
+        <li>User applies via "Become a Creator" page</li>
+        <li>Admin reviews & promotes to <code>author</code> in admin panel</li>
+        <li>RLS enforced at DB level — role column only writable by admin</li>
+      </ol>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <p class="label">Homepage Feed Logic</p>
+  <div style="padding:0.75rem 1rem;background:rgba(44,36,32,0.04);border-radius:8px;font-size:0.82rem;line-height:1.8;">
+    <p>A Postgres <strong>view</strong> (<code>homepage_feed</code>) filters: <code>status = published AND author.role IN ('admin','author')</code>. Ordered by <code>published_at DESC</code>, with <code>is_featured</code> items pinned first. Search returns all content but ranks admin/author results above user content.</p>
+  </div>
+</div>

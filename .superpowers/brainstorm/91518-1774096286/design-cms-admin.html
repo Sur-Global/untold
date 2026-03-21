@@ -1,0 +1,79 @@
+<h2>Design: CMS & Admin</h2>
+<p class="subtitle">Section 5 of 5 — content creation, moderation, admin dashboard</p>
+
+<div class="section">
+  <p class="label">Content Creation (all authenticated users)</p>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.75rem;margin-top:0.75rem;">
+
+    <div style="padding:1rem;background:rgba(160,82,45,0.06);border-radius:8px;border:1px solid rgba(160,82,45,0.2);">
+      <h3 style="font-size:0.8rem;margin-bottom:0.5rem;">Article editor (Tiptap)</h3>
+      <ul style="font-size:0.75rem;line-height:1.9;list-style:none;padding:0;">
+        <li>Rich text: headings, bold, italic, lists, blockquotes</li>
+        <li>Image upload → Supabase Storage</li>
+        <li>Embed blocks: YouTube, Spotify, Twitter/X</li>
+        <li>Cover image upload</li>
+        <li>Categories + tags picker</li>
+        <li>Excerpt field</li>
+        <li>Save draft / Publish</li>
+        <li>Auto-saves every 30s</li>
+      </ul>
+    </div>
+
+    <div style="padding:1rem;background:rgba(160,82,45,0.06);border-radius:8px;border:1px solid rgba(160,82,45,0.2);">
+      <h3 style="font-size:0.8rem;margin-bottom:0.5rem;">Other content types</h3>
+      <ul style="font-size:0.75rem;line-height:1.9;list-style:none;padding:0;">
+        <li><strong>Video</strong> — title, embed URL, description, thumbnail, duration, tags</li>
+        <li><strong>Podcast</strong> — title, embed URL, episode no., description, cover, duration</li>
+        <li><strong>Knowledge Pill</strong> — title, short text, color, optional image, tags</li>
+        <li><strong>Course</strong> — admin only · title, price, currency, duration, Stripe product ID</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <p class="label">Admin Dashboard panels</p>
+  <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:0.75rem;margin-top:0.75rem;">
+
+    <div style="padding:0.75rem;background:rgba(106,13,173,0.05);border-radius:8px;border:1px solid rgba(106,13,173,0.15);font-size:0.75rem;line-height:1.8;">
+      <strong>Content Management</strong>
+      <ul style="padding-left:1rem;margin:0.5rem 0 0;">
+        <li>List all content (all types)</li>
+        <li>Filter by type, status, author</li>
+        <li>Feature / unfeature</li>
+        <li>Publish / unpublish / delete</li>
+        <li>Preview any content</li>
+      </ul>
+    </div>
+
+    <div style="padding:0.75rem;background:rgba(106,13,173,0.05);border-radius:8px;border:1px solid rgba(106,13,173,0.15);font-size:0.75rem;line-height:1.8;">
+      <strong>User Management</strong>
+      <ul style="padding-left:1rem;margin:0.5rem 0 0;">
+        <li>List all users</li>
+        <li>Promote user → author</li>
+        <li>Demote / suspend</li>
+        <li>View user's content</li>
+        <li>Review "Become Creator" requests</li>
+      </ul>
+    </div>
+
+    <div style="padding:0.75rem;background:rgba(106,13,173,0.05);border-radius:8px;border:1px solid rgba(106,13,173,0.15);font-size:0.75rem;line-height:1.8;">
+      <strong>Analytics</strong>
+      <ul style="padding-left:1rem;margin:0.5rem 0 0;">
+        <li>Total users, authors, content</li>
+        <li>Most liked content</li>
+        <li>Most bookmarked content</li>
+        <li>New signups over time</li>
+        <li>Content by type breakdown</li>
+      </ul>
+    </div>
+
+  </div>
+</div>
+
+<div class="section">
+  <p class="label">Translation trigger</p>
+  <div style="padding:0.75rem 1rem;background:rgba(44,36,32,0.04);border-radius:8px;font-size:0.82rem;line-height:1.8;">
+    When content is published, a Supabase Edge Function fires: translates title, excerpt, and body into all configured locales (ES, PT, FR, DE, DA) via DeepL. Stores results in <code>content_translations</code> with <code>is_auto_translated = true</code>. Admin can manually override any translation. Quechua: manual only — admin submits translation directly.
+  </div>
+</div>

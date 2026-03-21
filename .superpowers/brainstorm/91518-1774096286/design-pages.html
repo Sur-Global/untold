@@ -1,0 +1,67 @@
+<h2>Design: Pages & Routing</h2>
+<p class="subtitle">Section 3 of 5 — Next.js App Router structure</p>
+
+<div class="section">
+  <p class="label">Route Structure</p>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.75rem;margin-top:0.75rem;">
+
+    <div style="padding:1rem;background:rgba(160,82,45,0.06);border-radius:8px;border:1px solid rgba(160,82,45,0.2);">
+      <h3 style="font-size:0.8rem;margin-bottom:0.75rem;">Public Routes (SSR)</h3>
+      <ul style="font-size:0.78rem;line-height:2;list-style:none;padding:0;font-family:monospace;">
+        <li><span style="color:#A0522D">/[locale]</span> — homepage (curated feed)</li>
+        <li><span style="color:#A0522D">/[locale]/articles</span> — all articles</li>
+        <li><span style="color:#A0522D">/[locale]/articles/[slug]</span> — article detail</li>
+        <li><span style="color:#A0522D">/[locale]/videos/[slug]</span> — video detail</li>
+        <li><span style="color:#A0522D">/[locale]/podcasts/[slug]</span> — podcast detail</li>
+        <li><span style="color:#A0522D">/[locale]/pills/[slug]</span> — pill detail</li>
+        <li><span style="color:#A0522D">/[locale]/courses/[slug]</span> — course detail</li>
+        <li><span style="color:#A0522D">/[locale]/tag/[slug]</span> — tag page</li>
+        <li><span style="color:#A0522D">/[locale]/author/[slug]</span> — author profile</li>
+        <li><span style="color:#A0522D">/[locale]/user/[slug]</span> — user profile</li>
+        <li><span style="color:#A0522D">/[locale]/search</span> — search results</li>
+        <li><span style="color:#A0522D">/[locale]/about</span></li>
+        <li><span style="color:#A0522D">/[locale]/contact</span></li>
+        <li><span style="color:#A0522D">/[locale]/newsletter</span></li>
+        <li><span style="color:#A0522D">/[locale]/become-creator</span></li>
+      </ul>
+    </div>
+
+    <div>
+      <div style="padding:1rem;background:rgba(107,142,35,0.06);border-radius:8px;border:1px solid rgba(107,142,35,0.2);margin-bottom:0.75rem;">
+        <h3 style="font-size:0.8rem;margin-bottom:0.75rem;">Auth-gated Routes</h3>
+        <ul style="font-size:0.78rem;line-height:2;list-style:none;padding:0;font-family:monospace;">
+          <li><span style="color:#6B8E23">/[locale]/dashboard</span> — user home</li>
+          <li><span style="color:#6B8E23">/[locale]/dashboard/bookmarks</span></li>
+          <li><span style="color:#6B8E23">/[locale]/dashboard/settings</span></li>
+          <li><span style="color:#6B8E23">/[locale]/create</span> — pick content type</li>
+          <li><span style="color:#6B8E23">/[locale]/create/article</span></li>
+          <li><span style="color:#6B8E23">/[locale]/create/video</span></li>
+          <li><span style="color:#6B8E23">/[locale]/create/podcast</span></li>
+          <li><span style="color:#6B8E23">/[locale]/create/pill</span></li>
+          <li><span style="color:#6B8E23">/[locale]/edit/[id]</span> — edit any content</li>
+        </ul>
+      </div>
+      <div style="padding:1rem;background:rgba(75,0,130,0.06);border-radius:8px;border:1px solid rgba(75,0,130,0.2);">
+        <h3 style="font-size:0.8rem;margin-bottom:0.75rem;">Admin-only Routes</h3>
+        <ul style="font-size:0.78rem;line-height:2;list-style:none;padding:0;font-family:monospace;">
+          <li><span style="color:#6A0DAD">/[locale]/admin</span> — dashboard</li>
+          <li><span style="color:#6A0DAD">/[locale]/admin/content</span> — CMS</li>
+          <li><span style="color:#6A0DAD">/[locale]/admin/users</span> — user mgmt</li>
+          <li><span style="color:#6A0DAD">/[locale]/admin/moderation</span></li>
+          <li><span style="color:#6A0DAD">/[locale]/admin/analytics</span></li>
+          <li><span style="color:#6A0DAD">/[locale]/create/course</span> — admin only</li>
+        </ul>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div class="section">
+  <p class="label">Locale Routing</p>
+  <div style="padding:0.75rem 1rem;background:rgba(44,36,32,0.04);border-radius:8px;font-size:0.82rem;line-height:1.8;">
+    <p>Supported locales: <strong>es</strong> (default) and <strong>en</strong> — handled by <strong>next-intl</strong>.</p>
+    <p>Language switcher in nav changes locale prefix. Article content served from <code>content_translations</code> for the active locale. Falls back to source language if translation pending.</p>
+    <p>SEO: <code>hreflang</code> tags generated automatically per page.</p>
+  </div>
+</div>

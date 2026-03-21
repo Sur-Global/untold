@@ -1,0 +1,102 @@
+<h2>Design: Data Model</h2>
+<p class="subtitle">Section 2 of 5 — Supabase Postgres schema</p>
+
+<div class="section">
+  <p class="label">Core Tables</p>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.75rem;margin-top:0.75rem;">
+
+    <div style="padding:1rem;background:rgba(160,82,45,0.06);border-radius:8px;border:1px solid rgba(160,82,45,0.2);">
+      <h3 style="font-size:0.8rem;margin-bottom:0.5rem;">profiles</h3>
+      <ul style="font-size:0.75rem;line-height:1.9;list-style:none;padding:0;font-family:monospace;">
+        <li>id <span style="color:#A0522D">uuid (→ auth.users)</span></li>
+        <li>slug <span style="color:#6B8E23">text unique</span></li>
+        <li>display_name <span style="color:#6B8E23">text</span></li>
+        <li>role <span style="color:#A0522D">enum: admin|author|user</span></li>
+        <li>bio, location, website</li>
+        <li>avatar_url <span style="color:#6B8E23">text</span></li>
+        <li>followers_count, following_count</li>
+      </ul>
+    </div>
+
+    <div style="padding:1rem;background:rgba(160,82,45,0.06);border-radius:8px;border:1px solid rgba(160,82,45,0.2);">
+      <h3 style="font-size:0.8rem;margin-bottom:0.5rem;">content</h3>
+      <ul style="font-size:0.75rem;line-height:1.9;list-style:none;padding:0;font-family:monospace;">
+        <li>id <span style="color:#A0522D">uuid</span></li>
+        <li>type <span style="color:#A0522D">enum: article|video|podcast|pill|course</span></li>
+        <li>author_id <span style="color:#A0522D">uuid (→ profiles)</span></li>
+        <li>slug <span style="color:#6B8E23">text unique</span></li>
+        <li>status <span style="color:#A0522D">enum: draft|published</span></li>
+        <li>is_featured <span style="color:#6B8E23">bool</span></li>
+        <li>cover_image_url <span style="color:#6B8E23">text</span></li>
+        <li>embed_url <span style="color:#6B8E23">text (video/podcast)</span></li>
+        <li>likes_count <span style="color:#6B8E23">int (denormalized)</span></li>
+        <li>published_at <span style="color:#6B8E23">timestamptz</span></li>
+      </ul>
+    </div>
+
+    <div style="padding:1rem;background:rgba(160,82,45,0.06);border-radius:8px;border:1px solid rgba(160,82,45,0.2);">
+      <h3 style="font-size:0.8rem;margin-bottom:0.5rem;">content_translations</h3>
+      <ul style="font-size:0.75rem;line-height:1.9;list-style:none;padding:0;font-family:monospace;">
+        <li>id <span style="color:#A0522D">uuid</span></li>
+        <li>content_id <span style="color:#A0522D">uuid (→ content)</span></li>
+        <li>locale <span style="color:#A0522D">enum: es|en</span></li>
+        <li>title <span style="color:#6B8E23">text</span></li>
+        <li>excerpt <span style="color:#6B8E23">text</span></li>
+        <li>body <span style="color:#6B8E23">jsonb (Tiptap JSON)</span></li>
+        <li>is_auto_translated <span style="color:#6B8E23">bool</span></li>
+      </ul>
+    </div>
+
+    <div style="padding:1rem;background:rgba(160,82,45,0.06);border-radius:8px;border:1px solid rgba(160,82,45,0.2);">
+      <h3 style="font-size:0.8rem;margin-bottom:0.5rem;">categories + tags</h3>
+      <ul style="font-size:0.75rem;line-height:1.9;list-style:none;padding:0;font-family:monospace;">
+        <li>categories: id, slug, name_es, name_en</li>
+        <li>tags: id, slug, name_es, name_en</li>
+        <li>content_categories: content_id, category_id</li>
+        <li>content_tags: content_id, tag_id</li>
+      </ul>
+      <h3 style="font-size:0.8rem;margin-bottom:0.5rem;margin-top:1rem;">courses (extends content)</h3>
+      <ul style="font-size:0.75rem;line-height:1.9;list-style:none;padding:0;font-family:monospace;">
+        <li>content_id <span style="color:#A0522D">uuid (→ content)</span></li>
+        <li>price, currency, duration</li>
+        <li>stripe_product_id <span style="color:#6B8E23">text</span></li>
+        <li>students_count, rating</li>
+      </ul>
+    </div>
+
+    <div style="padding:1rem;background:rgba(107,142,35,0.06);border-radius:8px;border:1px solid rgba(107,142,35,0.2);">
+      <h3 style="font-size:0.8rem;margin-bottom:0.5rem;">likes + bookmarks</h3>
+      <ul style="font-size:0.75rem;line-height:1.9;list-style:none;padding:0;font-family:monospace;">
+        <li>user_id + content_id <span style="color:#6B8E23">composite PK</span></li>
+        <li>created_at</li>
+        <li style="color:#5A4A42;font-style:italic;">— one table each, RLS: user sees only their own bookmarks</li>
+      </ul>
+    </div>
+
+    <div style="padding:1rem;background:rgba(107,142,35,0.06);border-radius:8px;border:1px solid rgba(107,142,35,0.2);">
+      <h3 style="font-size:0.8rem;margin-bottom:0.5rem;">follows</h3>
+      <ul style="font-size:0.75rem;line-height:1.9;list-style:none;padding:0;font-family:monospace;">
+        <li>follower_id + following_id <span style="color:#6B8E23">composite PK</span></li>
+        <li>created_at</li>
+      </ul>
+      <h3 style="font-size:0.8rem;margin-bottom:0.5rem;margin-top:1rem;">email_gates</h3>
+      <ul style="font-size:0.75rem;line-height:1.9;list-style:none;padding:0;font-family:monospace;">
+        <li>email <span style="color:#6B8E23">text</span></li>
+        <li>content_id <span style="color:#A0522D">uuid (→ content)</span></li>
+        <li>unlocked_at <span style="color:#6B8E23">timestamptz</span></li>
+      </ul>
+    </div>
+
+  </div>
+</div>
+
+<div class="section">
+  <p class="label">Key RLS Rules</p>
+  <ul style="font-size:0.82rem;line-height:1.9;">
+    <li>📖 <strong>content</strong>: anyone can read published; only author or admin can write</li>
+    <li>🔒 <strong>bookmarks</strong>: user can only read/write their own rows</li>
+    <li>❤️ <strong>likes</strong>: authenticated users can insert; anyone can read count</li>
+    <li>👑 <strong>profiles.role</strong>: only admin can update role column</li>
+    <li>🏠 <strong>homepage feed</strong>: DB view filtering role IN (admin, author) + published</li>
+  </ul>
+</div>
