@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { slugify, readTime, cn } from '@/lib/utils'
+import { slugify, readTime, cn, getEditPath } from '@/lib/utils'
 
 describe('slugify', () => {
   it('converts title to kebab-case slug', () => {
@@ -32,5 +32,23 @@ describe('cn', () => {
   })
   it('ignores falsy values', () => {
     expect(cn('foo', false, undefined, 'bar')).toBe('foo bar')
+  })
+})
+
+describe('getEditPath', () => {
+  it('returns article edit path', () => {
+    expect(getEditPath('article', 'abc')).toBe('/dashboard/articles/abc/edit')
+  })
+  it('returns video edit path', () => {
+    expect(getEditPath('video', 'abc')).toBe('/dashboard/videos/abc/edit')
+  })
+  it('returns podcast edit path', () => {
+    expect(getEditPath('podcast', 'abc')).toBe('/dashboard/podcasts/abc/edit')
+  })
+  it('returns pill edit path', () => {
+    expect(getEditPath('pill', 'abc')).toBe('/dashboard/pills/abc/edit')
+  })
+  it('returns course edit path', () => {
+    expect(getEditPath('course', 'abc')).toBe('/dashboard/courses/abc/edit')
   })
 })
