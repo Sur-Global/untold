@@ -8,7 +8,7 @@ export function isCreatorRole(role: UserRole | null | undefined): boolean {
 
 /**
  * Call from any server component that requires admin or author access.
- * Redirects to /auth/login if not authenticated, / if wrong role.
+ * Redirects to /auth/login if not authenticated, / if wrong role, /suspended if suspended.
  * Returns { user, profile } on success.
  */
 export async function requireCreator() {
@@ -18,11 +18,12 @@ export async function requireCreator() {
 
   const { data: profile } = await (supabase as any)
     .from('profiles')
-    .select('id, role, display_name, slug')
+    .select('id, role, display_name, slug, suspended_at')
     .eq('id', user.id)
     .single()
 
   if (!isCreatorRole(profile?.role)) redirect('/')
+  if (profile?.suspended_at) redirect('/suspended')
 
   return { user, profile }
 }
