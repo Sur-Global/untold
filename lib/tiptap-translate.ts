@@ -11,7 +11,8 @@ interface TiptapNode {
 function getNodeAtPath(doc: TiptapNode, path: Path): TiptapNode {
   let current: TiptapNode = doc
   for (const idx of path) {
-    current = current.content![idx]
+    if (!current.content) throw new Error(`Invalid path: node at index ${idx} has no content`)
+    current = current.content[idx]
   }
   return current
 }
@@ -44,6 +45,9 @@ export function injectTextNodes(
   translations: string[],
   paths: Path[],
 ): TiptapNode {
+  if (translations.length !== paths.length) {
+    throw new Error(`translations length (${translations.length}) must equal paths length (${paths.length})`)
+  }
   const result: TiptapNode = JSON.parse(JSON.stringify(doc))
   paths.forEach((path, i) => {
     getNodeAtPath(result, path).text = translations[i]
