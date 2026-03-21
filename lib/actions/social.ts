@@ -27,17 +27,6 @@ export async function toggleLike(contentId: string) {
       .insert({ user_id: user.id, content_id: contentId })
   }
 
-  // Recount and sync the denormalized counter
-  const { count } = await (supabase as any)
-    .from('likes')
-    .select('*', { count: 'exact', head: true })
-    .eq('content_id', contentId)
-
-  await (supabase as any)
-    .from('content')
-    .update({ likes_count: count ?? 0 })
-    .eq('id', contentId)
-
   revalidatePath('/', 'layout')
 }
 
@@ -89,27 +78,6 @@ export async function toggleFollow(profileId: string) {
       .from('follows')
       .insert({ follower_id: user.id, following_id: profileId })
   }
-
-  // Recount denormalized counters for both parties
-  const { count: followersCount } = await (supabase as any)
-    .from('follows')
-    .select('*', { count: 'exact', head: true })
-    .eq('following_id', profileId)
-
-  const { count: followingCount } = await (supabase as any)
-    .from('follows')
-    .select('*', { count: 'exact', head: true })
-    .eq('follower_id', user.id)
-
-  await (supabase as any)
-    .from('profiles')
-    .update({ followers_count: followersCount ?? 0 })
-    .eq('id', profileId)
-
-  await (supabase as any)
-    .from('profiles')
-    .update({ following_count: followingCount ?? 0 })
-    .eq('id', user.id)
 
   revalidatePath('/', 'layout')
 }
