@@ -17,6 +17,7 @@ interface RichTextEditorProps {
 
 export function RichTextEditor({ value, onChange, placeholder = 'Start writingâ€¦' }: RichTextEditorProps) {
   const editor = useEditor({
+    immediatelyRender: false,
     extensions: [
       StarterKit,
       Underline,
@@ -38,7 +39,7 @@ export function RichTextEditor({ value, onChange, placeholder = 'Start writingâ€
     if (!editor || !value) return
     const current = editor.getJSON()
     if (JSON.stringify(current) !== JSON.stringify(value)) {
-      editor.commands.setContent(value)
+      editor.commands.setContent(value, { emitUpdate: false })
     }
   }, [editor, value])
 
