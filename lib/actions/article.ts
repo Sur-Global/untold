@@ -38,7 +38,7 @@ export async function createArticle(formData: FormData) {
     locale: 'en',
     title,
     excerpt,
-    body: body ? JSON.parse(body) : null,
+    body: body ? (() => { try { return JSON.parse(body) } catch { return null } })() : null,
   })
 
   if (translationError) throw new Error(translationError.message ?? 'Failed to save article content')
@@ -48,7 +48,7 @@ export async function createArticle(formData: FormData) {
 }
 
 export async function updateArticle(id: string, formData: FormData) {
-  await requireCreator()
+  const { user } = await requireCreator()
   const supabase = await createClient()
 
   const title = (formData.get('title') as string).trim()
@@ -60,6 +60,7 @@ export async function updateArticle(id: string, formData: FormData) {
     .from('content')
     .update({ cover_image_url: coverImageUrl, updated_at: new Date().toISOString() })
     .eq('id', id)
+    .eq('author_id', user.id)
 
   await (supabase as any)
     .from('content_translations')
@@ -68,43 +69,45 @@ export async function updateArticle(id: string, formData: FormData) {
       locale: 'en',
       title,
       excerpt,
-      body: body ? JSON.parse(body) : null,
+      body: body ? (() => { try { return JSON.parse(body) } catch { return null } })() : null,
     }, { onConflict: 'content_id,locale' })
 
   revalidatePath(`/dashboard/articles/${id}/edit`)
 }
 
 export async function publishArticle(id: string, _formData: FormData) {
-  await requireCreator()
+  const { user } = await requireCreator()
   const supabase = await createClient()
 
   await (supabase as any)
     .from('content')
     .update({ status: 'published', published_at: new Date().toISOString() })
     .eq('id', id)
+    .eq('author_id', user.id)
 
   revalidatePath('/dashboard/articles')
   revalidatePath(`/dashboard/articles/${id}/edit`)
 }
 
 export async function unpublishArticle(id: string, _formData: FormData) {
-  await requireCreator()
+  const { user } = await requireCreator()
   const supabase = await createClient()
 
   await (supabase as any)
     .from('content')
     .update({ status: 'draft', published_at: null })
     .eq('id', id)
+    .eq('author_id', user.id)
 
   revalidatePath('/dashboard/articles')
   revalidatePath(`/dashboard/articles/${id}/edit`)
 }
 
 export async function deleteArticle(id: string) {
-  await requireCreator()
+  const { user } = await requireCreator()
   const supabase = await createClient()
 
-  await (supabase as any).from('content').delete().eq('id', id)
+  await (supabase as any).from('content').delete().eq('id', id).eq('author_id', user.id)
 
   revalidatePath('/dashboard/articles')
   redirect('/dashboard/articles')

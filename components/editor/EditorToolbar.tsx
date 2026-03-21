@@ -83,7 +83,7 @@ export function EditorToolbar({ editor }: EditorToolbarProps) {
         onClick={handleLinkToggle}
         className={btnClass(editor.isActive('link'))}
       >
-        🔗
+        Link
       </button>
     </div>
   )
