@@ -22,3 +22,15 @@ describe('readTime', () => {
     expect(readTime('word '.repeat(400))).toBe(2)
   })
 })
+
+describe('cn', () => {
+  it('merges class names', () => {
+    expect(cn('foo', 'bar')).toBe('foo bar')
+  })
+  it('resolves Tailwind conflicts (last wins)', () => {
+    expect(cn('p-2', 'p-4')).toBe('p-4')
+  })
+  it('ignores falsy values', () => {
+    expect(cn('foo', false, undefined, 'bar')).toBe('foo bar')
+  })
+})
