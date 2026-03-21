@@ -1,12 +1,13 @@
 import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
 import { createClient } from '@/lib/supabase/server'
-import { getNavProps } from '@/lib/nav'
 import { getTranslation } from '@/lib/content'
 import { readTime } from '@/lib/utils'
 import { Navigation } from '@/components/layout/Navigation'
 import { Footer } from '@/components/layout/Footer'
 import { ArticleBody } from '@/components/content/ArticleBody'
+import { LikeButton } from '@/components/social/LikeButton'
+import { BookmarkButton } from '@/components/social/BookmarkButton'
 import Link from 'next/link'
 
 interface PageProps {
@@ -34,7 +35,16 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 export default async function ArticlePage({ params }: PageProps) {
   const { locale, slug } = await params
   const supabase = await createClient()
-  const navProps = await getNavProps()
+
+  // Single getUser() call — derive nav props from it to avoid duplicate auth network call
+  const { data: { user } } = await supabase.auth.getUser()
+  let navUserRole = null
+  if (user) {
+    const { data: navProfile } = await (supabase as any)
+      .from('profiles').select('role').eq('id', user.id).single()
+    navUserRole = navProfile?.role ?? null
+  }
+  const navProps = { isLoggedIn: !!user, userRole: navUserRole as any }
 
   const { data: article } = await (supabase as any)
     .from('content')
@@ -57,6 +67,28 @@ export default async function ArticlePage({ params }: PageProps) {
   const author = article.profiles
   const body = t.body as Record<string, unknown> | null
   const tags = article.content_tags?.map((ct: any) => ct.tags) ?? []
+
+  // Check per-user social state
+  let isLiked = false
+  let isBookmarked = false
+  if (user) {
+    const [{ data: like }, { data: bookmark }] = await Promise.all([
+      (supabase as any)
+        .from('likes')
+        .select('user_id')
+        .eq('user_id', user.id)
+        .eq('content_id', article.id)
+        .maybeSingle(),
+      (supabase as any)
+        .from('bookmarks')
+        .select('user_id')
+        .eq('user_id', user.id)
+        .eq('content_id', article.id)
+        .maybeSingle(),
+    ])
+    isLiked = !!like
+    isBookmarked = !!bookmark
+  }
 
   // Estimate read time from body text
   const bodyText = body
@@ -109,13 +141,20 @@ export default async function ArticlePage({ params }: PageProps) {
                 )}
                 <span className="mx-2">·</span>
                 <span>{minutes} min read</span>
-                {article.likes_count > 0 && (
-                  <>
-                    <span className="mx-2">·</span>
-                    <span>♥ {article.likes_count}</span>
-                  </>
-                )}
               </div>
+            </div>
+            <div className="flex items-center gap-3">
+              <LikeButton
+                contentId={article.id}
+                initialIsLiked={isLiked}
+                initialCount={article.likes_count ?? 0}
+                isLoggedIn={!!user}
+              />
+              <BookmarkButton
+                contentId={article.id}
+                initialIsBookmarked={isBookmarked}
+                isLoggedIn={!!user}
+              />
             </div>
           </div>
         </header>
