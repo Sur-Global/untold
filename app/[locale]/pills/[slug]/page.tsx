@@ -1,10 +1,11 @@
 import { notFound } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
-import { getNavProps } from '@/lib/nav'
 import { getTranslation } from '@/lib/content'
 import { Navigation } from '@/components/layout/Navigation'
 import { Footer } from '@/components/layout/Footer'
 import { ArticleBody } from '@/components/content/ArticleBody'
+import { LikeButton } from '@/components/social/LikeButton'
+import { BookmarkButton } from '@/components/social/BookmarkButton'
 
 interface PageProps {
   params: Promise<{ locale: string; slug: string }>
@@ -13,7 +14,15 @@ interface PageProps {
 export default async function PillPage({ params }: PageProps) {
   const { locale, slug } = await params
   const supabase = await createClient()
-  const navProps = await getNavProps()
+
+  const { data: { user } } = await supabase.auth.getUser()
+  let navUserRole = null
+  if (user) {
+    const { data: navProfile } = await (supabase as any)
+      .from('profiles').select('role').eq('id', user.id).single()
+    navUserRole = navProfile?.role ?? null
+  }
+  const navProps = { isLoggedIn: !!user, userRole: navUserRole as any }
 
   const { data: pill } = await (supabase as any)
     .from('content')
@@ -37,6 +46,21 @@ export default async function PillPage({ params }: PageProps) {
   const accentColor = meta?.accent_color ?? '#6B8E23'
   const body = t.body as Record<string, unknown> | null
 
+  let isLiked = false
+  let isBookmarked = false
+  if (user) {
+    const [{ data: like }, { data: bookmark }] = await Promise.all([
+      (supabase as any)
+        .from('likes').select('user_id')
+        .eq('user_id', user.id).eq('content_id', pill.id).maybeSingle(),
+      (supabase as any)
+        .from('bookmarks').select('user_id')
+        .eq('user_id', user.id).eq('content_id', pill.id).maybeSingle(),
+    ])
+    isLiked = !!like
+    isBookmarked = !!bookmark
+  }
+
   return (
     <>
       <Navigation {...navProps} />
@@ -46,13 +70,26 @@ export default async function PillPage({ params }: PageProps) {
           className="rounded-2xl p-8 mb-8"
           style={{ background: `${accentColor}12`, borderTop: `4px solid ${accentColor}` }}
         >
-          <div className="flex items-center gap-2 mb-4">
+          <div className="flex items-center justify-between mb-4">
             <span
               className="text-xs font-mono uppercase tracking-wider px-2 py-0.5 rounded"
               style={{ background: `${accentColor}20`, color: accentColor }}
             >
               Knowledge Pill
             </span>
+            <div className="flex items-center gap-3">
+              <LikeButton
+                contentId={pill.id}
+                initialIsLiked={isLiked}
+                initialCount={pill.likes_count ?? 0}
+                isLoggedIn={!!user}
+              />
+              <BookmarkButton
+                contentId={pill.id}
+                initialIsBookmarked={isBookmarked}
+                isLoggedIn={!!user}
+              />
+            </div>
           </div>
           <h1 className="mb-4" style={{ color: '#2C2420' }}>{t.title}</h1>
           {meta?.image_url && (

@@ -1,9 +1,10 @@
 import { notFound } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
-import { getNavProps } from '@/lib/nav'
 import { getTranslation } from '@/lib/content'
 import { Navigation } from '@/components/layout/Navigation'
 import { Footer } from '@/components/layout/Footer'
+import { LikeButton } from '@/components/social/LikeButton'
+import { BookmarkButton } from '@/components/social/BookmarkButton'
 
 interface PageProps {
   params: Promise<{ locale: string; slug: string }>
@@ -12,7 +13,15 @@ interface PageProps {
 export default async function CoursePage({ params }: PageProps) {
   const { locale, slug } = await params
   const supabase = await createClient()
-  const navProps = await getNavProps()
+
+  const { data: { user } } = await supabase.auth.getUser()
+  let navUserRole = null
+  if (user) {
+    const { data: navProfile } = await (supabase as any)
+      .from('profiles').select('role').eq('id', user.id).single()
+    navUserRole = navProfile?.role ?? null
+  }
+  const navProps = { isLoggedIn: !!user, userRole: navUserRole as any }
 
   const { data: course } = await (supabase as any)
     .from('content')
@@ -35,6 +44,21 @@ export default async function CoursePage({ params }: PageProps) {
   const meta = course.course_meta
   const author = course.profiles
 
+  let isLiked = false
+  let isBookmarked = false
+  if (user) {
+    const [{ data: like }, { data: bookmark }] = await Promise.all([
+      (supabase as any)
+        .from('likes').select('user_id')
+        .eq('user_id', user.id).eq('content_id', course.id).maybeSingle(),
+      (supabase as any)
+        .from('bookmarks').select('user_id')
+        .eq('user_id', user.id).eq('content_id', course.id).maybeSingle(),
+    ])
+    isLiked = !!like
+    isBookmarked = !!bookmark
+  }
+
   return (
     <>
       <Navigation {...navProps} />
@@ -53,6 +77,19 @@ export default async function CoursePage({ params }: PageProps) {
             {t.description && (
               <p className="text-[#6B5F58] leading-relaxed text-lg">{t.description}</p>
             )}
+            <div className="flex items-center gap-3 mt-4">
+              <LikeButton
+                contentId={course.id}
+                initialIsLiked={isLiked}
+                initialCount={course.likes_count ?? 0}
+                isLoggedIn={!!user}
+              />
+              <BookmarkButton
+                contentId={course.id}
+                initialIsBookmarked={isBookmarked}
+                isLoggedIn={!!user}
+              />
+            </div>
           </div>
 
           {/* Course info sidebar */}

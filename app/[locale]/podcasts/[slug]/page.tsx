@@ -1,10 +1,11 @@
 import { notFound } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
-import { getNavProps } from '@/lib/nav'
 import { getTranslation } from '@/lib/content'
 import { Navigation } from '@/components/layout/Navigation'
 import { Footer } from '@/components/layout/Footer'
 import { EmbedPlayer } from '@/components/content/EmbedPlayer'
+import { LikeButton } from '@/components/social/LikeButton'
+import { BookmarkButton } from '@/components/social/BookmarkButton'
 import Link from 'next/link'
 
 interface PageProps {
@@ -14,7 +15,15 @@ interface PageProps {
 export default async function PodcastPage({ params }: PageProps) {
   const { locale, slug } = await params
   const supabase = await createClient()
-  const navProps = await getNavProps()
+
+  const { data: { user } } = await supabase.auth.getUser()
+  let navUserRole = null
+  if (user) {
+    const { data: navProfile } = await (supabase as any)
+      .from('profiles').select('role').eq('id', user.id).single()
+    navUserRole = navProfile?.role ?? null
+  }
+  const navProps = { isLoggedIn: !!user, userRole: navUserRole as any }
 
   const { data: podcast } = await (supabase as any)
     .from('content')
@@ -37,6 +46,21 @@ export default async function PodcastPage({ params }: PageProps) {
   const meta = podcast.podcast_meta
   const author = podcast.profiles
 
+  let isLiked = false
+  let isBookmarked = false
+  if (user) {
+    const [{ data: like }, { data: bookmark }] = await Promise.all([
+      (supabase as any)
+        .from('likes').select('user_id')
+        .eq('user_id', user.id).eq('content_id', podcast.id).maybeSingle(),
+      (supabase as any)
+        .from('bookmarks').select('user_id')
+        .eq('user_id', user.id).eq('content_id', podcast.id).maybeSingle(),
+    ])
+    isLiked = !!like
+    isBookmarked = !!bookmark
+  }
+
   return (
     <>
       <Navigation {...navProps} />
@@ -50,7 +74,7 @@ export default async function PodcastPage({ params }: PageProps) {
               className="w-24 h-24 rounded-xl object-cover flex-shrink-0"
             />
           )}
-          <div>
+          <div className="flex-1">
             {meta?.episode_number && (
               <p className="text-sm font-mono text-[#A0522D] mb-1">{meta.episode_number}</p>
             )}
@@ -62,6 +86,19 @@ export default async function PodcastPage({ params }: PageProps) {
                   {author.display_name}
                 </Link>
               )}
+              <div className="ml-auto flex items-center gap-3">
+                <LikeButton
+                  contentId={podcast.id}
+                  initialIsLiked={isLiked}
+                  initialCount={podcast.likes_count ?? 0}
+                  isLoggedIn={!!user}
+                />
+                <BookmarkButton
+                  contentId={podcast.id}
+                  initialIsBookmarked={isBookmarked}
+                  isLoggedIn={!!user}
+                />
+              </div>
             </div>
           </div>
         </div>
