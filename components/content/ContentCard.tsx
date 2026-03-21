@@ -1,4 +1,4 @@
-import Link from 'next/link'
+import { Link } from '@/i18n/navigation'
 import type { ContentType } from '@/lib/supabase/types'
 
 const TYPE_PATHS: Record<ContentType, string> = {

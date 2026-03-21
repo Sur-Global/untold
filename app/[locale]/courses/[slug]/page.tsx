@@ -68,10 +68,12 @@ export default async function CoursePage({ params }: PageProps) {
             )}
 
             <button
-              className="w-full py-3 rounded-lg font-mono text-sm font-semibold text-white mb-4"
-              style={{ background: 'linear-gradient(135deg, #8B4513 0%, #A0522D 100%)' }}
+              disabled
+              className="w-full py-3 rounded-lg font-mono text-sm font-semibold mb-4 cursor-not-allowed"
+              style={{ background: 'rgba(139,69,19,0.3)', color: 'rgba(255,255,255,0.6)' }}
+              title="Enrollment coming soon"
             >
-              Enroll Now
+              Enroll Now — Coming Soon
             </button>
 
             <div className="space-y-3 text-sm font-mono text-[#6B5F58]">
