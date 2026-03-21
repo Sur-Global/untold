@@ -1,10 +1,8 @@
 import { createClient } from '@/lib/supabase/server'
-import { requireAdmin } from '@/lib/require-admin'
 import { TranslateButton } from '@/components/admin/TranslateButton'
 import { SUPPORTED_LOCALES } from '@/lib/deepl'
 
 export default async function TranslationsPage() {
-  await requireAdmin()
   const supabase = await createClient()
 
   const { data: items } = await (supabase as any)
@@ -37,10 +35,8 @@ export default async function TranslationsPage() {
           <thead>
             <tr className="border-b text-left font-mono text-xs uppercase text-muted-foreground">
               <th className="py-2 pr-4">Title</th>
-              <th className="py-2 pr-4">Type</th>
               <th className="py-2 pr-4">Published</th>
-              <th className="py-2 pr-2">EN</th>
-              {SUPPORTED_LOCALES.map((locale) => (
+              {['en', ...SUPPORTED_LOCALES].map((locale) => (
                 <th key={locale} className="py-2 pr-2 uppercase">{locale}</th>
               ))}
             </tr>
@@ -58,8 +54,7 @@ export default async function TranslationsPage() {
                 <tr key={item.id} className="border-b hover:bg-muted/30">
                   <td className="py-2 pr-4 max-w-xs truncate font-medium">
                     {enRow?.title ?? item.id}
-                  </td>
-                  <td className="py-2 pr-4">
+                    {' '}
                     <span className="rounded bg-muted px-1.5 py-0.5 text-xs font-mono">
                       {item.type}
                     </span>
@@ -69,10 +64,7 @@ export default async function TranslationsPage() {
                       ? new Date(item.published_at).toLocaleDateString()
                       : '—'}
                   </td>
-                  <td className="py-2 pr-2">
-                    <span className="text-green-600">✓</span>
-                  </td>
-                  {SUPPORTED_LOCALES.map((locale) => {
+                  {['en', ...SUPPORTED_LOCALES].map((locale) => {
                     const isAutoTranslated = translationMap.get(locale)
                     const exists = translationMap.has(locale)
                     return (
@@ -81,6 +73,8 @@ export default async function TranslationsPage() {
                           <span className={isAutoTranslated === false ? 'text-blue-600' : 'text-green-600'}>
                             ✓
                           </span>
+                        ) : locale === 'en' ? (
+                          <span className="text-muted-foreground">—</span>
                         ) : (
                           <TranslateButton contentId={item.id} locale={locale} />
                         )}
