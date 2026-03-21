@@ -2,6 +2,7 @@
 
 import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
+import { after } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
 import { requireCreator } from '@/lib/require-creator'
 import { slugify } from '@/lib/utils'
@@ -97,4 +98,45 @@ export async function updatePill(id: string, formData: FormData) {
 
   revalidatePath(`/dashboard/pills/${id}/edit`)
   revalidatePath('/dashboard')
+}
+
+export async function publishPill(id: string) {
+  const { user } = await requireCreator()
+  const supabase = await createClient()
+
+  await (supabase as any)
+    .from('content')
+    .update({ status: 'published', published_at: new Date().toISOString() })
+    .eq('id', id)
+    .eq('author_id', user.id)
+
+  revalidatePath('/dashboard')
+  revalidatePath('/dashboard/pills')
+  revalidatePath(`/dashboard/pills/${id}/edit`)
+
+  after(async () => {
+    await fetch(`${process.env.NEXT_PUBLIC_SITE_URL}/api/translate`, {
+      method: 'POST',
+      headers: {
+        'content-type': 'application/json',
+        'x-translate-secret': process.env.TRANSLATE_API_SECRET!,
+      },
+      body: JSON.stringify({ contentId: id }),
+    })
+  })
+}
+
+export async function unpublishPill(id: string) {
+  const { user } = await requireCreator()
+  const supabase = await createClient()
+
+  await (supabase as any)
+    .from('content')
+    .update({ status: 'draft', published_at: null })
+    .eq('id', id)
+    .eq('author_id', user.id)
+
+  revalidatePath('/dashboard')
+  revalidatePath('/dashboard/pills')
+  revalidatePath(`/dashboard/pills/${id}/edit`)
 }
