@@ -14,7 +14,7 @@ export default async function CreatePage() {
     <>
       <Navigation {...navProps} />
       <main className="max-w-3xl mx-auto px-4 sm:px-6 py-12">
-        <h1 className="mb-8">{t('titlePlaceholder')}</h1>
+        <h1 className="mb-8">{t('newArticle')}</h1>
         <CreateArticleForm />
       </main>
       <Footer />

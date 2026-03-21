@@ -82,13 +82,15 @@
     "publish": "Publish",
     "unpublish": "Unpublish",
     "saveChanges": "Save changes",
-    "saving": "Saving…"
+    "saving": "Saving…",
+    "saveAsDraft": "Save as draft"
   },
   "editor": {
     "titlePlaceholder": "Article title",
     "excerptPlaceholder": "Short summary shown in listings (optional)",
     "coverImagePlaceholder": "Cover image URL (optional)",
     "bodyPlaceholder": "Start writing your article…",
+    "newArticle": "New article",
     "backToDashboard": "← Dashboard"
   }
 }

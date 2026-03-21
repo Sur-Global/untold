@@ -69,7 +69,7 @@ export function CreateArticleForm() {
         disabled={isPending}
         className="gradient-rust text-white border-0"
       >
-        {isPending ? td('saving') : 'Save as draft'}
+        {isPending ? td('saving') : td('saveAsDraft')}
       </Button>
     </form>
   )
