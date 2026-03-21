@@ -83,7 +83,7 @@ export async function POST(req: NextRequest) {
         const { texts, paths } = extractTextNodes(source.body)
         if (texts.length > 0) {
           const bodyTranslations = await translateTexts(texts, targetLocale)
-          translatedBody = injectTextNodes(source.body, bodyTranslations, paths) as Record<string, unknown>
+          translatedBody = injectTextNodes(source.body, bodyTranslations, paths) as unknown as Record<string, unknown>
         } else {
           translatedBody = source.body
         }

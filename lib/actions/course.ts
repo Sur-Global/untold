@@ -107,6 +107,8 @@ export async function publishCourse(id: string) {
   await requireAdmin()
   const supabase = await createClient()
 
+  // Intentionally no author_id filter — course publish is admin-only and any admin
+  // may publish any course regardless of authorship (by design for v1).
   await (supabase as any)
     .from('content')
     .update({ status: 'published', published_at: new Date().toISOString() })

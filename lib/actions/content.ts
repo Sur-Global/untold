@@ -2,6 +2,7 @@
 
 import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
+import { after } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
 import { requireCreator } from '@/lib/require-creator'
 
@@ -17,6 +18,24 @@ export async function publishContent(id: string, _formData: FormData) {
 
   // 'layout' invalidates /dashboard and all nested pages (edit pages included)
   revalidatePath('/dashboard', 'layout')
+
+  after(async () => {
+    try {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_SITE_URL}/api/translate`, {
+        method: 'POST',
+        headers: {
+          'content-type': 'application/json',
+          'x-translate-secret': process.env.TRANSLATE_API_SECRET!,
+        },
+        body: JSON.stringify({ contentId: id }),
+      })
+      if (!res.ok) {
+        console.error(`Translation trigger failed for ${id}: ${res.status}`)
+      }
+    } catch (err) {
+      console.error(`Translation trigger error for ${id}:`, err)
+    }
+  })
 }
 
 export async function unpublishContent(id: string, _formData: FormData) {
