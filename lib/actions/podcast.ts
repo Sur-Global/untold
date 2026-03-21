@@ -1,0 +1,98 @@
+'use server'
+
+import { revalidatePath } from 'next/cache'
+import { redirect } from 'next/navigation'
+import { createClient } from '@/lib/supabase/server'
+import { requireCreator } from '@/lib/require-creator'
+import { slugify } from '@/lib/utils'
+
+export async function createPodcast(formData: FormData) {
+  const { user } = await requireCreator()
+  const supabase = await createClient()
+
+  const title = (formData.get('title') as string).trim()
+  const description = (formData.get('description') as string)?.trim() || null
+  const embedUrl = (formData.get('embed_url') as string).trim()
+  const coverImageUrl = (formData.get('cover_image_url') as string)?.trim() || null
+  const duration = (formData.get('duration') as string)?.trim() || null
+  const episodeNumber = (formData.get('episode_number') as string)?.trim() || null
+
+  const slug = `${slugify(title)}-${Date.now().toString(36)}`
+
+  const { data: content, error } = await (supabase as any)
+    .from('content')
+    .insert({
+      type: 'podcast',
+      author_id: user.id,
+      slug,
+      source_locale: 'en',
+      status: 'draft',
+      cover_image_url: coverImageUrl,
+    })
+    .select('id')
+    .single()
+
+  if (error || !content) throw new Error(error?.message ?? 'Failed to create podcast')
+
+  const { error: translationError } = await (supabase as any)
+    .from('content_translations')
+    .insert({
+      content_id: content.id,
+      locale: 'en',
+      title,
+      description,
+      body: null,
+    })
+
+  if (translationError) throw new Error(translationError.message ?? 'Failed to save podcast translation')
+
+  const { error: metaError } = await (supabase as any)
+    .from('podcast_meta')
+    .insert({
+      content_id: content.id,
+      embed_url: embedUrl,
+      cover_image_url: coverImageUrl,
+      duration,
+      episode_number: episodeNumber,
+    })
+
+  if (metaError) throw new Error(metaError.message ?? 'Failed to save podcast metadata')
+
+  revalidatePath('/dashboard')
+  redirect(`/dashboard/podcasts/${content.id}/edit`)
+}
+
+export async function updatePodcast(id: string, formData: FormData) {
+  const { user } = await requireCreator()
+  const supabase = await createClient()
+
+  const title = (formData.get('title') as string).trim()
+  const description = (formData.get('description') as string)?.trim() || null
+  const embedUrl = (formData.get('embed_url') as string).trim()
+  const coverImageUrl = (formData.get('cover_image_url') as string)?.trim() || null
+  const duration = (formData.get('duration') as string)?.trim() || null
+  const episodeNumber = (formData.get('episode_number') as string)?.trim() || null
+
+  await (supabase as any)
+    .from('content')
+    .update({ cover_image_url: coverImageUrl, updated_at: new Date().toISOString() })
+    .eq('id', id)
+    .eq('author_id', user.id)
+
+  await (supabase as any)
+    .from('content_translations')
+    .upsert(
+      { content_id: id, locale: 'en', title, description, body: null },
+      { onConflict: 'content_id,locale' }
+    )
+
+  await (supabase as any)
+    .from('podcast_meta')
+    .upsert(
+      { content_id: id, embed_url: embedUrl, cover_image_url: coverImageUrl, duration, episode_number: episodeNumber },
+      { onConflict: 'content_id' }
+    )
+
+  revalidatePath(`/dashboard/podcasts/${id}/edit`)
+  revalidatePath('/dashboard')
+}
