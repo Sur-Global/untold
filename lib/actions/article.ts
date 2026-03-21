@@ -74,7 +74,7 @@ export async function updateArticle(id: string, formData: FormData) {
   revalidatePath(`/dashboard/articles/${id}/edit`)
 }
 
-export async function publishArticle(id: string) {
+export async function publishArticle(id: string, _formData: FormData) {
   await requireCreator()
   const supabase = await createClient()
 
@@ -87,7 +87,7 @@ export async function publishArticle(id: string) {
   revalidatePath(`/dashboard/articles/${id}/edit`)
 }
 
-export async function unpublishArticle(id: string) {
+export async function unpublishArticle(id: string, _formData: FormData) {
   await requireCreator()
   const supabase = await createClient()
 
