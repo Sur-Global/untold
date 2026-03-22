@@ -75,7 +75,7 @@ export function TagsInput({ value, onChange, placeholder = 'Add categories…' }
   return (
     <div className="relative">
       <div
-        className="min-h-[50px] flex flex-wrap gap-1.5 items-center px-4 py-2.5 rounded-[10px] border border-primary/20 bg-card cursor-text"
+        className="min-h-[50px] flex flex-wrap gap-1.5 items-center px-4 py-2.5 rounded-[10px] border border-primary/20 bg-white cursor-text"
         onClick={() => inputRef.current?.focus()}
       >
         {value.map((tag) => (

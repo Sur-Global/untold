@@ -168,7 +168,7 @@ export function EditArticleForm({
                 onChange={(e) => setTitle(e.target.value)}
                 placeholder={t('titlePlaceholder')}
                 required
-                className="w-full h-[50px] px-4 rounded-[10px] border border-primary/20 bg-transparent text-foreground text-base outline-none focus:border-primary/50 transition-colors placeholder:text-muted-foreground"
+                className="w-full h-[50px] px-4 rounded-[10px] border border-primary/20 bg-white text-foreground text-base outline-none focus:border-primary/50 transition-colors placeholder:text-muted-foreground"
               />
             </div>
 
@@ -180,7 +180,7 @@ export function EditArticleForm({
                 value={excerpt}
                 onChange={(e) => setExcerpt(e.target.value)}
                 placeholder="How communities are reclaiming their spaces"
-                className="w-full h-[50px] px-4 rounded-[10px] border border-primary/20 bg-transparent text-foreground text-base outline-none focus:border-primary/50 transition-colors placeholder:text-muted-foreground"
+                className="w-full h-[50px] px-4 rounded-[10px] border border-primary/20 bg-white text-foreground text-base outline-none focus:border-primary/50 transition-colors placeholder:text-muted-foreground"
               />
             </div>
 
@@ -199,7 +199,7 @@ export function EditArticleForm({
                 onChange={(e) => setFeaturedSummary(e.target.value)}
                 placeholder="Urban regeneration is not just about new buildings…"
                 rows={4}
-                className="w-full px-4 py-3 rounded-[10px] border border-primary/20 bg-transparent text-foreground text-base outline-none focus:border-primary/50 transition-colors resize-none placeholder:text-muted-foreground"
+                className="w-full px-4 py-3 rounded-[10px] border border-primary/20 bg-white text-foreground text-base outline-none focus:border-primary/50 transition-colors resize-none placeholder:text-muted-foreground"
               />
             </div>
 
@@ -275,7 +275,7 @@ export function EditArticleForm({
                 value={imageCredits}
                 onChange={(e) => setImageCredits(e.target.value)}
                 placeholder="e.g. Chris Lawton on Unsplash"
-                className="w-full h-[50px] px-4 rounded-[10px] border border-primary/20 bg-transparent text-foreground text-base outline-none focus:border-primary/50 transition-colors placeholder:text-muted-foreground"
+                className="w-full h-[50px] px-4 rounded-[10px] border border-primary/20 bg-white text-foreground text-base outline-none focus:border-primary/50 transition-colors placeholder:text-muted-foreground"
               />
             </div>
           </div>
