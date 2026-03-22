@@ -198,31 +198,33 @@ export function Navigation({ isLoggedIn, userRole }: NavigationProps) {
             >
               <Menu className="h-5 w-5" />
             </SheetTrigger>
-            <SheetContent side="right" style={{ background: '#2c2420', width: 288 }}>
-              <nav className="flex flex-col gap-1 mt-8" style={{ fontFamily: 'Inter, sans-serif' }}>
-                {NAV_LINKS.map(({ key, href }) => (
+            <SheetContent side="right" style={{ background: '#2c2420', width: 288, padding: '0' }}>
+              <nav className="flex flex-col h-full px-6 pt-14 pb-8" style={{ fontFamily: 'Inter, sans-serif' }}>
+                <div className="flex flex-col gap-1 flex-1">
+                  {NAV_LINKS.map(({ key, href }) => (
+                    <Link
+                      key={key}
+                      href={href}
+                      className="py-3.5 text-sm transition-opacity hover:opacity-70"
+                      style={{
+                        color: '#F5F1E8',
+                        textDecoration: 'none',
+                        borderBottom: '1px solid rgba(139,69,19,0.15)',
+                      }}
+                    >
+                      {t(key)}
+                    </Link>
+                  ))}
                   <Link
-                    key={key}
-                    href={href}
-                    className="py-3 text-sm transition-opacity hover:opacity-70"
-                    style={{
-                      color: '#F5F1E8',
-                      textDecoration: 'none',
-                      borderBottom: '1px solid rgba(139,69,19,0.15)',
-                    }}
+                    href="/search"
+                    className="py-3.5 text-sm transition-opacity hover:opacity-70"
+                    style={{ color: '#F5F1E8', textDecoration: 'none', borderBottom: '1px solid rgba(139,69,19,0.15)' }}
                   >
-                    {t(key)}
+                    {t('search')}
                   </Link>
-                ))}
-                <Link
-                  href="/search"
-                  className="py-3 text-sm transition-opacity hover:opacity-70"
-                  style={{ color: '#F5F1E8', textDecoration: 'none', borderBottom: '1px solid rgba(139,69,19,0.15)' }}
-                >
-                  {t('search')}
-                </Link>
+                </div>
 
-                <div className="flex flex-col gap-3 pt-5">
+                <div className="flex flex-col gap-3 pt-6">
                   <LocaleSwitcher />
                   {isLoggedIn && isCreator(userRole) ? (
                     <>
@@ -231,7 +233,7 @@ export function Navigation({ isLoggedIn, userRole }: NavigationProps) {
                       </Link>
                       <Link
                         href="/create"
-                        className="inline-flex items-center justify-center h-[36px] rounded-lg text-sm text-white"
+                        className="inline-flex items-center justify-center h-[42px] rounded-[10px] text-sm text-white"
                         style={{ background: 'linear-gradient(135deg,#8b4513,#a0522d)', fontFamily: 'JetBrains Mono, monospace', fontSize: 13 }}
                       >
                         {t('createContent')}
@@ -251,7 +253,7 @@ export function Navigation({ isLoggedIn, userRole }: NavigationProps) {
                   ) : (
                     <Link
                       href="/auth/login"
-                      className="inline-flex items-center justify-center h-[36px] rounded-lg text-sm text-white"
+                      className="inline-flex items-center justify-center h-[42px] rounded-[10px] text-sm text-white"
                       style={{ background: 'linear-gradient(135deg,#8b4513,#a0522d)', fontFamily: 'JetBrains Mono, monospace' }}
                     >
                       {t('login')}
