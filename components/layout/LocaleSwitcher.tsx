@@ -38,10 +38,8 @@ export function LocaleSwitcher() {
 
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <Button variant="ghost" size="sm" className="font-mono text-xs uppercase">
-          {current?.code.toUpperCase()}
-        </Button>
+      <DropdownMenuTrigger className="font-mono text-xs uppercase px-3 py-1.5 hover:bg-accent hover:text-accent-foreground rounded-md transition-colors">
+        {current?.code.toUpperCase()}
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
         {LOCALES.map((l) => (

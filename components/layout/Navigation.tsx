@@ -52,20 +52,20 @@ export function Navigation({ isLoggedIn, userRole }: NavigationProps) {
           <div className="hidden md:flex items-center gap-2">
             {isLoggedIn ? (
               <>
-                <Button asChild variant="ghost" size="sm">
-                  <Link href="/dashboard">{t('dashboard')}</Link>
+                <Button variant="ghost" size="sm" render={<Link href="/dashboard" />}>
+                  {t('dashboard')}
                 </Button>
-                <Button asChild size="sm" className="gradient-rust text-white border-0">
-                  <Link href="/create">{t('createContent')}</Link>
+                <Button size="sm" className="gradient-rust text-white border-0" render={<Link href="/create" />}>
+                  {t('createContent')}
                 </Button>
               </>
             ) : (
               <>
-                <Button asChild variant="ghost" size="sm">
-                  <Link href="/auth/login">{t('login')}</Link>
+                <Button variant="ghost" size="sm" render={<Link href="/auth/login" />}>
+                  {t('login')}
                 </Button>
-                <Button asChild size="sm" className="gradient-rust text-white border-0">
-                  <Link href="/auth/signup">{t('signup')}</Link>
+                <Button size="sm" className="gradient-rust text-white border-0" render={<Link href="/auth/signup" />}>
+                  {t('signup')}
                 </Button>
               </>
             )}
@@ -73,10 +73,8 @@ export function Navigation({ isLoggedIn, userRole }: NavigationProps) {
 
           {/* Mobile hamburger */}
           <Sheet>
-            <SheetTrigger asChild>
-              <Button variant="ghost" size="icon" className="md:hidden" aria-label="Open menu">
-                <Menu className="h-5 w-5" />
-              </Button>
+            <SheetTrigger className="md:hidden inline-flex items-center justify-center rounded-lg p-1.5 hover:bg-muted transition-colors" aria-label="Open menu">
+              <Menu className="h-5 w-5" />
             </SheetTrigger>
             <SheetContent side="right" className="bg-[#F5F1E8] w-72">
               <nav className="flex flex-col gap-4 mt-8" style={{ fontFamily: 'JetBrains Mono, monospace' }}>
@@ -88,20 +86,20 @@ export function Navigation({ isLoggedIn, userRole }: NavigationProps) {
                 <div className="flex flex-col gap-2 mt-4">
                   {isLoggedIn ? (
                     <>
-                      <Button asChild variant="ghost" className="justify-start">
-                        <Link href="/dashboard">{t('dashboard')}</Link>
+                      <Button variant="ghost" className="justify-start" render={<Link href="/dashboard" />}>
+                        {t('dashboard')}
                       </Button>
-                      <Button asChild className="gradient-rust text-white border-0">
-                        <Link href="/create">{t('createContent')}</Link>
+                      <Button className="gradient-rust text-white border-0" render={<Link href="/create" />}>
+                        {t('createContent')}
                       </Button>
                     </>
                   ) : (
                     <>
-                      <Button asChild variant="ghost" className="justify-start">
-                        <Link href="/auth/login">{t('login')}</Link>
+                      <Button variant="ghost" className="justify-start" render={<Link href="/auth/login" />}>
+                        {t('login')}
                       </Button>
-                      <Button asChild className="gradient-rust text-white border-0">
-                        <Link href="/auth/signup">{t('signup')}</Link>
+                      <Button className="gradient-rust text-white border-0" render={<Link href="/auth/signup" />}>
+                        {t('signup')}
                       </Button>
                     </>
                   )}
