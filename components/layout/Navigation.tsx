@@ -56,7 +56,7 @@ export function Navigation({ isLoggedIn, userRole }: NavigationProps) {
         {/* Desktop nav links */}
         <nav className="hidden md:flex items-center gap-6">
           {NAV_LINKS.map(({ key, href }) => {
-            const active = pathname.startsWith(`/${href.slice(1)}`) || pathname.includes(href)
+            const active = pathname.startsWith(href)
             return (
               <Link
                 key={key}
