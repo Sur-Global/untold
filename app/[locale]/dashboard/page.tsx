@@ -56,7 +56,7 @@ export default async function DashboardPage() {
     .eq('author_id', user.id)
     .order('created_at', { ascending: false })
 
-  const [navProps, t, { data: items }] = await Promise.all([
+  const [{ userId, ...navProps }, t, { data: items }] = await Promise.all([
     getNavProps(),
     getTranslations('dashboard'),
     itemsPromise,

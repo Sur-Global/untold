@@ -16,8 +16,7 @@ interface PageProps {
 export default async function SearchPage({ params, searchParams }: PageProps) {
   const { locale } = await params
   const { q = '', type: typeFilter } = await searchParams
-  const navProps = await getNavProps()
-  const supabase = await createClient()
+  const [{ userId, ...navProps }, supabase] = await Promise.all([getNavProps(), createClient()])
 
   let results: any[] = []
 

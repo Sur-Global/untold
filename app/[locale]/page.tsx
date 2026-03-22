@@ -1,21 +1,15 @@
 import { createClient } from '@/lib/supabase/server'
+import { getNavProps } from '@/lib/nav'
 import { getTranslations } from 'next-intl/server'
 import { Navigation } from '@/components/layout/Navigation'
 import { Footer } from '@/components/layout/Footer'
 
 export default async function HomePage() {
   const supabase = await createClient()
-  const t = await getTranslations('home')
-
-  // Get current user + role for Navigation
-  const { data: { user } } = await supabase.auth.getUser()
-  let userRole = null
-  if (user) {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const { data: profile } = await (supabase as any)
-      .from('profiles').select('role').eq('id', user.id).single() as { data: { role: string } | null }
-    userRole = (profile?.role ?? null) as typeof userRole
-  }
+  const [t, { userId, ...navProps }] = await Promise.all([
+    getTranslations('home'),
+    getNavProps(),
+  ])
 
   // Fetch curated content from homepage_feed (admin + author published content)
   // Filter content_translations client-side — PostgREST doesn't support
@@ -33,7 +27,7 @@ export default async function HomePage() {
 
   return (
     <>
-      <Navigation isLoggedIn={!!user} userRole={userRole} />
+      <Navigation {...navProps} />
       <main className="max-w-7xl mx-auto px-4 sm:px-6 py-20">
         {/* Hero */}
         <div className="mb-20 text-center">

@@ -13,14 +13,14 @@ interface PageProps {
 export default async function TagPage({ params }: PageProps) {
   const { locale, slug } = await params
   const supabase = await createClient()
-  const navProps = await getNavProps()
 
-  // Look up the tag
-  const { data: tag } = await (supabase as any)
+  const tagPromise = (supabase as any)
     .from('tags')
     .select('id, slug, names')
     .eq('slug', slug)
     .single()
+
+  const [{ userId, ...navProps }, { data: tag }] = await Promise.all([getNavProps(), tagPromise])
 
   if (!tag) notFound()
 

@@ -19,9 +19,8 @@ export default async function ArticlesPage({ params, searchParams }: PageProps) 
   const offset = (page - 1) * PAGE_SIZE
 
   const supabase = await createClient()
-  const navProps = await getNavProps()
 
-  const { data: articles, count } = await (supabase as any)
+  const articlesQuery = (supabase as any)
     .from('content')
     .select(`
       id, slug, type, is_featured, likes_count, published_at, cover_image_url,
@@ -34,6 +33,11 @@ export default async function ArticlesPage({ params, searchParams }: PageProps) 
     .order('is_featured', { ascending: false })
     .order('published_at', { ascending: false })
     .range(offset, offset + PAGE_SIZE - 1)
+
+  const [{ userId, ...navProps }, { data: articles, count }] = await Promise.all([
+    getNavProps(),
+    articlesQuery,
+  ])
 
   const totalPages = Math.ceil((count ?? 0) / PAGE_SIZE)
 

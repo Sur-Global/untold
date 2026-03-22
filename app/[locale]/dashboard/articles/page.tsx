@@ -40,7 +40,7 @@ export default async function DashboardArticlesPage() {
     .eq('type', 'article')
     .order('created_at', { ascending: false })
 
-  const [navProps, t, { data: articles }] = await Promise.all([
+  const [{ userId, ...navProps }, t, { data: articles }] = await Promise.all([
     getNavProps(),
     getTranslations('dashboard'),
     articlesPromise,

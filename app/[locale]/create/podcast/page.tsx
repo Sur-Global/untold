@@ -8,8 +8,10 @@ import { CreatePodcastForm } from './CreatePodcastForm'
 
 export default async function CreatePodcastPage() {
   await requireCreator()
-  const navProps = await getNavProps()
-  const t = await getTranslations('editor')
+  const [{ userId, ...navProps }, t] = await Promise.all([
+    getNavProps(),
+    getTranslations('editor'),
+  ])
 
   return (
     <>

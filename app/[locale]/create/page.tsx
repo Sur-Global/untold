@@ -16,8 +16,10 @@ const CONTENT_TYPES = [
 
 export default async function CreatePickerPage() {
   await requireCreator()
-  const navProps = await getNavProps()
-  const t = await getTranslations('create')
+  const [{ userId, ...navProps }, t] = await Promise.all([
+    getNavProps(),
+    getTranslations('create'),
+  ])
 
   return (
     <>
