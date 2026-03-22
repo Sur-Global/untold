@@ -104,18 +104,25 @@ export default async function AuthorPage({ params }: PageProps) {
       <Navigation {...navProps} />
 
       {/* Author profile header */}
-      <div className="bg-[#fdfcfa]" style={{ borderBottom: '0.9px solid #d4a574' }}>
-        <div className="max-w-[1280px] mx-auto px-6 py-16">
-          <div className="flex items-start gap-8">
+      <div
+        style={{
+          background: 'linear-gradient(160deg, #1e1410 0%, #2c2420 60%, #1a1008 100%)',
+          borderBottom: '1px solid rgba(212,165,116,0.2)',
+        }}
+      >
+        <div className="max-w-[1280px] mx-auto px-4 sm:px-6 py-10 sm:py-14">
+          {/* Mobile: centered stack. Desktop: side-by-side */}
+          <div className="flex flex-col items-center text-center sm:flex-row sm:items-start sm:text-left gap-6 sm:gap-10">
+
             {/* Avatar */}
             <div
               className="shrink-0 overflow-hidden"
               style={{
-                width: 128,
-                height: 128,
-                borderRadius: 16,
-                border: '2.7px solid #b8860b',
-                boxShadow: '0 4px 12px rgba(139,69,19,0.15)',
+                width: 96,
+                height: 96,
+                borderRadius: '50%',
+                border: '2px solid rgba(184,134,11,0.7)',
+                boxShadow: '0 0 0 4px rgba(184,134,11,0.12), 0 8px 24px rgba(0,0,0,0.4)',
               }}
             >
               {author.avatar_url ? (
@@ -125,8 +132,8 @@ export default async function AuthorPage({ params }: PageProps) {
                   className="w-full h-full object-cover"
                 />
               ) : (
-                <div className="w-full h-full bg-[#e8d5b5] flex items-center justify-center">
-                  <span className="text-4xl font-bold text-[#a0522d]">
+                <div className="w-full h-full bg-[#3a2f22] flex items-center justify-center">
+                  <span style={{ fontFamily: 'Audiowide, sans-serif', fontSize: 32, color: '#d4a574' }}>
                     {author.display_name.charAt(0).toUpperCase()}
                   </span>
                 </div>
@@ -136,21 +143,37 @@ export default async function AuthorPage({ params }: PageProps) {
             {/* Info */}
             <div className="flex-1 min-w-0">
               <h1
-                className="text-[40px] leading-[44px] tracking-[0.8px] text-[#5d4e37] uppercase mb-3"
+                className="uppercase mb-2"
+                style={{
+                  fontFamily: 'Audiowide, sans-serif',
+                  fontSize: 'clamp(22px, 5vw, 36px)',
+                  letterSpacing: '0.04em',
+                  color: '#F5F1E8',
+                  lineHeight: 1.2,
+                }}
               >
                 {author.display_name}
               </h1>
+
               {author.bio && (
-                <p className="text-[18px] leading-[1.6] text-[#6b5744] mb-4 max-w-3xl">
+                <p
+                  className="mb-4 max-w-2xl mx-auto sm:mx-0"
+                  style={{ fontSize: 15, lineHeight: 1.65, color: 'rgba(245,241,232,0.65)' }}
+                >
                   {author.bio}
                 </p>
               )}
-              <div className="flex flex-wrap items-center gap-6 text-[14px] text-[#8b7355] mb-4">
+
+              {/* Meta row */}
+              <div
+                className="flex flex-wrap justify-center sm:justify-start items-center gap-x-4 gap-y-1 mb-4"
+                style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 12, color: 'rgba(245,241,232,0.45)' }}
+              >
                 {author.location && (
-                  <span className="flex items-center gap-1.5">
-                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.4">
-                      <path d="M8 1.5a4.5 4.5 0 0 1 4.5 4.5c0 3-4.5 8.5-4.5 8.5S3.5 9 3.5 6A4.5 4.5 0 0 1 8 1.5z" />
-                      <circle cx="8" cy="6" r="1.5" />
+                  <span className="flex items-center gap-1">
+                    <svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5">
+                      <path d="M8 1.5a4.5 4.5 0 0 1 4.5 4.5c0 3-4.5 8.5-4.5 8.5S3.5 9 3.5 6A4.5 4.5 0 0 1 8 1.5z"/>
+                      <circle cx="8" cy="6" r="1.5"/>
                     </svg>
                     {author.location}
                   </span>
@@ -160,38 +183,41 @@ export default async function AuthorPage({ params }: PageProps) {
                     href={author.website}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex items-center gap-1.5 hover:text-primary transition-colors"
+                    className="flex items-center gap-1 hover:opacity-80 transition-opacity"
+                    style={{ color: 'inherit', textDecoration: 'none' }}
                   >
-                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.4">
-                      <circle cx="8" cy="8" r="6.5" />
-                      <path d="M8 1.5C8 1.5 6 4 6 8s2 6.5 2 6.5M8 1.5C8 1.5 10 4 10 8s-2 6.5-2 6.5M1.5 8h13" />
+                    <svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5">
+                      <circle cx="8" cy="8" r="6.5"/>
+                      <path d="M8 1.5C8 1.5 6 4 6 8s2 6.5 2 6.5M8 1.5C8 1.5 10 4 10 8s-2 6.5-2 6.5M1.5 8h13"/>
                     </svg>
                     Website
                   </a>
                 )}
-                <span className="flex items-center gap-1.5">
-                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.4">
-                    <rect x="1.5" y="2.5" width="13" height="12" rx="2" />
-                    <path d="M5 1.5v2M11 1.5v2M1.5 6.5h13" />
-                  </svg>
-                  Joined {joinedDate}
-                </span>
+                <span>Joined {joinedDate}</span>
               </div>
-              <div className="flex items-center gap-4 text-[14px] text-[#8b7355] mb-4">
-                <span>
-                  <strong className="text-[#5d4e37]">{author.followers_count ?? 0}</strong> followers
-                </span>
-                <span>
-                  <strong className="text-[#5d4e37]">{author.following_count ?? 0}</strong> following
-                </span>
+
+              {/* Stats + follow */}
+              <div className="flex flex-wrap justify-center sm:justify-start items-center gap-4">
+                <div className="flex items-center gap-4" style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 13 }}>
+                  <span style={{ color: 'rgba(245,241,232,0.55)' }}>
+                    <span style={{ color: '#d4a574', fontWeight: 600 }}>{author.followers_count ?? 0}</span>
+                    {' '}followers
+                  </span>
+                  <span style={{ color: 'rgba(245,241,232,0.3)' }}>·</span>
+                  <span style={{ color: 'rgba(245,241,232,0.55)' }}>
+                    <span style={{ color: '#d4a574', fontWeight: 600 }}>{author.following_count ?? 0}</span>
+                    {' '}following
+                  </span>
+                </div>
+
+                {user && user.id !== author.id && (
+                  <FollowButton
+                    profileId={author.id}
+                    initialIsFollowing={isFollowing}
+                    isLoggedIn={true}
+                  />
+                )}
               </div>
-              {user && user.id !== author.id && (
-                <FollowButton
-                  profileId={author.id}
-                  initialIsFollowing={isFollowing}
-                  isLoggedIn={true}
-                />
-              )}
             </div>
           </div>
         </div>

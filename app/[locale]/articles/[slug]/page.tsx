@@ -174,23 +174,13 @@ export default async function ArticlePage({ params }: PageProps) {
               </div>
 
               {/* Date + read time */}
-              <div className="flex items-center gap-6 text-sm text-muted-foreground">
+              <div className="flex flex-wrap items-center gap-x-5 gap-y-1 text-sm text-muted-foreground">
                 {article.published_at && (
-                  <div className="flex items-center gap-1.5">
-                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden>
-                      <rect x="2" y="3" width="12" height="11" rx="1.5" stroke="currentColor" strokeWidth="1.2"/>
-                      <path d="M5 2v2M11 2v2M2 7h12" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round"/>
-                    </svg>
-                    <span>{formatDate(article.published_at, locale, { month: 'long', day: 'numeric', year: 'numeric' })}</span>
-                  </div>
+                  <span className="whitespace-nowrap">
+                    {formatDate(article.published_at, locale, { month: 'short', day: 'numeric', year: 'numeric' })}
+                  </span>
                 )}
-                <div className="flex items-center gap-1.5">
-                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden>
-                    <circle cx="8" cy="8" r="6" stroke="currentColor" strokeWidth="1.2"/>
-                    <path d="M8 5v3.5l2.5 1.5" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round"/>
-                  </svg>
-                  <span>{tContent('readTime', { minutes })}</span>
-                </div>
+                <span className="whitespace-nowrap">{tContent('readTime', { minutes })}</span>
               </div>
             </div>
 
