@@ -1,0 +1,1 @@
+ALTER TABLE content ADD COLUMN IF NOT EXISTS read_time_minutes INTEGER;
