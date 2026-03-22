@@ -135,6 +135,7 @@ export default async function SearchPage({ params, searchParams }: PageProps) {
               return (
                 <ContentCard
                   key={row.content_id}
+                  contentId={item.id}
                   type={item.type}
                   slug={item.slug}
                   title={t?.title ?? 'Untitled'}

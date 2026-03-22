@@ -23,13 +23,13 @@ export default async function ArticlesPage({ params, searchParams }: PageProps) 
   const articlesQuery = (supabase as any)
     .from('content')
     .select(`
-      id, slug, type, is_featured, likes_count, published_at, cover_image_url,
-      profiles!author_id ( display_name, slug, role ),
-      content_translations ( title, excerpt, locale )
+      id, slug, type, is_featured, likes_count, published_at, cover_image_url, read_time_minutes,
+      profiles!author_id ( display_name, slug, role, avatar_url ),
+      content_translations ( title, excerpt, locale ),
+      content_tags ( tags ( names ) )
     `, { count: 'exact' })
     .eq('type', 'article')
     .eq('status', 'published')
-    .in('profiles.role', ['admin', 'author'])
     .order('is_featured', { ascending: false })
     .order('published_at', { ascending: false })
     .range(offset, offset + PAGE_SIZE - 1)
@@ -38,6 +38,17 @@ export default async function ArticlesPage({ params, searchParams }: PageProps) 
     getNavProps(),
     articlesQuery,
   ])
+
+  const contentIds = (articles ?? []).map((a: any) => a.id)
+  const bookmarkedIds = new Set<string>()
+  if (userId && contentIds.length > 0) {
+    const { data: bookmarks } = await (supabase as any)
+      .from('bookmarks')
+      .select('content_id')
+      .eq('user_id', userId)
+      .in('content_id', contentIds)
+    bookmarks?.forEach((b: any) => bookmarkedIds.add(b.content_id))
+  }
 
   const totalPages = Math.ceil((count ?? 0) / PAGE_SIZE)
 
@@ -55,10 +66,16 @@ export default async function ArticlesPage({ params, searchParams }: PageProps) 
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
               {articles.map((article: any) => {
                 const t = getTranslation(article.content_translations ?? [], locale)
+                const firstTag = article.content_tags?.[0]?.tags
+                const categoryTag = firstTag
+                  ? (firstTag.names[locale] ?? firstTag.names['en'] ?? null)
+                  : null
                 const author = article.profiles
+
                 return (
                   <ContentCard
                     key={article.id}
+                    contentId={article.id}
                     type="article"
                     slug={article.slug}
                     title={t?.title ?? 'Untitled'}
@@ -68,6 +85,12 @@ export default async function ArticlesPage({ params, searchParams }: PageProps) 
                     likesCount={article.likes_count}
                     authorName={author?.display_name}
                     authorSlug={author?.slug}
+                    authorAvatarUrl={author?.avatar_url}
+                    categoryTag={categoryTag}
+                    readTimeMinutes={article.read_time_minutes}
+                    isBookmarked={bookmarkedIds.has(article.id)}
+                    isLoggedIn={navProps.isLoggedIn}
+                    isFeatured={article.is_featured}
                   />
                 )
               })}

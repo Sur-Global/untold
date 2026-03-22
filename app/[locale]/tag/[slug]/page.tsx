@@ -69,6 +69,7 @@ export default async function TagPage({ params }: PageProps) {
               return (
                 <ContentCard
                   key={item.id}
+                  contentId={item.id}
                   type={item.type}
                   slug={item.slug}
                   title={t?.title ?? 'Untitled'}
