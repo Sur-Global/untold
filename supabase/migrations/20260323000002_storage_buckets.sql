@@ -12,7 +12,8 @@ WITH CHECK (bucket_id = 'content-images' AND (storage.foldername(name))[2] = aut
 
 CREATE POLICY "Authenticated users can update their content images"
 ON storage.objects FOR UPDATE TO authenticated
-USING (bucket_id = 'content-images' AND (storage.foldername(name))[2] = auth.uid()::text);
+USING     (bucket_id = 'content-images' AND (storage.foldername(name))[2] = auth.uid()::text)
+WITH CHECK (bucket_id = 'content-images' AND (storage.foldername(name))[2] = auth.uid()::text);
 
 CREATE POLICY "Public read for content images"
 ON storage.objects FOR SELECT TO public
@@ -25,7 +26,8 @@ WITH CHECK (bucket_id = 'avatars' AND name = auth.uid()::text || '.webp');
 
 CREATE POLICY "Authenticated users can update their avatar"
 ON storage.objects FOR UPDATE TO authenticated
-USING (bucket_id = 'avatars' AND name = auth.uid()::text || '.webp');
+USING     (bucket_id = 'avatars' AND name = auth.uid()::text || '.webp')
+WITH CHECK (bucket_id = 'avatars' AND name = auth.uid()::text || '.webp');
 
 CREATE POLICY "Public read for avatars"
 ON storage.objects FOR SELECT TO public
