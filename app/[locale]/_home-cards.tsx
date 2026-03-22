@@ -1,3 +1,4 @@
+'use client'
 import { Link } from '@/i18n/navigation'
 import { BookmarkButton } from '@/components/social/BookmarkButton'
 
