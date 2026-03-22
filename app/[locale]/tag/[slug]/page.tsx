@@ -86,6 +86,7 @@ export default async function TagPage({ params }: PageProps) {
                   rating={item.course_meta?.rating}
                   price={item.course_meta?.price}
                   currency={item.course_meta?.currency}
+                  isLoggedIn={navProps.isLoggedIn}
                 />
               )
             })}
