@@ -5,7 +5,8 @@ import { Navigation } from '@/components/layout/Navigation'
 import { Footer } from '@/components/layout/Footer'
 import { getNavProps } from '@/lib/nav'
 import { Link } from '@/i18n/navigation'
-import { Button, buttonVariants } from '@/components/ui/button'
+import { Button } from '@/components/ui/button'
+import { buttonVariants } from '@/components/ui/button-variants'
 import { publishArticle, unpublishArticle } from '@/lib/actions/article'
 import { cn } from '@/lib/utils'
 import { DeleteArticleButton } from './DeleteArticleButton'
@@ -28,10 +29,8 @@ function StatusBadge({ status }: { status: string }) {
 export default async function DashboardArticlesPage() {
   const { user } = await requireCreator()
   const supabase = await createClient()
-  const navProps = await getNavProps()
-  const t = await getTranslations('dashboard')
 
-  const { data: articles } = await (supabase as any)
+  const articlesPromise = (supabase as any)
     .from('content')
     .select(`
       id, slug, status, published_at, created_at,
@@ -40,6 +39,12 @@ export default async function DashboardArticlesPage() {
     .eq('author_id', user.id)
     .eq('type', 'article')
     .order('created_at', { ascending: false })
+
+  const [navProps, t, { data: articles }] = await Promise.all([
+    getNavProps(),
+    getTranslations('dashboard'),
+    articlesPromise,
+  ])
 
   const getTitle = (article: any) => {
     const tr = article.content_translations?.find((tr: any) => tr.locale === 'en')

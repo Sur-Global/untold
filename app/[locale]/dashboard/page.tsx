@@ -5,7 +5,8 @@ import { Navigation } from '@/components/layout/Navigation'
 import { Footer } from '@/components/layout/Footer'
 import { getNavProps } from '@/lib/nav'
 import { Link } from '@/i18n/navigation'
-import { Button, buttonVariants } from '@/components/ui/button'
+import { Button } from '@/components/ui/button'
+import { buttonVariants } from '@/components/ui/button-variants'
 import { cn, getEditPath } from '@/lib/utils'
 import { publishContent, unpublishContent } from '@/lib/actions/content'
 import { DeleteContentButton } from './DeleteContentButton'
@@ -45,10 +46,8 @@ function TypeBadge({ type }: { type: ContentType }) {
 export default async function DashboardPage() {
   const { user } = await requireCreator()
   const supabase = await createClient()
-  const navProps = await getNavProps()
-  const t = await getTranslations('dashboard')
 
-  const { data: items } = await (supabase as any)
+  const itemsPromise = (supabase as any)
     .from('content')
     .select(`
       id, type, status, created_at,
@@ -56,6 +55,12 @@ export default async function DashboardPage() {
     `)
     .eq('author_id', user.id)
     .order('created_at', { ascending: false })
+
+  const [navProps, t, { data: items }] = await Promise.all([
+    getNavProps(),
+    getTranslations('dashboard'),
+    itemsPromise,
+  ])
 
   const getTitle = (item: any) => {
     const tr = item.content_translations?.find((tr: any) => tr.locale === 'en')

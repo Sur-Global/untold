@@ -24,6 +24,10 @@ const NAV_LINKS = [
   { key: 'courses' as const, href: '/courses' },
 ]
 
+function isCreator(role: UserRole | null) {
+  return role === 'admin' || role === 'author'
+}
+
 export function Navigation({ isLoggedIn, userRole }: NavigationProps) {
   const t = useTranslations('nav')
 
@@ -50,7 +54,7 @@ export function Navigation({ isLoggedIn, userRole }: NavigationProps) {
 
           {/* Desktop auth buttons */}
           <div className="hidden md:flex items-center gap-2">
-            {isLoggedIn ? (
+            {isLoggedIn && isCreator(userRole) ? (
               <>
                 <Button variant="ghost" size="sm" render={<Link href="/dashboard" />}>
                   {t('dashboard')}
@@ -59,7 +63,7 @@ export function Navigation({ isLoggedIn, userRole }: NavigationProps) {
                   {t('createContent')}
                 </Button>
               </>
-            ) : (
+            ) : !isLoggedIn ? (
               <>
                 <Button variant="ghost" size="sm" render={<Link href="/auth/login" />}>
                   {t('login')}
@@ -68,7 +72,7 @@ export function Navigation({ isLoggedIn, userRole }: NavigationProps) {
                   {t('signup')}
                 </Button>
               </>
-            )}
+            ) : null}
           </div>
 
           {/* Mobile hamburger */}
@@ -84,7 +88,7 @@ export function Navigation({ isLoggedIn, userRole }: NavigationProps) {
                   </Link>
                 ))}
                 <div className="flex flex-col gap-2 mt-4">
-                  {isLoggedIn ? (
+                  {isLoggedIn && isCreator(userRole) ? (
                     <>
                       <Button variant="ghost" className="justify-start" render={<Link href="/dashboard" />}>
                         {t('dashboard')}
@@ -93,7 +97,7 @@ export function Navigation({ isLoggedIn, userRole }: NavigationProps) {
                         {t('createContent')}
                       </Button>
                     </>
-                  ) : (
+                  ) : !isLoggedIn ? (
                     <>
                       <Button variant="ghost" className="justify-start" render={<Link href="/auth/login" />}>
                         {t('login')}
@@ -102,7 +106,7 @@ export function Navigation({ isLoggedIn, userRole }: NavigationProps) {
                         {t('signup')}
                       </Button>
                     </>
-                  )}
+                  ) : null}
                 </div>
               </nav>
             </SheetContent>
