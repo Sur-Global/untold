@@ -6,6 +6,7 @@ import { after } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
 import { requireCreator } from '@/lib/require-creator'
 import { slugify } from '@/lib/utils'
+import { computeReadTime } from '@/lib/readTime'
 
 export async function createArticle(formData: FormData) {
   const { user } = await requireCreator()
@@ -44,6 +45,15 @@ export async function createArticle(formData: FormData) {
 
   if (translationError) throw new Error(translationError.message ?? 'Failed to save article content')
 
+  const bodyJson = body ? (() => { try { return JSON.parse(body) } catch { return null } })() : null
+  const readTimeMinutes = bodyJson ? computeReadTime(bodyJson) : null
+  if (readTimeMinutes) {
+    await (supabase as any)
+      .from('content')
+      .update({ read_time_minutes: readTimeMinutes })
+      .eq('id', content.id)
+  }
+
   revalidatePath('/dashboard/articles')
   redirect(`/dashboard/articles/${content.id}/edit`)
 }
@@ -72,6 +82,16 @@ export async function updateArticle(id: string, formData: FormData) {
       excerpt,
       body: body ? (() => { try { return JSON.parse(body) } catch { return null } })() : null,
     }, { onConflict: 'content_id,locale' })
+
+  const bodyJson = body ? (() => { try { return JSON.parse(body) } catch { return null } })() : null
+  const readTimeMinutes = bodyJson ? computeReadTime(bodyJson) : null
+  if (readTimeMinutes) {
+    await (supabase as any)
+      .from('content')
+      .update({ read_time_minutes: readTimeMinutes })
+      .eq('id', id)
+      .eq('author_id', user.id)
+  }
 
   revalidatePath(`/dashboard/articles/${id}/edit`)
 }
