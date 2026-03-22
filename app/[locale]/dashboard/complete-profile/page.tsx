@@ -9,8 +9,9 @@ export default async function CompleteProfilePage() {
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) redirect('/auth/login')
 
-  const { data: profile } = await supabase
-    .from('profiles').select('slug').eq('id', user.id).single()
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const { data: profile } = await (supabase as any)
+    .from('profiles').select('slug').eq('id', user.id).single() as { data: { slug: string } | null }
   if (profile && !profile.slug.startsWith('user-')) redirect('/')
 
   const t = await getTranslations('auth')

@@ -12,11 +12,12 @@ export async function GET(request: Request) {
     if (!error) {
       const { data: { user } } = await supabase.auth.getUser()
       if (user) {
-        const { data: profile } = await supabase
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const { data: profile } = await (supabase as any)
           .from('profiles')
           .select('slug, display_name')
           .eq('id', user.id)
-          .single()
+          .single() as { data: { slug: string; display_name: string } | null }
         if (profile?.slug?.startsWith('user-')) {
           return NextResponse.redirect(`${origin}/dashboard/complete-profile`)
         }
