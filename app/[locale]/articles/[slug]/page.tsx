@@ -1,8 +1,10 @@
 import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
+import { getTranslations } from 'next-intl/server'
 import { createClient } from '@/lib/supabase/server'
 import { getTranslation } from '@/lib/content'
 import { readTime } from '@/lib/utils'
+import { formatDate } from '@/lib/format-date'
 import { Navigation } from '@/components/layout/Navigation'
 import { Footer } from '@/components/layout/Footer'
 import { ArticleBody } from '@/components/content/ArticleBody'
@@ -49,8 +51,8 @@ export default async function ArticlePage({ params }: PageProps) {
   const { data: article } = await (supabase as any)
     .from('content')
     .select(`
-      id, slug, likes_count, published_at, cover_image_url, source_locale,
-      profiles!author_id ( id, display_name, slug, avatar_url, followers_count, role ),
+      id, slug, likes_count, published_at, cover_image_url, image_credits, source_locale,
+      profiles!author_id ( id, display_name, slug, avatar_url, bio, location, followers_count, role ),
       content_translations ( title, excerpt, body, locale ),
       content_tags ( tags ( slug, names ) )
     `)
@@ -93,6 +95,7 @@ export default async function ArticlePage({ params }: PageProps) {
     ? JSON.stringify(body).replace(/"[^"]*":\s*"/g, ' ').replace(/[{}\[\]",]/g, ' ')
     : ''
   const minutes = readTime(bodyText)
+  const tContent = await getTranslations({ locale, namespace: 'content' })
 
   // Reusable action button style using design tokens
   const actionButtonClass = [
@@ -178,7 +181,7 @@ export default async function ArticlePage({ params }: PageProps) {
                       <rect x="2" y="3" width="12" height="11" rx="1.5" stroke="currentColor" strokeWidth="1.2"/>
                       <path d="M5 2v2M11 2v2M2 7h12" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round"/>
                     </svg>
-                    <span>{new Date(article.published_at).toLocaleDateString('en', { month: 'long', day: 'numeric', year: 'numeric' })}</span>
+                    <span>{formatDate(article.published_at, locale, { month: 'long', day: 'numeric', year: 'numeric' })}</span>
                   </div>
                 )}
                 <div className="flex items-center gap-1.5">
@@ -186,7 +189,7 @@ export default async function ArticlePage({ params }: PageProps) {
                     <circle cx="8" cy="8" r="6" stroke="currentColor" strokeWidth="1.2"/>
                     <path d="M8 5v3.5l2.5 1.5" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round"/>
                   </svg>
-                  <span>{minutes} min read</span>
+                  <span>{tContent('readTime', { minutes })}</span>
                 </div>
               </div>
             </div>
@@ -211,13 +214,24 @@ export default async function ArticlePage({ params }: PageProps) {
 
             {/* Cover image */}
             {article.cover_image_url && (
-              <div className="rounded-2xl overflow-hidden mb-10 shadow-[0px_4px_16px_rgba(0,0,0,0.1),0px_8px_32px_rgba(0,0,0,0.06)]" style={{ height: 500 }}>
-                <img
-                  src={article.cover_image_url}
-                  alt={t.title}
-                  className="w-full h-full object-cover"
-                />
-              </div>
+              <figure className={article.image_credits ? 'mb-10' : 'mb-10'}>
+                <div className="rounded-2xl overflow-hidden shadow-[0px_4px_16px_0px_rgba(44,36,32,0.1),0px_8px_32px_0px_rgba(44,36,32,0.06)]" style={{ height: 500 }}>
+                  <img
+                    src={article.cover_image_url}
+                    alt={t.title}
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+                {article.image_credits && (
+                  <figcaption
+                    className="mt-3 px-4 py-4 rounded-[10px] text-sm leading-[1.43]"
+                    style={{ background: 'rgba(120,113,108,0.1)' }}
+                  >
+                    <strong style={{ color: '#78716c', fontFamily: 'Inter, sans-serif', fontWeight: 700 }}>Credits: </strong>
+                    <span style={{ color: '#78716c', fontFamily: 'Inter, sans-serif' }}>{article.image_credits}</span>
+                  </figcaption>
+                )}
+              </figure>
             )}
 
             {/* Body */}
@@ -229,7 +243,7 @@ export default async function ArticlePage({ params }: PageProps) {
 
             {/* About the Author */}
             {author && (
-              <div className="mt-16 bg-card rounded-2xl p-8 border border-primary/20 shadow-[0px_4px_16px_rgba(0,0,0,0.1),0px_8px_32px_rgba(0,0,0,0.06)]">
+              <div className="mt-16 bg-card rounded-2xl p-8 border border-primary/20 shadow-[0px_4px_16px_0px_rgba(44,36,32,0.1),0px_8px_32px_0px_rgba(44,36,32,0.06)]">
                 <h3 className="font-['Audiowide'] text-2xl uppercase text-foreground mb-6">
                   About the Author
                 </h3>
@@ -247,6 +261,12 @@ export default async function ArticlePage({ params }: PageProps) {
                     <h4 className="font-['Audiowide'] text-lg uppercase text-foreground mb-1">
                       {author.display_name}
                     </h4>
+                    {author.location && (
+                      <p className="text-xs text-muted-foreground font-['JetBrains_Mono',monospace] mb-2">{author.location}</p>
+                    )}
+                    {author.bio && (
+                      <p className="text-sm text-muted-foreground leading-relaxed mb-3">{author.bio}</p>
+                    )}
                     <Link
                       href={`/author/${author.slug}`}
                       className="text-sm text-primary hover:underline font-['JetBrains_Mono',monospace] tracking-[0.28px]"

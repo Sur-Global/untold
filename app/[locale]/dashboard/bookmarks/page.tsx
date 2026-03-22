@@ -1,6 +1,8 @@
+import { getTranslations } from 'next-intl/server'
 import { requireUser } from '@/lib/require-user'
 import { createClient } from '@/lib/supabase/server'
 import { getTranslation } from '@/lib/content'
+import { formatDate } from '@/lib/format-date'
 import { Navigation } from '@/components/layout/Navigation'
 import { Footer } from '@/components/layout/Footer'
 import Link from 'next/link'
@@ -30,6 +32,8 @@ export default async function BookmarksPage({ params }: PageProps) {
     `)
     .eq('user_id', user.id)
     .order('created_at', { ascending: false })
+
+  const tDashboard = await getTranslations({ locale, namespace: 'dashboard' })
 
   const publishedBookmarks = (bookmarks ?? []).filter(
     (bm: any) => bm.content?.status === 'published'
@@ -63,7 +67,7 @@ export default async function BookmarksPage({ params }: PageProps) {
                   <div className="flex items-center gap-3 mt-1">
                     <span className="text-xs font-mono text-[#6B5F58] capitalize">{item.type}</span>
                     <span className="text-xs font-mono text-[#6B5F58]">
-                      Saved {new Date(bm.created_at).toLocaleDateString('en', { month: 'short', day: 'numeric', year: 'numeric' })}
+                      {tDashboard('savedOn', { date: formatDate(bm.created_at, locale, { month: 'short', day: 'numeric', year: 'numeric' }) })}
                     </span>
                   </div>
                 </li>

@@ -10,7 +10,8 @@
     "signup": "Sign up",
     "createContent": "Create",
     "dashboard": "Dashboard",
-    "logout": "Log out"
+    "logout": "Log out",
+    "search": "Search"
   },
   "home": {
     "title": "UNTOLD",
@@ -25,13 +26,36 @@
     "pills": "Knowledge Pills",
     "courses": "Courses & Training",
     "viewAll": "View all",
-    "featuredBadge": "★ Featured"
+    "featuredBadge": "Featured",
+    "heroHeadline": "THE FUTURE OF KNOWLEDGE IS COLLABORATIVE",
+    "heroSubtext": "The untold stories, insights, and knowledge from creators across the Global South.",
+    "ctaGetStarted": "Get Started Free",
+    "ctaBrowseCourses": "Browse Courses",
+    "statAccessibility": "Accessibility",
+    "statResponsibleAI": "Responsible AI",
+    "statEcology": "Ecology",
+    "updatedDaily": "Updated daily",
+    "curatedContent": "Curated content",
+    "videoContent": "Visual content",
+    "podcastsSubtext": "Listen and learn",
+    "pillsSubtext": "Quick insights",
+    "coursesSubtext": "Structured learning from Global South practitioners",
+    "tagResources": "{count} resources"
   },
   "listings": {
+    "articlesDesc": "In-depth analysis, research and reflections on responsible technology, accessibility and decolonial thinking.",
+    "articlesSearch": "Search articles...",
     "videosDesc": "Watch videos from journalists and creators across the Global South.",
     "podcastsDesc": "Listen to audio stories and conversations.",
     "pillsDesc": "Bite-sized knowledge to expand your perspective.",
-    "coursesDesc": "Structured learning from Global South practitioners."
+    "coursesDesc": "Structured learning from Global South practitioners.",
+    "filterFeatured": "Featured",
+    "filterTrending": "Trending",
+    "filterRecent": "Recent",
+    "loadMore": "Load more articles",
+    "noArticles": "No articles yet.",
+    "noResults": "No articles match your search.",
+    "readMoreBy": "Read more by {name}"
   },
   "auth": {
     "loginTitle": "Welcome back",
@@ -81,7 +105,8 @@
     "filterVideos": "Videos",
     "filterPodcasts": "Podcasts",
     "filterPills": "Pills",
-    "filterCourses": "Courses"
+    "filterCourses": "Courses",
+    "button": "Search"
   },
   "tag": {
     "heading": "#{tag}",
@@ -119,7 +144,8 @@
     "unpublish": "Unpublish",
     "saveChanges": "Save changes",
     "saving": "Saving…",
-    "saveAsDraft": "Save as draft"
+    "saveAsDraft": "Save as draft",
+    "savedOn": "Saved {date}"
   },
   "editor": {
     "titlePlaceholder": "Title",

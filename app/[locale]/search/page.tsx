@@ -1,9 +1,11 @@
+import { getTranslations } from 'next-intl/server'
 import { createClient } from '@/lib/supabase/server'
 import { getNavProps } from '@/lib/nav'
 import { getTranslation } from '@/lib/content'
 import { Navigation } from '@/components/layout/Navigation'
 import { Footer } from '@/components/layout/Footer'
 import { ContentCard } from '@/components/content/ContentCard'
+import { SearchForm } from './_SearchForm'
 import type { ContentType } from '@/lib/supabase/types'
 
 const CONTENT_TYPES: ContentType[] = ['article', 'video', 'podcast', 'pill', 'course']
@@ -16,12 +18,18 @@ interface PageProps {
 export default async function SearchPage({ params, searchParams }: PageProps) {
   const { locale } = await params
   const { q = '', type: typeFilter } = await searchParams
-  const [{ userId, ...navProps }, supabase] = await Promise.all([getNavProps(), createClient()])
+  const [{ userId, ...navProps }, supabase, tSearch] = await Promise.all([
+    getNavProps(),
+    createClient(),
+    getTranslations({ locale, namespace: 'search' }),
+  ])
 
   let results: any[] = []
 
   if (q.trim()) {
-    // Use Postgres full-text search via the search_vector column
+    const term = q.trim()
+    const ilikePattern = `%${term}%`
+
     let query = (supabase as any)
       .from('content_translations')
       .select(`
@@ -35,10 +43,10 @@ export default async function SearchPage({ params, searchParams }: PageProps) {
           course_meta ( price, currency, rating )
         )
       `)
-      .textSearch('search_vector', q.trim().split(/\s+/).join(' & '), { type: 'websearch' })
+      .or(`title.ilike.${ilikePattern},excerpt.ilike.${ilikePattern},description.ilike.${ilikePattern}`)
       .eq('locale', locale !== 'en' ? locale : 'en')
       .eq('content.status', 'published')
-      .limit(20)
+      .limit(40)
 
     if (typeFilter && CONTENT_TYPES.includes(typeFilter as ContentType)) {
       query = query.eq('content.type', typeFilter)
@@ -84,30 +92,16 @@ export default async function SearchPage({ params, searchParams }: PageProps) {
       <main className="max-w-7xl mx-auto px-4 sm:px-6 py-16">
         {/* Search header */}
         <div className="mb-8">
-          <h1 className="mb-6">Search</h1>
-          <form method="GET" className="flex gap-3 max-w-2xl">
-            <input
-              name="q"
-              defaultValue={q}
-              placeholder="Search articles, videos, podcasts..."
-              className="flex-1 px-4 py-2 rounded-lg font-mono text-sm"
-              style={{ background: '#FAF7F2', border: '1px solid rgba(139,69,19,0.2)', color: '#2C2420' }}
-            />
-            <button
-              type="submit"
-              className="px-6 py-2 rounded-lg font-mono text-sm font-semibold text-white"
-              style={{ background: 'linear-gradient(135deg, #8B4513, #A0522D)' }}
-            >
-              Search
-            </button>
-          </form>
+          <h1 className="mb-6">{tSearch('button')}</h1>
+          <SearchForm initialQuery={q} />
         </div>
 
         {/* Type filter tabs */}
         {q && (
           <div className="flex flex-wrap gap-2 mb-8">
             {[null, ...CONTENT_TYPES].map((t) => {
-              const label = t ? t.charAt(0).toUpperCase() + t.slice(1) + 's' : 'All'
+              const filterKey = t ? `filter${t.charAt(0).toUpperCase() + t.slice(1)}s` as const : 'filterAll'
+              const label = tSearch(filterKey as any)
               const isActive = t === (typeFilter || null)
               return (
                 <a
@@ -130,8 +124,8 @@ export default async function SearchPage({ params, searchParams }: PageProps) {
         {q && (
           <p className="text-sm text-[#6B5F58] font-mono mb-6">
             {results.length > 0
-              ? `${results.length} results for "${q}"`
-              : `No results for "${q}"`}
+              ? tSearch('results', { count: results.length, query: q })
+              : tSearch('noResults', { query: q })}
           </p>
         )}
 
@@ -173,7 +167,7 @@ export default async function SearchPage({ params, searchParams }: PageProps) {
         )}
 
         {!q && (
-          <p className="text-center py-20 text-[#6B5F58]">Enter a search term above.</p>
+          <p className="text-center py-20 text-[#6B5F58]">{tSearch('placeholder')}</p>
         )}
       </main>
       <Footer />

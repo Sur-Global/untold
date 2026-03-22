@@ -1,6 +1,8 @@
 import { notFound } from 'next/navigation'
+import { getTranslations } from 'next-intl/server'
 import { createClient } from '@/lib/supabase/server'
 import { getTranslation } from '@/lib/content'
+import { formatDate } from '@/lib/format-date'
 import { Navigation } from '@/components/layout/Navigation'
 import { Footer } from '@/components/layout/Footer'
 import { EmbedPlayer } from '@/components/content/EmbedPlayer'
@@ -45,6 +47,7 @@ export default async function VideoPage({ params }: PageProps) {
 
   const meta = video.video_meta
   const author = video.profiles
+  const tContent = await getTranslations({ locale, namespace: 'content' })
 
   let isLiked = false
   let isBookmarked = false
@@ -78,11 +81,11 @@ export default async function VideoPage({ params }: PageProps) {
         <div className="flex items-center gap-4 mb-6 text-sm font-mono text-[#6B5F58]">
           {meta?.duration && <span>⏱ {meta.duration}</span>}
           {video.published_at && (
-            <span>{new Date(video.published_at).toLocaleDateString('en', { month: 'short', day: 'numeric', year: 'numeric' })}</span>
+            <span>{formatDate(video.published_at, locale, { month: 'short', day: 'numeric', year: 'numeric' })}</span>
           )}
           {author && (
             <Link href={`/author/${author.slug}`} className="hover:text-[#A0522D]">
-              by {author.display_name}
+              {tContent('by')} {author.display_name}
             </Link>
           )}
           <div className="ml-auto flex items-center gap-3">

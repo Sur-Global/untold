@@ -25,8 +25,8 @@ export async function POST(request: NextRequest) {
   if (!file || !file.type.startsWith('image/')) {
     return NextResponse.json({ error: 'Invalid file — must be an image' }, { status: 400 })
   }
-  if (type !== 'cover' && type !== 'avatar') {
-    return NextResponse.json({ error: 'Invalid type — must be cover or avatar' }, { status: 400 })
+  if (type !== 'cover' && type !== 'avatar' && type !== 'content') {
+    return NextResponse.json({ error: 'Invalid type — must be cover, avatar, or content' }, { status: 400 })
   }
   if (file.size > MAX_BYTES) {
     return NextResponse.json({ error: 'File too large — max 5 MB' }, { status: 413 })
@@ -44,6 +44,13 @@ export async function POST(request: NextRequest) {
         .webp({ quality: 80 })
         .toBuffer()
       storagePath = `covers/${user.id}/${crypto.randomUUID()}.webp`
+      bucket = 'content-images'
+    } else if (type === 'content') {
+      processed = await sharp(buffer)
+        .resize({ width: 1200, withoutEnlargement: true })
+        .webp({ quality: 82 })
+        .toBuffer()
+      storagePath = `inline/${user.id}/${crypto.randomUUID()}.webp`
       bucket = 'content-images'
     } else {
       processed = await sharp(buffer)

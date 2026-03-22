@@ -1,7 +1,7 @@
 import { createServerClient } from '@supabase/ssr'
 import { type NextRequest, NextResponse } from 'next/server'
 
-const SUPPORTED_LOCALES = ['en', 'es', 'pt', 'fr', 'de', 'da', 'qu']
+const SUPPORTED_LOCALES = ['en', 'es', 'pt', 'fr', 'de', 'da']
 
 export async function GET(request: NextRequest) {
   const { searchParams, origin } = new URL(request.url)

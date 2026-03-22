@@ -38,6 +38,7 @@ export default async function EditPillPage({ params }: EditPillPageProps) {
   if (!content) notFound()
 
   const tr = content.content_translations?.find((r: any) => r.locale === 'en') ?? content.content_translations?.[0]
+  const initialBody = Array.isArray(tr?.body) ? tr.body : null
   const meta = Array.isArray(content.pill_meta) ? content.pill_meta[0] : content.pill_meta ?? {}
 
   return (
@@ -52,7 +53,7 @@ export default async function EditPillPage({ params }: EditPillPageProps) {
           id={id}
           status={content.status}
           initialTitle={tr?.title ?? ''}
-          initialBody={tr?.body ?? null}
+          initialBody={initialBody}
           initialAccentColor={meta?.accent_color ?? '#C45D3A'}
           initialImageUrl={meta?.image_url ?? ''}
         />

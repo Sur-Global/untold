@@ -13,7 +13,7 @@ export function CreatePillForm() {
   const t = useTranslations('editor')
   const td = useTranslations('dashboard')
   const formRef = useRef<HTMLFormElement>(null)
-  const [body, setBody] = useState<Record<string, unknown> | null>(null)
+  const [body, setBody] = useState<import('@blocknote/core').Block[] | null>(null)
   const [isPending, startTransition] = useTransition()
 
   const handleSubmit = (e: React.FormEvent) => {

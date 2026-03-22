@@ -14,7 +14,7 @@ interface EditPillFormProps {
   id: string
   status: string
   initialTitle: string
-  initialBody: Record<string, unknown> | null
+  initialBody: import('@blocknote/core').Block[] | null
   initialAccentColor: string
   initialImageUrl: string
 }
@@ -25,7 +25,7 @@ export function EditPillForm({
   const t = useTranslations('editor')
   const td = useTranslations('dashboard')
   const formRef = useRef<HTMLFormElement>(null)
-  const [body, setBody] = useState<Record<string, unknown> | null>(initialBody)
+  const [body, setBody] = useState<import('@blocknote/core').Block[] | null>(initialBody)
   const [isPending, startTransition] = useTransition()
 
   const handleSave = (e: React.FormEvent) => {

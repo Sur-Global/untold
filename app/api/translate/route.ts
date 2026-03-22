@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { createServiceRoleClient } from '@/lib/supabase/service-role'
 import { translateTexts, SUPPORTED_LOCALES, type SupportedLocale } from '@/lib/deepl'
 import { extractTextNodes, injectTextNodes } from '@/lib/tiptap-translate'
+import { extractBlockNoteTextNodes, injectBlockNoteTextNodes } from '@/lib/blocknote-translate'
 
 export async function POST(req: NextRequest) {
   const secret = req.headers.get('x-translate-secret')
@@ -76,16 +77,28 @@ export async function POST(req: NextRequest) {
       const translatedFields: Record<string, string> = {}
       fieldNames.forEach((name, i) => { translatedFields[name] = translatedTexts[i] })
 
-      // Translate Tiptap body for article and pill
-      let translatedBody: Record<string, unknown> | null = null
+      // Translate body for article and pill (supports both BlockNote and legacy Tiptap formats)
+      let translatedBody: unknown = null
       const hasBody = content.type === 'article' || content.type === 'pill'
       if (hasBody && source.body) {
-        const { texts, paths } = extractTextNodes(source.body)
-        if (texts.length > 0) {
-          const bodyTranslations = await translateTexts(texts, targetLocale)
-          translatedBody = injectTextNodes(source.body, bodyTranslations, paths) as unknown as Record<string, unknown>
+        if (Array.isArray(source.body)) {
+          // BlockNote format
+          const entries = extractBlockNoteTextNodes(source.body)
+          if (entries.length > 0) {
+            const bodyTranslations = await translateTexts(entries.map((e) => e.text), targetLocale)
+            translatedBody = injectBlockNoteTextNodes(source.body, bodyTranslations, entries)
+          } else {
+            translatedBody = source.body
+          }
         } else {
-          translatedBody = source.body
+          // Legacy Tiptap format
+          const { texts, paths } = extractTextNodes(source.body)
+          if (texts.length > 0) {
+            const bodyTranslations = await translateTexts(texts, targetLocale)
+            translatedBody = injectTextNodes(source.body, bodyTranslations, paths)
+          } else {
+            translatedBody = source.body
+          }
         }
       }
 

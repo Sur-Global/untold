@@ -1,6 +1,7 @@
 import { getTranslations } from 'next-intl/server'
 import { requireCreator } from '@/lib/require-creator'
 import { createClient } from '@/lib/supabase/server'
+import { formatDate } from '@/lib/format-date'
 import { Navigation } from '@/components/layout/Navigation'
 import { Footer } from '@/components/layout/Footer'
 import { getNavProps } from '@/lib/nav'
@@ -43,7 +44,8 @@ function TypeBadge({ type }: { type: ContentType }) {
   )
 }
 
-export default async function DashboardPage() {
+export default async function DashboardPage({ params }: { params: Promise<{ locale: string }> }) {
+  const { locale } = await params
   const { user } = await requireCreator()
   const supabase = await createClient()
 
@@ -92,7 +94,7 @@ export default async function DashboardPage() {
                 <div className="flex-1 min-w-0">
                   <p className="font-semibold truncate">{getTitle(item)}</p>
                   <p className="text-xs text-[#6B5F58] font-mono mt-0.5">
-                    {new Date(item.created_at).toLocaleDateString('en', { month: 'short', day: 'numeric', year: 'numeric' })}
+                    {formatDate(item.created_at, locale, { month: 'short', day: 'numeric', year: 'numeric' })}
                   </p>
                 </div>
 

@@ -10,13 +10,37 @@
     "signup": "Sign up",
     "createContent": "Create",
     "dashboard": "Dashboard",
-    "logout": "Log out"
+    "logout": "Log out",
+    "search": "Maskiy"
   },
   "home": {
     "title": "UNTOLD",
     "subtitle": "Views from the Global South",
     "featuredArticles": "Featured Articles",
-    "latestStories": "The latest stories"
+    "latestStories": "The latest stories",
+    "heroTagline": "Stories that don't make the front page.",
+    "ctaRead": "Start Reading",
+    "ctaExplore": "Explore Content",
+    "videos": "Videos",
+    "podcasts": "Podcasts",
+    "pills": "Knowledge Pills",
+    "courses": "Courses & Training",
+    "viewAll": "View all",
+    "featuredBadge": "Featured",
+    "heroHeadline": "THE FUTURE OF KNOWLEDGE IS COLLABORATIVE",
+    "heroSubtext": "The untold stories, insights, and knowledge from creators across the Global South.",
+    "ctaGetStarted": "Get Started Free",
+    "ctaBrowseCourses": "Browse Courses",
+    "statAccessibility": "Accessibility",
+    "statResponsibleAI": "Responsible AI",
+    "statEcology": "Ecology",
+    "updatedDaily": "Updated daily",
+    "curatedContent": "Curated content",
+    "videoContent": "Visual content",
+    "podcastsSubtext": "Listen and learn",
+    "pillsSubtext": "Quick insights",
+    "coursesSubtext": "Structured learning from Global South practitioners",
+    "tagResources": "{count} resources"
   },
   "auth": {
     "loginTitle": "Welcome back",
@@ -66,7 +90,8 @@
     "filterVideos": "Videos",
     "filterPodcasts": "Podcasts",
     "filterPills": "Pills",
-    "filterCourses": "Courses"
+    "filterCourses": "Courses",
+    "button": "Maskiy"
   },
   "tag": {
     "heading": "#{tag}",
