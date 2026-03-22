@@ -1,4 +1,4 @@
-import type { Metadata } from 'next'
+import type { Metadata, Viewport } from 'next'
 import { Audiowide, Inter, JetBrains_Mono } from 'next/font/google'
 import './globals.css'
 
@@ -24,6 +24,9 @@ const jetbrainsMono = JetBrains_Mono({
 export const metadata: Metadata = {
   title: 'UNTOLD — Views from the Global South',
   description: 'A multilingual editorial platform by Sur Global',
+}
+
+export const viewport: Viewport = {
   themeColor: '#201916',
 }
 
