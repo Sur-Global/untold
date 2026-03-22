@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useRef, useEffect } from 'react'
+import { useState, useRef } from 'react'
 import { Label } from '@/components/ui/label'
 
 interface CoverImageInputProps {
@@ -27,8 +27,6 @@ export function CoverImageInput({
   const isAvatar = uploadType === 'avatar'
   const fieldLabel = label ?? (isAvatar ? 'Avatar' : 'Cover Image')
 
-  useEffect(() => { onChange?.(url) }, [url, onChange])
-
   async function handleFile(file: File) {
     setError(null)
     setUploading(true)
@@ -44,6 +42,7 @@ export function CoverImageInput({
       }
       const { url: uploadedUrl } = await res.json()
       setUrl(uploadedUrl)
+      onChange?.(uploadedUrl)
     } catch {
       setError('Upload failed. Please try again.')
     } finally {
@@ -53,9 +52,15 @@ export function CoverImageInput({
 
   function handleUseUrl() {
     const trimmed = urlInput.trim()
-    if (!trimmed.startsWith('http')) { setError('Please enter a valid URL'); return }
+    try {
+      new URL(trimmed)
+    } catch {
+      setError('Please enter a valid URL')
+      return
+    }
     setError(null)
     setUrl(trimmed)
+    onChange?.(trimmed)
     setUrlInput('')
   }
 
@@ -90,7 +95,7 @@ export function CoverImageInput({
               </button>
               <button
                 type="button"
-                onClick={() => setUrl('')}
+                onClick={() => { setUrl(''); onChange?.('') }}
                 style={{ background: 'rgba(245,241,232,0.15)', color: '#F5F1E8', border: '1px solid rgba(245,241,232,0.25)', borderRadius: 8, padding: '6px 12px', fontSize: 12, fontFamily: 'JetBrains Mono, monospace', cursor: 'pointer' }}
               >
                 ✕ Remove
