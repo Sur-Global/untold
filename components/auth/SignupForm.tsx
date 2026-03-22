@@ -5,6 +5,8 @@ import { createClient } from '@/lib/supabase/client'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { OAuthButton } from './OAuthButton'
+import { OAuthDivider } from './OAuthDivider'
 
 export function SignupForm() {
   const t = useTranslations('auth')
@@ -33,7 +35,10 @@ export function SignupForm() {
   if (done) return <p className="text-center py-4">{t('confirmEmail')}</p>
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4">
+    <div className="space-y-4">
+      <OAuthButton provider="google" />
+      <OAuthDivider />
+      <form onSubmit={handleSubmit} className="space-y-4">
       <div className="space-y-2">
         <Label htmlFor="email">{t('emailLabel')}</Label>
         <Input id="email" type="email" value={email}
@@ -49,5 +54,6 @@ export function SignupForm() {
         {loading ? '...' : t('signupButton')}
       </Button>
     </form>
+    </div>
   )
 }

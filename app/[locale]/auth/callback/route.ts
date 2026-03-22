@@ -1,10 +1,15 @@
 import { createClient } from '@/lib/supabase/server'
 import { NextResponse } from 'next/server'
 
+const SUPPORTED_LOCALES = ['en', 'es', 'pt', 'fr', 'de', 'da', 'qu']
+
 export async function GET(request: Request) {
   const { searchParams, origin } = new URL(request.url)
   const code = searchParams.get('code')
   const next = searchParams.get('next') ?? '/'
+  const rawLocale = searchParams.get('locale') ?? 'en'
+  const locale = SUPPORTED_LOCALES.includes(rawLocale) ? rawLocale : 'en'
+  const prefix = locale === 'en' ? '' : `/${locale}`
 
   if (code) {
     const supabase = await createClient()
@@ -19,12 +24,12 @@ export async function GET(request: Request) {
           .eq('id', user.id)
           .single() as { data: { slug: string; display_name: string } | null }
         if (profile?.slug?.startsWith('user-')) {
-          return NextResponse.redirect(`${origin}/dashboard/complete-profile`)
+          return NextResponse.redirect(`${origin}${prefix}/dashboard/complete-profile`)
         }
       }
-      return NextResponse.redirect(`${origin}${next}`)
+      return NextResponse.redirect(`${origin}${prefix}${next}`)
     }
   }
 
-  return NextResponse.redirect(`${origin}/auth/login?error=auth_error`)
+  return NextResponse.redirect(`${origin}${prefix}/auth/login?error=auth_error`)
 }

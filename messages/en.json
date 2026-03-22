@@ -32,7 +32,9 @@
     "displayNameLabel": "Display name",
     "slugLabel": "Username",
     "slugHint": "Your public URL: untold.ink/@{slug}",
-    "saveProfile": "Save and continue"
+    "saveProfile": "Save and continue",
+    "continueWith": "Continue with {provider}",
+    "orDivider": "or"
   },
   "errors": {
     "required": "This field is required",
