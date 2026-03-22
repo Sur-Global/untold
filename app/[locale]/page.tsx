@@ -108,9 +108,13 @@ export default async function HomePage({ params }: PageProps) {
     })
   }
 
+  const articlesWithoutFeatured = (articles ?? []).filter(
+    (a: any) => !featuredArticle || a.id !== featuredArticle.id
+  )
+
   type Section = { label: string; href: string; items: any[] }
   const sections: Section[] = [
-    { label: t('featuredArticles'), href: '/articles', items: articles ?? [] },
+    { label: t('featuredArticles'), href: '/articles', items: articlesWithoutFeatured },
     { label: t('videos'), href: '/videos', items: videos ?? [] },
     { label: t('podcasts'), href: '/podcasts', items: podcasts ?? [] },
     { label: t('pills'), href: '/pills', items: pills ?? [] },
@@ -186,12 +190,15 @@ export default async function HomePage({ params }: PageProps) {
 
             {/* Right column: featured article card */}
             {featuredArticle && heroTrans && (
-              <div
+              <Link
+                href={`/articles/${featuredArticle.slug}`}
                 className="shrink-0 rounded-xl overflow-hidden"
                 style={{
                   width: 320,
                   background: 'rgba(255,255,255,0.06)',
                   border: '1px solid rgba(245,241,232,0.12)',
+                  textDecoration: 'none',
+                  display: 'block',
                 }}
               >
                 {featuredArticle.cover_image_url && (
@@ -220,7 +227,7 @@ export default async function HomePage({ params }: PageProps) {
                     </p>
                   )}
                 </div>
-              </div>
+              </Link>
             )}
           </div>
         </section>
