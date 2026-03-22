@@ -1,5 +1,5 @@
 'use client'
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { useTranslations } from 'next-intl'
 import { useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
@@ -17,10 +17,6 @@ export function CompleteProfileForm() {
   const [slugError, setSlugError] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
 
-  useEffect(() => {
-    if (displayName) setSlug(slugify(displayName))
-  }, [displayName])
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     if (!/^[a-z0-9-]+$/.test(slug)) { setSlugError(te('slugInvalid')); return }
@@ -30,10 +26,11 @@ export function CompleteProfileForm() {
     const { data: { user } } = await supabase.auth.getUser()
     if (!user) { router.push('/auth/login'); return }
 
-    const { error } = await supabase
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const { error } = await (supabase as any)
       .from('profiles')
       .update({ display_name: displayName, slug })
-      .eq('id', user.id)
+      .eq('id', user.id) as { error: { code: string; message: string } | null }
 
     setLoading(false)
     if (error?.code === '23505') { setSlugError(te('slugTaken')); return }
@@ -47,7 +44,7 @@ export function CompleteProfileForm() {
       <div className="space-y-2">
         <Label htmlFor="displayName">{t('displayNameLabel')}</Label>
         <Input id="displayName" value={displayName}
-          onChange={(e) => setDisplayName(e.target.value)} required />
+          onChange={(e) => { setDisplayName(e.target.value); setSlug(slugify(e.target.value)) }} required />
       </div>
       <div className="space-y-2">
         <Label htmlFor="slug">{t('slugLabel')}</Label>
