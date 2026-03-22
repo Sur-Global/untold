@@ -26,6 +26,12 @@
     "courses": "Courses & Training",
     "viewAll": "View all"
   },
+  "listings": {
+    "videosDesc": "Watch videos from journalists and creators across the Global South.",
+    "podcastsDesc": "Listen to audio stories and conversations.",
+    "pillsDesc": "Bite-sized knowledge to expand your perspective.",
+    "coursesDesc": "Structured learning from Global South practitioners."
+  },
   "auth": {
     "loginTitle": "Welcome back",
     "signupTitle": "Join UNTOLD",
