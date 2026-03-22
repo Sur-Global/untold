@@ -27,7 +27,7 @@ export function LikeButton({ contentId, initialIsLiked, initialCount, isLoggedIn
       onClick={handleClick}
       disabled={isPending || !isLoggedIn}
       title={isLoggedIn ? undefined : 'Sign in to like'}
-      className={className ?? "flex items-center gap-1.5 text-sm font-mono text-[#6B5F58] hover:text-[#A0522D] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"}
+      className={className ?? "flex items-center gap-1.5 text-sm font-mono text-muted-foreground hover:text-primary transition-colors disabled:opacity-50 disabled:cursor-not-allowed"}
     >
       <span>{isLiked ? '♥' : '♡'}</span>
       {count > 0 && <span>{count}</span>}

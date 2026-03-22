@@ -94,18 +94,25 @@ export default async function ArticlePage({ params }: PageProps) {
     : ''
   const minutes = readTime(bodyText)
 
-  const actionButtonClass = "flex items-center gap-2 px-4 h-[38px] rounded-[10px] bg-white border border-[rgba(160,82,45,0.2)] text-sm font-['JetBrains_Mono',monospace] text-[#5a4a42] transition-colors hover:bg-[rgba(160,82,45,0.04)] disabled:opacity-50 disabled:cursor-not-allowed"
+  // Reusable action button style using design tokens
+  const actionButtonClass = [
+    'flex items-center gap-2 px-4 h-[38px] rounded-[10px]',
+    'bg-card border border-primary/20',
+    "text-sm font-['JetBrains_Mono',monospace] text-muted-foreground",
+    'transition-colors hover:bg-primary/5',
+    'disabled:opacity-50 disabled:cursor-not-allowed',
+  ].join(' ')
 
   return (
     <>
       <Navigation {...navProps} />
-      <main className="bg-[#f5f1e8] min-h-screen">
+      <main className="bg-background min-h-screen">
         <div className="max-w-[900px] mx-auto px-6 py-8">
 
           {/* Back */}
           <Link
             href="/articles"
-            className="inline-flex items-center gap-2 text-sm text-[#5a4a42] font-['JetBrains_Mono',monospace] tracking-[0.28px] mb-8 hover:text-[#a0522d] transition-colors"
+            className="inline-flex items-center gap-2 text-sm text-muted-foreground font-['JetBrains_Mono',monospace] tracking-[0.28px] mb-8 hover:text-primary transition-colors"
           >
             <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden>
               <path d="M10 3L5 8L10 13" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
@@ -121,8 +128,7 @@ export default async function ArticlePage({ params }: PageProps) {
                   <Link
                     key={tag.slug}
                     href={`/tag/${tag.slug}`}
-                    className="inline-flex items-center gap-2 h-9 px-4 rounded-full text-sm text-[#a0522d] hover:bg-[rgba(160,82,45,0.15)] transition-colors"
-                    style={{ background: 'rgba(160,82,45,0.1)' }}
+                    className="inline-flex items-center gap-2 h-9 px-4 rounded-full text-sm text-primary bg-primary/10 hover:bg-primary/15 transition-colors"
                   >
                     <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden>
                       <path d="M2 4a2 2 0 012-2h4.586a1 1 0 01.707.293l4.414 4.414a1 1 0 010 1.414l-4.586 4.586a1 1 0 01-1.414 0L3.293 8.293A1 1 0 013 7.586V4z"/>
@@ -135,7 +141,7 @@ export default async function ArticlePage({ params }: PageProps) {
 
             {/* Title */}
             <h1
-              className="font-['Audiowide'] text-[#2c2420] uppercase mb-6"
+              className="font-['Audiowide'] text-foreground uppercase mb-6"
               style={{ fontSize: 50, lineHeight: '61.6px', letterSpacing: '-0.56px', maxWidth: 752 }}
             >
               {t.title}
@@ -143,37 +149,29 @@ export default async function ArticlePage({ params }: PageProps) {
 
             {/* Excerpt */}
             {t.excerpt && (
-              <p className="text-2xl text-[#5a4a42] leading-tight mb-8">{t.excerpt}</p>
+              <p className="text-2xl text-muted-foreground leading-tight mb-8">{t.excerpt}</p>
             )}
 
             {/* Author + meta bar */}
-            <div
-              className="flex items-center justify-between py-5 mb-6"
-              style={{ borderBottom: '1px solid rgba(160,82,45,0.15)' }}
-            >
+            <div className="flex items-center justify-between py-5 mb-6 border-b border-border">
               {/* Author */}
               <div className="flex items-center gap-3">
-                <div
-                  className="w-12 h-12 rounded-full flex-shrink-0 overflow-hidden"
-                  style={{ border: '2px solid rgba(160,82,45,0.2)' }}
-                >
+                <div className="w-12 h-12 rounded-full flex-shrink-0 overflow-hidden border-2 border-primary/20">
                   {author?.avatar_url ? (
                     <img src={author.avatar_url} alt={author.display_name} className="w-full h-full object-cover" />
                   ) : (
-                    <div className="w-full h-full bg-[rgba(160,82,45,0.1)] flex items-center justify-center text-[#a0522d] font-semibold">
+                    <div className="w-full h-full bg-primary/10 flex items-center justify-center text-primary font-semibold">
                       {author?.display_name?.[0]?.toUpperCase() ?? '?'}
                     </div>
                   )}
                 </div>
-                <div>
-                  <Link href={`/author/${author?.slug}`} className="block text-sm font-semibold text-[#2c2420] hover:text-[#a0522d] transition-colors">
-                    {author?.display_name}
-                  </Link>
-                </div>
+                <Link href={`/author/${author?.slug}`} className="text-sm font-semibold text-foreground hover:text-primary transition-colors">
+                  {author?.display_name}
+                </Link>
               </div>
 
               {/* Date + read time */}
-              <div className="flex items-center gap-6 text-sm text-[#78716c]">
+              <div className="flex items-center gap-6 text-sm text-muted-foreground">
                 {article.published_at && (
                   <div className="flex items-center gap-1.5">
                     <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden>
@@ -213,13 +211,7 @@ export default async function ArticlePage({ params }: PageProps) {
 
             {/* Cover image */}
             {article.cover_image_url && (
-              <div
-                className="rounded-2xl overflow-hidden mb-10"
-                style={{
-                  height: 500,
-                  boxShadow: '0px 4px 16px rgba(44,36,32,0.1), 0px 8px 32px rgba(44,36,32,0.06)',
-                }}
-              >
+              <div className="rounded-2xl overflow-hidden mb-10 shadow-[0px_4px_16px_rgba(0,0,0,0.1),0px_8px_32px_rgba(0,0,0,0.06)]" style={{ height: 500 }}>
                 <img
                   src={article.cover_image_url}
                   alt={t.title}
@@ -232,41 +224,32 @@ export default async function ArticlePage({ params }: PageProps) {
             {body ? (
               <ArticleBody json={body} />
             ) : (
-              <p className="text-[#6B5F58]">No content available.</p>
+              <p className="text-muted-foreground">No content available.</p>
             )}
 
             {/* About the Author */}
             {author && (
-              <div
-                className="mt-16 bg-white rounded-2xl p-8"
-                style={{
-                  border: '1px solid rgba(160,82,45,0.2)',
-                  boxShadow: '0px 4px 16px rgba(44,36,32,0.1), 0px 8px 32px rgba(44,36,32,0.06)',
-                }}
-              >
-                <h3 className="font-['Audiowide'] text-2xl uppercase text-[#2c2420] mb-6">
+              <div className="mt-16 bg-card rounded-2xl p-8 border border-primary/20 shadow-[0px_4px_16px_rgba(0,0,0,0.1),0px_8px_32px_rgba(0,0,0,0.06)]">
+                <h3 className="font-['Audiowide'] text-2xl uppercase text-foreground mb-6">
                   About the Author
                 </h3>
                 <div className="flex gap-6 items-start">
-                  <div
-                    className="w-24 h-24 rounded-full flex-shrink-0 overflow-hidden"
-                    style={{ border: '2px solid rgba(160,82,45,0.2)' }}
-                  >
+                  <div className="w-24 h-24 rounded-full flex-shrink-0 overflow-hidden border-2 border-primary/20">
                     {author.avatar_url ? (
                       <img src={author.avatar_url} alt={author.display_name} className="w-full h-full object-cover" />
                     ) : (
-                      <div className="w-full h-full bg-[rgba(160,82,45,0.1)] flex items-center justify-center text-[#a0522d] text-2xl font-semibold">
+                      <div className="w-full h-full bg-primary/10 flex items-center justify-center text-primary text-2xl font-semibold">
                         {author.display_name?.[0]?.toUpperCase() ?? '?'}
                       </div>
                     )}
                   </div>
                   <div className="flex-1 min-w-0">
-                    <h4 className="font-['Audiowide'] text-lg uppercase text-[#2c2420] mb-1">
+                    <h4 className="font-['Audiowide'] text-lg uppercase text-foreground mb-1">
                       {author.display_name}
                     </h4>
                     <Link
                       href={`/author/${author.slug}`}
-                      className="text-sm text-[#a0522d] hover:underline font-['JetBrains_Mono',monospace] tracking-[0.28px]"
+                      className="text-sm text-primary hover:underline font-['JetBrains_Mono',monospace] tracking-[0.28px]"
                     >
                       View profile →
                     </Link>
