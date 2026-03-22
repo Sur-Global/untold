@@ -42,7 +42,7 @@ CREATE TRIGGER on_auth_user_created
 
 -- Content
 CREATE TABLE content (
-  id              UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  id              UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   type            content_type NOT NULL,
   author_id       UUID NOT NULL REFERENCES profiles(id) ON DELETE CASCADE,
   slug            TEXT UNIQUE NOT NULL,
@@ -67,7 +67,7 @@ CREATE TRIGGER content_updated_at
 
 -- Content translations
 CREATE TABLE content_translations (
-  id                  UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  id                  UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   content_id          UUID NOT NULL REFERENCES content(id) ON DELETE CASCADE,
   locale              TEXT NOT NULL,
   title               TEXT NOT NULL,
@@ -113,13 +113,13 @@ CREATE TABLE course_meta (
 
 -- Categories & tags
 CREATE TABLE categories (
-  id    UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  id    UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   slug  TEXT UNIQUE NOT NULL,
   names JSONB NOT NULL DEFAULT '{}'
 );
 
 CREATE TABLE tags (
-  id    UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  id    UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   slug  TEXT UNIQUE NOT NULL,
   names JSONB NOT NULL DEFAULT '{}'
 );
@@ -197,7 +197,7 @@ CREATE TRIGGER follows_count_trigger
 
 -- Creator applications
 CREATE TABLE creator_applications (
-  id          UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  id          UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   user_id     UUID NOT NULL REFERENCES profiles(id) ON DELETE CASCADE,
   message     TEXT NOT NULL,
   status      application_status NOT NULL DEFAULT 'pending',
