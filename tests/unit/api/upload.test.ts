@@ -72,6 +72,14 @@ describe('POST /api/upload', () => {
     expect(res.status).toBe(400)
   })
 
+  it('returns 400 for invalid type', async () => {
+    vi.mocked(createClient).mockResolvedValue({
+      auth: { getUser: vi.fn().mockResolvedValue({ data: { user: { id: 'user-1' } }, error: null }) },
+    } as any)
+    const res = await POST(makeRequest(makeFile('img.jpg', 'image/jpeg', 100), 'invalid'))
+    expect(res.status).toBe(400)
+  })
+
   it('returns { url } ending in .webp for valid cover upload', async () => {
     vi.mocked(createClient).mockResolvedValue({
       auth: { getUser: vi.fn().mockResolvedValue({ data: { user: { id: 'user-1' } }, error: null }) },
@@ -80,7 +88,7 @@ describe('POST /api/upload', () => {
     const res = await POST(makeRequest(makeFile('photo.jpg', 'image/jpeg', 100), 'cover'))
     expect(res.status).toBe(200)
     const body = await res.json()
-    expect(body.url).toMatch(/\.webp/)
+    expect(body.url).toMatch(/\.webp$/)
   })
 
   it('returns { url } for valid avatar upload', async () => {
