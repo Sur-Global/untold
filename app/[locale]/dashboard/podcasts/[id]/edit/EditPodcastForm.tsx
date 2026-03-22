@@ -7,6 +7,7 @@ import { publishContent, unpublishContent, deleteContent } from '@/lib/actions/c
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { CoverImageInput } from '@/components/ui/CoverImageInput'
 
 interface EditPodcastFormProps {
   id: string
@@ -76,16 +77,7 @@ export function EditPodcastForm({
         />
       </div>
 
-      <div className="space-y-2">
-        <Label htmlFor="cover_image_url">Cover image URL</Label>
-        <Input
-          id="cover_image_url"
-          name="cover_image_url"
-          type="url"
-          defaultValue={initialCoverImageUrl}
-          placeholder={t('coverImagePlaceholder')}
-        />
-      </div>
+      <CoverImageInput name="cover_image_url" defaultValue={initialCoverImageUrl} />
 
       <div className="space-y-2">
         <Label htmlFor="episode_number">Episode number</Label>

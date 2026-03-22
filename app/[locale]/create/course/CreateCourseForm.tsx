@@ -6,6 +6,7 @@ import { createCourse } from '@/lib/actions/course'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { CoverImageInput } from '@/components/ui/CoverImageInput'
 
 export function CreateCourseForm() {
   const t = useTranslations('editor')
@@ -31,10 +32,7 @@ export function CreateCourseForm() {
         <Input id="description" name="description" placeholder={t('descriptionPlaceholder')} />
       </div>
 
-      <div className="space-y-2">
-        <Label htmlFor="cover_image_url">Cover image URL</Label>
-        <Input id="cover_image_url" name="cover_image_url" type="url" placeholder={t('coverImagePlaceholder')} />
-      </div>
+      <CoverImageInput name="cover_image_url" />
 
       <div className="grid grid-cols-2 gap-4">
         <div className="space-y-2">

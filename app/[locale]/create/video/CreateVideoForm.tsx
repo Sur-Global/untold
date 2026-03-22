@@ -6,6 +6,7 @@ import { createVideo } from '@/lib/actions/video'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { CoverImageInput } from '@/components/ui/CoverImageInput'
 
 export function CreateVideoForm() {
   const t = useTranslations('editor')
@@ -36,10 +37,7 @@ export function CreateVideoForm() {
         <Input id="description" name="description" placeholder={t('descriptionPlaceholder')} />
       </div>
 
-      <div className="space-y-2">
-        <Label htmlFor="thumbnail_url">Thumbnail URL</Label>
-        <Input id="thumbnail_url" name="thumbnail_url" type="url" placeholder={t('thumbnailUrlPlaceholder')} />
-      </div>
+      <CoverImageInput name="thumbnail_url" />
 
       <div className="space-y-2">
         <Label htmlFor="duration">Duration</Label>

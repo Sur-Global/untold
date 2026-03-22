@@ -8,6 +8,7 @@ import { RichTextEditor } from '@/components/editor/RichTextEditor'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { CoverImageInput } from '@/components/ui/CoverImageInput'
 
 interface EditPillFormProps {
   id: string
@@ -56,10 +57,7 @@ export function EditPillForm({
         </div>
       </div>
 
-      <div className="space-y-2">
-        <Label htmlFor="image_url">Image URL</Label>
-        <Input id="image_url" name="image_url" type="url" defaultValue={initialImageUrl} placeholder={t('imageUrlPlaceholder')} />
-      </div>
+      <CoverImageInput name="image_url" defaultValue={initialImageUrl} />
 
       <div className="space-y-2">
         <Label>Body</Label>

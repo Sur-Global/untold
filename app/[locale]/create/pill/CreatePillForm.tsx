@@ -7,6 +7,7 @@ import { RichTextEditor } from '@/components/editor/RichTextEditor'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { CoverImageInput } from '@/components/ui/CoverImageInput'
 
 export function CreatePillForm() {
   const t = useTranslations('editor')
@@ -44,10 +45,7 @@ export function CreatePillForm() {
         </div>
       </div>
 
-      <div className="space-y-2">
-        <Label htmlFor="image_url">Image URL</Label>
-        <Input id="image_url" name="image_url" type="url" placeholder={t('imageUrlPlaceholder')} />
-      </div>
+      <CoverImageInput name="image_url" />
 
       <div className="space-y-2">
         <Label>Body</Label>

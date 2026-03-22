@@ -7,6 +7,7 @@ import { publishContent, unpublishContent, deleteContent } from '@/lib/actions/c
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { CoverImageInput } from '@/components/ui/CoverImageInput'
 
 interface EditVideoFormProps {
   id: string
@@ -74,16 +75,7 @@ export function EditVideoForm({
         />
       </div>
 
-      <div className="space-y-2">
-        <Label htmlFor="thumbnail_url">Thumbnail URL</Label>
-        <Input
-          id="thumbnail_url"
-          name="thumbnail_url"
-          type="url"
-          defaultValue={initialThumbnailUrl}
-          placeholder={t('thumbnailUrlPlaceholder')}
-        />
-      </div>
+      <CoverImageInput name="thumbnail_url" defaultValue={initialThumbnailUrl} />
 
       <div className="space-y-2">
         <Label htmlFor="duration">Duration</Label>
