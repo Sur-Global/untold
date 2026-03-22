@@ -14,8 +14,12 @@ export async function createArticle(formData: FormData) {
 
   const title = (formData.get('title') as string).trim()
   const excerpt = (formData.get('excerpt') as string)?.trim() || null
+  const featuredSummary = (formData.get('featured_summary') as string)?.trim() || null
   const coverImageUrl = (formData.get('cover_image_url') as string)?.trim() || null
+  const imageCredits = (formData.get('image_credits') as string)?.trim() || null
   const body = formData.get('body') as string | null
+  const tagIdsRaw = formData.get('tag_ids') as string | null
+  const featureRequested = formData.get('feature_requested') === 'true'
 
   // Append a short timestamp suffix to ensure slug uniqueness
   const slug = `${slugify(title)}-${Date.now().toString(36)}`
@@ -29,6 +33,8 @@ export async function createArticle(formData: FormData) {
       source_locale: 'en',
       status: 'draft',
       cover_image_url: coverImageUrl,
+      image_credits: imageCredits,
+      feature_requested_at: featureRequested ? new Date().toISOString() : null,
     })
     .select('id')
     .single()
@@ -42,6 +48,7 @@ export async function createArticle(formData: FormData) {
     locale: 'en',
     title,
     excerpt,
+    featured_summary: featuredSummary,
     body: bodyJson,
   })
 
@@ -56,6 +63,14 @@ export async function createArticle(formData: FormData) {
       .eq('author_id', user.id)
   }
 
+  // Sync tags
+  const tagIds = tagIdsRaw ? JSON.parse(tagIdsRaw) as string[] : []
+  if (tagIds.length > 0) {
+    await (supabase as any)
+      .from('content_tags')
+      .insert(tagIds.map((tag_id: string) => ({ content_id: content.id, tag_id })))
+  }
+
   revalidatePath('/dashboard/articles')
   redirect(`/dashboard/articles/${content.id}/edit`)
 }
@@ -66,12 +81,21 @@ export async function updateArticle(id: string, formData: FormData) {
 
   const title = (formData.get('title') as string).trim()
   const excerpt = (formData.get('excerpt') as string)?.trim() || null
+  const featuredSummary = (formData.get('featured_summary') as string)?.trim() || null
   const coverImageUrl = (formData.get('cover_image_url') as string)?.trim() || null
+  const imageCredits = (formData.get('image_credits') as string)?.trim() || null
   const body = formData.get('body') as string | null
+  const tagIdsRaw = formData.get('tag_ids') as string | null
+  const featureRequested = formData.get('feature_requested') === 'true'
 
   await (supabase as any)
     .from('content')
-    .update({ cover_image_url: coverImageUrl, updated_at: new Date().toISOString() })
+    .update({
+      cover_image_url: coverImageUrl,
+      image_credits: imageCredits,
+      feature_requested_at: featureRequested ? new Date().toISOString() : null,
+      updated_at: new Date().toISOString(),
+    })
     .eq('id', id)
     .eq('author_id', user.id)
 
@@ -84,6 +108,7 @@ export async function updateArticle(id: string, formData: FormData) {
       locale: 'en',
       title,
       excerpt,
+      featured_summary: featuredSummary,
       body: bodyJson,
     }, { onConflict: 'content_id,locale' })
 
@@ -94,6 +119,15 @@ export async function updateArticle(id: string, formData: FormData) {
       .update({ read_time_minutes: readTimeMinutes })
       .eq('id', id)
       .eq('author_id', user.id)
+  }
+
+  // Sync tags
+  const tagIds = tagIdsRaw ? JSON.parse(tagIdsRaw) as string[] : []
+  await (supabase as any).from('content_tags').delete().eq('content_id', id)
+  if (tagIds.length > 0) {
+    await (supabase as any)
+      .from('content_tags')
+      .insert(tagIds.map((tag_id: string) => ({ content_id: id, tag_id })))
   }
 
   revalidatePath(`/dashboard/articles/${id}/edit`)

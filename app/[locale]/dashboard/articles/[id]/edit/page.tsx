@@ -5,7 +5,6 @@ import { createClient } from '@/lib/supabase/server'
 import { Navigation } from '@/components/layout/Navigation'
 import { Footer } from '@/components/layout/Footer'
 import { getNavProps } from '@/lib/nav'
-import { Link } from '@/i18n/navigation'
 import { EditArticleForm } from './EditArticleForm'
 
 interface PageProps {
@@ -19,15 +18,19 @@ export default async function EditArticlePage({ params }: PageProps) {
 
   const articlePromise = (supabase as any)
     .from('content')
-    .select('id, status, cover_image_url, content_translations ( title, excerpt, body, locale )')
+    .select(`
+      id, status, cover_image_url, image_credits, feature_requested_at,
+      profiles!author_id ( display_name, bio ),
+      content_translations ( title, excerpt, featured_summary, body, locale ),
+      content_tags ( tag_id, tags ( id, slug, names ) )
+    `)
     .eq('id', id)
     .eq('author_id', user.id)
     .eq('type', 'article')
     .single()
 
-  const [{ userId, ...navProps }, t, { data: article }] = await Promise.all([
+  const [{ userId, ...navProps }, { data: article }] = await Promise.all([
     getNavProps(),
-    getTranslations('editor'),
     articlePromise,
   ])
 
@@ -36,34 +39,32 @@ export default async function EditArticlePage({ params }: PageProps) {
   const enTranslation = article.content_translations?.find((tr: any) => tr.locale === 'en')
     ?? article.content_translations?.[0]
 
+  const initialBody = Array.isArray(enTranslation?.body) ? enTranslation.body : null
+
+  const initialTags = (article.content_tags ?? [])
+    .map((ct: any) => ct.tags)
+    .filter(Boolean)
+    .map((t: any) => ({ id: t.id, slug: t.slug, name: t.names?.en ?? t.slug }))
+
+  const author = Array.isArray(article.profiles) ? article.profiles[0] : article.profiles
+
   return (
     <>
       <Navigation {...navProps} />
-      <main className="max-w-3xl mx-auto px-4 sm:px-6 py-12">
-        <div className="flex items-center justify-between mb-8">
-          <Link href="/dashboard/articles" className="text-sm text-[#A0522D] hover:underline font-mono">
-            {t('backToDashboard')}
-          </Link>
-          <span
-            className="text-xs font-mono px-2 py-0.5 rounded-full"
-            style={{
-              background: article.status === 'published' ? 'rgba(34,197,94,0.1)' : 'rgba(160,82,45,0.1)',
-              color: article.status === 'published' ? '#16a34a' : '#A0522D',
-            }}
-          >
-            {article.status}
-          </span>
-        </div>
-
-        <EditArticleForm
-          id={id}
-          status={article.status}
-          initialTitle={enTranslation?.title ?? ''}
-          initialExcerpt={enTranslation?.excerpt ?? ''}
-          initialCoverImageUrl={article.cover_image_url ?? ''}
-          initialBody={enTranslation?.body ?? null}
-        />
-      </main>
+      <EditArticleForm
+        id={id}
+        status={article.status}
+        initialTitle={enTranslation?.title ?? ''}
+        initialExcerpt={enTranslation?.excerpt ?? ''}
+        initialFeaturedSummary={enTranslation?.featured_summary ?? ''}
+        initialCoverImageUrl={article.cover_image_url ?? ''}
+        initialImageCredits={article.image_credits ?? ''}
+        initialBody={initialBody}
+        initialTags={initialTags}
+        initialFeatureRequested={!!article.feature_requested_at}
+        authorName={author?.display_name ?? ''}
+        authorBio={author?.bio ?? undefined}
+      />
       <Footer />
     </>
   )
