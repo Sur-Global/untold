@@ -204,6 +204,7 @@ export default async function ArticlesPage({ params, searchParams }: PageProps) 
                   const categoryTag = firstTag
                     ? (firstTag.names[locale] ?? firstTag.names['en'] ?? null)
                     : null
+                  const categoryTagSlug = firstTag?.slug ?? null
                   const author = article.profiles
                   return (
                     <ContentCard
@@ -220,6 +221,7 @@ export default async function ArticlesPage({ params, searchParams }: PageProps) 
                       authorSlug={author?.slug}
                       authorAvatarUrl={author?.avatar_url}
                       categoryTag={categoryTag}
+                      categoryTagSlug={categoryTagSlug}
                       readTimeMinutes={article.read_time_minutes}
                       isBookmarked={bookmarkedIds.has(article.id)}
                       isLoggedIn={navProps.isLoggedIn}

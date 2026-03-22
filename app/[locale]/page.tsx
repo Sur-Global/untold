@@ -48,7 +48,7 @@ export default async function HomePage({ params }: PageProps) {
         id, slug, cover_image_url, read_time_minutes, likes_count,
         profiles!author_id ( display_name, slug, avatar_url ),
         content_translations ( title, excerpt, locale ),
-        content_tags ( tags ( names ) )
+        content_tags ( tags ( names, slug ) )
       `)
       .eq('type', 'article')
       .eq('status', 'published')
@@ -63,7 +63,7 @@ export default async function HomePage({ params }: PageProps) {
         id, slug, type, is_featured, likes_count, published_at, cover_image_url, read_time_minutes,
         profiles!author_id ( display_name, slug, avatar_url ),
         content_translations ( title, excerpt, locale ),
-        content_tags ( tags ( names ) )
+        content_tags ( tags ( names, slug ) )
       `)
       .eq('type', 'article')
       .eq('status', 'published')
@@ -77,7 +77,7 @@ export default async function HomePage({ params }: PageProps) {
         id, slug, type, is_featured, likes_count, published_at, cover_image_url,
         profiles!author_id ( display_name, slug, avatar_url ),
         content_translations ( title, excerpt, locale ),
-        content_tags ( tags ( names ) ),
+        content_tags ( tags ( names, slug ) ),
         video_meta ( thumbnail_url, duration )
       `)
       .eq('type', 'video')
@@ -91,7 +91,7 @@ export default async function HomePage({ params }: PageProps) {
         id, slug, type, is_featured, likes_count, published_at,
         profiles!author_id ( display_name, slug, avatar_url ),
         content_translations ( title, excerpt, locale ),
-        content_tags ( tags ( names ) ),
+        content_tags ( tags ( names, slug ) ),
         podcast_meta ( cover_image_url, duration, episode_number )
       `)
       .eq('type', 'podcast')
@@ -105,7 +105,7 @@ export default async function HomePage({ params }: PageProps) {
         id, slug, type, is_featured, likes_count, published_at, cover_image_url,
         profiles!author_id ( display_name, slug, avatar_url ),
         content_translations ( title, excerpt, locale ),
-        content_tags ( tags ( names ) ),
+        content_tags ( tags ( names, slug ) ),
         pill_meta ( accent_color, image_url )
       `)
       .eq('type', 'pill')
@@ -119,7 +119,7 @@ export default async function HomePage({ params }: PageProps) {
         id, slug, type, is_featured, likes_count, published_at, cover_image_url,
         profiles!author_id ( display_name, slug, avatar_url ),
         content_translations ( title, excerpt, locale ),
-        content_tags ( tags ( names ) ),
+        content_tags ( tags ( names, slug ) ),
         course_meta ( price, currency, duration, students_count, rating )
       `)
       .eq('type', 'course')
@@ -170,6 +170,7 @@ export default async function HomePage({ params }: PageProps) {
     const author = item.profiles
     const firstTag = item.content_tags?.[0]?.tags
     const categoryTag = firstTag ? (firstTag.names[locale] ?? firstTag.names['en'] ?? null) : null
+    const categoryTagSlug = firstTag?.slug ?? null
     const vm = item.video_meta
     const pm = item.podcast_meta
     const plm = item.pill_meta
@@ -188,6 +189,7 @@ export default async function HomePage({ params }: PageProps) {
       authorSlug: author?.slug,
       authorAvatarUrl: author?.avatar_url,
       categoryTag,
+      categoryTagSlug,
       readTimeMinutes: item.read_time_minutes,
       isBookmarked: bookmarkedIds.has(item.id),
       isLoggedIn: navProps.isLoggedIn,
@@ -215,6 +217,7 @@ export default async function HomePage({ params }: PageProps) {
   const featuredCategoryTag = featuredTag
     ? (featuredTag.names[locale] ?? featuredTag.names['en'] ?? null)
     : null
+  const featuredCategoryTagSlug = featuredTag?.slug ?? null
 
   return (
     <>
@@ -431,6 +434,7 @@ export default async function HomePage({ params }: PageProps) {
                         authorSlug={featuredArticle.profiles?.slug}
                         authorAvatarUrl={featuredArticle.profiles?.avatar_url}
                         categoryTag={featuredCategoryTag}
+                        categoryTagSlug={featuredCategoryTagSlug}
                         readTimeMinutes={featuredArticle.read_time_minutes}
                         likesCount={featuredArticle.likes_count}
                         isFeatured
@@ -490,6 +494,7 @@ export default async function HomePage({ params }: PageProps) {
                       coverImageUrl={p.coverImageUrl}
                       duration={p.duration}
                       categoryTag={p.categoryTag}
+                      categoryTagSlug={p.categoryTagSlug}
                       authorName={p.authorName}
                       authorSlug={p.authorSlug}
                       authorAvatarUrl={p.authorAvatarUrl}
@@ -557,6 +562,7 @@ export default async function HomePage({ params }: PageProps) {
                       excerpt={p.excerpt}
                       coverImageUrl={p.coverImageUrl}
                       categoryTag={p.categoryTag}
+                      categoryTagSlug={p.categoryTagSlug}
                       accentColor={p.accentColor}
                       authorName={p.authorName}
                       authorSlug={p.authorSlug}

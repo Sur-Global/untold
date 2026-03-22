@@ -94,6 +94,7 @@ interface LargeArticleCardProps {
   authorSlug?: string | null
   authorAvatarUrl?: string | null
   categoryTag?: string | null
+  categoryTagSlug?: string | null
   readTimeMinutes?: number | null
   likesCount?: number | null
   isFeatured?: boolean
@@ -108,6 +109,7 @@ export function LargeArticleCard({
   authorSlug,
   authorAvatarUrl,
   categoryTag,
+  categoryTagSlug,
   readTimeMinutes,
   likesCount,
   isFeatured,
@@ -158,17 +160,34 @@ export function LargeArticleCard({
           </span>
         )}
         {categoryTag && (
-          <span
-            className="ml-auto px-3 py-1 rounded-full text-xs"
-            style={{
-              background: 'rgba(253,252,250,0.9)',
-              color: '#5d4e37',
-              fontFamily: 'JetBrains Mono, monospace',
-              fontSize: 11,
-            }}
-          >
-            {categoryTag}
-          </span>
+          categoryTagSlug ? (
+            <Link
+              href={`/tag/${categoryTagSlug}`}
+              className="ml-auto px-3 py-1 rounded-full text-xs hover:opacity-80 transition-opacity"
+              style={{
+                background: 'rgba(253,252,250,0.9)',
+                color: '#5d4e37',
+                fontFamily: 'JetBrains Mono, monospace',
+                fontSize: 11,
+                textDecoration: 'none',
+              }}
+              onClick={(e) => e.stopPropagation()}
+            >
+              {categoryTag}
+            </Link>
+          ) : (
+            <span
+              className="ml-auto px-3 py-1 rounded-full text-xs"
+              style={{
+                background: 'rgba(253,252,250,0.9)',
+                color: '#5d4e37',
+                fontFamily: 'JetBrains Mono, monospace',
+                fontSize: 11,
+              }}
+            >
+              {categoryTag}
+            </span>
+          )
         )}
       </div>
 
@@ -252,6 +271,7 @@ interface VideoCardProps {
   coverImageUrl?: string | null
   duration?: string | null
   categoryTag?: string | null
+  categoryTagSlug?: string | null
   authorName?: string | null
   authorSlug?: string | null
   authorAvatarUrl?: string | null
@@ -268,6 +288,7 @@ export function VideoCard({
   coverImageUrl,
   duration,
   categoryTag,
+  categoryTagSlug,
   authorName,
   authorSlug,
   authorAvatarUrl,
@@ -310,17 +331,34 @@ export function VideoCard({
         />
         {/* Category badge */}
         {categoryTag && (
-          <span
-            className="absolute top-3 left-3 text-xs px-3 py-1 rounded-full"
-            style={{
-              background: 'rgba(253,252,250,0.92)',
-              color: '#5d4e37',
-              fontFamily: 'JetBrains Mono, monospace',
-              fontSize: 11,
-            }}
-          >
-            {categoryTag}
-          </span>
+          categoryTagSlug ? (
+            <Link
+              href={`/tag/${categoryTagSlug}`}
+              className="absolute top-3 left-3 text-xs px-3 py-1 rounded-full hover:opacity-80 transition-opacity"
+              style={{
+                background: 'rgba(253,252,250,0.92)',
+                color: '#5d4e37',
+                fontFamily: 'JetBrains Mono, monospace',
+                fontSize: 11,
+                textDecoration: 'none',
+              }}
+              onClick={(e) => e.stopPropagation()}
+            >
+              {categoryTag}
+            </Link>
+          ) : (
+            <span
+              className="absolute top-3 left-3 text-xs px-3 py-1 rounded-full"
+              style={{
+                background: 'rgba(253,252,250,0.92)',
+                color: '#5d4e37',
+                fontFamily: 'JetBrains Mono, monospace',
+                fontSize: 11,
+              }}
+            >
+              {categoryTag}
+            </span>
+          )
         )}
         {/* Play button */}
         <div className="absolute inset-0 flex items-center justify-center">
@@ -530,6 +568,7 @@ interface HomePillCardProps {
   excerpt?: string | null
   coverImageUrl?: string | null
   categoryTag?: string | null
+  categoryTagSlug?: string | null
   accentColor?: string | null
   authorName?: string | null
   authorSlug?: string | null
@@ -545,6 +584,7 @@ export function HomePillCard({
   excerpt,
   coverImageUrl,
   categoryTag,
+  categoryTagSlug,
   accentColor,
   authorName,
   authorSlug,
@@ -583,18 +623,35 @@ export function HomePillCard({
         {/* Badge row */}
         <div className="flex items-center justify-between">
           {categoryTag ? (
-            <span
-              className="text-xs px-3 py-1 rounded-full"
-              style={{
-                background: tagBg,
-                color: tagColor,
-                border: `1px solid ${tagBorder}`,
-                fontFamily: 'JetBrains Mono, monospace',
-                fontSize: 11,
-              }}
-            >
-              {categoryTag}
-            </span>
+            categoryTagSlug ? (
+              <Link
+                href={`/tag/${categoryTagSlug}`}
+                className="text-xs px-3 py-1 rounded-full hover:opacity-80 transition-opacity"
+                style={{
+                  background: tagBg,
+                  color: tagColor,
+                  border: `1px solid ${tagBorder}`,
+                  fontFamily: 'JetBrains Mono, monospace',
+                  fontSize: 11,
+                  textDecoration: 'none',
+                }}
+              >
+                {categoryTag}
+              </Link>
+            ) : (
+              <span
+                className="text-xs px-3 py-1 rounded-full"
+                style={{
+                  background: tagBg,
+                  color: tagColor,
+                  border: `1px solid ${tagBorder}`,
+                  fontFamily: 'JetBrains Mono, monospace',
+                  fontSize: 11,
+                }}
+              >
+                {categoryTag}
+              </span>
+            )
           ) : (
             <div />
           )}

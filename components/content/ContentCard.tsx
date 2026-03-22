@@ -28,6 +28,7 @@ interface ContentCardProps {
   authorSlug?: string | null
   authorAvatarUrl?: string | null
   categoryTag?: string | null
+  categoryTagSlug?: string | null
   readTimeMinutes?: number | null
   isBookmarked?: boolean
   isLoggedIn?: boolean
@@ -83,6 +84,7 @@ export function ContentCard({
   authorSlug,
   authorAvatarUrl,
   categoryTag,
+  categoryTagSlug,
   readTimeMinutes,
   isBookmarked = false,
   isLoggedIn = false,
@@ -198,9 +200,10 @@ export function ContentCard({
         </Link>
 
         {/* Category / type badge — top left */}
-        {categoryTag ? (
-          <span
-            className="absolute top-[15px] left-[16px] text-xs px-3 py-1 rounded-full"
+        {categoryTag && categoryTagSlug ? (
+          <Link
+            href={`/tag/${categoryTagSlug}`}
+            className="absolute top-[15px] left-[16px] text-xs px-3 py-1 rounded-full hover:opacity-80 transition-opacity"
             style={{
               background: 'rgba(253,252,250,0.9)',
               border: '1px solid rgba(212,165,116,0.3)',
@@ -208,9 +211,10 @@ export function ContentCard({
               fontFamily: 'JetBrains Mono, monospace',
               fontSize: 11,
             }}
+            onClick={(e) => e.stopPropagation()}
           >
             {categoryTag}
-          </span>
+          </Link>
         ) : (
           <span
             className="absolute top-[15px] left-[16px] text-xs px-3 py-1 rounded-full"
@@ -222,7 +226,7 @@ export function ContentCard({
               fontSize: 11,
             }}
           >
-            {tCreate(type)}
+            {categoryTag ?? tCreate(type)}
           </span>
         )}
 

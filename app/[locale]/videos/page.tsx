@@ -26,7 +26,7 @@ export default async function VideosPage({ params, searchParams }: PageProps) {
       id, slug, type, is_featured, likes_count, published_at, cover_image_url, read_time_minutes,
       profiles!author_id ( display_name, slug, role, avatar_url ),
       content_translations ( title, excerpt, locale ),
-      content_tags ( tags ( names ) ),
+      content_tags ( tags ( names, slug ) ),
       video_meta ( thumbnail_url, duration )
     `, { count: 'exact' })
     .eq('type', 'video')
@@ -69,7 +69,8 @@ export default async function VideosPage({ params, searchParams }: PageProps) {
                 const t = getTranslation(item.content_translations ?? [], locale)
                 const author = item.profiles
                 const firstTag = item.content_tags?.[0]?.tags
-                const categoryTag = firstTag ? (firstTag.names[locale] ?? firstTag.names['en'] ?? null) : null
+                const categoryTag = firstTag ? (firstTag.names[locale] ?? firstTag.names["en"] ?? null) : null
+                const categoryTagSlug = firstTag?.slug ?? null
                 return (
                   <ContentCard
                     key={item.id}
@@ -85,6 +86,7 @@ export default async function VideosPage({ params, searchParams }: PageProps) {
                     authorSlug={author?.slug}
                     authorAvatarUrl={author?.avatar_url}
                     categoryTag={categoryTag}
+                      categoryTagSlug={categoryTagSlug}
                     duration={item.video_meta?.duration}
                     isBookmarked={bookmarkedIds.has(item.id)}
                     isLoggedIn={navProps.isLoggedIn}
