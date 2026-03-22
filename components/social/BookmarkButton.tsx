@@ -7,9 +7,10 @@ interface BookmarkButtonProps {
   contentId: string
   initialIsBookmarked: boolean
   isLoggedIn: boolean
+  className?: string
 }
 
-export function BookmarkButton({ contentId, initialIsBookmarked, isLoggedIn }: BookmarkButtonProps) {
+export function BookmarkButton({ contentId, initialIsBookmarked, isLoggedIn, className }: BookmarkButtonProps) {
   const [isBookmarked, setIsBookmarked] = useState(initialIsBookmarked)
   const [isPending, startTransition] = useTransition()
 
@@ -23,7 +24,7 @@ export function BookmarkButton({ contentId, initialIsBookmarked, isLoggedIn }: B
       onClick={handleClick}
       disabled={isPending || !isLoggedIn}
       title={isLoggedIn ? (isBookmarked ? 'Remove bookmark' : 'Bookmark') : 'Sign in to bookmark'}
-      className="flex items-center gap-1.5 text-sm font-mono text-[#6B5F58] hover:text-[#A0522D] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+      className={className ?? "flex items-center gap-1.5 text-sm font-mono text-[#6B5F58] hover:text-[#A0522D] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"}
     >
       {isBookmarked ? '🔖' : '🏷'}
     </button>
