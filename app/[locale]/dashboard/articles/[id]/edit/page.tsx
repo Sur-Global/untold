@@ -16,16 +16,20 @@ export default async function EditArticlePage({ params }: PageProps) {
   const { id } = await params
   const { user } = await requireCreator()
   const supabase = await createClient()
-  const navProps = await getNavProps()
-  const t = await getTranslations('editor')
 
-  const { data: article } = await (supabase as any)
+  const articlePromise = (supabase as any)
     .from('content')
     .select('id, status, cover_image_url, content_translations ( title, excerpt, body, locale )')
     .eq('id', id)
     .eq('author_id', user.id)
     .eq('type', 'article')
     .single()
+
+  const [{ userId, ...navProps }, t, { data: article }] = await Promise.all([
+    getNavProps(),
+    getTranslations('editor'),
+    articlePromise,
+  ])
 
   if (!article) notFound()
 

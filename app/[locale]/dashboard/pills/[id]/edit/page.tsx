@@ -16,10 +16,8 @@ export default async function EditPillPage({ params }: EditPillPageProps) {
   const { id } = await params
   const { user } = await requireCreator()
   const supabase = await createClient()
-  const navProps = await getNavProps()
-  const t = await getTranslations('editor')
 
-  const { data: content } = await (supabase as any)
+  const contentPromise = (supabase as any)
     .from('content')
     .select(`
       id, status,
@@ -30,6 +28,12 @@ export default async function EditPillPage({ params }: EditPillPageProps) {
     .eq('author_id', user.id)
     .eq('type', 'pill')
     .single()
+
+  const [{ userId, ...navProps }, t, { data: content }] = await Promise.all([
+    getNavProps(),
+    getTranslations('editor'),
+    contentPromise,
+  ])
 
   if (!content) notFound()
 

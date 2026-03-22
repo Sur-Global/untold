@@ -6,6 +6,7 @@ import { after } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
 import { requireCreator } from '@/lib/require-creator'
 import { slugify } from '@/lib/utils'
+import { computeReadTime } from '@/lib/readTime'
 
 export async function createArticle(formData: FormData) {
   const { user } = await requireCreator()
@@ -34,15 +35,26 @@ export async function createArticle(formData: FormData) {
 
   if (error || !content) throw new Error(error?.message ?? 'Failed to create article')
 
+  const bodyJson = body ? (() => { try { return JSON.parse(body) } catch { return null } })() : null
+
   const { error: translationError } = await (supabase as any).from('content_translations').insert({
     content_id: content.id,
     locale: 'en',
     title,
     excerpt,
-    body: body ? (() => { try { return JSON.parse(body) } catch { return null } })() : null,
+    body: bodyJson,
   })
 
   if (translationError) throw new Error(translationError.message ?? 'Failed to save article content')
+
+  const readTimeMinutes = bodyJson ? computeReadTime(bodyJson) : null
+  if (readTimeMinutes !== null) {
+    await (supabase as any)
+      .from('content')
+      .update({ read_time_minutes: readTimeMinutes })
+      .eq('id', content.id)
+      .eq('author_id', user.id)
+  }
 
   revalidatePath('/dashboard/articles')
   redirect(`/dashboard/articles/${content.id}/edit`)
@@ -63,6 +75,8 @@ export async function updateArticle(id: string, formData: FormData) {
     .eq('id', id)
     .eq('author_id', user.id)
 
+  const bodyJson = body ? (() => { try { return JSON.parse(body) } catch { return null } })() : null
+
   await (supabase as any)
     .from('content_translations')
     .upsert({
@@ -70,8 +84,17 @@ export async function updateArticle(id: string, formData: FormData) {
       locale: 'en',
       title,
       excerpt,
-      body: body ? (() => { try { return JSON.parse(body) } catch { return null } })() : null,
+      body: bodyJson,
     }, { onConflict: 'content_id,locale' })
+
+  const readTimeMinutes = bodyJson ? computeReadTime(bodyJson) : null
+  if (readTimeMinutes !== null) {
+    await (supabase as any)
+      .from('content')
+      .update({ read_time_minutes: readTimeMinutes })
+      .eq('id', id)
+      .eq('author_id', user.id)
+  }
 
   revalidatePath(`/dashboard/articles/${id}/edit`)
 }

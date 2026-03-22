@@ -1,8 +1,8 @@
 'use client'
 import Link from 'next/link'
 import { useTranslations } from 'next-intl'
+import { usePathname } from 'next/navigation'
 import { Menu } from 'lucide-react'
-import { Button } from '@/components/ui/button'
 import {
   Sheet,
   SheetContent,
@@ -30,88 +30,182 @@ function isCreator(role: UserRole | null) {
 
 export function Navigation({ isLoggedIn, userRole }: NavigationProps) {
   const t = useTranslations('nav')
+  const pathname = usePathname()
 
   return (
-    <header className="sticky top-0 z-50 border-b bg-[#F5F1E8]/95 backdrop-blur" style={{ borderColor: 'rgba(139,69,19,0.15)' }}>
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between gap-4">
-        {/* Logo */}
-        <Link href="/" className="text-xl tracking-widest uppercase text-[#2C2420]" style={{ fontFamily: 'Audiowide, sans-serif' }}>
+    <header
+      className="sticky top-0 z-50"
+      style={{ background: '#2c2420', boxShadow: '0 2px 8px rgba(44,36,32,0.08)' }}
+    >
+      {/* Row 1: Logo left, nav links right */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 flex items-center justify-between" style={{ height: 80 }}>
+        <Link
+          href="/"
+          className="shrink-0"
+          style={{
+            fontFamily: 'Audiowide, sans-serif',
+            fontSize: 22,
+            letterSpacing: 3,
+            color: '#F5F1E8',
+            textDecoration: 'none',
+          }}
+        >
           UNTOLD
         </Link>
 
-        {/* Desktop nav */}
-        <nav className="hidden md:flex items-center gap-6 text-sm" style={{ fontFamily: 'JetBrains Mono, monospace' }}>
-          {NAV_LINKS.map(({ key, href }) => (
-            <Link key={key} href={href} className="hover:text-[#A0522D] transition-colors">
-              {t(key)}
-            </Link>
-          ))}
+        {/* Desktop nav links */}
+        <nav className="hidden md:flex items-center gap-6">
+          {NAV_LINKS.map(({ key, href }) => {
+            const active = pathname.startsWith(href)
+            return (
+              <Link
+                key={key}
+                href={href}
+                style={{
+                  fontFamily: 'JetBrains Mono, monospace',
+                  fontSize: 14,
+                  color: '#fff',
+                  textDecoration: 'none',
+                  paddingBottom: 2,
+                  borderBottom: active
+                    ? '2px solid #a0522d'
+                    : '2px solid transparent',
+                  opacity: active ? 1 : 0.85,
+                  transition: 'opacity 0.15s',
+                }}
+              >
+                {t(key)}
+              </Link>
+            )
+          })}
         </nav>
 
-        {/* Right side */}
-        <div className="flex items-center gap-2">
-          <LocaleSwitcher />
+        {/* Mobile hamburger */}
+        <Sheet>
+          <SheetTrigger
+            className="md:hidden inline-flex items-center justify-center rounded-lg p-1.5 transition-colors"
+            style={{ color: '#F5F1E8' }}
+            aria-label="Open menu"
+          >
+            <Menu className="h-5 w-5" />
+          </SheetTrigger>
+          <SheetContent side="right" style={{ background: '#2c2420', width: 288 }}>
+            <nav className="flex flex-col gap-4 mt-8" style={{ fontFamily: 'JetBrains Mono, monospace' }}>
+              {NAV_LINKS.map(({ key, href }) => (
+                <Link
+                  key={key}
+                  href={href}
+                  className="py-2 text-base transition-opacity"
+                  style={{
+                    color: '#F5F1E8',
+                    textDecoration: 'none',
+                    borderBottom: '1px solid rgba(139,69,19,0.15)',
+                  }}
+                >
+                  {t(key)}
+                </Link>
+              ))}
+              <div className="flex flex-col gap-2 mt-4">
+                <LocaleSwitcher />
+                {isLoggedIn && isCreator(userRole) ? (
+                  <>
+                    <Link href="/dashboard" style={{ color: '#F5F1E8', fontFamily: 'JetBrains Mono, monospace', fontSize: 14 }}>
+                      {t('dashboard')}
+                    </Link>
+                    <Link href="/create" style={{ color: '#F5F1E8', fontFamily: 'JetBrains Mono, monospace', fontSize: 14 }}>
+                      {t('createContent')}
+                    </Link>
+                  </>
+                ) : !isLoggedIn ? (
+                  <>
+                    <Link href="/auth/login" style={{ color: '#F5F1E8', fontFamily: 'JetBrains Mono, monospace', fontSize: 14 }}>
+                      {t('login')}
+                    </Link>
+                    <Link href="/auth/signup" style={{ color: '#F5F1E8', fontFamily: 'JetBrains Mono, monospace', fontSize: 14 }}>
+                      {t('signup')}
+                    </Link>
+                  </>
+                ) : null}
+              </div>
+            </nav>
+          </SheetContent>
+        </Sheet>
+      </div>
 
-          {/* Desktop auth buttons */}
-          <div className="hidden md:flex items-center gap-2">
-            {isLoggedIn && isCreator(userRole) ? (
-              <>
-                <Button variant="ghost" size="sm" render={<Link href="/dashboard" />}>
-                  {t('dashboard')}
-                </Button>
-                <Button size="sm" className="gradient-rust text-white border-0" render={<Link href="/create" />}>
-                  {t('createContent')}
-                </Button>
-              </>
-            ) : !isLoggedIn ? (
-              <>
-                <Button variant="ghost" size="sm" render={<Link href="/auth/login" />}>
-                  {t('login')}
-                </Button>
-                <Button size="sm" className="gradient-rust text-white border-0" render={<Link href="/auth/signup" />}>
-                  {t('signup')}
-                </Button>
-              </>
-            ) : null}
-          </div>
+      {/* Row 2: Locale + auth, right-aligned */}
+      <div
+        className="max-w-7xl mx-auto px-4 sm:px-6 hidden md:flex items-center justify-end gap-3"
+        style={{
+          height: 66,
+          borderTop: '1px solid rgba(139,69,19,0.1)',
+        }}
+      >
+        <LocaleSwitcher />
 
-          {/* Mobile hamburger */}
-          <Sheet>
-            <SheetTrigger className="md:hidden inline-flex items-center justify-center rounded-lg p-1.5 hover:bg-muted transition-colors" aria-label="Open menu">
-              <Menu className="h-5 w-5" />
-            </SheetTrigger>
-            <SheetContent side="right" className="bg-[#F5F1E8] w-72">
-              <nav className="flex flex-col gap-4 mt-8" style={{ fontFamily: 'JetBrains Mono, monospace' }}>
-                {NAV_LINKS.map(({ key, href }) => (
-                  <Link key={key} href={href} className="text-base hover:text-[#A0522D] transition-colors py-2 border-b" style={{ borderColor: 'rgba(139,69,19,0.1)' }}>
-                    {t(key)}
-                  </Link>
-                ))}
-                <div className="flex flex-col gap-2 mt-4">
-                  {isLoggedIn && isCreator(userRole) ? (
-                    <>
-                      <Button variant="ghost" className="justify-start" render={<Link href="/dashboard" />}>
-                        {t('dashboard')}
-                      </Button>
-                      <Button className="gradient-rust text-white border-0" render={<Link href="/create" />}>
-                        {t('createContent')}
-                      </Button>
-                    </>
-                  ) : !isLoggedIn ? (
-                    <>
-                      <Button variant="ghost" className="justify-start" render={<Link href="/auth/login" />}>
-                        {t('login')}
-                      </Button>
-                      <Button className="gradient-rust text-white border-0" render={<Link href="/auth/signup" />}>
-                        {t('signup')}
-                      </Button>
-                    </>
-                  ) : null}
-                </div>
-              </nav>
-            </SheetContent>
-          </Sheet>
-        </div>
+        {isLoggedIn && isCreator(userRole) ? (
+          <>
+            <Link
+              href="/dashboard"
+              style={{
+                fontFamily: 'JetBrains Mono, monospace',
+                fontSize: 14,
+                color: '#F5F1E8',
+                border: '1px solid rgba(245,241,232,0.3)',
+                borderRadius: 10,
+                padding: '8px 16px',
+                textDecoration: 'none',
+              }}
+            >
+              {t('dashboard')}
+            </Link>
+            <Link
+              href="/create"
+              style={{
+                fontFamily: 'JetBrains Mono, monospace',
+                fontSize: 14,
+                color: '#fff',
+                background: 'linear-gradient(160deg,#8b4513,#a0522d)',
+                borderRadius: 10,
+                padding: '8px 20px',
+                textDecoration: 'none',
+              }}
+            >
+              {t('createContent')}
+            </Link>
+          </>
+        ) : !isLoggedIn ? (
+          <>
+            <Link
+              href="/auth/login"
+              style={{
+                fontFamily: 'JetBrains Mono, monospace',
+                fontSize: 14,
+                color: '#F5F1E8',
+                textDecoration: 'none',
+                padding: '8px 16px',
+              }}
+            >
+              {t('login')}
+            </Link>
+            <Link
+              href="/auth/signup"
+              style={{
+                fontFamily: 'JetBrains Mono, monospace',
+                fontSize: 14,
+                color: '#fff',
+                background: 'linear-gradient(160deg,#8b4513,#a0522d)',
+                borderRadius: 10,
+                padding: '8px 20px',
+                textDecoration: 'none',
+              }}
+            >
+              {t('signup')}
+            </Link>
+          </>
+        ) : (
+          /* Logged-in reader: locale pill only (no buttons) */
+          null
+        )}
       </div>
     </header>
   )

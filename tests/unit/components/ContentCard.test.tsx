@@ -9,7 +9,7 @@ vi.mock('@/i18n/navigation', () => ({
 }))
 
 const base = {
-  id: '1',
+  contentId: '1',
   slug: 'test-slug',
   title: 'Test Title',
   publishedAt: '2026-03-21T00:00:00Z',

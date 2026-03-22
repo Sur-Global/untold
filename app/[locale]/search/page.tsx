@@ -16,8 +16,7 @@ interface PageProps {
 export default async function SearchPage({ params, searchParams }: PageProps) {
   const { locale } = await params
   const { q = '', type: typeFilter } = await searchParams
-  const navProps = await getNavProps()
-  const supabase = await createClient()
+  const [{ userId, ...navProps }, supabase] = await Promise.all([getNavProps(), createClient()])
 
   let results: any[] = []
 
@@ -65,6 +64,18 @@ export default async function SearchPage({ params, searchParams }: PageProps) {
         // Tiebreaker: most recently published first (proxy for ts_rank within same role group)
         return new Date(b.content?.published_at ?? 0).getTime() - new Date(a.content?.published_at ?? 0).getTime()
       })
+  }
+
+  // Batch bookmark resolution
+  const contentIds = results.map((row: any) => row.content?.id).filter(Boolean)
+  const bookmarkedIds = new Set<string>()
+  if (userId && contentIds.length > 0) {
+    const { data: bookmarks } = await (supabase as any)
+      .from('bookmarks')
+      .select('content_id')
+      .eq('user_id', userId)
+      .in('content_id', contentIds)
+    bookmarks?.forEach((b: any) => bookmarkedIds.add(b.content_id))
   }
 
   return (
@@ -136,6 +147,7 @@ export default async function SearchPage({ params, searchParams }: PageProps) {
               return (
                 <ContentCard
                   key={row.content_id}
+                  contentId={item.id}
                   type={item.type}
                   slug={item.slug}
                   title={t?.title ?? 'Untitled'}
@@ -152,6 +164,8 @@ export default async function SearchPage({ params, searchParams }: PageProps) {
                   rating={item.course_meta?.rating}
                   price={item.course_meta?.price}
                   currency={item.course_meta?.currency}
+                  isBookmarked={bookmarkedIds.has(item.id)}
+                  isLoggedIn={navProps.isLoggedIn}
                 />
               )
             })}

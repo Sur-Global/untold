@@ -8,8 +8,10 @@ import { CreateArticleForm } from './CreateArticleForm'
 
 export default async function CreateArticlePage() {
   await requireCreator()
-  const navProps = await getNavProps()
-  const t = await getTranslations('editor')
+  const [{ userId, ...navProps }, t] = await Promise.all([
+    getNavProps(),
+    getTranslations('editor'),
+  ])
 
   return (
     <>

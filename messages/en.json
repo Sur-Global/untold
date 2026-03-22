@@ -16,7 +16,22 @@
     "title": "UNTOLD",
     "subtitle": "Views from the Global South",
     "featuredArticles": "Featured Articles",
-    "latestStories": "The latest stories"
+    "latestStories": "The latest stories",
+    "heroTagline": "Stories that don't make the front page.",
+    "ctaRead": "Start Reading",
+    "ctaExplore": "Explore Content",
+    "videos": "Videos",
+    "podcasts": "Podcasts",
+    "pills": "Knowledge Pills",
+    "courses": "Courses & Training",
+    "viewAll": "View all",
+    "featuredBadge": "★ Featured"
+  },
+  "listings": {
+    "videosDesc": "Watch videos from journalists and creators across the Global South.",
+    "podcastsDesc": "Listen to audio stories and conversations.",
+    "pillsDesc": "Bite-sized knowledge to expand your perspective.",
+    "coursesDesc": "Structured learning from Global South practitioners."
   },
   "auth": {
     "loginTitle": "Welcome back",
