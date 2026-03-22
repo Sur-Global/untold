@@ -35,19 +35,20 @@ export async function createArticle(formData: FormData) {
 
   if (error || !content) throw new Error(error?.message ?? 'Failed to create article')
 
+  const bodyJson = body ? (() => { try { return JSON.parse(body) } catch { return null } })() : null
+
   const { error: translationError } = await (supabase as any).from('content_translations').insert({
     content_id: content.id,
     locale: 'en',
     title,
     excerpt,
-    body: body ? (() => { try { return JSON.parse(body) } catch { return null } })() : null,
+    body: bodyJson,
   })
 
   if (translationError) throw new Error(translationError.message ?? 'Failed to save article content')
 
-  const bodyJson = body ? (() => { try { return JSON.parse(body) } catch { return null } })() : null
   const readTimeMinutes = bodyJson ? computeReadTime(bodyJson) : null
-  if (readTimeMinutes) {
+  if (readTimeMinutes !== null) {
     await (supabase as any)
       .from('content')
       .update({ read_time_minutes: readTimeMinutes })
@@ -73,6 +74,8 @@ export async function updateArticle(id: string, formData: FormData) {
     .eq('id', id)
     .eq('author_id', user.id)
 
+  const bodyJson = body ? (() => { try { return JSON.parse(body) } catch { return null } })() : null
+
   await (supabase as any)
     .from('content_translations')
     .upsert({
@@ -80,12 +83,11 @@ export async function updateArticle(id: string, formData: FormData) {
       locale: 'en',
       title,
       excerpt,
-      body: body ? (() => { try { return JSON.parse(body) } catch { return null } })() : null,
+      body: bodyJson,
     }, { onConflict: 'content_id,locale' })
 
-  const bodyJson = body ? (() => { try { return JSON.parse(body) } catch { return null } })() : null
   const readTimeMinutes = bodyJson ? computeReadTime(bodyJson) : null
-  if (readTimeMinutes) {
+  if (readTimeMinutes !== null) {
     await (supabase as any)
       .from('content')
       .update({ read_time_minutes: readTimeMinutes })
