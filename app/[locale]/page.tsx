@@ -420,11 +420,11 @@ export default async function HomePage({ params }: PageProps) {
               />
 
               <div className="mt-6 space-y-5">
-                {/* Top: large card + 2 stacked — stack on mobile, side-by-side on md+ */}
+                {/* Top: large card full-width on mobile, side-by-side on md+ */}
                 <div className="flex flex-col md:flex-row gap-5 md:items-stretch">
                   {/* Large featured card */}
                   {featuredArticle && heroTrans && (
-                    <div className="md:shrink-0 md:w-[55%]">
+                    <div className="w-full md:shrink-0 md:w-[55%]">
                       <LargeArticleCard
                           slug={featuredArticle.slug}
                           title={heroTrans.title}
@@ -441,9 +441,9 @@ export default async function HomePage({ params }: PageProps) {
                         />
                     </div>
                   )}
-                  {/* Right: 2 stacked article cards */}
+                  {/* Right: 2 stacked article cards — single column always */}
                   {featuredArticles.length > 0 && (
-                    <div className="flex-1 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-1 gap-5">
+                    <div className="w-full md:flex-1 flex flex-col gap-5">
                       {featuredArticles.slice(0, 2).map((item: any) => (
                         <ContentCard
                           key={item.id}
@@ -454,9 +454,9 @@ export default async function HomePage({ params }: PageProps) {
                   )}
                 </div>
 
-                {/* Bottom row: 2 more cards */}
+                {/* Bottom row: 2 more cards, side-by-side only on md+ */}
                 {featuredArticles.length > 2 && (
-                  <div className="grid sm:grid-cols-2 gap-5">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                     {featuredArticles.slice(2, 4).map((item: any) => (
                       <ContentCard
                         key={item.id}
