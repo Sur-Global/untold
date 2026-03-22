@@ -420,36 +420,34 @@ export default async function HomePage({ params }: PageProps) {
               />
 
               <div className="mt-6 space-y-5">
-                {/* Top: large card left + 2 stacked right */}
-                <div className="flex gap-5 items-stretch">
+                {/* Top: large card + 2 stacked — stack on mobile, side-by-side on md+ */}
+                <div className="flex flex-col md:flex-row gap-5 md:items-stretch">
                   {/* Large featured card */}
                   {featuredArticle && heroTrans && (
-                    <div className="shrink-0" style={{ width: '55%' }}>
+                    <div className="md:shrink-0 md:w-[55%]">
                       <LargeArticleCard
-                        slug={featuredArticle.slug}
-                        title={heroTrans.title}
-                        excerpt={heroTrans.excerpt}
-                        coverImageUrl={featuredArticle.cover_image_url}
-                        authorName={featuredArticle.profiles?.display_name}
-                        authorSlug={featuredArticle.profiles?.slug}
-                        authorAvatarUrl={featuredArticle.profiles?.avatar_url}
-                        categoryTag={featuredCategoryTag}
-                        categoryTagSlug={featuredCategoryTagSlug}
-                        readTimeMinutes={featuredArticle.read_time_minutes}
-                        likesCount={featuredArticle.likes_count}
-                        isFeatured
-
-                      />
+                          slug={featuredArticle.slug}
+                          title={heroTrans.title}
+                          excerpt={heroTrans.excerpt}
+                          coverImageUrl={featuredArticle.cover_image_url}
+                          authorName={featuredArticle.profiles?.display_name}
+                          authorSlug={featuredArticle.profiles?.slug}
+                          authorAvatarUrl={featuredArticle.profiles?.avatar_url}
+                          categoryTag={featuredCategoryTag}
+                          categoryTagSlug={featuredCategoryTagSlug}
+                          readTimeMinutes={featuredArticle.read_time_minutes}
+                          likesCount={featuredArticle.likes_count}
+                          isFeatured
+                        />
                     </div>
                   )}
                   {/* Right: 2 stacked article cards */}
                   {featuredArticles.length > 0 && (
-                    <div className="flex-1 flex flex-col gap-5">
+                    <div className="flex-1 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-1 gap-5">
                       {featuredArticles.slice(0, 2).map((item: any) => (
                         <ContentCard
                           key={item.id}
                           {...getItemProps(item)}
-  
                         />
                       ))}
                     </div>
@@ -463,7 +461,6 @@ export default async function HomePage({ params }: PageProps) {
                       <ContentCard
                         key={item.id}
                         {...getItemProps(item)}
-
                       />
                     ))}
                   </div>

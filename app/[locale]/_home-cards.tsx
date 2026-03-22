@@ -121,7 +121,7 @@ export function LargeArticleCard({
       className="relative flex flex-col rounded-2xl overflow-hidden"
       style={{
         height: '100%',
-        minHeight: 480,
+        minHeight: 280,
         background: '#2C2420',
         border: '1px solid rgba(212,165,116,0.2)',
         textDecoration: 'none',
