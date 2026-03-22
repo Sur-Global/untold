@@ -1,62 +1,54 @@
 'use client'
-
-import { useEffect } from 'react'
-import { useEditor, EditorContent } from '@tiptap/react'
-import StarterKit from '@tiptap/starter-kit'
-import Underline from '@tiptap/extension-underline'
-import { Table, TableRow, TableCell, TableHeader } from '@tiptap/extension-table'
-import Link from '@tiptap/extension-link'
-import Placeholder from '@tiptap/extension-placeholder'
-import { EditorToolbar } from './EditorToolbar'
+import '@blocknote/mantine/style.css'
+import type { Block } from '@blocknote/core'
+import { useCreateBlockNote } from '@blocknote/react'
+import { BlockNoteView } from '@blocknote/mantine'
+import { useEffect, useRef } from 'react'
 
 interface RichTextEditorProps {
-  value?: Record<string, unknown> | null
-  onChange: (json: Record<string, unknown>) => void
+  value?: Block[] | null
+  onChange: (blocks: Block[]) => void
   placeholder?: string
 }
 
-export function RichTextEditor({ value, onChange, placeholder = 'Start writing…' }: RichTextEditorProps) {
-  const editor = useEditor({
-    immediatelyRender: false,
-    extensions: [
-      StarterKit,
-      Underline,
-      Table.configure({ resizable: false }),
-      TableRow,
-      TableCell,
-      TableHeader,
-      Link.configure({ openOnClick: false, HTMLAttributes: { rel: 'noopener noreferrer' } }),
-      Placeholder.configure({ placeholder }),
-    ],
-    content: value ?? undefined,
-    onUpdate({ editor }) {
-      onChange(editor.getJSON() as Record<string, unknown>)
-    },
+async function uploadImageToSupabase(file: File): Promise<string> {
+  const form = new FormData()
+  form.append('file', file)
+  form.append('type', 'content')
+  const res = await fetch('/api/upload', { method: 'POST', body: form })
+  if (!res.ok) throw new Error('Image upload failed')
+  const { url } = await res.json()
+  return url
+}
+
+export function RichTextEditor({ value, onChange, placeholder = 'Start writing\u2026' }: RichTextEditorProps) {
+  const initialContentRef = useRef(value ?? undefined)
+
+  const editor = useCreateBlockNote({
+    initialContent: initialContentRef.current ?? undefined,
+    uploadFile: uploadImageToSupabase,
+    placeholders: { default: placeholder },
   })
 
-  // Sync external value changes (e.g. when page loads with existing article body)
+  // Sync external value when it changes (e.g. locale switch loads different content)
   useEffect(() => {
     if (!editor || !value) return
-    const current = editor.getJSON()
-    if (JSON.stringify(current) !== JSON.stringify(value)) {
-      editor.commands.setContent(value, { emitUpdate: false })
+    const current = JSON.stringify(editor.document)
+    if (current !== JSON.stringify(value)) {
+      editor.replaceBlocks(editor.document, value)
     }
   }, [editor, value])
 
-  if (!editor) return null
-
   return (
     <div
-      className="rounded-lg overflow-hidden"
-      style={{ border: '1px solid rgba(139,69,19,0.25)' }}
+      className="rounded-lg overflow-hidden bg-white"
+      style={{ border: '1px solid rgba(139,69,19,0.25)', minHeight: 320 }}
     >
-      <EditorToolbar editor={editor} />
-      <EditorContent
+      <BlockNoteView
         editor={editor}
-        className="prose prose-stone max-w-none min-h-[320px] p-4 focus-within:outline-none
-          prose-headings:font-['Audiowide'] prose-headings:uppercase
-          prose-a:text-[#A0522D] prose-code:text-[#A0522D]
-          prose-code:bg-[rgba(160,82,45,0.08)] prose-pre:bg-[#1C1712]"
+        onChange={() => onChange(editor.document as Block[])}
+        theme="light"
+        style={{ fontFamily: 'Inter, sans-serif', background: '#ffffff' }}
       />
     </div>
   )

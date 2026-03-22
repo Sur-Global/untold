@@ -1,4 +1,3 @@
-@import url('https://fonts.googleapis.com/css2?family=Audiowide&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
 @import "tailwindcss";
 @plugin "@tailwindcss/typography";
 @import "tw-animate-css";
@@ -39,9 +38,9 @@
   --color-chart-2: var(--chart-2);
   --color-chart-1: var(--chart-1);
 
-  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-  --font-mono: 'JetBrains Mono', monospace;
-  --font-heading: 'Audiowide', sans-serif;
+  --font-sans: var(--font-inter), -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-mono: var(--font-jetbrains-mono), monospace;
+  --font-heading: var(--font-audiowide), sans-serif;
 
   --radius-sm: calc(var(--radius) * 0.6);
   --radius-md: calc(var(--radius) * 0.8);
@@ -126,6 +125,31 @@
   --sidebar-ring: oklch(0.6 0.115 42);
 }
 
+@keyframes card-shine {
+  from { transform: translateX(-120%) skewX(-18deg); }
+  to   { transform: translateX(280%) skewX(-18deg); }
+}
+
+.card-image-shine {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(
+    105deg,
+    transparent 35%,
+    rgba(255, 255, 255, 0.22) 50%,
+    transparent 65%
+  );
+  opacity: 0;
+  transform: translateX(-120%) skewX(-18deg);
+  will-change: transform;
+}
+
+article:hover .card-image-shine {
+  animation: card-shine 0.75s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  opacity: 1;
+}
+
 @layer base {
   * {
     @apply border-border outline-ring/50;
@@ -153,7 +177,10 @@
   h3 { font-size: 1.5rem; line-height: 1.3; }
   h4 { font-size: 1.125rem; line-height: 1.4; }
   p  { font-size: 1rem; line-height: 1.7; }
-  a  { text-decoration: none; color: inherit; }
+  a  { text-decoration: none; color: inherit; cursor: pointer; }
+  a:hover { opacity: 0.82; transition: opacity 0.15s; }
+
+  button, [role="button"] { cursor: pointer; }
 
   button, [role="button"] {
     font-family: var(--font-mono);
@@ -179,3 +206,10 @@
 .shadow-vintage  { box-shadow: 0 2px 8px rgba(44,36,32,0.08), 0 4px 16px rgba(44,36,32,0.04); }
 .shadow-vintage-lg { box-shadow: 0 4px 16px rgba(44,36,32,0.1), 0 8px 32px rgba(44,36,32,0.06); }
 .border-vintage  { border: 1px solid rgba(139,69,19,0.15); }
+
+
+/* Force white background inside BlockNote editor */
+.bn-editor,
+.bn-container[data-color-scheme] {
+  background: #ffffff !important;
+}
