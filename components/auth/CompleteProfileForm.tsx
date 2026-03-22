@@ -7,6 +7,7 @@ import { slugify } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { CoverImageInput } from '@/components/ui/CoverImageInput'
 
 export function CompleteProfileForm() {
   const t = useTranslations('auth')
@@ -16,6 +17,7 @@ export function CompleteProfileForm() {
   const [slug, setSlug] = useState('')
   const [slugError, setSlugError] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
+  const [avatarUrl, setAvatarUrl] = useState('')
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -29,7 +31,7 @@ export function CompleteProfileForm() {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const { error } = await (supabase as any)
       .from('profiles')
-      .update({ display_name: displayName, slug })
+      .update({ display_name: displayName, slug, avatar_url: avatarUrl || null })
       .eq('id', user.id) as { error: { code: string; message: string } | null }
 
     setLoading(false)
@@ -54,6 +56,13 @@ export function CompleteProfileForm() {
           {t('slugHint').replace('{slug}', slug || 'your-name')}
         </p>
         {slugError && <p className="text-sm text-red-600">{slugError}</p>}
+      </div>
+      <div className="space-y-2">
+        <CoverImageInput
+          name="avatar_url"
+          uploadType="avatar"
+          onChange={setAvatarUrl}
+        />
       </div>
       <Button type="submit" disabled={loading} className="w-full gradient-rust text-white border-0">
         {loading ? '...' : t('saveProfile')}
