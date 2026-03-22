@@ -11,7 +11,7 @@ const jwtSecret = process.env.SUPABASE_JWT_SECRET
   ? new TextEncoder().encode(process.env.SUPABASE_JWT_SECRET)
   : null
 
-export async function middleware(request: NextRequest) {
+export async function proxy(request: NextRequest) {
   // 1. Handle i18n routing
   const intlResponse = intlMiddleware(request)
   const response = intlResponse || NextResponse.next({ request })
