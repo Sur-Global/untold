@@ -20,6 +20,7 @@ function buildContentQuery(supabase: any, type: string) {
     `)
     .eq('type', type)
     .eq('status', 'published')
+    .in('profiles.role', ['admin', 'author'])
     .order('published_at', { ascending: false })
     .limit(SECTION_SIZE)
 }
@@ -213,7 +214,7 @@ export default async function HomePage({ params }: PageProps) {
                     className="text-xs font-mono mb-1"
                     style={{ color: 'rgba(245,241,232,0.5)' }}
                   >
-                    ★ Featured
+                    {t('featuredBadge')}
                   </p>
                   <h3
                     className="text-sm leading-snug mb-2"

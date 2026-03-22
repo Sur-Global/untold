@@ -53,6 +53,7 @@ export async function createArticle(formData: FormData) {
       .from('content')
       .update({ read_time_minutes: readTimeMinutes })
       .eq('id', content.id)
+      .eq('author_id', user.id)
   }
 
   revalidatePath('/dashboard/articles')

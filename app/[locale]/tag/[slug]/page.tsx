@@ -52,6 +52,18 @@ export default async function TagPage({ params }: PageProps) {
       return new Date(b.published_at).getTime() - new Date(a.published_at).getTime()
     })
 
+  // Batch bookmark resolution
+  const contentIds = published.map((i: any) => i.id)
+  const bookmarkedIds = new Set<string>()
+  if (userId && contentIds.length > 0) {
+    const { data: bookmarks } = await (supabase as any)
+      .from('bookmarks')
+      .select('content_id')
+      .eq('user_id', userId)
+      .in('content_id', contentIds)
+    bookmarks?.forEach((b: any) => bookmarkedIds.add(b.content_id))
+  }
+
   return (
     <>
       <Navigation {...navProps} />
@@ -86,6 +98,7 @@ export default async function TagPage({ params }: PageProps) {
                   rating={item.course_meta?.rating}
                   price={item.course_meta?.price}
                   currency={item.course_meta?.currency}
+                  isBookmarked={bookmarkedIds.has(item.id)}
                   isLoggedIn={navProps.isLoggedIn}
                 />
               )

@@ -31,6 +31,7 @@ export default async function PodcastsPage({ params, searchParams }: PageProps) 
     `, { count: 'exact' })
     .eq('type', 'podcast')
     .eq('status', 'published')
+    .in('profiles.role', ['admin', 'author'])
     .order('published_at', { ascending: false })
     .range(offset, offset + PAGE_SIZE - 1)
 
