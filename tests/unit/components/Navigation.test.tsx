@@ -30,9 +30,15 @@ describe('Navigation', () => {
     expect(screen.getByText('nav.signup')).toBeInTheDocument()
   })
 
-  it('shows Dashboard and Create when logged in', () => {
-    render(<Navigation isLoggedIn={true} userRole="user" />)
+  it('shows Dashboard and Create when logged in as creator', () => {
+    render(<Navigation isLoggedIn={true} userRole="author" />)
     expect(screen.getByText('nav.dashboard')).toBeInTheDocument()
     expect(screen.getByText('nav.createContent')).toBeInTheDocument()
+  })
+
+  it('does not show Dashboard or Create for reader role', () => {
+    render(<Navigation isLoggedIn={true} userRole="user" />)
+    expect(screen.queryByText('nav.dashboard')).not.toBeInTheDocument()
+    expect(screen.queryByText('nav.createContent')).not.toBeInTheDocument()
   })
 })
