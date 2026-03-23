@@ -68,6 +68,12 @@ export function RichTextEditor({
     placeholders: { default: placeholder },
     dropCursor: multiColumnDropCursor,
     dictionary,
+    tables: {
+      splitCells: true,
+      cellBackgroundColor: true,
+      cellTextColor: true,
+      headers: true,
+    },
   })
 
   // Sync external value changes (e.g. locale switch loads different content)
