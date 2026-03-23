@@ -8,9 +8,6 @@ import {
   useCreateBlockNote,
   SuggestionMenuController,
   getDefaultReactSlashMenuItems,
-  FormattingToolbar,
-  FormattingToolbarController,
-  getFormattingToolbarItems,
 } from '@blocknote/react'
 import {
   withMultiColumn,
@@ -21,7 +18,6 @@ import {
 import {
   AIExtension,
   AIMenuController,
-  AIToolbarButton,
   getAISlashMenuItems,
 } from '@blocknote/xl-ai'
 import { en as aiEn } from '@blocknote/xl-ai/locales'
@@ -57,37 +53,6 @@ async function uploadImageToSupabase(file: File): Promise<string> {
   if (!res.ok) throw new Error('Image upload failed')
   const { url } = await res.json()
   return url
-}
-
-function FormattingToolbarWithAI() {
-  return (
-    <FormattingToolbarController
-      formattingToolbar={() => (
-        <FormattingToolbar>
-          {...getFormattingToolbarItems()}
-          <AIToolbarButton />
-        </FormattingToolbar>
-      )}
-    />
-  )
-}
-
-function SuggestionMenuWithAI({ editor }: { editor: ReturnType<typeof useCreateBlockNote> }) {
-  return (
-    <SuggestionMenuController
-      triggerCharacter="/"
-      getItems={async (query) =>
-        filterSuggestionItems(
-          combineByGroup(
-            getDefaultReactSlashMenuItems(editor),
-            getMultiColumnSlashMenuItems(editor),
-            getAISlashMenuItems(editor),
-          ),
-          query,
-        )
-      }
-    />
-  )
 }
 
 export function RichTextEditor({
@@ -145,13 +110,23 @@ export function RichTextEditor({
         editor={editor}
         theme="light"
         style={{ fontFamily: 'Inter, sans-serif', background: '#ffffff' }}
-        formattingToolbar={false}
         slashMenu={false}
         onChange={() => onChange(editor.document as EditorBlock[])}
       >
         <AIMenuController />
-        <FormattingToolbarWithAI />
-        <SuggestionMenuWithAI editor={editor} />
+        <SuggestionMenuController
+          triggerCharacter="/"
+          getItems={async (query) =>
+            filterSuggestionItems(
+              combineByGroup(
+                getDefaultReactSlashMenuItems(editor),
+                getMultiColumnSlashMenuItems(editor),
+                getAISlashMenuItems(editor),
+              ),
+              query,
+            )
+          }
+        />
       </BlockNoteView>
     </div>
   )
