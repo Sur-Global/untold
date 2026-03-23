@@ -2,7 +2,8 @@
 
 import { useRef, useState, useTransition, useCallback, useEffect } from 'react'
 import { useTranslations } from 'next-intl'
-import type { Block } from '@blocknote/core'
+import { useLocale } from 'next-intl'
+import type { EditorBlock } from '@/components/editor/RichTextEditor'
 import { updateVideo } from '@/lib/actions/video'
 import { publishContent, unpublishContent, deleteContent } from '@/lib/actions/content'
 import { ensureTag } from '@/lib/actions/tags'
@@ -18,7 +19,7 @@ interface EditVideoFormProps {
   id: string
   status: string
   initialTitle: string
-  initialBody: Block[] | null
+  initialBody: EditorBlock[] | null
   initialEmbedUrl: string
   initialThumbnailUrl: string
   initialDuration: string
@@ -106,11 +107,12 @@ export function EditVideoForm({
 }: EditVideoFormProps) {
   const t = useTranslations('editor')
   const td = useTranslations('dashboard')
+  const locale = useLocale()
 
   const [activeTab, setActiveTab] = useState<'text' | 'layout' | 'images'>('text')
   const [embedUrl, setEmbedUrl] = useState(initialEmbedUrl)
   const [title, setTitle] = useState(initialTitle)
-  const [body, setBody] = useState<Block[] | null>(initialBody)
+  const [body, setBody] = useState<EditorBlock[] | null>(initialBody)
   const [duration, setDuration] = useState(initialDuration)
   const [tags, setTags] = useState<Tag[]>(initialTags)
   const [chapters, setChapters] = useState<Chapter[]>(
@@ -165,7 +167,7 @@ export function EditVideoForm({
     triggerAutoSave()
   }, [title, embedUrl, duration, tags, chapters, featureRequested, layoutStyle, thumbnailUrl]) // eslint-disable-line react-hooks/exhaustive-deps
 
-  const handleBodyChange = useCallback((blocks: Block[]) => {
+  const handleBodyChange = useCallback((blocks: EditorBlock[]) => {
     setBody(blocks)
     triggerAutoSave()
   }, [triggerAutoSave])
@@ -179,7 +181,7 @@ export function EditVideoForm({
     if (meta.title) setTitle(meta.title)
     if (meta.description) {
       // Convert plain text description to BlockNote paragraph blocks
-      const blocks: Block[] = meta.description
+      const blocks: EditorBlock[] = meta.description
         .split(/\n\n+/)
         .map((text) => text.trim())
         .filter(Boolean)
@@ -189,7 +191,7 @@ export function EditVideoForm({
           props: { textColor: 'default', backgroundColor: 'default', textAlignment: 'left' },
           content: [{ type: 'text', text, styles: {} }],
           children: [],
-        })) as Block[]
+        })) as EditorBlock[]
       if (blocks.length > 0) {
         setBody(blocks)
         triggerAutoSave()
@@ -330,7 +332,7 @@ export function EditVideoForm({
             {/* Description */}
             <div className="space-y-2">
               <label className="block text-sm font-semibold text-foreground">Description</label>
-              <RichTextEditor value={body} onChange={handleBodyChange} />
+              <RichTextEditor value={body} onChange={handleBodyChange} locale={locale} />
             </div>
 
             {/* Duration + Topic */}
