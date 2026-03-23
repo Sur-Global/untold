@@ -1,29 +1,20 @@
 'use client'
-import '@blocknote/mantine/style.css'
 import { BlockNoteSchema } from '@blocknote/core'
-import { BlockNoteView } from '@blocknote/mantine'
 import { useCreateBlockNote } from '@blocknote/react'
-import { withMultiColumn, multiColumnDropCursor } from '@blocknote/xl-multi-column'
-import { useEffect } from 'react'
+import { withMultiColumn } from '@blocknote/xl-multi-column'
+import { useMemo } from 'react'
+
+const schema = withMultiColumn(BlockNoteSchema.create())
 
 interface BlockNoteReaderProps {
   blocks: unknown[]
+  className?: string
 }
 
-export function BlockNoteReader({ blocks }: BlockNoteReaderProps) {
-  const editor = useCreateBlockNote({
-    schema: withMultiColumn(BlockNoteSchema.create()),
-    initialContent: blocks as any,
-    dropCursor: multiColumnDropCursor,
-  })
+export function BlockNoteReader({ blocks, className }: BlockNoteReaderProps) {
+  // Create a minimal editor (no UI) just for HTML conversion
+  const editor = useCreateBlockNote({ schema })
+  const html = useMemo(() => editor.blocksToHTMLLossy(blocks as any), [editor, blocks])
 
-  useEffect(() => {
-    editor.isEditable = false
-  }, [editor])
-
-  return (
-    <div className="bn-article-body">
-      <BlockNoteView editor={editor} theme="light" />
-    </div>
-  )
+  return <div className={className} dangerouslySetInnerHTML={{ __html: html }} />
 }

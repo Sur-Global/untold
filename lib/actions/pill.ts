@@ -77,17 +77,35 @@ export async function updatePill(id: string, formData: FormData) {
 
   if (!owned) return
 
+  const bodyJson = body ? (() => { try { return JSON.parse(body) } catch { return null } })() : null
+
+  const { data: currentEn } = await (supabase as any)
+    .from('content_translations')
+    .select('title, body')
+    .eq('content_id', id)
+    .eq('locale', 'en')
+    .single()
+
+  const titleChanged = currentEn?.title !== title
+  const bodyChanged = JSON.stringify(currentEn?.body ?? null) !== JSON.stringify(bodyJson)
+
   await (supabase as any)
     .from('content_translations')
     .upsert(
-      {
-        content_id: id,
-        locale: 'en',
-        title,
-        body: body ? (() => { try { return JSON.parse(body) } catch { return null } })() : null,
-      },
+      { content_id: id, locale: 'en', title, body: bodyJson },
       { onConflict: 'content_id,locale' }
     )
+
+  if (titleChanged || bodyChanged) {
+    const staleFields: Record<string, null> = {}
+    if (titleChanged) staleFields.title = null
+    if (bodyChanged) staleFields.body = null
+    await (supabase as any)
+      .from('content_translations')
+      .update(staleFields)
+      .eq('content_id', id)
+      .neq('locale', 'en')
+  }
 
   await (supabase as any)
     .from('pill_meta')

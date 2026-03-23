@@ -101,6 +101,18 @@ export async function updateArticle(id: string, formData: FormData) {
 
   const bodyJson = body ? (() => { try { return JSON.parse(body) } catch { return null } })() : null
 
+  // Detect changes before upserting so we can invalidate stale translations
+  const { data: currentEn } = await (supabase as any)
+    .from('content_translations')
+    .select('title, excerpt, body')
+    .eq('content_id', id)
+    .eq('locale', 'en')
+    .single()
+
+  const titleChanged = currentEn?.title !== title
+  const excerptChanged = currentEn?.excerpt !== excerpt
+  const bodyChanged = JSON.stringify(currentEn?.body ?? null) !== JSON.stringify(bodyJson)
+
   await (supabase as any)
     .from('content_translations')
     .upsert({
@@ -111,6 +123,19 @@ export async function updateArticle(id: string, formData: FormData) {
       featured_summary: featuredSummary,
       body: bodyJson,
     }, { onConflict: 'content_id,locale' })
+
+  // Null out stale non-English fields so they re-translate on next view
+  if (titleChanged || excerptChanged || bodyChanged) {
+    const staleFields: Record<string, null> = {}
+    if (titleChanged) staleFields.title = null
+    if (excerptChanged) staleFields.excerpt = null
+    if (bodyChanged) staleFields.body = null
+    await (supabase as any)
+      .from('content_translations')
+      .update(staleFields)
+      .eq('content_id', id)
+      .neq('locale', 'en')
+  }
 
   const readTimeMinutes = bodyJson ? computeReadTime(bodyJson) : null
   if (readTimeMinutes !== null) {
