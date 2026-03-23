@@ -1,17 +1,19 @@
 'use client'
 
 import { useRef, useState, useTransition } from 'react'
-import { useTranslations } from 'next-intl'
+import { useTranslations, useLocale } from 'next-intl'
 import { createArticle } from '@/lib/actions/article'
 import { RichTextEditor } from '@/components/editor/RichTextEditor'
+import type { EditorBlock } from '@/components/editor/RichTextEditor'
 import { CoverImageInput } from '@/components/ui/CoverImageInput'
 import { TagsInput, type Tag } from '@/components/ui/TagsInput'
 
 export function CreateArticleForm() {
   const t = useTranslations('editor')
   const td = useTranslations('dashboard')
+  const locale = useLocale()
   const formRef = useRef<HTMLFormElement>(null)
-  const [body, setBody] = useState<import('@blocknote/core').Block[] | null>(null)
+  const [body, setBody] = useState<EditorBlock[] | null>(null)
   const [tags, setTags] = useState<Tag[]>([])
   const [featureRequested, setFeatureRequested] = useState(false)
   const [activeTab, setActiveTab] = useState<'text' | 'images'>('text')
@@ -98,7 +100,7 @@ export function CreateArticleForm() {
             <div className="space-y-2">
               <label className="block text-sm font-semibold text-foreground">Full Content</label>
               <div className="rounded-[10px] border border-primary/20 overflow-hidden">
-                <RichTextEditor value={body} onChange={setBody} placeholder={t('bodyPlaceholder')} />
+                <RichTextEditor value={body} onChange={setBody} placeholder={t('bodyPlaceholder')} locale={locale} />
               </div>
             </div>
 

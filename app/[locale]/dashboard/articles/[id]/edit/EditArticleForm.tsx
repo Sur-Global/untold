@@ -1,7 +1,8 @@
 'use client'
 
 import { useRef, useState, useTransition, useCallback, useEffect } from 'react'
-import { useTranslations } from 'next-intl'
+import { useTranslations, useLocale } from 'next-intl'
+import type { EditorBlock } from '@/components/editor/RichTextEditor'
 import { updateArticle, publishArticle, unpublishArticle, deleteArticle } from '@/lib/actions/article'
 import { RichTextEditor } from '@/components/editor/RichTextEditor'
 import { CoverImageInput } from '@/components/ui/CoverImageInput'
@@ -16,7 +17,7 @@ interface EditArticleFormProps {
   initialFeaturedSummary: string
   initialCoverImageUrl: string
   initialImageCredits: string
-  initialBody: import('@blocknote/core').Block[] | null
+  initialBody: EditorBlock[] | null
   initialTags: Tag[]
   initialFeatureRequested: boolean
   authorName: string
@@ -41,13 +42,14 @@ export function EditArticleForm({
 }: EditArticleFormProps) {
   const t = useTranslations('editor')
   const td = useTranslations('dashboard')
+  const locale = useLocale()
 
   const [title, setTitle] = useState(initialTitle)
   const [excerpt, setExcerpt] = useState(initialExcerpt)
   const [featuredSummary, setFeaturedSummary] = useState(initialFeaturedSummary)
   const [coverImageUrl, setCoverImageUrl] = useState(initialCoverImageUrl)
   const [imageCredits, setImageCredits] = useState(initialImageCredits)
-  const [body, setBody] = useState<import('@blocknote/core').Block[] | null>(initialBody)
+  const [body, setBody] = useState<EditorBlock[] | null>(initialBody)
   const [tags, setTags] = useState<Tag[]>(initialTags)
   const [featureRequested, setFeatureRequested] = useState(initialFeatureRequested)
   const [saveStatus, setSaveStatus] = useState<'saved' | 'saving' | 'unsaved'>('saved')
@@ -86,7 +88,7 @@ export function EditArticleForm({
 
   // Trigger auto-save when any field changes
   useEffect(() => { triggerAutoSave() }, [title, excerpt, featuredSummary, coverImageUrl, imageCredits, tags, featureRequested]) // eslint-disable-line react-hooks/exhaustive-deps
-  const handleBodyChange = useCallback((blocks: import('@blocknote/core').Block[]) => {
+  const handleBodyChange = useCallback((blocks: EditorBlock[]) => {
     setBody(blocks)
     triggerAutoSave()
   }, [triggerAutoSave])
@@ -211,6 +213,7 @@ export function EditArticleForm({
                   value={body}
                   onChange={handleBodyChange}
                   placeholder={t('bodyPlaceholder')}
+                  locale={locale}
                 />
               </div>
             </div>
