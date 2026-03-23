@@ -70,7 +70,11 @@ export default async function VideoPage({ params }: PageProps) {
 
   const meta = Array.isArray(video.video_meta) ? video.video_meta[0] : video.video_meta ?? {}
 
-  // Trigger transcript translation on first visit for non-English locales
+  // Trigger transcript translation on first visit for non-English locales.
+  // NOTE: Multiple concurrent visitors before the translation job completes will each
+  // fire an after() call. The translate route is idempotent so this is safe; the
+  // worst case is a few redundant DeepL calls until the DB is written. Acceptable
+  // trade-off for a content site — see the same note in app/api/translate/route.ts.
   if (
     locale !== 'en' &&
     Array.isArray(meta?.transcript) &&
@@ -117,6 +121,11 @@ export default async function VideoPage({ params }: PageProps) {
     'transition-colors hover:bg-primary/5',
     'disabled:opacity-50 disabled:cursor-not-allowed',
   ].join(' ')
+
+  const displayTranscript: TranscriptCue[] | null =
+    locale !== 'en' && Array.isArray(meta?.transcript_translations?.[locale])
+      ? (meta.transcript_translations[locale] as TranscriptCue[])
+      : Array.isArray(meta?.transcript) ? (meta.transcript as TranscriptCue[]) : null
 
   return (
     <>
@@ -275,15 +284,9 @@ export default async function VideoPage({ params }: PageProps) {
           )}
 
           {/* Transcript panel */}
-          {(() => {
-            const displayTranscript: TranscriptCue[] | null =
-              locale !== 'en' && Array.isArray(meta?.transcript_translations?.[locale])
-                ? (meta.transcript_translations[locale] as TranscriptCue[])
-                : Array.isArray(meta?.transcript) ? (meta.transcript as TranscriptCue[]) : null
-            return displayTranscript && displayTranscript.length > 0
-              ? <TranscriptPanel transcript={displayTranscript} />
-              : null
-          })()}
+          {displayTranscript && displayTranscript.length > 0 && (
+            <TranscriptPanel transcript={displayTranscript} />
+          )}
 
           {/* About the Creator */}
           {author && (
