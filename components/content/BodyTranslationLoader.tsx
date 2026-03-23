@@ -15,8 +15,6 @@ interface BodyTranslationLoaderProps {
   fallback?: unknown
   // initial content (may be null if not yet translated)
   initialContent?: unknown
-  // server-pre-rendered HTML for the initial content (from ServerBlockNoteEditor.blocksToFullHTML)
-  prerenderedHtml?: string
   // className applied to the description <p> tag (ignored for body)
   descriptionClassName?: string
   // author ID to include in polling (for author bio status)
@@ -63,7 +61,6 @@ export function BodyTranslationLoader({
   field,
   fallback,
   initialContent,
-  prerenderedHtml,
   descriptionClassName,
   authorId,
   fullPageRefreshOnComplete,
@@ -72,8 +69,6 @@ export function BodyTranslationLoader({
   const [content, setContent] = useState<unknown>(initialContent ?? null)
   const [failed, setFailed] = useState(false)
   const attemptsRef = useRef(0)
-  // Track whether content was updated via polling (vs. initial prop)
-  const contentFromPollingRef = useRef(false)
   const router = useRouter()
   const language = nativeLanguageName(locale)
 
@@ -94,7 +89,6 @@ export function BodyTranslationLoader({
             router.refresh()
             return
           }
-          contentFromPollingRef.current = true
           setContent(value)
           clearInterval(interval)
           return
@@ -112,13 +106,7 @@ export function BodyTranslationLoader({
   }, [isTranslating, contentId, locale, field, content, authorId, fullPageRefreshOnComplete, router])
 
   // Has content — render it
-  if (content != null) {
-    // Use server-pre-rendered HTML for initial content (better fidelity via ServerBlockNoteEditor)
-    if (field === 'body' && prerenderedHtml && !contentFromPollingRef.current) {
-      return <ArticleBody html={prerenderedHtml} />
-    }
-    return renderContent(content, field, descriptionClassName)
-  }
+  if (content != null) return renderContent(content, field, descriptionClassName)
 
   // Translation failed after max attempts — fall back to English
   if (failed && fallback != null) return renderContent(fallback, field, descriptionClassName)

@@ -1,23 +1,28 @@
+'use client'
+import dynamic from 'next/dynamic'
 import { generateHTML } from '@tiptap/html'
 import StarterKit from '@tiptap/starter-kit'
 import { Table, TableRow, TableCell, TableHeader } from '@tiptap/extension-table'
 import { ImageWithCredit } from '@/lib/tiptap/image-with-credit'
-import { blockNoteToHtml } from '@/lib/blocknote-to-html'
+
+// Dynamic import prevents BlockNote (which accesses window at module level) from
+// running during SSR, even within a 'use client' component tree
+const BlockNoteReader = dynamic(() => import('./BlockNoteReader').then(m => m.BlockNoteReader), { ssr: false })
 
 interface ArticleBodyProps {
-  json?: Record<string, unknown> | unknown[]
-  /** Pre-rendered HTML from ServerBlockNoteEditor.blocksToFullHTML */
-  html?: string
+  json: Record<string, unknown> | unknown[]
 }
 
-function toHtml(json: ArticleBodyProps['json']): string {
-  // BlockNote format is an array of blocks
+export function ArticleBody({ json }: ArticleBodyProps) {
+  // BlockNote format — render via BlockNoteReader (handles all block types + multi-column)
   if (Array.isArray(json)) {
-    return blockNoteToHtml(json)
+    return <BlockNoteReader blocks={json} />
   }
+
   // Legacy Tiptap/ProseMirror format
+  let html: string
   try {
-    return generateHTML(json as any, [
+    html = generateHTML(json as any, [
       StarterKit.configure({ link: false }),
       ImageWithCredit,
       Table,
@@ -26,22 +31,8 @@ function toHtml(json: ArticleBodyProps['json']): string {
       TableHeader,
     ])
   } catch {
-    return '<p>Unable to render content.</p>'
+    html = '<p>Unable to render content.</p>'
   }
-}
-
-export function ArticleBody({ json, html: prerenderedHtml }: ArticleBodyProps) {
-  // Use server-pre-rendered HTML when available (blocksToFullHTML output)
-  if (prerenderedHtml) {
-    return (
-      <div
-        className="bn-article-body"
-        dangerouslySetInnerHTML={{ __html: prerenderedHtml }}
-      />
-    )
-  }
-
-  const html = json ? toHtml(json) : ''
 
   return (
     <div

@@ -2,7 +2,6 @@ import { notFound } from 'next/navigation'
 import { after } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
 import { getTranslation } from '@/lib/content'
-import { renderBodyToHtml } from '@/lib/render-body'
 import { Navigation } from '@/components/layout/Navigation'
 import { Footer } from '@/components/layout/Footer'
 import { BodyTranslationLoader } from '@/components/content/BodyTranslationLoader'
@@ -52,8 +51,6 @@ export default async function PillPage({ params }: PageProps) {
   const usingFallback = t.locale !== locale
   const body = usingFallback ? null : (t.body as Record<string, unknown> | null)
   const needsBody = locale !== 'en' && !!englishBody && (usingFallback || !body)
-
-  const prerenderedBody = body ? await renderBodyToHtml(body) ?? undefined : undefined
 
   if (needsBody) {
     after(async () => {
@@ -130,7 +127,6 @@ export default async function PillPage({ params }: PageProps) {
           field="body"
           fallback={englishBody}
           initialContent={body}
-          prerenderedHtml={prerenderedBody}
         />
       </main>
       <Footer />

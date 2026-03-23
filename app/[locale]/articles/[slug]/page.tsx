@@ -6,7 +6,6 @@ import { createClient } from '@/lib/supabase/server'
 import { getTranslation } from '@/lib/content'
 import { readTime } from '@/lib/utils'
 import { formatDate } from '@/lib/format-date'
-import { renderBodyToHtml } from '@/lib/render-body'
 import { Navigation } from '@/components/layout/Navigation'
 import { Footer } from '@/components/layout/Footer'
 import { ArticleBody } from '@/components/content/ArticleBody'
@@ -81,9 +80,6 @@ export default async function ArticlePage({ params }: PageProps) {
   const usingFallback = t.locale !== locale
   const body = usingFallback ? null : (t.body as Record<string, unknown> | null)
   const needsBody = locale !== 'en' && !!englishBody && (usingFallback || !body)
-
-  // Pre-render body to HTML server-side for correct multi-column and block rendering
-  const prerenderedBody = body ? await renderBodyToHtml(body) ?? undefined : undefined
 
   // Author bio translation
   const profileTrans = author?.profile_translations as Record<string, { bio?: string }> | null
@@ -302,7 +298,6 @@ export default async function ArticlePage({ params }: PageProps) {
                   field="body"
                   fallback={englishBody}
                   initialContent={body}
-                  prerenderedHtml={prerenderedBody}
                 />
 
                 {/* About the Author */}
