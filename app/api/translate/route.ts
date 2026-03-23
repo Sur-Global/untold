@@ -119,39 +119,51 @@ export async function POST(req: NextRequest) {
 
       translated.push(targetLocale)
 
-      // Translate transcript for video content
+      // Translate transcript and chapters for video content
       if (content.type === 'video') {
         try {
           const { data: videoMeta } = await (supabase as any)
             .from('video_meta')
-            .select('transcript, transcript_translations')
+            .select('transcript, transcript_translations, chapters, chapter_translations')
             .eq('content_id', contentId)
             .maybeSingle()
 
+          const updates: Record<string, unknown> = {}
+
+          // Transcript
           const sourceCues: Array<{ start: string; text: string }> = Array.isArray(videoMeta?.transcript)
             ? videoMeta.transcript
             : []
 
           if (sourceCues.length > 0) {
-            const texts = sourceCues.map((c) => c.text)
-            const translatedTexts = await translateTexts(texts, targetLocale)
+            const translatedTexts = await translateTexts(sourceCues.map((c) => c.text), targetLocale)
             const translatedCues = sourceCues.map((c, i) => ({ start: c.start, text: translatedTexts[i] }))
+            // NOTE: Read-then-merge-then-write (not atomic). Worst case: a locale gets re-triggered
+            // on next visit if two concurrent writes race. Acceptable trade-off for a content site.
+            const existingTrans = (videoMeta?.transcript_translations as Record<string, unknown>) ?? {}
+            updates.transcript_translations = { ...existingTrans, [targetLocale]: translatedCues }
+          }
 
-            // NOTE: This is a read-then-merge-then-write pattern, not atomic.
-            // If two visitors arrive simultaneously in different locales (e.g. es and fr),
-            // the second write could overwrite the first locale's translation.
-            // Worst case: that locale gets re-triggered on the next visit — no data is permanently lost.
-            // For a content site, this is an acceptable trade-off.
-            const existing = videoMeta?.transcript_translations ?? {}
-            const merged = { ...existing, [targetLocale]: translatedCues }
+          // Chapters
+          const sourceChapters: Array<{ timestamp: string; title: string }> = Array.isArray(videoMeta?.chapters)
+            ? videoMeta.chapters
+            : []
 
+          if (sourceChapters.length > 0) {
+            const translatedTitles = await translateTexts(sourceChapters.map((c) => c.title), targetLocale)
+            const translatedChapters = sourceChapters.map((c, i) => ({ timestamp: c.timestamp, title: translatedTitles[i] }))
+            const existingChapterTrans = (videoMeta?.chapter_translations as Record<string, unknown>) ?? {}
+            updates.chapter_translations = { ...existingChapterTrans, [targetLocale]: translatedChapters }
+          }
+
+          if (Object.keys(updates).length > 0) {
             await (supabase as any)
               .from('video_meta')
-              .update({ transcript_translations: merged })
+              .update(updates)
               .eq('content_id', contentId)
           }
         } catch (err) {
-          console.error(`Transcript translation failed for locale ${targetLocale}:`, err)
+          console.error(`Video meta translation failed for locale ${targetLocale}:`, err)
         }
       }
     } catch (err) {

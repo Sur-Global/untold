@@ -1,0 +1,2 @@
+ALTER TABLE video_meta
+  ADD COLUMN IF NOT EXISTS chapter_translations JSONB DEFAULT NULL;

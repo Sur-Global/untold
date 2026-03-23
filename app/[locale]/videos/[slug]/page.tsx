@@ -8,8 +8,7 @@ import { getNavProps } from '@/lib/nav'
 import { Navigation } from '@/components/layout/Navigation'
 import { Footer } from '@/components/layout/Footer'
 import { EmbedPlayer } from '@/components/content/EmbedPlayer'
-import { ArticleBody } from '@/components/content/ArticleBody'
-import { TranscriptLoader } from '@/components/content/TranscriptLoader'
+import { VideoTranslationLoader } from '@/components/content/VideoTranslationLoader'
 import { LikeButton } from '@/components/social/LikeButton'
 import { BookmarkButton } from '@/components/social/BookmarkButton'
 import { ShareButton } from '@/components/social/ShareButton'
@@ -55,7 +54,7 @@ export default async function VideoPage({ params }: PageProps) {
         profiles!author_id ( id, display_name, slug, avatar_url, bio, location ),
         content_translations ( title, body, description, locale ),
         content_tags ( tags ( slug, names ) ),
-        video_meta ( embed_url, thumbnail_url, duration, chapters, transcript, transcript_translations )
+        video_meta ( embed_url, thumbnail_url, duration, chapters, chapter_translations, transcript, transcript_translations )
       `)
       .eq('slug', slug)
       .eq('type', 'video')
@@ -70,18 +69,31 @@ export default async function VideoPage({ params }: PageProps) {
 
   const meta = Array.isArray(video.video_meta) ? video.video_meta[0] : video.video_meta ?? {}
 
-  // Trigger transcript translation on first visit for non-English locales.
-  // NOTE: Multiple concurrent visitors before the translation job completes will each
-  // fire an after() call. The translate route is idempotent so this is safe; the
-  // worst case is a few redundant DeepL calls until the DB is written. Acceptable
-  // trade-off for a content site — see the same note in app/api/translate/route.ts.
+  const author = video.profiles
+  const tags = (video.content_tags ?? []).map((ct: any) => ct.tags).filter(Boolean)
+  const chapters: VideoChapter[] = Array.isArray(meta?.chapters) ? meta.chapters : []
+  const chapterTranslations = meta?.chapter_translations as Record<string, VideoChapter[]> | null
+  const body = t.body as Record<string, unknown> | unknown[] | null
+  const legacyDescription = !body ? (t as any).description as string | null : null
+
+  // English body for fallback display while body is being translated
+  const enTranslation = (video.content_translations ?? []).find((tr: any) => tr.locale === 'en')
+  const englishBody = enTranslation?.body as Record<string, unknown> | unknown[] | null
+
+  // Per-section translation flags
+  const needsBody = locale !== 'en' && !!englishBody && !body
+  const needsChapters = locale !== 'en' && chapters.length > 0 && !chapterTranslations?.[locale]
   const needsTranscript =
     locale !== 'en' &&
     Array.isArray(meta?.transcript) &&
     (meta.transcript as unknown[]).length > 0 &&
     !meta?.transcript_translations?.[locale]
 
-  if (needsTranscript) {
+  // Trigger translation on first visit when any content is missing.
+  // The translate route handles body, chapters, and transcript in one call — idempotent and safe.
+  // NOTE: Multiple concurrent visitors may each fire an after() call before the DB is written.
+  // Worst case: a few redundant DeepL calls. Acceptable trade-off for a content site.
+  if (needsBody || needsChapters || needsTranscript) {
     after(async () => {
       try {
         await fetch(`${process.env.NEXT_PUBLIC_SITE_URL}/api/translate`, {
@@ -93,16 +105,10 @@ export default async function VideoPage({ params }: PageProps) {
           body: JSON.stringify({ contentId: video.id, locale }),
         })
       } catch (err) {
-        console.error('[transcript-translation] trigger failed:', err)
+        console.error('[translation-trigger] failed:', err)
       }
     })
   }
-
-  const author = video.profiles
-  const tags = (video.content_tags ?? []).map((ct: any) => ct.tags).filter(Boolean)
-  const chapters: VideoChapter[] = Array.isArray(meta?.chapters) ? meta.chapters : []
-  const body = t.body as Record<string, unknown> | unknown[] | null
-  const legacyDescription = !body ? (t as any).description as string | null : null
 
   let isLiked = false
   let isBookmarked = false
@@ -123,10 +129,9 @@ export default async function VideoPage({ params }: PageProps) {
     'disabled:opacity-50 disabled:cursor-not-allowed',
   ].join(' ')
 
-  const displayTranscript: TranscriptCue[] | null =
-    locale !== 'en' && Array.isArray(meta?.transcript_translations?.[locale])
-      ? (meta.transcript_translations[locale] as TranscriptCue[])
-      : Array.isArray(meta?.transcript) ? (meta.transcript as TranscriptCue[]) : null
+  const transcriptTranslations = meta?.transcript_translations as Record<string, TranscriptCue[]> | null
+  const translatedTranscript = transcriptTranslations?.[locale] ?? null
+  const englishTranscript: TranscriptCue[] = Array.isArray(meta?.transcript) ? meta.transcript : []
 
   return (
     <>
@@ -242,57 +247,21 @@ export default async function VideoPage({ params }: PageProps) {
             <ShareButton title={t.title} className={actionButtonClass} />
           </div>
 
-          {/* Description card */}
-          {(body || legacyDescription) && (
-            <div className="bg-card border border-primary/20 rounded-2xl p-6 mb-4">
-              <h3 className="font-['Audiowide'] text-2xl uppercase text-foreground mb-4">Description</h3>
-              <div className="text-[#5a4a42] text-base leading-[1.625]">
-                {body ? (
-                  <ArticleBody json={body} />
-                ) : (
-                  <p className="leading-[1.625]">{legacyDescription}</p>
-                )}
-              </div>
-            </div>
-          )}
-
-          {/* Chapters card */}
-          {chapters.length > 0 && (
-            <div className="bg-card border border-primary/20 rounded-2xl p-6 mb-4">
-              <h3 className="font-['Audiowide'] text-2xl uppercase text-foreground mb-4">Chapters</h3>
-              <div className="flex flex-col gap-1">
-                {chapters.map((ch, i) => (
-                  <div
-                    key={i}
-                    className="flex items-start gap-4 px-3 py-3 rounded-[10px] hover:bg-primary/5 transition-colors"
-                  >
-                    <span
-                      className="font-semibold text-primary text-sm tracking-[0.28px] w-14 flex-shrink-0 mt-0.5"
-                      style={{ fontFamily: "'JetBrains Mono', monospace" }}
-                    >
-                      {ch.timestamp}
-                    </span>
-                    <span
-                      className="text-sm text-[#5a4a42] tracking-[0.28px]"
-                      style={{ fontFamily: "'JetBrains Mono', monospace" }}
-                    >
-                      {ch.title}
-                    </span>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
-
-          {/* Transcript panel */}
-          {displayTranscript && displayTranscript.length > 0 && (
-            <TranscriptLoader
-              transcript={displayTranscript}
-              isTranslating={needsTranscript}
-              contentId={video.id}
-              locale={locale}
-            />
-          )}
+          {/* Description, chapters, and transcript — with lazy translation + loading states */}
+          <VideoTranslationLoader
+            body={body}
+            englishBody={englishBody}
+            legacyDescription={legacyDescription}
+            chapters={chapters}
+            translatedChapters={chapterTranslations?.[locale] ?? null}
+            transcript={englishTranscript}
+            translatedTranscript={translatedTranscript}
+            needsBody={needsBody}
+            needsChapters={needsChapters}
+            needsTranscript={needsTranscript}
+            contentId={video.id}
+            locale={locale}
+          />
 
           {/* About the Creator */}
           {author && (
