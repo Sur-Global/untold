@@ -197,7 +197,7 @@ export function EditVideoForm({
     }
     if (meta.thumbnailUrl) setThumbnailUrl(meta.thumbnailUrl)
     if (meta.duration) setDuration(meta.duration)
-    if (meta.tags?.length) {
+    if (meta.tags?.length && tags.length === 0) {
       const resolved = await Promise.all(meta.tags.map((name) => ensureTag(name)))
       setTags(resolved)
     }
@@ -305,6 +305,15 @@ export function EditVideoForm({
                 </button>
               </div>
             </div>
+
+            {/* Transcript status */}
+            {transcript !== null && (
+              <p className="text-xs font-['JetBrains_Mono',monospace] text-primary/70">
+                {transcript.length > 0
+                  ? `✓ Transcript extracted (${transcript.length} cues)`
+                  : 'No transcript available for this video'}
+              </p>
+            )}
 
             {/* Video Title */}
             <div className="space-y-2">

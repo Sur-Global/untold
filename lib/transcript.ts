@@ -14,8 +14,57 @@ function formatMs(ms: number): string {
 }
 
 /**
+ * Extract the first complete JSON object following `marker` in `html`.
+ * Uses brace depth-counting instead of regex so it handles deeply nested objects
+ * and multi-line content reliably.
+ */
+function extractJsonObject(html: string, marker: string): unknown | null {
+  const idx = html.indexOf(marker)
+  if (idx === -1) return null
+  const start = html.indexOf('{', idx + marker.length)
+  if (start === -1) return null
+
+  let depth = 0
+  let inString = false
+  let escape = false
+
+  for (let i = start; i < html.length; i++) {
+    const ch = html[i]
+    if (escape) { escape = false; continue }
+    if (ch === '\\' && inString) { escape = true; continue }
+    if (ch === '"') { inString = !inString; continue }
+    if (inString) continue
+    if (ch === '{') depth++
+    else if (ch === '}') {
+      depth--
+      if (depth === 0) {
+        try { return JSON.parse(html.slice(start, i + 1)) } catch { return null }
+      }
+    }
+  }
+  return null
+}
+
+function parseJson3(data: unknown): TranscriptCue[] {
+  const events = (data as any)?.events ?? []
+  const cues: TranscriptCue[] = []
+  for (const event of events) {
+    if (event.tStartMs == null || !event.segs) continue
+    const text = event.segs
+      .map((s: any) => s.utf8 ?? '')
+      .join('')
+      .replace(/\n/g, ' ')
+      .trim()
+    if (!text) continue
+    cues.push({ start: formatMs(event.tStartMs), text })
+  }
+  return cues
+}
+
+/**
  * Extract transcript cues from a YouTube video.
- * Scrapes ytInitialPlayerResponse from the watch page and fetches the json3 caption track.
+ * Fetches the watch page, parses ytInitialPlayerResponse using brace depth-counting,
+ * then fetches the caption track in json3 format.
  * Returns null on any failure — extraction is best-effort.
  */
 export async function extractYouTubeTranscript(videoId: string): Promise<TranscriptCue[] | null> {
@@ -31,13 +80,11 @@ export async function extractYouTubeTranscript(videoId: string): Promise<Transcr
 
     const html = await res.text()
 
-    // ytInitialPlayerResponse is a separate blob from ytInitialData
-    const match = html.match(/ytInitialPlayerResponse\s*=\s*(\{.+?\});\s*(?:var\s+\w+|<\/script>)/)
-    if (!match) return null
+    const playerResponse = extractJsonObject(html, 'ytInitialPlayerResponse')
+    if (!playerResponse) return null
 
-    const playerResponse = JSON.parse(match[1])
     const captionTracks: Array<{ baseUrl: string; vssId: string }> =
-      playerResponse?.captions?.playerCaptionsTracklistRenderer?.captionTracks ?? []
+      (playerResponse as any)?.captions?.playerCaptionsTracklistRenderer?.captionTracks ?? []
 
     if (captionTracks.length === 0) return null
 
@@ -49,22 +96,7 @@ export async function extractYouTubeTranscript(videoId: string): Promise<Transcr
     const captionRes = await fetch(`${track.baseUrl}&fmt=json3`)
     if (!captionRes.ok) return null
 
-    const data = await captionRes.json()
-    const events: Array<{ tStartMs?: number; segs?: Array<{ utf8?: string }> }> =
-      data?.events ?? []
-
-    const cues: TranscriptCue[] = []
-    for (const event of events) {
-      if (event.tStartMs == null || !event.segs) continue
-      const text = event.segs
-        .map((s) => s.utf8 ?? '')
-        .join('')
-        .replace(/\n/g, ' ')
-        .trim()
-      if (!text || text === '\n') continue
-      cues.push({ start: formatMs(event.tStartMs), text })
-    }
-
+    const cues = parseJson3(await captionRes.json())
     return cues.length > 0 ? cues : null
   } catch (err) {
     console.error('[transcript] extraction failed:', err)
