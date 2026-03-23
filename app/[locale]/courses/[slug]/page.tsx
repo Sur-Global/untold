@@ -48,7 +48,10 @@ export default async function CoursePage({ params }: PageProps) {
 
   const enTranslation = (course.content_translations ?? []).find((tr: any) => tr.locale === 'en')
   const englishDescription = enTranslation?.description as string | null
-  const needsDescription = locale !== 'en' && !!englishDescription && !t.description
+
+  const usingFallback = t.locale !== locale
+  const description = usingFallback ? null : (t.description as string | null)
+  const needsDescription = locale !== 'en' && !!englishDescription && (usingFallback || !description)
 
   if (needsDescription) {
     after(async () => {
@@ -103,7 +106,7 @@ export default async function CoursePage({ params }: PageProps) {
               isTranslating={needsDescription}
               field="description"
               fallback={englishDescription}
-              initialContent={t.description ?? null}
+              initialContent={description}
               descriptionClassName="text-[#6B5F58] leading-relaxed text-lg"
             />
             <div className="flex items-center gap-3 mt-4">

@@ -69,12 +69,15 @@ export default async function ArticlePage({ params }: PageProps) {
   if (!t) notFound()
 
   const author = article.profiles
-  const body = t.body as Record<string, unknown> | null
   const tags = article.content_tags?.map((ct: any) => ct.tags) ?? []
 
   const enTranslation = (article.content_translations ?? []).find((tr: any) => tr.locale === 'en')
   const englishBody = enTranslation?.body as Record<string, unknown> | null
-  const needsBody = locale !== 'en' && !!englishBody && !body
+
+  // getTranslation falls back to English when no locale row exists — detect that case
+  const usingFallback = t.locale !== locale
+  const body = usingFallback ? null : (t.body as Record<string, unknown> | null)
+  const needsBody = locale !== 'en' && !!englishBody && (usingFallback || !body)
 
   if (needsBody) {
     after(async () => {

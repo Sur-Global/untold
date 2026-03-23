@@ -45,11 +45,12 @@ export default async function PillPage({ params }: PageProps) {
 
   const meta = pill.pill_meta
   const accentColor = meta?.accent_color ?? '#6B8E23'
-  const body = t.body as Record<string, unknown> | null
-
   const enTranslation = (pill.content_translations ?? []).find((tr: any) => tr.locale === 'en')
   const englishBody = enTranslation?.body as Record<string, unknown> | null
-  const needsBody = locale !== 'en' && !!englishBody && !body
+
+  const usingFallback = t.locale !== locale
+  const body = usingFallback ? null : (t.body as Record<string, unknown> | null)
+  const needsBody = locale !== 'en' && !!englishBody && (usingFallback || !body)
 
   if (needsBody) {
     after(async () => {

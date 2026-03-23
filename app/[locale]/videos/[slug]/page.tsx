@@ -73,15 +73,17 @@ export default async function VideoPage({ params }: PageProps) {
   const tags = (video.content_tags ?? []).map((ct: any) => ct.tags).filter(Boolean)
   const chapters: VideoChapter[] = Array.isArray(meta?.chapters) ? meta.chapters : []
   const chapterTranslations = meta?.chapter_translations as Record<string, VideoChapter[]> | null
-  const body = t.body as Record<string, unknown> | unknown[] | null
-  const legacyDescription = !body ? (t as any).description as string | null : null
-
   // English body for fallback display while body is being translated
   const enTranslation = (video.content_translations ?? []).find((tr: any) => tr.locale === 'en')
   const englishBody = enTranslation?.body as Record<string, unknown> | unknown[] | null
 
+  // getTranslation falls back to English when no locale row exists — detect that case
+  const usingFallback = t.locale !== locale
+  const body = usingFallback ? null : (t.body as Record<string, unknown> | unknown[] | null)
+  const legacyDescription = !body ? (t as any).description as string | null : null
+
   // Per-section translation flags
-  const needsBody = locale !== 'en' && !!englishBody && !body
+  const needsBody = locale !== 'en' && !!englishBody && (usingFallback || !body)
   const needsChapters = locale !== 'en' && chapters.length > 0 && !chapterTranslations?.[locale]
   const needsTranscript =
     locale !== 'en' &&
