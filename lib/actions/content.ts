@@ -35,6 +35,23 @@ export async function publishContent(id: string, _formData: FormData) {
     } catch (err) {
       console.error(`Translation trigger error for ${id}:`, err)
     }
+
+    // transcript extraction
+    try {
+      const transcriptRes = await fetch(`${process.env.NEXT_PUBLIC_SITE_URL}/api/transcript`, {
+        method: 'POST',
+        headers: {
+          'content-type': 'application/json',
+          'x-transcript-secret': process.env.TRANSCRIPT_API_SECRET!,
+        },
+        body: JSON.stringify({ contentId: id }),
+      })
+      if (!transcriptRes.ok) {
+        console.error(`Transcript trigger failed for ${id}: ${transcriptRes.status}`)
+      }
+    } catch (err) {
+      console.error(`Transcript trigger error for ${id}:`, err)
+    }
   })
 }
 
