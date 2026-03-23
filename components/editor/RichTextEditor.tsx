@@ -8,6 +8,9 @@ import {
   useCreateBlockNote,
   SuggestionMenuController,
   getDefaultReactSlashMenuItems,
+  FormattingToolbar,
+  FormattingToolbarController,
+  getFormattingToolbarItems,
 } from '@blocknote/react'
 import {
   withMultiColumn,
@@ -18,6 +21,7 @@ import {
 import {
   AIExtension,
   AIMenuController,
+  AIToolbarButton,
   getAISlashMenuItems,
 } from '@blocknote/xl-ai'
 import { en as aiEn } from '@blocknote/xl-ai/locales'
@@ -110,10 +114,19 @@ export function RichTextEditor({
         editor={editor}
         theme="light"
         style={{ fontFamily: 'Inter, sans-serif', background: '#ffffff' }}
+        formattingToolbar={false}
         slashMenu={false}
         onChange={() => onChange(editor.document as EditorBlock[])}
       >
         <AIMenuController />
+        <FormattingToolbarController
+          formattingToolbar={() => (
+            <FormattingToolbar>
+              {getFormattingToolbarItems()}
+              <AIToolbarButton />
+            </FormattingToolbar>
+          )}
+        />
         <SuggestionMenuController
           triggerCharacter="/"
           getItems={async (query) =>
