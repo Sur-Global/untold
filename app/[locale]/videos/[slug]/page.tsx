@@ -9,7 +9,7 @@ import { Navigation } from '@/components/layout/Navigation'
 import { Footer } from '@/components/layout/Footer'
 import { EmbedPlayer } from '@/components/content/EmbedPlayer'
 import { ArticleBody } from '@/components/content/ArticleBody'
-import { TranscriptPanel } from '@/components/content/TranscriptPanel'
+import { TranscriptLoader } from '@/components/content/TranscriptLoader'
 import { LikeButton } from '@/components/social/LikeButton'
 import { BookmarkButton } from '@/components/social/BookmarkButton'
 import { ShareButton } from '@/components/social/ShareButton'
@@ -75,12 +75,13 @@ export default async function VideoPage({ params }: PageProps) {
   // fire an after() call. The translate route is idempotent so this is safe; the
   // worst case is a few redundant DeepL calls until the DB is written. Acceptable
   // trade-off for a content site — see the same note in app/api/translate/route.ts.
-  if (
+  const needsTranscript =
     locale !== 'en' &&
     Array.isArray(meta?.transcript) &&
-    meta.transcript.length > 0 &&
+    (meta.transcript as unknown[]).length > 0 &&
     !meta?.transcript_translations?.[locale]
-  ) {
+
+  if (needsTranscript) {
     after(async () => {
       try {
         await fetch(`${process.env.NEXT_PUBLIC_SITE_URL}/api/translate`, {
@@ -285,7 +286,12 @@ export default async function VideoPage({ params }: PageProps) {
 
           {/* Transcript panel */}
           {displayTranscript && displayTranscript.length > 0 && (
-            <TranscriptPanel transcript={displayTranscript} />
+            <TranscriptLoader
+              transcript={displayTranscript}
+              isTranslating={needsTranscript}
+              contentId={video.id}
+              locale={locale}
+            />
           )}
 
           {/* About the Creator */}
