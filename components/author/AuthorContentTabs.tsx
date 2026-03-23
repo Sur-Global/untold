@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
+import { useTranslations } from 'next-intl'
 import { LikeButton } from '@/components/social/LikeButton'
 import { BookmarkButton } from '@/components/social/BookmarkButton'
 
@@ -56,12 +57,13 @@ function AuthorAvatar({ name, avatarUrl, size = 32 }: { name: string; avatarUrl:
   )
 }
 
-function ArticleFeaturedCard({ item, authorName, authorSlug, authorAvatarUrl, isLoggedIn }: {
+function ArticleFeaturedCard({ item, authorName, authorSlug, authorAvatarUrl, isLoggedIn, t }: {
   item: ContentItem
   authorName: string
   authorSlug: string
   authorAvatarUrl: string | null
   isLoggedIn: boolean
+  t: ReturnType<typeof useTranslations>
 }) {
   const image = item.coverImageUrl
   return (
@@ -76,7 +78,6 @@ function ArticleFeaturedCard({ item, authorName, authorSlug, authorAvatarUrl, is
           ) : (
             <div className="w-full h-full bg-[#2c2418]" />
           )}
-          {/* Dark gradient overlay */}
           <div
             className="absolute inset-0"
             style={{ background: 'linear-gradient(to top, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.5) 50%, rgba(0,0,0,0.15) 100%)' }}
@@ -93,7 +94,7 @@ function ArticleFeaturedCard({ item, authorName, authorSlug, authorAvatarUrl, is
             <svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor">
               <path d="M8 1l1.8 3.6 4 .6-2.9 2.8.7 4L8 10l-3.6 2 .7-4L2.2 5.2l4-.6z" />
             </svg>
-            <span className="font-['Audiowide',sans-serif] uppercase tracking-wide">Featured</span>
+            <span className="font-['Audiowide',sans-serif] uppercase tracking-wide">{t('featuredBadge')}</span>
           </div>
           {/* Category tag */}
           {item.tags[0] && (
@@ -114,7 +115,6 @@ function ArticleFeaturedCard({ item, authorName, authorSlug, authorAvatarUrl, is
                 {item.excerpt}
               </p>
             )}
-            {/* Author + actions row */}
             <div
               className="flex items-center justify-between pt-4"
               style={{ borderTop: '1px solid rgba(255,255,255,0.2)' }}
@@ -128,7 +128,7 @@ function ArticleFeaturedCard({ item, authorName, authorSlug, authorAvatarUrl, is
                       className="text-white text-[12px] px-2 py-0.5 rounded"
                       style={{ background: 'rgba(184,134,11,0.9)' }}
                     >
-                      Author
+                      {t('authorBadge')}
                     </span>
                   </div>
                 </div>
@@ -156,21 +156,19 @@ function ArticleFeaturedCard({ item, authorName, authorSlug, authorAvatarUrl, is
   )
 }
 
-function ArticleCard({ item, authorName, authorSlug, authorAvatarUrl, isLoggedIn }: {
+function ArticleCard({ item, authorName, authorSlug, authorAvatarUrl, isLoggedIn, t }: {
   item: ContentItem
   authorName: string
   authorSlug: string
   authorAvatarUrl: string | null
   isLoggedIn: boolean
+  t: ReturnType<typeof useTranslations>
 }) {
   const image = item.coverImageUrl
   return (
     <article
       className="rounded-[16px] overflow-hidden bg-[#fdfcfa] flex flex-col"
-      style={{
-        border: '0.9px solid #d4a574',
-        boxShadow: '0 2px 8px rgba(93,78,55,0.1)',
-      }}
+      style={{ border: '0.9px solid #d4a574', boxShadow: '0 2px 8px rgba(93,78,55,0.1)' }}
     >
       <Link href={`/articles/${item.slug}`} className="block relative">
         <div className="relative aspect-[394/224]">
@@ -204,32 +202,18 @@ function ArticleCard({ item, authorName, authorSlug, authorAvatarUrl, isLoggedIn
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
             <AuthorAvatar name={authorName} avatarUrl={authorAvatarUrl} size={32} />
-            <div>
-              <div className="flex items-center gap-2">
-                <Link href={`/author/${authorSlug}`} className="text-[14px] font-medium text-[#5d4e37] hover:text-primary">
-                  {authorName}
-                </Link>
-                <span
-                  className="text-[12px] px-2 py-0.5 rounded text-[#8b4513]"
-                  style={{ background: '#e8d5b5' }}
-                >
-                  Author
-                </span>
-              </div>
+            <div className="flex items-center gap-2">
+              <Link href={`/author/${authorSlug}`} className="text-[14px] font-medium text-[#5d4e37] hover:text-primary">
+                {authorName}
+              </Link>
+              <span className="text-[12px] px-2 py-0.5 rounded text-[#8b4513]" style={{ background: '#e8d5b5' }}>
+                {t('authorBadge')}
+              </span>
             </div>
           </div>
           <div className="flex items-center gap-2">
-            <LikeButton
-              contentId={item.id}
-              initialIsLiked={false}
-              initialCount={item.likesCount}
-              isLoggedIn={isLoggedIn}
-            />
-            <BookmarkButton
-              contentId={item.id}
-              initialIsBookmarked={false}
-              isLoggedIn={isLoggedIn}
-            />
+            <LikeButton contentId={item.id} initialIsLiked={false} initialCount={item.likesCount} isLoggedIn={isLoggedIn} />
+            <BookmarkButton contentId={item.id} initialIsBookmarked={false} isLoggedIn={isLoggedIn} />
           </div>
         </div>
       </div>
@@ -237,11 +221,12 @@ function ArticleCard({ item, authorName, authorSlug, authorAvatarUrl, isLoggedIn
   )
 }
 
-function VideoCard({ item, authorName, authorSlug, authorAvatarUrl }: {
+function VideoCard({ item, authorName, authorSlug, authorAvatarUrl, t }: {
   item: ContentItem
   authorName: string
   authorSlug: string
   authorAvatarUrl: string | null
+  t: ReturnType<typeof useTranslations>
 }) {
   const image = item.thumbnailUrl ?? item.coverImageUrl
   return (
@@ -257,22 +242,16 @@ function VideoCard({ item, authorName, authorSlug, authorAvatarUrl }: {
             <div className="w-full h-full bg-[#2c2418]" />
           )}
           <div className="absolute inset-0 bg-black/40" />
-          {/* Play button */}
           <div className="absolute inset-0 flex items-center justify-center">
             <div
               className="flex items-center justify-center rounded-full size-16"
-              style={{
-                background: 'rgba(184,115,79,0.95)',
-                border: '1.8px solid rgba(255,255,255,0.3)',
-                boxShadow: '0 4px 12px rgba(184,115,79,0.4)',
-              }}
+              style={{ background: 'rgba(184,115,79,0.95)', border: '1.8px solid rgba(255,255,255,0.3)', boxShadow: '0 4px 12px rgba(184,115,79,0.4)' }}
             >
               <svg width="28" height="28" viewBox="0 0 24 24" fill="white">
                 <path d="M8 5v14l11-7z" />
               </svg>
             </div>
           </div>
-          {/* Duration */}
           {item.duration && (
             <div
               className="absolute bottom-3 right-3 px-2 py-1 rounded-[7px] text-xs text-[#e8e6e3] flex items-center gap-1.5"
@@ -284,7 +263,6 @@ function VideoCard({ item, authorName, authorSlug, authorAvatarUrl }: {
               {item.duration}
             </div>
           )}
-          {/* Category tag */}
           {item.tags[0] && (
             <div
               className="absolute top-3 left-3 px-3 py-1 rounded-full text-xs text-[#6b5744]"
@@ -301,7 +279,7 @@ function VideoCard({ item, authorName, authorSlug, authorAvatarUrl }: {
         <div>
           <p className="text-[14px] font-medium text-[#6b5744]">{authorName}</p>
           <Link href={`/author/${authorSlug}`} className="text-[12px] text-[#b8734f] hover:underline">
-            More from {authorName.split(' ')[0]}
+            {t('moreFrom', { name: authorName.split(' ')[0] })}
           </Link>
         </div>
       </div>
@@ -309,24 +287,20 @@ function VideoCard({ item, authorName, authorSlug, authorAvatarUrl }: {
   )
 }
 
-function PodcastCard({ item, authorName, authorSlug, authorAvatarUrl }: {
+function PodcastCard({ item, authorName, authorSlug, authorAvatarUrl, t }: {
   item: ContentItem
   authorName: string
   authorSlug: string
   authorAvatarUrl: string | null
+  t: ReturnType<typeof useTranslations>
 }) {
   const image = item.podcastCoverUrl ?? item.coverImageUrl
   return (
     <article
       className="rounded-[16px] overflow-hidden bg-[#fdfcfa]"
-      style={{
-        border: '0.9px solid #d4a574',
-        boxShadow: '0 2px 8px rgba(93,78,55,0.1)',
-        maxWidth: 604,
-      }}
+      style={{ border: '0.9px solid #d4a574', boxShadow: '0 2px 8px rgba(93,78,55,0.1)', maxWidth: 604 }}
     >
       <div className="flex gap-4 p-5">
-        {/* Album art */}
         <div
           className="rounded-[10px] overflow-hidden shrink-0 size-28"
           style={{ border: '1.8px solid #d4a574', boxShadow: '0 2px 8px rgba(93,78,55,0.1)' }}
@@ -342,10 +316,9 @@ function PodcastCard({ item, authorName, authorSlug, authorAvatarUrl }: {
             </div>
           )}
         </div>
-        {/* Info */}
         <div className="flex flex-col gap-2 flex-1 min-w-0">
           {item.episodeNumber && (
-            <p className="text-[12px] font-medium text-[#8b7355]">Episode {item.episodeNumber}</p>
+            <p className="text-[12px] font-medium text-[#8b7355]">{t('episode', { number: item.episodeNumber })}</p>
           )}
           <h4 className="text-[16px] leading-[1.4] text-[#5d4e37] uppercase">{item.title}</h4>
           {(item.excerpt ?? item.description) && (
@@ -361,15 +334,12 @@ function PodcastCard({ item, authorName, authorSlug, authorAvatarUrl }: {
           )}
         </div>
       </div>
-      <div
-        className="flex items-center gap-3 px-5 py-4"
-        style={{ borderTop: '0.9px solid #d4a574' }}
-      >
+      <div className="flex items-center gap-3 px-5 py-4" style={{ borderTop: '0.9px solid #d4a574' }}>
         <AuthorAvatar name={authorName} avatarUrl={authorAvatarUrl} size={24} />
         <div>
           <p className="text-[14px] font-medium text-[#6b5744]">{authorName}</p>
           <Link href={`/author/${authorSlug}`} className="text-[12px] text-[#b8734f] hover:underline">
-            More from {authorName.split(' ')[0]}
+            {t('moreFrom', { name: authorName.split(' ')[0] })}
           </Link>
         </div>
       </div>
@@ -377,24 +347,21 @@ function PodcastCard({ item, authorName, authorSlug, authorAvatarUrl }: {
   )
 }
 
-function PillCard({ item, authorName, authorSlug, authorAvatarUrl, isLoggedIn }: {
+function PillCard({ item, authorName, authorSlug, authorAvatarUrl, isLoggedIn, t }: {
   item: ContentItem
   authorName: string
   authorSlug: string
   authorAvatarUrl: string | null
   isLoggedIn: boolean
+  t: ReturnType<typeof useTranslations>
 }) {
   const image = item.pillImageUrl ?? item.coverImageUrl
   const accent = item.accentColor ?? '#a0522d'
   return (
     <article
       className="rounded-[16px] overflow-hidden bg-[#fdfcfa] flex flex-col"
-      style={{
-        border: `0.9px solid ${accent}40`,
-        boxShadow: '0 2px 8px rgba(93,78,55,0.1)',
-      }}
+      style={{ border: `0.9px solid ${accent}40`, boxShadow: '0 2px 8px rgba(93,78,55,0.1)' }}
     >
-      {/* Image */}
       <div className="relative h-48 overflow-hidden">
         {image ? (
           <img src={image} alt={item.title} className="w-full h-full object-cover" />
@@ -403,9 +370,7 @@ function PillCard({ item, authorName, authorSlug, authorAvatarUrl, isLoggedIn }:
         )}
         <div className="absolute inset-0" style={{ background: `${accent}0f` }} />
       </div>
-      {/* Content */}
       <div className="p-6 flex flex-col gap-3 flex-1">
-        {/* Tag + actions */}
         <div className="flex items-center justify-between">
           <span
             className="text-[12px] font-medium px-3 py-1 rounded-full"
@@ -423,15 +388,12 @@ function PillCard({ item, authorName, authorSlug, authorAvatarUrl, isLoggedIn }:
           <p className="text-[14px] text-[#6b5744] leading-[1.43] line-clamp-3">{item.excerpt ?? item.description}</p>
         )}
       </div>
-      <div
-        className="flex items-center gap-3 px-6 py-4"
-        style={{ borderTop: `0.9px solid ${accent}30` }}
-      >
+      <div className="flex items-center gap-3 px-6 py-4" style={{ borderTop: `0.9px solid ${accent}30` }}>
         <AuthorAvatar name={authorName} avatarUrl={authorAvatarUrl} size={24} />
         <div>
           <p className="text-[12px] font-medium text-[#6b5744]">{authorName}</p>
           <Link href={`/author/${authorSlug}`} className="text-[12px] text-[#b8734f] hover:underline">
-            More from {authorName.split(' ')[0]}
+            {t('moreFrom', { name: authorName.split(' ')[0] })}
           </Link>
         </div>
       </div>
@@ -440,6 +402,7 @@ function PillCard({ item, authorName, authorSlug, authorAvatarUrl, isLoggedIn }:
 }
 
 export function AuthorContentTabs({ items, authorName, authorSlug, authorAvatarUrl, isLoggedIn }: Props) {
+  const t = useTranslations('author')
   const [activeTab, setActiveTab] = useState<Tab>('all')
 
   const articles = items.filter(i => i.type === 'article')
@@ -448,13 +411,13 @@ export function AuthorContentTabs({ items, authorName, authorSlug, authorAvatarU
   const pills = items.filter(i => i.type === 'pill')
 
   const allTabs: { id: Tab; label: string; count: number }[] = [
-    { id: 'all', label: 'All', count: items.length },
-    { id: 'article', label: 'Articles', count: articles.length },
-    { id: 'video', label: 'Videos', count: videos.length },
-    { id: 'podcast', label: 'Podcasts', count: podcasts.length },
-    { id: 'pill', label: 'Pills', count: pills.length },
+    { id: 'all', label: t('tabAll'), count: items.length },
+    { id: 'article', label: t('tabArticles'), count: articles.length },
+    { id: 'video', label: t('tabVideos'), count: videos.length },
+    { id: 'podcast', label: t('tabPodcasts'), count: podcasts.length },
+    { id: 'pill', label: t('tabPills'), count: pills.length },
   ]
-  const tabs = allTabs.filter(t => t.id === 'all' || t.count > 0)
+  const tabs = allTabs.filter(tab => tab.id === 'all' || tab.count > 0)
 
   const showArticles = activeTab === 'all' || activeTab === 'article'
   const showVideos = activeTab === 'all' || activeTab === 'video'
@@ -463,6 +426,8 @@ export function AuthorContentTabs({ items, authorName, authorSlug, authorAvatarU
 
   const featuredArticle = articles.find(a => a.isFeatured) ?? articles[0] ?? null
   const otherArticles = articles.filter(a => a !== featuredArticle)
+
+  const cardProps = { authorName, authorSlug, authorAvatarUrl, isLoggedIn, t }
 
   return (
     <>
@@ -486,10 +451,7 @@ export function AuthorContentTabs({ items, authorName, authorSlug, authorAvatarU
               >
                 {tab.label} ({tab.count})
                 {activeTab === tab.id && (
-                  <span
-                    className="absolute bottom-0 left-0 right-0 h-0.5 rounded-full"
-                    style={{ background: '#b8734f' }}
-                  />
+                  <span className="absolute bottom-0 left-0 right-0 h-0.5 rounded-full" style={{ background: '#b8734f' }} />
                 )}
               </button>
             ))}
@@ -503,45 +465,23 @@ export function AuthorContentTabs({ items, authorName, authorSlug, authorAvatarU
         {/* Articles */}
         {showArticles && articles.length > 0 && (
           <section>
-            <h2 className="text-[28px] leading-[1.3] text-[#5d4e37] uppercase mb-6">Articles</h2>
-            {/* Featured + secondary layout */}
+            <h2 className="text-[28px] leading-[1.3] text-[#5d4e37] uppercase mb-6">{t('sectionArticles')}</h2>
             <div className="flex gap-6 flex-wrap lg:flex-nowrap">
               {featuredArticle && (
-                <ArticleFeaturedCard
-                  item={featuredArticle}
-                  authorName={authorName}
-                  authorSlug={authorSlug}
-                  authorAvatarUrl={authorAvatarUrl}
-                  isLoggedIn={isLoggedIn}
-                />
+                <ArticleFeaturedCard item={featuredArticle} {...cardProps} />
               )}
               {otherArticles.length > 0 && (
                 <div className="flex flex-col gap-6 w-full lg:w-[394px] shrink-0">
                   {otherArticles.slice(0, 3).map(item => (
-                    <ArticleCard
-                      key={item.id}
-                      item={item}
-                      authorName={authorName}
-                      authorSlug={authorSlug}
-                      authorAvatarUrl={authorAvatarUrl}
-                      isLoggedIn={isLoggedIn}
-                    />
+                    <ArticleCard key={item.id} item={item} {...cardProps} />
                   ))}
                 </div>
               )}
             </div>
-            {/* Additional articles as grid */}
             {otherArticles.length > 3 && (
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-6">
                 {otherArticles.slice(3).map(item => (
-                  <ArticleCard
-                    key={item.id}
-                    item={item}
-                    authorName={authorName}
-                    authorSlug={authorSlug}
-                    authorAvatarUrl={authorAvatarUrl}
-                    isLoggedIn={isLoggedIn}
-                  />
+                  <ArticleCard key={item.id} item={item} {...cardProps} />
                 ))}
               </div>
             )}
@@ -551,16 +491,10 @@ export function AuthorContentTabs({ items, authorName, authorSlug, authorAvatarU
         {/* Videos */}
         {showVideos && videos.length > 0 && (
           <section>
-            <h2 className="text-[28px] leading-[1.3] text-[#5d4e37] uppercase mb-6">Videos</h2>
+            <h2 className="text-[28px] leading-[1.3] text-[#5d4e37] uppercase mb-6">{t('sectionVideos')}</h2>
             <div className="flex flex-wrap gap-6">
               {videos.map(item => (
-                <VideoCard
-                  key={item.id}
-                  item={item}
-                  authorName={authorName}
-                  authorSlug={authorSlug}
-                  authorAvatarUrl={authorAvatarUrl}
-                />
+                <VideoCard key={item.id} item={item} authorName={authorName} authorSlug={authorSlug} authorAvatarUrl={authorAvatarUrl} t={t} />
               ))}
             </div>
           </section>
@@ -569,16 +503,10 @@ export function AuthorContentTabs({ items, authorName, authorSlug, authorAvatarU
         {/* Podcasts */}
         {showPodcasts && podcasts.length > 0 && (
           <section>
-            <h2 className="text-[28px] leading-[1.3] text-[#5d4e37] uppercase mb-6">Podcasts</h2>
+            <h2 className="text-[28px] leading-[1.3] text-[#5d4e37] uppercase mb-6">{t('sectionPodcasts')}</h2>
             <div className="flex flex-wrap gap-6">
               {podcasts.map(item => (
-                <PodcastCard
-                  key={item.id}
-                  item={item}
-                  authorName={authorName}
-                  authorSlug={authorSlug}
-                  authorAvatarUrl={authorAvatarUrl}
-                />
+                <PodcastCard key={item.id} item={item} authorName={authorName} authorSlug={authorSlug} authorAvatarUrl={authorAvatarUrl} t={t} />
               ))}
             </div>
           </section>
@@ -587,24 +515,17 @@ export function AuthorContentTabs({ items, authorName, authorSlug, authorAvatarU
         {/* Knowledge Pills */}
         {showPills && pills.length > 0 && (
           <section>
-            <h2 className="text-[28px] leading-[1.3] text-[#5d4e37] uppercase mb-6">Knowledge Pills</h2>
+            <h2 className="text-[28px] leading-[1.3] text-[#5d4e37] uppercase mb-6">{t('sectionPills')}</h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
               {pills.map(item => (
-                <PillCard
-                  key={item.id}
-                  item={item}
-                  authorName={authorName}
-                  authorSlug={authorSlug}
-                  authorAvatarUrl={authorAvatarUrl}
-                  isLoggedIn={isLoggedIn}
-                />
+                <PillCard key={item.id} item={item} {...cardProps} />
               ))}
             </div>
           </section>
         )}
 
         {items.length === 0 && (
-          <p className="text-[#6b5744] text-center py-16">No published content yet.</p>
+          <p className="text-[#6b5744] text-center py-16">{t('noContent')}</p>
         )}
       </div>
     </>

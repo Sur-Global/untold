@@ -147,6 +147,35 @@
     "saveAsDraft": "Salvar como rascunho",
     "savedOn": "Salvo em {date}"
   },
+  "translating": {
+    "heading": "Traduzindo para {language}",
+    "bodyArticle": "Estamos preparando este artigo em {language} para você. Estará pronto em um momento — obrigado pela paciência.",
+    "bodyGeneric": "Estamos traduzindo este conteúdo para você. Estará pronto em um momento — obrigado pela paciência.",
+    "bioBadge": "Traduzindo biografia..."
+  },
+  "author": {
+    "joinedDate": "Entrou em {date}",
+    "website": "Website",
+    "followers": "seguidores",
+    "following": "seguindo",
+    "aboutAuthor": "Sobre o autor",
+    "aboutCreator": "Sobre o criador",
+    "viewProfile": "Ver perfil →",
+    "tabAll": "Tudo",
+    "tabArticles": "Artigos",
+    "tabVideos": "Vídeos",
+    "tabPodcasts": "Podcasts",
+    "tabPills": "Pílulas",
+    "sectionArticles": "Artigos",
+    "sectionVideos": "Vídeos",
+    "sectionPodcasts": "Podcasts",
+    "sectionPills": "Pílulas de conhecimento",
+    "featuredBadge": "Destaque",
+    "authorBadge": "Autor",
+    "episode": "Episódio {number}",
+    "moreFrom": "Mais de {name}",
+    "noContent": "Nenhum conteúdo publicado ainda."
+  },
   "editor": {
     "titlePlaceholder": "Título",
     "excerptPlaceholder": "Resumo breve exibido nas listagens (opcional)",

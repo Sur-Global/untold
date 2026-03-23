@@ -170,7 +170,8 @@ article:hover .card-image-shine {
     font-weight: 400;
     text-transform: uppercase;
     text-wrap: balance;
-    word-break: break-all;
+    overflow-wrap: break-word;
+    word-break: auto-phrase;
   }
 
   h1 { font-size: 3.5rem; line-height: 1.1; letter-spacing: -0.01em; }

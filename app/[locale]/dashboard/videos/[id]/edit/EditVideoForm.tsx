@@ -6,7 +6,6 @@ import { useLocale } from 'next-intl'
 import type { EditorBlock } from '@/components/editor/RichTextEditor'
 import { updateVideo } from '@/lib/actions/video'
 import { publishContent, unpublishContent, deleteContent } from '@/lib/actions/content'
-import { ensureTag } from '@/lib/actions/tags'
 import { RichTextEditor } from '@/components/editor/RichTextEditor'
 import { CoverImageInput } from '@/components/ui/CoverImageInput'
 import { TagsInput, type Tag } from '@/components/ui/TagsInput'
@@ -199,10 +198,6 @@ export function EditVideoForm({
     }
     if (meta.thumbnailUrl) setThumbnailUrl(meta.thumbnailUrl)
     if (meta.duration) setDuration(meta.duration)
-    if (meta.tags?.length && tags.length === 0) {
-      const resolved = await Promise.all(meta.tags.map((name) => ensureTag(name)))
-      setTags(resolved)
-    }
     if (meta.chapters?.length) {
       setChapters(meta.chapters)
     }

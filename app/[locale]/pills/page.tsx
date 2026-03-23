@@ -1,6 +1,9 @@
+import { after } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
 import { getNavProps } from '@/lib/nav'
 import { getTranslation } from '@/lib/content'
+import { triggerListingTranslations } from '@/lib/trigger-listing-translations'
+import { triggerTagTranslations } from '@/lib/trigger-tag-translations'
 import { Navigation } from '@/components/layout/Navigation'
 import { Footer } from '@/components/layout/Footer'
 import { ContentCard } from '@/components/content/ContentCard'
@@ -52,6 +55,16 @@ export default async function PillsPage({ params, searchParams }: PageProps) {
   }
 
   const totalPages = Math.ceil((count ?? 0) / PAGE_SIZE)
+
+  if (locale !== 'en' && items && items.length > 0) {
+    const untranslatedIds = (items as any[])
+      .filter(i => !(i.content_translations ?? []).some((t: any) => t.locale === locale))
+      .map((i: any) => i.id)
+    if (untranslatedIds.length > 0) {
+      after(() => triggerListingTranslations(untranslatedIds, locale))
+    }
+    after(() => triggerTagTranslations(locale))
+  }
 
   return (
     <>

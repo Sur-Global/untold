@@ -1,8 +1,11 @@
 import { Suspense } from 'react'
+import { after } from 'next/server'
 import { getTranslations } from 'next-intl/server'
 import { createClient } from '@/lib/supabase/server'
 import { getNavProps } from '@/lib/nav'
 import { getTranslation } from '@/lib/content'
+import { triggerListingTranslations } from '@/lib/trigger-listing-translations'
+import { triggerTagTranslations } from '@/lib/trigger-tag-translations'
 import { Navigation } from '@/components/layout/Navigation'
 import { Footer } from '@/components/layout/Footer'
 import { ContentCard } from '@/components/content/ContentCard'
@@ -133,6 +136,17 @@ export default async function ArticlesPage({ params, searchParams }: PageProps) 
       .eq('user_id', userId)
       .in('content_id', contentIds)
     bookmarks?.forEach((b: any) => bookmarkedIds.add(b.content_id))
+  }
+
+  // Trigger background translation for articles without a locale translation yet
+  if (locale !== 'en' && articles && articles.length > 0) {
+    const untranslatedIds = (articles as any[])
+      .filter(a => !(a.content_translations ?? []).some((t: any) => t.locale === locale))
+      .map((a: any) => a.id)
+    if (untranslatedIds.length > 0) {
+      after(() => triggerListingTranslations(untranslatedIds, locale))
+    }
+    after(() => triggerTagTranslations(locale))
   }
 
   const hasMore = (count ?? 0) > limit

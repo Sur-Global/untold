@@ -1,6 +1,9 @@
+import { after } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
 import { getNavProps } from '@/lib/nav'
 import { getTranslation } from '@/lib/content'
+import { triggerListingTranslations } from '@/lib/trigger-listing-translations'
+import { triggerTagTranslations } from '@/lib/trigger-tag-translations'
 import { Navigation } from '@/components/layout/Navigation'
 import { Footer } from '@/components/layout/Footer'
 import { ContentCard } from '@/components/content/ContentCard'
@@ -145,6 +148,22 @@ export default async function HomePage({ params }: PageProps) {
       .eq('user_id', userId)
       .in('content_id', contentIds)
     bookmarks?.forEach((b: any) => bookmarkedIds.add(b.content_id))
+  }
+
+  // Trigger background translation for untranslated listing items
+  if (locale !== 'en') {
+    const allFetchedItems = [
+      ...(featuredArticle ? [featuredArticle] : []),
+      ...allItems,
+    ]
+    const untranslatedIds = allFetchedItems
+      .filter((i: any) => !(i.content_translations ?? []).some((t: any) => t.locale === locale))
+      .map((i: any) => i.id)
+    const uniqueIds = [...new Set(untranslatedIds)] as string[]
+    if (uniqueIds.length > 0) {
+      after(() => triggerListingTranslations(uniqueIds, locale))
+    }
+    after(() => triggerTagTranslations(locale))
   }
 
   // Aggregate top 3 tags by published content count

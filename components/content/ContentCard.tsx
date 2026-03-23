@@ -99,8 +99,7 @@ export function ContentCard({
   const tContent = useTranslations('content')
   const tCreate = useTranslations('create')
   const href = `/${TYPE_PATHS[type]}/${slug}`
-  const raw = excerpt ?? description
-  const blurb = raw && raw.length > 130 ? raw.slice(0, 128).trimEnd() + '…' : raw
+  const blurb = excerpt ?? description
   const image = coverImageUrl ?? thumbnailUrl
 
   const cardRef = useRef<HTMLElement>(null)

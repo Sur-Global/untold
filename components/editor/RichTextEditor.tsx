@@ -1,5 +1,6 @@
 'use client'
 import '@blocknote/mantine/style.css'
+import '@blocknote/xl-ai/style.css'
 import { Block, BlockNoteSchema, filterSuggestionItems, combineByGroup } from '@blocknote/core'
 import { en, de, fr, es, pt } from '@blocknote/core/locales'
 import { BlockNoteView } from '@blocknote/mantine'
@@ -7,6 +8,9 @@ import {
   useCreateBlockNote,
   SuggestionMenuController,
   getDefaultReactSlashMenuItems,
+  FormattingToolbar,
+  FormattingToolbarController,
+  getFormattingToolbarItems,
 } from '@blocknote/react'
 import {
   withMultiColumn,
@@ -14,6 +18,14 @@ import {
   getMultiColumnSlashMenuItems,
   locales as multiColumnLocales,
 } from '@blocknote/xl-multi-column'
+import {
+  AIExtension,
+  AIMenuController,
+  AIToolbarButton,
+  getAISlashMenuItems,
+} from '@blocknote/xl-ai'
+import { en as aiEn } from '@blocknote/xl-ai/locales'
+import { DefaultChatTransport } from 'ai'
 import { useEffect, useRef } from 'react'
 
 // Schema created once at module level — never inside the component
@@ -47,6 +59,37 @@ async function uploadImageToSupabase(file: File): Promise<string> {
   return url
 }
 
+function FormattingToolbarWithAI() {
+  return (
+    <FormattingToolbarController
+      formattingToolbar={() => (
+        <FormattingToolbar>
+          {...getFormattingToolbarItems()}
+          <AIToolbarButton />
+        </FormattingToolbar>
+      )}
+    />
+  )
+}
+
+function SuggestionMenuWithAI({ editor }: { editor: ReturnType<typeof useCreateBlockNote> }) {
+  return (
+    <SuggestionMenuController
+      triggerCharacter="/"
+      getItems={async (query) =>
+        filterSuggestionItems(
+          combineByGroup(
+            getDefaultReactSlashMenuItems(editor),
+            getMultiColumnSlashMenuItems(editor),
+            getAISlashMenuItems(editor),
+          ),
+          query,
+        )
+      }
+    />
+  )
+}
+
 export function RichTextEditor({
   value,
   onChange,
@@ -59,6 +102,7 @@ export function RichTextEditor({
   const dictionary = {
     ...BASE_LOCALES[key],
     multi_column: multiColumnLocales[key] ?? multiColumnLocales.en,
+    ai: aiEn,
   } as typeof BASE_LOCALES[typeof key]
 
   const editor = useCreateBlockNote({
@@ -74,6 +118,13 @@ export function RichTextEditor({
       cellTextColor: true,
       headers: true,
     },
+    extensions: [
+      AIExtension({
+        transport: new DefaultChatTransport({
+          api: '/api/ai',
+        }),
+      }),
+    ],
   })
 
   // Sync external value changes (e.g. locale switch loads different content)
@@ -94,21 +145,13 @@ export function RichTextEditor({
         editor={editor}
         theme="light"
         style={{ fontFamily: 'Inter, sans-serif', background: '#ffffff' }}
+        formattingToolbar={false}
         slashMenu={false}
         onChange={() => onChange(editor.document as EditorBlock[])}
       >
-        <SuggestionMenuController
-          triggerCharacter="/"
-          getItems={async (query) =>
-            filterSuggestionItems(
-              combineByGroup(
-                getDefaultReactSlashMenuItems(editor),
-                getMultiColumnSlashMenuItems(editor),
-              ),
-              query,
-            )
-          }
-        />
+        <AIMenuController />
+        <FormattingToolbarWithAI />
+        <SuggestionMenuWithAI editor={editor} />
       </BlockNoteView>
     </div>
   )

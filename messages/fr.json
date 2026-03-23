@@ -147,6 +147,35 @@
     "saveAsDraft": "Enregistrer comme brouillon",
     "savedOn": "Enregistré le {date}"
   },
+  "translating": {
+    "heading": "Traduction en {language}",
+    "bodyArticle": "Nous préparons cet article en {language} pour vous. Il sera prêt dans un instant — merci de votre patience.",
+    "bodyGeneric": "Nous traduisons ce contenu pour vous. Il sera prêt dans un instant — merci de votre patience.",
+    "bioBadge": "Traduction de la biographie..."
+  },
+  "author": {
+    "joinedDate": "Inscrit en {date}",
+    "website": "Site web",
+    "followers": "abonnés",
+    "following": "abonnements",
+    "aboutAuthor": "À propos de l'auteur",
+    "aboutCreator": "À propos du créateur",
+    "viewProfile": "Voir le profil →",
+    "tabAll": "Tout",
+    "tabArticles": "Articles",
+    "tabVideos": "Vidéos",
+    "tabPodcasts": "Podcasts",
+    "tabPills": "Pilules",
+    "sectionArticles": "Articles",
+    "sectionVideos": "Vidéos",
+    "sectionPodcasts": "Podcasts",
+    "sectionPills": "Pilules de connaissance",
+    "featuredBadge": "À la une",
+    "authorBadge": "Auteur",
+    "episode": "Épisode {number}",
+    "moreFrom": "Plus de {name}",
+    "noContent": "Aucun contenu publié pour l'instant."
+  },
   "editor": {
     "titlePlaceholder": "Titre",
     "excerptPlaceholder": "Bref résumé affiché dans les listes (facultatif)",

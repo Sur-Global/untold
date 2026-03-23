@@ -4,7 +4,7 @@ import path from 'path'
 const withNextIntl = createNextIntlPlugin('./i18n/request.ts')
 
 const nextConfig = {
-  transpilePackages: ['@blocknote/core', '@blocknote/react', '@blocknote/mantine', '@blocknote/xl-multi-column'],
+  transpilePackages: ['@blocknote/core', '@blocknote/react', '@blocknote/mantine', '@blocknote/xl-multi-column', '@blocknote/xl-ai'],
   turbopack: {
     root: path.resolve(__dirname),
   },

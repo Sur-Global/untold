@@ -96,5 +96,34 @@
   "tag": {
     "heading": "#{tag}",
     "contentCount": "{count} pieces of content"
+  },
+  "translating": {
+    "heading": "Translating into {language}",
+    "bodyArticle": "We're preparing this article in {language} for you. It'll be ready in just a moment — thank you for your patience.",
+    "bodyGeneric": "We're translating this content for you. It'll be ready in just a moment — thank you for your patience.",
+    "bioBadge": "Translating bio..."
+  },
+  "author": {
+    "joinedDate": "Joined {date}",
+    "website": "Website",
+    "followers": "followers",
+    "following": "following",
+    "aboutAuthor": "About the Author",
+    "aboutCreator": "About the Creator",
+    "viewProfile": "View profile →",
+    "tabAll": "All",
+    "tabArticles": "Articles",
+    "tabVideos": "Videos",
+    "tabPodcasts": "Podcasts",
+    "tabPills": "Pills",
+    "sectionArticles": "Articles",
+    "sectionVideos": "Videos",
+    "sectionPodcasts": "Podcasts",
+    "sectionPills": "Knowledge Pills",
+    "featuredBadge": "Featured",
+    "authorBadge": "Author",
+    "episode": "Episode {number}",
+    "moreFrom": "More from {name}",
+    "noContent": "No published content yet."
   }
 }

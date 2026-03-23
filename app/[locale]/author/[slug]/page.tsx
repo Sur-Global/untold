@@ -1,7 +1,10 @@
 import { notFound } from 'next/navigation'
+import { after } from 'next/server'
 import type { Metadata } from 'next'
+import { getTranslations } from 'next-intl/server'
 import { createClient } from '@/lib/supabase/server'
 import { getTranslation } from '@/lib/content'
+import { triggerListingTranslations } from '@/lib/trigger-listing-translations'
 import { formatDate } from '@/lib/format-date'
 import { Navigation } from '@/components/layout/Navigation'
 import { Footer } from '@/components/layout/Footer'
@@ -39,9 +42,11 @@ export default async function AuthorPage({ params }: PageProps) {
   }
   const navProps = { isLoggedIn: !!user, userRole: navUserRole as any }
 
+  const tAuthor = await getTranslations({ locale, namespace: 'author' })
+
   const { data: author } = await (supabase as any)
     .from('profiles')
-    .select('id, display_name, slug, avatar_url, bio, location, website, followers_count, following_count, role, created_at')
+    .select('id, display_name, slug, avatar_url, bio, profile_translations, location, website, followers_count, following_count, role, created_at')
     .eq('slug', slug)
     .single()
 
@@ -96,6 +101,50 @@ export default async function AuthorPage({ params }: PageProps) {
       pillImageUrl: item.pill_meta?.image_url ?? null,
     }
   })
+
+  // Trigger background translation for untranslated content items on this author page
+  if (locale !== 'en' && (content ?? []).length > 0) {
+    const untranslatedIds = (content as any[])
+      .filter(i => !(i.content_translations ?? []).some((t: any) => t.locale === locale))
+      .map((i: any) => i.id)
+    if (untranslatedIds.length > 0) {
+      after(() => triggerListingTranslations(untranslatedIds, locale))
+    }
+  }
+
+  const profileTrans = author.profile_translations as Record<string, { bio?: string }> | null
+  const translatedBio = profileTrans?.[locale]?.bio ?? author.bio
+  const needsAuthorBio = locale !== 'en' && !!author.bio && !profileTrans?.[locale]?.bio
+
+  // Trigger bio translation on first visit in this language.
+  // We need a content_id from one of the author's content items to use the translate route.
+  // We reuse the existing translate route which handles author bio as a side effect.
+  if (needsAuthorBio) {
+    const { data: anyContent } = await (supabase as any)
+      .from('content')
+      .select('id')
+      .eq('author_id', author.id)
+      .eq('status', 'published')
+      .limit(1)
+      .maybeSingle()
+
+    if (anyContent) {
+      after(async () => {
+        try {
+          await fetch(`${process.env.NEXT_PUBLIC_SITE_URL}/api/translate`, {
+            method: 'POST',
+            headers: {
+              'content-type': 'application/json',
+              'x-translate-secret': process.env.TRANSLATE_API_SECRET!,
+            },
+            body: JSON.stringify({ contentId: anyContent.id, locale }),
+          })
+        } catch (err) {
+          console.error('[author-bio-translation-trigger] failed:', err)
+        }
+      })
+    }
+  }
 
   const joinedDate = formatDate(author.created_at, locale, { month: 'long', year: 'numeric' })
 
@@ -155,12 +204,12 @@ export default async function AuthorPage({ params }: PageProps) {
                 {author.display_name}
               </h1>
 
-              {author.bio && (
+              {translatedBio && (
                 <p
                   className="mb-4 max-w-2xl mx-auto sm:mx-0"
                   style={{ fontSize: 15, lineHeight: 1.65, color: 'rgba(245,241,232,0.65)' }}
                 >
-                  {author.bio}
+                  {translatedBio}
                 </p>
               )}
 
@@ -190,10 +239,10 @@ export default async function AuthorPage({ params }: PageProps) {
                       <circle cx="8" cy="8" r="6.5"/>
                       <path d="M8 1.5C8 1.5 6 4 6 8s2 6.5 2 6.5M8 1.5C8 1.5 10 4 10 8s-2 6.5-2 6.5M1.5 8h13"/>
                     </svg>
-                    Website
+                    {tAuthor('website')}
                   </a>
                 )}
-                <span>Joined {joinedDate}</span>
+                <span>{tAuthor('joinedDate', { date: joinedDate })}</span>
               </div>
 
               {/* Stats + follow */}
@@ -201,12 +250,12 @@ export default async function AuthorPage({ params }: PageProps) {
                 <div className="flex items-center gap-4" style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 13 }}>
                   <span style={{ color: 'rgba(245,241,232,0.55)' }}>
                     <span style={{ color: '#d4a574', fontWeight: 600 }}>{author.followers_count ?? 0}</span>
-                    {' '}followers
+                    {' '}{tAuthor('followers')}
                   </span>
                   <span style={{ color: 'rgba(245,241,232,0.3)' }}>·</span>
                   <span style={{ color: 'rgba(245,241,232,0.55)' }}>
                     <span style={{ color: '#d4a574', fontWeight: 600 }}>{author.following_count ?? 0}</span>
-                    {' '}following
+                    {' '}{tAuthor('following')}
                   </span>
                 </div>
 

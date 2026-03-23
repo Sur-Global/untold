@@ -147,6 +147,35 @@
     "saveAsDraft": "Gem som kladde",
     "savedOn": "Gemt {date}"
   },
+  "translating": {
+    "heading": "Oversætter til {language}",
+    "bodyArticle": "Vi forbereder denne artikel på {language} til dig. Den er klar om et øjeblik — tak for din tålmodighed.",
+    "bodyGeneric": "Vi oversætter dette indhold til dig. Det er klar om et øjeblik — tak for din tålmodighed.",
+    "bioBadge": "Oversætter biografi..."
+  },
+  "author": {
+    "joinedDate": "Tilmeldt {date}",
+    "website": "Hjemmeside",
+    "followers": "følgere",
+    "following": "følger",
+    "aboutAuthor": "Om forfatteren",
+    "aboutCreator": "Om skaberen",
+    "viewProfile": "Se profil →",
+    "tabAll": "Alle",
+    "tabArticles": "Artikler",
+    "tabVideos": "Videoer",
+    "tabPodcasts": "Podcasts",
+    "tabPills": "Videnspilder",
+    "sectionArticles": "Artikler",
+    "sectionVideos": "Videoer",
+    "sectionPodcasts": "Podcasts",
+    "sectionPills": "Videnspilder",
+    "featuredBadge": "Fremhævet",
+    "authorBadge": "Forfatter",
+    "episode": "Episode {number}",
+    "moreFrom": "Mere fra {name}",
+    "noContent": "Intet publiceret indhold endnu."
+  },
   "editor": {
     "titlePlaceholder": "Titel",
     "excerptPlaceholder": "Kort resumé vist i lister (valgfrit)",

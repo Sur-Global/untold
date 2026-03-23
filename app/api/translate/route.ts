@@ -11,7 +11,7 @@ export async function POST(req: NextRequest) {
   }
 
   const body = await req.json()
-  const { contentId, locale } = body as { contentId?: string; locale?: string }
+  const { contentId, locale, fieldsOnly } = body as { contentId?: string; locale?: string; fieldsOnly?: boolean }
 
   if (!contentId) {
     return NextResponse.json({ error: 'contentId required' }, { status: 400 })
@@ -25,7 +25,7 @@ export async function POST(req: NextRequest) {
 
   const { data: content } = await (supabase as any)
     .from('content')
-    .select('type')
+    .select('type, author_id')
     .eq('id', contentId)
     .single()
 
@@ -51,12 +51,14 @@ export async function POST(req: NextRequest) {
       // Skip manually authored translations
       const { data: existing } = await (supabase as any)
         .from('content_translations')
-        .select('is_auto_translated')
+        .select('is_auto_translated, title')
         .eq('content_id', contentId)
         .eq('locale', targetLocale)
         .maybeSingle()
 
       if (existing && existing.is_auto_translated === false) continue
+      // For fields-only mode, skip if text fields are already translated
+      if (fieldsOnly && existing?.title) continue
 
       // Build field list for this content type
       const fieldNames: string[] = []
@@ -77,9 +79,9 @@ export async function POST(req: NextRequest) {
       const translatedFields: Record<string, string> = {}
       fieldNames.forEach((name, i) => { translatedFields[name] = translatedTexts[i] })
 
-      // Translate body for article and pill (supports both BlockNote and legacy Tiptap formats)
+      // Translate body (skipped in fieldsOnly mode — used by listing page triggers)
       let translatedBody: unknown = null
-      const hasBody = ['article', 'pill', 'video', 'podcast', 'course'].includes(content.type)
+      const hasBody = !fieldsOnly && ['article', 'pill', 'video', 'podcast', 'course'].includes(content.type)
       if (hasBody && source.body) {
         if (Array.isArray(source.body)) {
           // BlockNote format
@@ -109,7 +111,7 @@ export async function POST(req: NextRequest) {
             content_id: contentId,
             locale: targetLocale,
             ...translatedFields,
-            body: translatedBody,
+            ...(translatedBody !== null ? { body: translatedBody } : {}),
             is_auto_translated: true,
           },
           { onConflict: 'content_id,locale' },
@@ -118,6 +120,9 @@ export async function POST(req: NextRequest) {
       if (upsertError) throw upsertError
 
       translated.push(targetLocale)
+
+      // Translate transcript, chapters, and author bio (skipped in fieldsOnly mode)
+      if (fieldsOnly) continue
 
       // Translate transcript and chapters for video content
       if (content.type === 'video') {
@@ -164,6 +169,28 @@ export async function POST(req: NextRequest) {
           }
         } catch (err) {
           console.error(`Video meta translation failed for locale ${targetLocale}:`, err)
+        }
+      }
+
+      // Translate author bio for this locale if not yet done
+      if (content.author_id) {
+        try {
+          const { data: author } = await (supabase as any)
+            .from('profiles')
+            .select('bio, profile_translations')
+            .eq('id', content.author_id)
+            .maybeSingle()
+
+          const existingProfileTrans = (author?.profile_translations as Record<string, unknown>) ?? {}
+          if (author?.bio && !existingProfileTrans[targetLocale]) {
+            const [translatedBio] = await translateTexts([author.bio], targetLocale)
+            await (supabase as any)
+              .from('profiles')
+              .update({ profile_translations: { ...existingProfileTrans, [targetLocale]: { bio: translatedBio } } })
+              .eq('id', content.author_id)
+          }
+        } catch (err) {
+          console.error(`Author bio translation failed for locale ${targetLocale}:`, err)
         }
       }
     } catch (err) {

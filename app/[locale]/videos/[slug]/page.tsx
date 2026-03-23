@@ -1,6 +1,7 @@
 import { notFound } from 'next/navigation'
 import { after } from 'next/server'
 import type { Metadata } from 'next'
+import { getTranslations } from 'next-intl/server'
 import { createClient } from '@/lib/supabase/server'
 import { getTranslation } from '@/lib/content'
 import { formatDate } from '@/lib/format-date'
@@ -9,6 +10,7 @@ import { Navigation } from '@/components/layout/Navigation'
 import { Footer } from '@/components/layout/Footer'
 import { EmbedPlayer } from '@/components/content/EmbedPlayer'
 import { VideoTranslationLoader } from '@/components/content/VideoTranslationLoader'
+import { AuthorBioLoader } from '@/components/content/AuthorBioLoader'
 import { LikeButton } from '@/components/social/LikeButton'
 import { BookmarkButton } from '@/components/social/BookmarkButton'
 import { ShareButton } from '@/components/social/ShareButton'
@@ -45,13 +47,15 @@ export default async function VideoPage({ params }: PageProps) {
   const { locale, slug } = await params
   const supabase = await createClient()
 
+  const tAuthor = await getTranslations({ locale, namespace: 'author' })
+
   const [{ userId, ...navProps }, { data: video }] = await Promise.all([
     getNavProps(),
     (supabase as any)
       .from('content')
       .select(`
         id, slug, likes_count, published_at,
-        profiles!author_id ( id, display_name, slug, avatar_url, bio, location ),
+        profiles!author_id ( id, display_name, slug, avatar_url, bio, profile_translations, location ),
         content_translations ( title, body, description, locale ),
         content_tags ( tags ( slug, names ) ),
         video_meta ( embed_url, thumbnail_url, duration, chapters, chapter_translations, transcript, transcript_translations )
@@ -82,6 +86,11 @@ export default async function VideoPage({ params }: PageProps) {
   const body = usingFallback ? null : (t.body as Record<string, unknown> | unknown[] | null)
   const legacyDescription = !body ? (t as any).description as string | null : null
 
+  // Author bio translation
+  const authorProfileTrans = author?.profile_translations as Record<string, { bio?: string }> | null
+  const translatedAuthorBio = authorProfileTrans?.[locale]?.bio ?? null
+  const needsAuthorBio = locale !== 'en' && !!author?.bio && !translatedAuthorBio
+
   // Per-section translation flags
   const needsBody = locale !== 'en' && !!englishBody && (usingFallback || !body)
   const needsChapters = locale !== 'en' && chapters.length > 0 && !chapterTranslations?.[locale]
@@ -95,7 +104,7 @@ export default async function VideoPage({ params }: PageProps) {
   // The translate route handles body, chapters, and transcript in one call — idempotent and safe.
   // NOTE: Multiple concurrent visitors may each fire an after() call before the DB is written.
   // Worst case: a few redundant DeepL calls. Acceptable trade-off for a content site.
-  if (needsBody || needsChapters || needsTranscript) {
+  if (needsBody || needsChapters || needsTranscript || needsAuthorBio) {
     after(async () => {
       try {
         await fetch(`${process.env.NEXT_PUBLIC_SITE_URL}/api/translate`, {
@@ -269,7 +278,7 @@ export default async function VideoPage({ params }: PageProps) {
           {author && (
             <div className="bg-card rounded-2xl p-8 border border-primary/20 shadow-[0px_4px_16px_0px_rgba(44,36,32,0.1),0px_8px_32px_0px_rgba(44,36,32,0.06)]">
               <h3 className="font-['Audiowide'] text-2xl uppercase text-foreground mb-6">
-                About the Creator
+                {tAuthor('aboutCreator')}
               </h3>
               <div className="flex gap-6 items-start">
                 <div className="w-24 h-24 rounded-full flex-shrink-0 overflow-hidden border-2 border-primary/20">
@@ -289,13 +298,19 @@ export default async function VideoPage({ params }: PageProps) {
                     <p className="text-sm text-primary mb-3">{author.location}</p>
                   )}
                   {author.bio && (
-                    <p className="text-base text-[#5a4a42] leading-[1.625] mb-4">{author.bio}</p>
+                    <AuthorBioLoader
+                      initialBio={translatedAuthorBio ?? (needsAuthorBio ? null : author.bio)}
+                      needsTranslation={needsAuthorBio}
+                      contentId={video.id}
+                      authorId={author.id}
+                      locale={locale}
+                    />
                   )}
                   <Link
                     href={`/author/${author.slug}`}
                     className="text-sm text-primary hover:underline font-['JetBrains_Mono',monospace] tracking-[0.28px]"
                   >
-                    View profile →
+                    {tAuthor('viewProfile')}
                   </Link>
                 </div>
               </div>
