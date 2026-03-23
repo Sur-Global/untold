@@ -2,9 +2,11 @@
 
 import { useRef, useState, useTransition } from 'react'
 import { useTranslations } from 'next-intl'
+import { useLocale } from 'next-intl'
 import { updatePill } from '@/lib/actions/pill'
 import { publishContent, unpublishContent, deleteContent } from '@/lib/actions/content'
 import { RichTextEditor } from '@/components/editor/RichTextEditor'
+import type { EditorBlock } from '@/components/editor/RichTextEditor'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -14,7 +16,7 @@ interface EditPillFormProps {
   id: string
   status: string
   initialTitle: string
-  initialBody: import('@blocknote/core').Block[] | null
+  initialBody: EditorBlock[] | null
   initialAccentColor: string
   initialImageUrl: string
 }
@@ -24,8 +26,9 @@ export function EditPillForm({
 }: EditPillFormProps) {
   const t = useTranslations('editor')
   const td = useTranslations('dashboard')
+  const locale = useLocale()
   const formRef = useRef<HTMLFormElement>(null)
-  const [body, setBody] = useState<import('@blocknote/core').Block[] | null>(initialBody)
+  const [body, setBody] = useState<EditorBlock[] | null>(initialBody)
   const [isPending, startTransition] = useTransition()
 
   const handleSave = (e: React.FormEvent) => {
@@ -61,7 +64,7 @@ export function EditPillForm({
 
       <div className="space-y-2">
         <Label>Body</Label>
-        <RichTextEditor value={body} onChange={setBody} placeholder={t('bodyPlaceholder')} />
+        <RichTextEditor value={body} onChange={setBody} placeholder={t('bodyPlaceholder')} locale={locale} />
       </div>
 
       <div className="flex items-center gap-3 pt-2">

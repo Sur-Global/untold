@@ -2,8 +2,10 @@
 
 import { useRef, useState, useTransition } from 'react'
 import { useTranslations } from 'next-intl'
+import { useLocale } from 'next-intl'
 import { createPill } from '@/lib/actions/pill'
 import { RichTextEditor } from '@/components/editor/RichTextEditor'
+import type { EditorBlock } from '@/components/editor/RichTextEditor'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -12,8 +14,9 @@ import { CoverImageInput } from '@/components/ui/CoverImageInput'
 export function CreatePillForm() {
   const t = useTranslations('editor')
   const td = useTranslations('dashboard')
+  const locale = useLocale()
   const formRef = useRef<HTMLFormElement>(null)
-  const [body, setBody] = useState<import('@blocknote/core').Block[] | null>(null)
+  const [body, setBody] = useState<EditorBlock[] | null>(null)
   const [isPending, startTransition] = useTransition()
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -49,11 +52,7 @@ export function CreatePillForm() {
 
       <div className="space-y-2">
         <Label>Body</Label>
-        <RichTextEditor
-          value={body}
-          onChange={setBody}
-          placeholder={t('bodyPlaceholder')}
-        />
+        <RichTextEditor value={body} onChange={setBody} placeholder={t('bodyPlaceholder')} locale={locale} />
       </div>
 
       <Button type="submit" disabled={isPending} className="gradient-rust text-white border-0">
