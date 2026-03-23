@@ -1,8 +1,10 @@
 import { notFound } from 'next/navigation'
+import { after } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
 import { getTranslation } from '@/lib/content'
 import { Navigation } from '@/components/layout/Navigation'
 import { Footer } from '@/components/layout/Footer'
+import { BodyTranslationLoader } from '@/components/content/BodyTranslationLoader'
 import { LikeButton } from '@/components/social/LikeButton'
 import { BookmarkButton } from '@/components/social/BookmarkButton'
 
@@ -44,6 +46,27 @@ export default async function CoursePage({ params }: PageProps) {
   const meta = course.course_meta
   const author = course.profiles
 
+  const enTranslation = (course.content_translations ?? []).find((tr: any) => tr.locale === 'en')
+  const englishDescription = enTranslation?.description as string | null
+  const needsDescription = locale !== 'en' && !!englishDescription && !t.description
+
+  if (needsDescription) {
+    after(async () => {
+      try {
+        await fetch(`${process.env.NEXT_PUBLIC_SITE_URL}/api/translate`, {
+          method: 'POST',
+          headers: {
+            'content-type': 'application/json',
+            'x-translate-secret': process.env.TRANSLATE_API_SECRET!,
+          },
+          body: JSON.stringify({ contentId: course.id, locale }),
+        })
+      } catch (err) {
+        console.error('[translation-trigger] failed:', err)
+      }
+    })
+  }
+
   let isLiked = false
   let isBookmarked = false
   if (user) {
@@ -74,9 +97,16 @@ export default async function CoursePage({ params }: PageProps) {
               />
             )}
             <h1 className="mb-4">{t.title}</h1>
-            {t.description && (
-              <p className="text-[#6B5F58] leading-relaxed text-lg">{t.description}</p>
-            )}
+            <BodyTranslationLoader
+              contentId={course.id}
+              locale={locale}
+              isTranslating={needsDescription}
+              field="description"
+              fallback={englishDescription}
+              initialContent={t.description ?? null}
+            >
+              {(content) => <p className="text-[#6B5F58] leading-relaxed text-lg">{content as string}</p>}
+            </BodyTranslationLoader>
             <div className="flex items-center gap-3 mt-4">
               <LikeButton
                 contentId={course.id}

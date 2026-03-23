@@ -1,9 +1,11 @@
 import { notFound } from 'next/navigation'
+import { after } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
 import { getTranslation } from '@/lib/content'
 import { Navigation } from '@/components/layout/Navigation'
 import { Footer } from '@/components/layout/Footer'
 import { ArticleBody } from '@/components/content/ArticleBody'
+import { BodyTranslationLoader } from '@/components/content/BodyTranslationLoader'
 import { LikeButton } from '@/components/social/LikeButton'
 import { BookmarkButton } from '@/components/social/BookmarkButton'
 
@@ -45,6 +47,27 @@ export default async function PillPage({ params }: PageProps) {
   const meta = pill.pill_meta
   const accentColor = meta?.accent_color ?? '#6B8E23'
   const body = t.body as Record<string, unknown> | null
+
+  const enTranslation = (pill.content_translations ?? []).find((tr: any) => tr.locale === 'en')
+  const englishBody = enTranslation?.body as Record<string, unknown> | null
+  const needsBody = locale !== 'en' && !!englishBody && !body
+
+  if (needsBody) {
+    after(async () => {
+      try {
+        await fetch(`${process.env.NEXT_PUBLIC_SITE_URL}/api/translate`, {
+          method: 'POST',
+          headers: {
+            'content-type': 'application/json',
+            'x-translate-secret': process.env.TRANSLATE_API_SECRET!,
+          },
+          body: JSON.stringify({ contentId: pill.id, locale }),
+        })
+      } catch (err) {
+        console.error('[translation-trigger] failed:', err)
+      }
+    })
+  }
 
   let isLiked = false
   let isBookmarked = false
@@ -97,11 +120,16 @@ export default async function PillPage({ params }: PageProps) {
           )}
         </div>
 
-        {body ? (
-          <ArticleBody json={body} />
-        ) : (
-          <p className="text-[#6B5F58]">No content.</p>
-        )}
+        <BodyTranslationLoader
+          contentId={pill.id}
+          locale={locale}
+          isTranslating={needsBody}
+          field="body"
+          fallback={englishBody}
+          initialContent={body}
+        >
+          {(content) => <ArticleBody json={content as Record<string, unknown>} />}
+        </BodyTranslationLoader>
       </main>
       <Footer />
     </>

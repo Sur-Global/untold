@@ -1,9 +1,11 @@
 import { notFound } from 'next/navigation'
+import { after } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
 import { getTranslation } from '@/lib/content'
 import { Navigation } from '@/components/layout/Navigation'
 import { Footer } from '@/components/layout/Footer'
 import { EmbedPlayer } from '@/components/content/EmbedPlayer'
+import { BodyTranslationLoader } from '@/components/content/BodyTranslationLoader'
 import { LikeButton } from '@/components/social/LikeButton'
 import { BookmarkButton } from '@/components/social/BookmarkButton'
 import Link from 'next/link'
@@ -45,6 +47,27 @@ export default async function PodcastPage({ params }: PageProps) {
 
   const meta = podcast.podcast_meta
   const author = podcast.profiles
+
+  const enTranslation = (podcast.content_translations ?? []).find((tr: any) => tr.locale === 'en')
+  const englishDescription = enTranslation?.description as string | null
+  const needsDescription = locale !== 'en' && !!englishDescription && !t.description
+
+  if (needsDescription) {
+    after(async () => {
+      try {
+        await fetch(`${process.env.NEXT_PUBLIC_SITE_URL}/api/translate`, {
+          method: 'POST',
+          headers: {
+            'content-type': 'application/json',
+            'x-translate-secret': process.env.TRANSLATE_API_SECRET!,
+          },
+          body: JSON.stringify({ contentId: podcast.id, locale }),
+        })
+      } catch (err) {
+        console.error('[translation-trigger] failed:', err)
+      }
+    })
+  }
 
   let isLiked = false
   let isBookmarked = false
@@ -110,9 +133,16 @@ export default async function PodcastPage({ params }: PageProps) {
           </div>
         )}
 
-        {t.description && (
-          <p className="text-[#6B5F58] leading-relaxed">{t.description}</p>
-        )}
+        <BodyTranslationLoader
+          contentId={podcast.id}
+          locale={locale}
+          isTranslating={needsDescription}
+          field="description"
+          fallback={englishDescription}
+          initialContent={t.description ?? null}
+        >
+          {(content) => <p className="text-[#6B5F58] leading-relaxed">{content as string}</p>}
+        </BodyTranslationLoader>
       </main>
       <Footer />
     </>

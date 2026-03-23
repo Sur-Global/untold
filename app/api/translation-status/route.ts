@@ -20,7 +20,7 @@ export async function GET(req: NextRequest) {
   const [{ data: translation }, { data: videoMeta }] = await Promise.all([
     (supabase as any)
       .from('content_translations')
-      .select('body')
+      .select('body, description')
       .eq('content_id', contentId)
       .eq('locale', locale)
       .maybeSingle(),
@@ -36,6 +36,7 @@ export async function GET(req: NextRequest) {
 
   return NextResponse.json({
     body: translation?.body ?? null,
+    description: translation?.description ?? null,
     chapters: chapterTrans?.[locale] ?? null,
     transcript: translations?.[locale] ?? null,
   })

@@ -1,4 +1,5 @@
 import { notFound } from 'next/navigation'
+import { after } from 'next/server'
 import type { Metadata } from 'next'
 import { getTranslations } from 'next-intl/server'
 import { createClient } from '@/lib/supabase/server'
@@ -8,6 +9,7 @@ import { formatDate } from '@/lib/format-date'
 import { Navigation } from '@/components/layout/Navigation'
 import { Footer } from '@/components/layout/Footer'
 import { ArticleBody } from '@/components/content/ArticleBody'
+import { BodyTranslationLoader } from '@/components/content/BodyTranslationLoader'
 import { LikeButton } from '@/components/social/LikeButton'
 import { BookmarkButton } from '@/components/social/BookmarkButton'
 import { ShareButton } from '@/components/social/ShareButton'
@@ -69,6 +71,27 @@ export default async function ArticlePage({ params }: PageProps) {
   const author = article.profiles
   const body = t.body as Record<string, unknown> | null
   const tags = article.content_tags?.map((ct: any) => ct.tags) ?? []
+
+  const enTranslation = (article.content_translations ?? []).find((tr: any) => tr.locale === 'en')
+  const englishBody = enTranslation?.body as Record<string, unknown> | null
+  const needsBody = locale !== 'en' && !!englishBody && !body
+
+  if (needsBody) {
+    after(async () => {
+      try {
+        await fetch(`${process.env.NEXT_PUBLIC_SITE_URL}/api/translate`, {
+          method: 'POST',
+          headers: {
+            'content-type': 'application/json',
+            'x-translate-secret': process.env.TRANSLATE_API_SECRET!,
+          },
+          body: JSON.stringify({ contentId: article.id, locale }),
+        })
+      } catch (err) {
+        console.error('[translation-trigger] failed:', err)
+      }
+    })
+  }
 
   let isLiked = false
   let isBookmarked = false
@@ -246,11 +269,16 @@ export default async function ArticlePage({ params }: PageProps) {
             )}
 
             {/* Body */}
-            {body ? (
-              <ArticleBody json={body} />
-            ) : (
-              <p className="text-muted-foreground">No content available.</p>
-            )}
+            <BodyTranslationLoader
+              contentId={article.id}
+              locale={locale}
+              isTranslating={needsBody}
+              field="body"
+              fallback={englishBody}
+              initialContent={body}
+            >
+              {(content) => <ArticleBody json={content as Record<string, unknown>} />}
+            </BodyTranslationLoader>
 
             {/* About the Author */}
             {author && (
