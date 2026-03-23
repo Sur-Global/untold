@@ -1,4 +1,5 @@
 import { notFound } from 'next/navigation'
+import { after } from 'next/server'
 import type { Metadata } from 'next'
 import { createClient } from '@/lib/supabase/server'
 import { getTranslation } from '@/lib/content'
@@ -54,7 +55,7 @@ export default async function VideoPage({ params }: PageProps) {
         profiles!author_id ( id, display_name, slug, avatar_url, bio, location ),
         content_translations ( title, body, description, locale ),
         content_tags ( tags ( slug, names ) ),
-        video_meta ( embed_url, thumbnail_url, duration, chapters, transcript )
+        video_meta ( embed_url, thumbnail_url, duration, chapters, transcript, transcript_translations )
       `)
       .eq('slug', slug)
       .eq('type', 'video')
@@ -68,6 +69,30 @@ export default async function VideoPage({ params }: PageProps) {
   if (!t) notFound()
 
   const meta = Array.isArray(video.video_meta) ? video.video_meta[0] : video.video_meta ?? {}
+
+  // Trigger transcript translation on first visit for non-English locales
+  if (
+    locale !== 'en' &&
+    Array.isArray(meta?.transcript) &&
+    meta.transcript.length > 0 &&
+    !meta?.transcript_translations?.[locale]
+  ) {
+    after(async () => {
+      try {
+        await fetch(`${process.env.NEXT_PUBLIC_SITE_URL}/api/translate`, {
+          method: 'POST',
+          headers: {
+            'content-type': 'application/json',
+            'x-translate-secret': process.env.TRANSLATE_API_SECRET!,
+          },
+          body: JSON.stringify({ contentId: video.id, locale }),
+        })
+      } catch (err) {
+        console.error('[transcript-translation] trigger failed:', err)
+      }
+    })
+  }
+
   const author = video.profiles
   const tags = (video.content_tags ?? []).map((ct: any) => ct.tags).filter(Boolean)
   const chapters: VideoChapter[] = Array.isArray(meta?.chapters) ? meta.chapters : []
@@ -250,9 +275,15 @@ export default async function VideoPage({ params }: PageProps) {
           )}
 
           {/* Transcript panel */}
-          {Array.isArray(meta?.transcript) && meta.transcript.length > 0 && (
-            <TranscriptPanel transcript={meta.transcript as TranscriptCue[]} />
-          )}
+          {(() => {
+            const displayTranscript: TranscriptCue[] | null =
+              locale !== 'en' && Array.isArray(meta?.transcript_translations?.[locale])
+                ? (meta.transcript_translations[locale] as TranscriptCue[])
+                : Array.isArray(meta?.transcript) ? (meta.transcript as TranscriptCue[]) : null
+            return displayTranscript && displayTranscript.length > 0
+              ? <TranscriptPanel transcript={displayTranscript} />
+              : null
+          })()}
 
           {/* About the Creator */}
           {author && (
