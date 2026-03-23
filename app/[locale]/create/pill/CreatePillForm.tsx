@@ -1,8 +1,7 @@
 'use client'
 
 import { useRef, useState, useTransition } from 'react'
-import { useTranslations } from 'next-intl'
-import { useLocale } from 'next-intl'
+import { useTranslations, useLocale } from 'next-intl'
 import { createPill } from '@/lib/actions/pill'
 import { RichTextEditor } from '@/components/editor/RichTextEditor'
 import type { EditorBlock } from '@/components/editor/RichTextEditor'

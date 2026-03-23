@@ -58,8 +58,8 @@ export function RichTextEditor({
   const key = LOCALE_MAP[locale] ?? 'en'
   const dictionary = {
     ...BASE_LOCALES[key],
-    ...(multiColumnLocales[key] ?? multiColumnLocales.en),
-  } as unknown as typeof BASE_LOCALES[typeof key]
+    multi_column: multiColumnLocales[key] ?? multiColumnLocales.en,
+  } as typeof BASE_LOCALES[typeof key]
 
   const editor = useCreateBlockNote({
     schema: multiColumnSchema,

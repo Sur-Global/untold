@@ -158,13 +158,10 @@ test.describe('BlockNote multi-column + locale', () => {
     if (columnListCount > 0) {
       const columnList = page.locator('.bn-column-list').first()
 
-      // Verify the data-columns attribute exists
-      const dataColumns = await columnList.getAttribute('data-columns')
-      if (dataColumns) {
-        const columns = parseInt(dataColumns, 10)
-        expect(columns).toBeGreaterThan(0)
-        expect(columns).toBeLessThanOrEqual(4) // Reasonable max for columns
-      }
+      // Verify the column list has the correct class and grid style
+      await expect(columnList).toHaveAttribute('class', /bn-column-list/)
+      const styleAttr = await columnList.getAttribute('style')
+      expect(styleAttr).toContain('grid-template-columns')
 
       // Verify at least one column child exists
       const columns = columnList.locator('.bn-column')
