@@ -176,8 +176,8 @@ export function EditVideoForm({
     const meta = await fetchVideoMetadata(embedUrl)
     setExtracting(false)
     if (!meta) return
-    if (meta.title && !title) setTitle(meta.title)
-    if (meta.description && !body) {
+    if (meta.title) setTitle(meta.title)
+    if (meta.description) {
       // Convert plain text description to BlockNote paragraph blocks
       const blocks: Block[] = meta.description
         .split(/\n\n+/)
@@ -195,9 +195,9 @@ export function EditVideoForm({
         triggerAutoSave()
       }
     }
-    if (meta.thumbnailUrl && !thumbnailUrl) setThumbnailUrl(meta.thumbnailUrl)
-    if (meta.duration && !duration) setDuration(meta.duration)
-    if (meta.tags?.length && tags.length === 0) {
+    if (meta.thumbnailUrl) setThumbnailUrl(meta.thumbnailUrl)
+    if (meta.duration) setDuration(meta.duration)
+    if (meta.tags?.length) {
       const resolved = await Promise.all(meta.tags.map((name) => ensureTag(name)))
       setTags(resolved)
     }
