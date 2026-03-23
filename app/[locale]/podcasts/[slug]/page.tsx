@@ -140,9 +140,8 @@ export default async function PodcastPage({ params }: PageProps) {
           field="description"
           fallback={englishDescription}
           initialContent={t.description ?? null}
-        >
-          {(content) => <p className="text-[#6B5F58] leading-relaxed">{content as string}</p>}
-        </BodyTranslationLoader>
+          descriptionClassName="text-[#6B5F58] leading-relaxed"
+        />
       </main>
       <Footer />
     </>

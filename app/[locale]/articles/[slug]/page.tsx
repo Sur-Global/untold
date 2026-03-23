@@ -276,9 +276,7 @@ export default async function ArticlePage({ params }: PageProps) {
               field="body"
               fallback={englishBody}
               initialContent={body}
-            >
-              {(content) => <ArticleBody json={content as Record<string, unknown>} />}
-            </BodyTranslationLoader>
+            />
 
             {/* About the Author */}
             {author && (

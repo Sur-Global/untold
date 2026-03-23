@@ -104,9 +104,8 @@ export default async function CoursePage({ params }: PageProps) {
               field="description"
               fallback={englishDescription}
               initialContent={t.description ?? null}
-            >
-              {(content) => <p className="text-[#6B5F58] leading-relaxed text-lg">{content as string}</p>}
-            </BodyTranslationLoader>
+              descriptionClassName="text-[#6B5F58] leading-relaxed text-lg"
+            />
             <div className="flex items-center gap-3 mt-4">
               <LikeButton
                 contentId={course.id}

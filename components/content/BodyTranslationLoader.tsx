@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useRef, useState } from 'react'
-import type { ReactNode } from 'react'
+import { ArticleBody } from './ArticleBody'
 
 interface BodyTranslationLoaderProps {
   contentId: string
@@ -11,10 +11,10 @@ interface BodyTranslationLoaderProps {
   field: 'body' | 'description'
   // fallback English content to show after max attempts
   fallback?: unknown
-  // render function called with translated content when available
-  children: (content: unknown) => ReactNode
   // initial content (may be null if not yet translated)
   initialContent?: unknown
+  // className applied to the description <p> tag (ignored for body)
+  descriptionClassName?: string
 }
 
 const MAX_ATTEMPTS = 10
@@ -41,14 +41,21 @@ function Skeleton() {
   )
 }
 
+function renderContent(content: unknown, field: 'body' | 'description', descriptionClassName?: string) {
+  if (field === 'body') {
+    return <ArticleBody json={content as Record<string, unknown> | unknown[]} />
+  }
+  return <p className={descriptionClassName ?? 'text-muted-foreground leading-relaxed'}>{content as string}</p>
+}
+
 export function BodyTranslationLoader({
   contentId,
   locale,
   isTranslating,
   field,
   fallback,
-  children,
   initialContent,
+  descriptionClassName,
 }: BodyTranslationLoaderProps) {
   const [content, setContent] = useState<unknown>(initialContent ?? null)
   const [failed, setFailed] = useState(false)
@@ -82,10 +89,10 @@ export function BodyTranslationLoader({
   }, [isTranslating, contentId, locale, field, content])
 
   // Has content — render it
-  if (content != null) return <>{children(content)}</>
+  if (content != null) return renderContent(content, field, descriptionClassName)
 
   // Translation failed after max attempts — fall back to English
-  if (failed && fallback != null) return <>{children(fallback)}</>
+  if (failed && fallback != null) return renderContent(fallback, field, descriptionClassName)
 
   // Translation pending — show apology placeholder
   if (isTranslating) {

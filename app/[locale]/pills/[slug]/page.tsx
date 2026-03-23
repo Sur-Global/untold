@@ -4,7 +4,6 @@ import { createClient } from '@/lib/supabase/server'
 import { getTranslation } from '@/lib/content'
 import { Navigation } from '@/components/layout/Navigation'
 import { Footer } from '@/components/layout/Footer'
-import { ArticleBody } from '@/components/content/ArticleBody'
 import { BodyTranslationLoader } from '@/components/content/BodyTranslationLoader'
 import { LikeButton } from '@/components/social/LikeButton'
 import { BookmarkButton } from '@/components/social/BookmarkButton'
@@ -127,9 +126,7 @@ export default async function PillPage({ params }: PageProps) {
           field="body"
           fallback={englishBody}
           initialContent={body}
-        >
-          {(content) => <ArticleBody json={content as Record<string, unknown>} />}
-        </BodyTranslationLoader>
+        />
       </main>
       <Footer />
     </>
