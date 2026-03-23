@@ -120,6 +120,17 @@ function blockToHtml(block: Block): string {
       return `<table><tbody>${rowsHtml}</tbody></table>${children}`
     }
 
+    case 'column':
+      return `<div class="bn-column">${children}</div>`
+
+    case 'columnList': {
+      const cols = block.children ?? []
+      const style = cols.length > 0
+        ? `display:grid;grid-template-columns:${cols.map((col) => `${(col.props?.width as number | undefined) ?? 1}fr`).join(' ')};gap:1.5rem`
+        : 'display:flex;gap:1.5rem'
+      return `<div class="bn-column-list" style="${style}">${children}</div>`
+    }
+
     default:
       // Fallback: wrap in a paragraph
       return inner ? `<p>${inner}</p>${children}` : children
