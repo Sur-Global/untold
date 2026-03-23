@@ -20,22 +20,28 @@ BlockNote's editor chrome (slash menu labels, toolbar tooltips, placeholder text
 
 `RichTextEditor` gains a `locale` prop (`string`). It maps the app locale to a BlockNote dictionary and passes it to `useCreateBlockNote({ dictionary })`.
 
-BlockNote ships built-in dictionaries for `de`, `fr`, `es`, `pt`. Danish (`da`) has no built-in dictionary — the editor UI falls back to English for that locale. This only affects editor chrome; article content translation (via DeepL) is unaffected.
+BlockNote ships built-in dictionaries importable from `@blocknote/core/locales` (a separate subpath entry point — not from `@blocknote/core` directly):
+
+```ts
+import { en, de, fr, es, pt } from '@blocknote/core/locales'
+```
+
+Danish (`da`) has no built-in dictionary — the editor UI falls back to `en` for that locale. This only affects editor chrome; article content translation (via DeepL) is unaffected.
 
 **Locale mapping:**
 
 | App locale | BlockNote dictionary |
 |---|---|
-| `es` | `locales.es` |
-| `pt` | `locales.pt` |
-| `fr` | `locales.fr` |
-| `de` | `locales.de` |
-| `da` | `locales.en` (fallback) |
-| `en` | `locales.en` |
+| `es` | `es` |
+| `pt` | `pt` |
+| `fr` | `fr` |
+| `de` | `de` |
+| `da` | `en` (fallback) |
+| `en` | `en` |
 
 ### Call sites
 
-All five editor forms already have access to the locale (via `useLocale()` from next-intl) and pass it as a prop to `RichTextEditor`.
+All five editor forms already have access to the locale via `useLocale()` from next-intl and pass it as a `locale` prop to `RichTextEditor`.
 
 ---
 
@@ -47,36 +53,108 @@ Authors can insert 2- or 3-column layouts into any content body via the slash me
 
 ### Package
 
-Requires `@blocknote/xl-multi-column` — a first-party BlockNote package in the same version family (v0.47.x).
+Requires installing `@blocknote/xl-multi-column` — a first-party BlockNote package in the same version family (v0.47.x).
 
-### Editor changes (`RichTextEditor`)
+### TypeScript: Block type change
 
-1. **Schema**: Replace the implicit default schema with `withMultiColumn(BlockNoteSchema.create())`. This adds `columnList` and `column` block types.
-2. **Drop cursor**: Replace the default with `multiColumnDropCursor` for correct drag-drop behaviour between columns.
-3. **Slash menu**: Switch `BlockNoteView` to `slashMenu={false}` and add an explicit `SuggestionMenuController` that combines `getDefaultReactSlashMenuItems` with `getMultiColumnSlashMenuItems` via `combineByGroup`. This adds "2 columns" and "3 columns" entries to the slash menu.
-4. **Dictionary**: When multi-column is active, merge `multiColumnLocales.<lang>` into the dictionary alongside the base locale dictionary. Multi-column locales are available for the same languages as the base dictionaries; `da` falls back to `multiColumnLocales.en`.
+Switching from the implicit default schema to `withMultiColumn(BlockNoteSchema.create())` changes the type of `editor.document` from `Block[]` to `Block<typeof schema.blockSchema, typeof schema.inlineContentSchema, typeof schema.styleSchema>[]`, which includes `columnList` and `column` block types.
+
+In `RichTextEditor.tsx`, the schema is created at module level (outside the component, to avoid recreation on each render). The `EditorBlock` type is derived from the schema's generic parameters and re-exported for use in the editor forms:
+
+```ts
+import { Block, BlockNoteSchema } from '@blocknote/core'
+import { withMultiColumn } from '@blocknote/xl-multi-column'
+
+const multiColumnSchema = withMultiColumn(BlockNoteSchema.create())
+
+// Derive the correct Block type from the schema instance's properties
+export type EditorBlock = Block<
+  typeof multiColumnSchema.blockSchema,
+  typeof multiColumnSchema.inlineContentSchema,
+  typeof multiColumnSchema.styleSchema
+>
+```
+
+The `RichTextEditor` `value` and `onChange` props use `EditorBlock[]`. All five editor forms replace their `import('@blocknote/core').Block[]` state type with `EditorBlock` imported from `@/components/editor/RichTextEditor`.
+
+### Editor changes (`RichTextEditor.tsx`)
+
+1. **Schema**: Use `withMultiColumn(BlockNoteSchema.create())` created at module level (not inside the component, to avoid recreation on each render).
+2. **Drop cursor**: Pass `dropCursor: multiColumnDropCursor` to `useCreateBlockNote`.
+3. **Dictionary**: Build locale-aware dictionary that merges base + multi-column locale:
+   ```ts
+   import { en, de, fr, es, pt } from '@blocknote/core/locales'
+   import { locales as multiColumnLocales } from '@blocknote/xl-multi-column'
+
+   // Named map avoids unsafe namespace string-indexing
+   const BASE_LOCALES = { en, de, fr, es, pt }
+   const LOCALE_MAP: Record<string, keyof typeof BASE_LOCALES> = {
+     es: 'es', pt: 'pt', fr: 'fr', de: 'de', da: 'en', en: 'en',
+   }
+
+   // Inside component:
+   const key = LOCALE_MAP[locale] ?? 'en'
+   const dictionary = { ...BASE_LOCALES[key], ...multiColumnLocales[key] }
+   ```
+4. **Slash menu**: Switch `BlockNoteView` to `slashMenu={false}` + explicit `SuggestionMenuController`:
+   ```ts
+   import { combineByGroup, filterSuggestionItems } from '@blocknote/core'
+   import { getDefaultReactSlashMenuItems, SuggestionMenuController } from '@blocknote/react'
+   import { getMultiColumnSlashMenuItems } from '@blocknote/xl-multi-column'
+   ```
+   ```tsx
+   <BlockNoteView editor={editor} slashMenu={false} ...>
+     <SuggestionMenuController
+       triggerCharacter="/"
+       getItems={async (query) =>
+         filterSuggestionItems(
+           combineByGroup(
+             getDefaultReactSlashMenuItems(editor),
+             getMultiColumnSlashMenuItems(editor),
+           ),
+           query,
+         )
+       }
+     />
+   </BlockNoteView>
+   ```
 
 ### Reader changes (`blocknote-to-html.ts`)
 
-Add two new block type cases:
+Add two new cases to `blockToHtml`:
 
-- **`columnList`**: Emits a `<div class="bn-column-list">` with an inline `grid-template-columns` style built from the `width` props of its child column blocks (e.g. `"1.4fr 0.8fr"`). Falls back to equal columns if no widths are set.
-- **`column`**: Emits a `<div class="bn-column">` wrapping its children's HTML.
+**`column` case** — wraps its children in a `<div class="bn-column">`:
+```ts
+case 'column':
+  return `<div class="bn-column">${children}</div>`
+```
 
-### Reader responsive CSS (`ArticleBody.tsx`)
+**`columnList` case** — builds `grid-template-columns` from child `width` props. The `width` prop on each column is a `number` (BlockNote default is `1`; authors drag to resize). Convert each width to a `fr` unit. If a column has no `width` prop, treat it as `1`. If `block.children` is empty, fall back to `display: flex`:
 
-Add prose override styles for `.bn-column-list` and `.bn-column`:
+```ts
+case 'columnList': {
+  const cols = (block.children ?? [])
+  const frValues = cols.map((col) => `${(col.props?.width as number) ?? 1}fr`).join(' ')
+  const style = cols.length > 0
+    ? `display:grid;grid-template-columns:${frValues};gap:1.5rem`
+    : 'display:flex;gap:1.5rem'
+  return `<div class="bn-column-list" style="${style}">${children}</div>`
+}
+```
+
+Note: In `blockToHtml`, `children` is already the rendered HTML of `block.children` via `blocksToHtml(block.children)`. The width inspection happens on the raw `block.children` array before that render, which is available in scope.
+
+### Reader responsive CSS (`app/globals.css`)
+
+Add to `app/globals.css` (not in `ArticleBody.tsx`, which is a React component with no CSS mechanism):
 
 ```css
-.bn-column-list {
-  display: grid;
-  gap: 1.5rem;
-}
 @media (max-width: 768px) {
   .bn-column-list {
     grid-template-columns: 1fr !important;
   }
 }
+
 .bn-column > * + * {
   margin-top: 1rem;
 }
@@ -84,7 +162,7 @@ Add prose override styles for `.bn-column-list` and `.bn-column`:
 
 ### Translation (`blocknote-translate.ts`)
 
-No changes needed. `walkBlocks` already recurses into `children` arrays, so column block content is extracted and re-injected correctly by the existing traversal.
+No changes needed. `walkBlocks` already recurses into `children` arrays, so `columnList` → `column` → paragraph content is extracted and re-injected correctly by the existing traversal.
 
 ---
 
@@ -93,14 +171,14 @@ No changes needed. `walkBlocks` already recurses into `children` arrays, so colu
 | File | Change |
 |---|---|
 | `package.json` | Add `@blocknote/xl-multi-column` |
-| `components/editor/RichTextEditor.tsx` | `locale` prop, `withMultiColumn` schema, slash menu with column items, drop cursor, locale-aware dictionary |
-| `app/[locale]/create/article/CreateArticleForm.tsx` | Pass `locale` to `RichTextEditor` |
-| `app/[locale]/dashboard/articles/[id]/edit/EditArticleForm.tsx` | Pass `locale` to `RichTextEditor` |
-| `app/[locale]/create/pill/CreatePillForm.tsx` | Pass `locale` to `RichTextEditor` |
-| `app/[locale]/dashboard/pills/[id]/edit/EditPillForm.tsx` | Pass `locale` to `RichTextEditor` |
-| `app/[locale]/dashboard/videos/[id]/edit/EditVideoForm.tsx` | Pass `locale` to `RichTextEditor` |
+| `components/editor/RichTextEditor.tsx` | `locale` prop, `withMultiColumn` schema at module level, `EditorBlock` type re-export, locale-aware dictionary (base + multi-column merge), slash menu with column items, drop cursor |
+| `app/[locale]/create/article/CreateArticleForm.tsx` | Replace `Block[]` state type with `EditorBlock`; pass `locale` to `RichTextEditor` |
+| `app/[locale]/dashboard/articles/[id]/edit/EditArticleForm.tsx` | Replace `Block[]` state type with `EditorBlock`; pass `locale` to `RichTextEditor` |
+| `app/[locale]/create/pill/CreatePillForm.tsx` | Replace `Block[]` state type with `EditorBlock`; pass `locale` to `RichTextEditor` |
+| `app/[locale]/dashboard/pills/[id]/edit/EditPillForm.tsx` | Replace `Block[]` state type with `EditorBlock`; pass `locale` to `RichTextEditor` |
+| `app/[locale]/dashboard/videos/[id]/edit/EditVideoForm.tsx` | Replace `Block[]` state type with `EditorBlock`; pass `locale` to `RichTextEditor` |
 | `lib/blocknote-to-html.ts` | Add `columnList` and `column` cases with width-aware grid rendering |
-| `components/content/ArticleBody.tsx` | Add responsive column CSS |
+| `app/globals.css` | Add responsive `.bn-column-list` and `.bn-column` CSS |
 
 ---
 
