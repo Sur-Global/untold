@@ -169,6 +169,12 @@
     "priceLabel": "Pris",
     "pricePlaceholder": "0.00",
     "currencyLabel": "Valuta",
-    "descriptionPlaceholder": "Beskrivelse (valgfrit)"
+    "descriptionPlaceholder": "Beskrivelse (valgfrit)",
+    "videoUrlLabel": "Video-URL",
+    "videoUrlPlaceholder": "Indsæt en YouTube-, Vimeo- eller anden video-URL",
+    "videoUrlExtract": "Udtræk info",
+    "videoUrlExtracting": "Udtrækker…",
+    "reExtractTranscript": "Genudtræk transskription",
+    "reExtractingTranscript": "Udtrækker…"
   }
 }

@@ -169,6 +169,12 @@
     "priceLabel": "Price",
     "pricePlaceholder": "0.00",
     "currencyLabel": "Currency",
-    "descriptionPlaceholder": "Description (optional)"
+    "descriptionPlaceholder": "Description (optional)",
+    "videoUrlLabel": "Video URL",
+    "videoUrlPlaceholder": "Paste a YouTube, Vimeo, or other video URL",
+    "videoUrlExtract": "Extract Info",
+    "videoUrlExtracting": "Extracting…",
+    "reExtractTranscript": "Re-extract transcript",
+    "reExtractingTranscript": "Extracting…"
   }
 }
