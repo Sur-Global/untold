@@ -130,6 +130,7 @@ export function EditVideoForm({
     embedUrl, title, body, duration, tags, chapters,
     featureRequested, layoutStyle, transcript, thumbnailUrl,
   })
+  // eslint-disable-next-line react-hooks/refs -- intentional latest-ref pattern for debounce closure
   latestState.current = {
     embedUrl, title, body, duration, tags, chapters,
     featureRequested, layoutStyle, transcript, thumbnailUrl,

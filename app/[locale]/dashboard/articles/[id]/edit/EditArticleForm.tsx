@@ -59,6 +59,7 @@ export function EditArticleForm({
   const autoSaveTimer = useRef<NodeJS.Timeout | null>(null)
   // Keep a ref to the latest save payload so the debounce always uses fresh values
   const latestState = useRef({ title, excerpt, featuredSummary, coverImageUrl, imageCredits, body, tags, featureRequested })
+  // eslint-disable-next-line react-hooks/refs -- intentional latest-ref pattern for debounce closure
   latestState.current = { title, excerpt, featuredSummary, coverImageUrl, imageCredits, body, tags, featureRequested }
 
   const doSave = useCallback(() => {
