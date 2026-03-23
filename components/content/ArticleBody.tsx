@@ -5,7 +5,9 @@ import { ImageWithCredit } from '@/lib/tiptap/image-with-credit'
 import { blockNoteToHtml } from '@/lib/blocknote-to-html'
 
 interface ArticleBodyProps {
-  json: Record<string, unknown> | unknown[]
+  json?: Record<string, unknown> | unknown[]
+  /** Pre-rendered HTML from ServerBlockNoteEditor.blocksToFullHTML */
+  html?: string
 }
 
 function toHtml(json: ArticleBodyProps['json']): string {
@@ -28,8 +30,18 @@ function toHtml(json: ArticleBodyProps['json']): string {
   }
 }
 
-export function ArticleBody({ json }: ArticleBodyProps) {
-  const html = toHtml(json)
+export function ArticleBody({ json, html: prerenderedHtml }: ArticleBodyProps) {
+  // Use server-pre-rendered HTML when available (blocksToFullHTML output)
+  if (prerenderedHtml) {
+    return (
+      <div
+        className="bn-article-body"
+        dangerouslySetInnerHTML={{ __html: prerenderedHtml }}
+      />
+    )
+  }
+
+  const html = json ? toHtml(json) : ''
 
   return (
     <div

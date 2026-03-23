@@ -1,6 +1,8 @@
 'use client'
 
 import { useEffect, useRef, useState } from 'react'
+import { useRouter } from 'next/navigation'
+import { useTranslations } from 'next-intl'
 import { ArticleBody } from './ArticleBody'
 
 interface BodyTranslationLoaderProps {
@@ -13,19 +15,25 @@ interface BodyTranslationLoaderProps {
   fallback?: unknown
   // initial content (may be null if not yet translated)
   initialContent?: unknown
+  // server-pre-rendered HTML for the initial content (from ServerBlockNoteEditor.blocksToFullHTML)
+  prerenderedHtml?: string
   // className applied to the description <p> tag (ignored for body)
   descriptionClassName?: string
+  // author ID to include in polling (for author bio status)
+  authorId?: string
+  // when true, call router.refresh() after translation lands (so title/excerpt update too)
+  fullPageRefreshOnComplete?: boolean
 }
 
 const MAX_ATTEMPTS = 10
 const POLL_INTERVAL_MS = 4000
 
-const LOCALE_NAMES: Record<string, string> = {
-  es: 'Spanish',
-  pt: 'Portuguese',
-  fr: 'French',
-  de: 'German',
-  da: 'Danish',
+function nativeLanguageName(locale: string): string {
+  try {
+    return new Intl.DisplayNames([locale], { type: 'language' }).of(locale) ?? locale
+  } catch {
+    return locale
+  }
 }
 
 function Skeleton() {
@@ -55,23 +63,38 @@ export function BodyTranslationLoader({
   field,
   fallback,
   initialContent,
+  prerenderedHtml,
   descriptionClassName,
+  authorId,
+  fullPageRefreshOnComplete,
 }: BodyTranslationLoaderProps) {
+  const t = useTranslations('translating')
   const [content, setContent] = useState<unknown>(initialContent ?? null)
   const [failed, setFailed] = useState(false)
   const attemptsRef = useRef(0)
+  // Track whether content was updated via polling (vs. initial prop)
+  const contentFromPollingRef = useRef(false)
+  const router = useRouter()
+  const language = nativeLanguageName(locale)
 
   useEffect(() => {
     if (!isTranslating || content != null) return
 
     attemptsRef.current = 0
+    const authorParam = authorId ? `&authorId=${authorId}` : ''
     const interval = setInterval(async () => {
       attemptsRef.current += 1
       try {
-        const res = await fetch(`/api/translation-status?contentId=${contentId}&locale=${locale}`)
+        const res = await fetch(`/api/translation-status?contentId=${contentId}&locale=${locale}${authorParam}`)
         const data = await res.json()
         const value = data[field]
         if (value != null && (typeof value !== 'object' || Object.keys(value).length > 0)) {
+          if (fullPageRefreshOnComplete) {
+            clearInterval(interval)
+            router.refresh()
+            return
+          }
+          contentFromPollingRef.current = true
           setContent(value)
           clearInterval(interval)
           return
@@ -86,30 +109,33 @@ export function BodyTranslationLoader({
     }, POLL_INTERVAL_MS)
 
     return () => clearInterval(interval)
-  }, [isTranslating, contentId, locale, field, content])
+  }, [isTranslating, contentId, locale, field, content, authorId, fullPageRefreshOnComplete, router])
 
   // Has content — render it
-  if (content != null) return renderContent(content, field, descriptionClassName)
+  if (content != null) {
+    // Use server-pre-rendered HTML for initial content (better fidelity via ServerBlockNoteEditor)
+    if (field === 'body' && prerenderedHtml && !contentFromPollingRef.current) {
+      return <ArticleBody html={prerenderedHtml} />
+    }
+    return renderContent(content, field, descriptionClassName)
+  }
 
   // Translation failed after max attempts — fall back to English
   if (failed && fallback != null) return renderContent(fallback, field, descriptionClassName)
 
   // Translation pending — show apology placeholder
   if (isTranslating) {
-    const languageName = LOCALE_NAMES[locale] ?? locale.toUpperCase()
     return (
       <div className="bg-card border border-primary/20 rounded-2xl p-8 mb-6">
         <div className="flex flex-col gap-6">
           <div className="flex items-center gap-3">
             <span className="w-5 h-5 rounded-full border-2 border-primary border-t-transparent animate-spin flex-shrink-0" />
             <div>
-              <p
-                className="font-['Audiowide'] text-sm uppercase text-foreground"
-              >
-                Translating into {languageName}
+              <p className="font-['Audiowide'] text-sm uppercase text-foreground">
+                {t('heading', { language })}
               </p>
               <p className="text-xs text-muted-foreground font-['JetBrains_Mono',monospace] mt-1">
-                We&apos;re translating this content for you. It&apos;ll be ready in just a moment — thank you for your patience.
+                {t('bodyGeneric', { language })}
               </p>
             </div>
           </div>

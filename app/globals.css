@@ -170,7 +170,7 @@ article:hover .card-image-shine {
     font-weight: 400;
     text-transform: uppercase;
     text-wrap: balance;
-    overflow-wrap: break-word;
+    word-break: break-all;
   }
 
   h1 { font-size: 3.5rem; line-height: 1.1; letter-spacing: -0.01em; }
@@ -224,4 +224,148 @@ article:hover .card-image-shine {
 
 .bn-column > * + * {
   margin-top: 1rem;
+}
+
+/* ========== BlockNote article reader styles ========== */
+/* Applied to .bn-article-body which wraps blocksToFullHTML output */
+
+.bn-article-body .bn-container {
+  color: hsl(var(--foreground));
+  font-family: Inter, sans-serif;
+}
+
+/* Remove editor chrome */
+.bn-article-body .bn-editor {
+  padding: 0 !important;
+  background: transparent !important;
+  cursor: default !important;
+  outline: none !important;
+}
+
+/* Paragraphs */
+.bn-article-body [data-content-type="paragraph"] p,
+.bn-article-body [data-content-type="paragraph"] .bn-inline-content {
+  font-size: 18px;
+  line-height: 1.625;
+  color: hsl(var(--foreground));
+  margin-bottom: 1.5rem;
+}
+
+/* Headings */
+.bn-article-body [data-content-type="heading"][data-level="1"] .bn-inline-content,
+.bn-article-body [data-content-type="heading"][data-level="2"] .bn-inline-content,
+.bn-article-body [data-content-type="heading"][data-level="3"] .bn-inline-content {
+  font-family: 'Audiowide', sans-serif;
+  text-transform: uppercase;
+  color: hsl(var(--foreground));
+}
+.bn-article-body [data-content-type="heading"][data-level="1"] .bn-inline-content {
+  font-size: 50px;
+  line-height: 1.232;
+  letter-spacing: -0.56px;
+  margin-top: 2.5rem;
+  margin-bottom: 1.5rem;
+}
+.bn-article-body [data-content-type="heading"][data-level="2"] .bn-inline-content {
+  font-size: 35px;
+  line-height: 1.371;
+  letter-spacing: -0.4px;
+  margin-top: 2.5rem;
+  margin-bottom: 1.25rem;
+}
+.bn-article-body [data-content-type="heading"][data-level="3"] .bn-inline-content {
+  font-size: 24px;
+  line-height: 1.3;
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+}
+
+/* Lists */
+.bn-article-body ul,
+.bn-article-body ol {
+  padding-left: 1.25rem;
+  margin-bottom: 1.5rem;
+}
+.bn-article-body li {
+  font-size: 16px;
+  line-height: 1.5;
+  color: hsl(var(--foreground));
+  margin-bottom: 0.75rem;
+}
+.bn-article-body ul li::marker { color: hsl(var(--primary)); }
+
+/* Blockquotes */
+.bn-article-body [data-content-type="quote"],
+.bn-article-body blockquote {
+  border-left: 4px solid hsl(var(--primary));
+  background: hsl(var(--primary) / 0.05);
+  border-radius: 1rem;
+  padding: 1.5rem 1.5rem 1.5rem 1.75rem;
+  font-size: 18px;
+  line-height: 1.625;
+  color: hsl(var(--foreground));
+  margin: 2rem 0;
+  font-style: normal;
+}
+.bn-article-body [data-content-type="quote"] .bn-inline-content,
+.bn-article-body blockquote p { margin-bottom: 0; }
+
+/* Code */
+.bn-article-body code {
+  color: hsl(var(--primary));
+  background: hsl(var(--primary) / 0.08);
+  padding: 0.1em 0.3em;
+  border-radius: 3px;
+}
+.bn-article-body pre {
+  background: hsl(var(--foreground));
+  color: hsl(var(--background));
+  padding: 1.25rem;
+  border-radius: 0.75rem;
+  overflow-x: auto;
+  margin: 1.5rem 0;
+}
+.bn-article-body pre code { background: none; color: inherit; padding: 0; }
+
+/* Images */
+.bn-article-body [data-content-type="image"] img,
+.bn-article-body img {
+  border-radius: 1rem;
+  width: 100%;
+  box-shadow: 0px 4px 16px 0px rgba(44,36,32,0.1), 0px 8px 32px 0px rgba(44,36,32,0.06);
+}
+.bn-article-body figure { margin: 2rem 0; }
+.bn-article-body figcaption {
+  font-size: 0.875rem;
+  color: #78716c;
+  margin-top: 0.75rem;
+  padding: 1rem;
+  background: rgba(120,113,108,0.1);
+  border-radius: 0.625rem;
+}
+
+/* Links */
+.bn-article-body a { color: hsl(var(--primary)); text-decoration: none; }
+.bn-article-body a:hover { text-decoration: underline; }
+
+/* Strong / em */
+.bn-article-body strong { color: hsl(var(--foreground)); font-weight: 600; }
+
+/* Tables */
+.bn-article-body table { width: 100%; border-collapse: collapse; margin: 1.5rem 0; }
+.bn-article-body th, .bn-article-body td {
+  border: 1px solid hsl(var(--border));
+  padding: 0.625rem 1rem;
+  text-align: left;
+  font-size: 14px;
+}
+.bn-article-body th { background: hsl(var(--primary) / 0.08); font-weight: 600; }
+
+/* Columns: responsive */
+@media (max-width: 768px) {
+  .bn-article-body [data-content-type="columnList"],
+  .bn-article-body .bn-column-list {
+    display: flex !important;
+    flex-direction: column !important;
+  }
 }
