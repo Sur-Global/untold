@@ -41,8 +41,7 @@ export async function POST(req: NextRequest) {
 
   await (supabase as any)
     .from('video_meta')
-    .update({ transcript })
-    .eq('content_id', contentId)
+    .upsert({ content_id: contentId, transcript }, { onConflict: 'content_id' })
 
   return NextResponse.json({ ok: true, cues: transcript.length })
 }
