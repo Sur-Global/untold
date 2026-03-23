@@ -79,7 +79,7 @@ export async function POST(req: NextRequest) {
 
       // Translate body for article and pill (supports both BlockNote and legacy Tiptap formats)
       let translatedBody: unknown = null
-      const hasBody = content.type === 'article' || content.type === 'pill'
+      const hasBody = ['article', 'pill', 'video', 'podcast', 'course'].includes(content.type)
       if (hasBody && source.body) {
         if (Array.isArray(source.body)) {
           // BlockNote format
@@ -118,6 +118,42 @@ export async function POST(req: NextRequest) {
       if (upsertError) throw upsertError
 
       translated.push(targetLocale)
+
+      // Translate transcript for video content
+      if (content.type === 'video') {
+        try {
+          const { data: videoMeta } = await (supabase as any)
+            .from('video_meta')
+            .select('transcript, transcript_translations')
+            .eq('content_id', contentId)
+            .maybeSingle()
+
+          const sourceCues: Array<{ start: string; text: string }> = Array.isArray(videoMeta?.transcript)
+            ? videoMeta.transcript
+            : []
+
+          if (sourceCues.length > 0) {
+            const texts = sourceCues.map((c) => c.text)
+            const translatedTexts = await translateTexts(texts, targetLocale)
+            const translatedCues = sourceCues.map((c, i) => ({ start: c.start, text: translatedTexts[i] }))
+
+            // NOTE: This is a read-then-merge-then-write pattern, not atomic.
+            // If two visitors arrive simultaneously in different locales (e.g. es and fr),
+            // the second write could overwrite the first locale's translation.
+            // Worst case: that locale gets re-triggered on the next visit — no data is permanently lost.
+            // For a content site, this is an acceptable trade-off.
+            const existing = videoMeta?.transcript_translations ?? {}
+            const merged = { ...existing, [targetLocale]: translatedCues }
+
+            await (supabase as any)
+              .from('video_meta')
+              .update({ transcript_translations: merged })
+              .eq('content_id', contentId)
+          }
+        } catch (err) {
+          console.error(`Transcript translation failed for locale ${targetLocale}:`, err)
+        }
+      }
     } catch (err) {
       console.error(`Translation failed for locale ${targetLocale}:`, err)
     }
