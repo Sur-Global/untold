@@ -3,7 +3,7 @@
 import { useRef, useState, useTransition, useCallback, useEffect } from 'react'
 import { useTranslations } from 'next-intl'
 import type { Block } from '@blocknote/core'
-import { updateVideo, extractTranscript } from '@/lib/actions/video'
+import { updateVideo } from '@/lib/actions/video'
 import { publishContent, unpublishContent, deleteContent } from '@/lib/actions/content'
 import { ensureTag } from '@/lib/actions/tags'
 import { RichTextEditor } from '@/components/editor/RichTextEditor'
@@ -11,6 +11,7 @@ import { CoverImageInput } from '@/components/ui/CoverImageInput'
 import { TagsInput, type Tag } from '@/components/ui/TagsInput'
 import { Link } from '@/i18n/navigation'
 import type { VideoMetadata, VideoChapter as Chapter } from '@/app/api/video-metadata/route'
+import type { TranscriptCue } from '@/lib/transcript'
 type LayoutStyle = 'standard' | 'wide' | 'sidebar' | 'card'
 
 interface EditVideoFormProps {
@@ -23,7 +24,7 @@ interface EditVideoFormProps {
   initialDuration: string
   initialChapters: Chapter[]
   initialLayoutStyle: LayoutStyle
-  initialShowTranscript: boolean
+  initialTranscript: TranscriptCue[] | null
   initialTags: Tag[]
   initialFeatureRequested: boolean
 }
@@ -99,7 +100,7 @@ export function EditVideoForm({
   initialDuration,
   initialChapters,
   initialLayoutStyle,
-  initialShowTranscript,
+  initialTranscript,
   initialTags,
   initialFeatureRequested,
 }: EditVideoFormProps) {
@@ -117,21 +118,20 @@ export function EditVideoForm({
   )
   const [featureRequested, setFeatureRequested] = useState(initialFeatureRequested)
   const [layoutStyle, setLayoutStyle] = useState<LayoutStyle>(initialLayoutStyle)
-  const [showTranscript, setShowTranscript] = useState(initialShowTranscript)
+  const [transcript, setTranscript] = useState<TranscriptCue[] | null>(initialTranscript)
   const [thumbnailUrl, setThumbnailUrl] = useState(initialThumbnailUrl)
   const [extracting, setExtracting] = useState(false)
   const [saveStatus, setSaveStatus] = useState<'saved' | 'saving' | 'unsaved'>('saved')
   const [isPending, startTransition] = useTransition()
-  const [isExtracting, startExtractTransition] = useTransition()
 
   const autoSaveTimer = useRef<NodeJS.Timeout | null>(null)
   const latestState = useRef({
     embedUrl, title, body, duration, tags, chapters,
-    featureRequested, layoutStyle, showTranscript, thumbnailUrl,
+    featureRequested, layoutStyle, transcript, thumbnailUrl,
   })
   latestState.current = {
     embedUrl, title, body, duration, tags, chapters,
-    featureRequested, layoutStyle, showTranscript, thumbnailUrl,
+    featureRequested, layoutStyle, transcript, thumbnailUrl,
   }
 
   const doSave = useCallback(() => {
@@ -147,7 +147,7 @@ export function EditVideoForm({
     fd.set('chapters', JSON.stringify(s.chapters.filter((c) => c.timestamp || c.title)))
     fd.set('feature_requested', String(s.featureRequested))
     fd.set('layout_style', s.layoutStyle)
-    fd.set('show_transcript', String(s.showTranscript))
+    if (s.transcript) fd.set('transcript', JSON.stringify(s.transcript))
     setSaveStatus('saving')
     startTransition(async () => {
       await updateVideo(id, fd)
@@ -163,7 +163,7 @@ export function EditVideoForm({
 
   useEffect(() => {
     triggerAutoSave()
-  }, [title, embedUrl, duration, tags, chapters, featureRequested, layoutStyle, showTranscript, thumbnailUrl]) // eslint-disable-line react-hooks/exhaustive-deps
+  }, [title, embedUrl, duration, tags, chapters, featureRequested, layoutStyle, thumbnailUrl]) // eslint-disable-line react-hooks/exhaustive-deps
 
   const handleBodyChange = useCallback((blocks: Block[]) => {
     setBody(blocks)
@@ -203,6 +203,10 @@ export function EditVideoForm({
     }
     if (meta.chapters?.length) {
       setChapters(meta.chapters)
+    }
+    if (meta.transcript?.length) {
+      setTranscript(meta.transcript)
+      triggerAutoSave()
     }
   }
 
@@ -442,28 +446,6 @@ export function EditVideoForm({
               })}
             </div>
 
-            <div className="bg-card border border-primary/20 rounded-[16px] p-6 space-y-4">
-              <p className="font-['Audiowide'] text-foreground text-base uppercase">Display Options</p>
-              <label className="flex items-center gap-3 cursor-pointer">
-                <input
-                  type="checkbox"
-                  checked={showTranscript}
-                  onChange={(e) => setShowTranscript(e.target.checked)}
-                  className="w-5 h-5 accent-primary cursor-pointer"
-                />
-                <span className="text-base text-foreground">Show transcript</span>
-              </label>
-              {status === 'published' && (
-                <button
-                  type="button"
-                  onClick={() => startExtractTransition(() => extractTranscript(id))}
-                  disabled={isExtracting}
-                  className="text-sm text-primary hover:underline font-['JetBrains_Mono',monospace] tracking-[0.28px] disabled:opacity-50"
-                >
-                  {isExtracting ? t('reExtractingTranscript') : t('reExtractTranscript')}
-                </button>
-              )}
-            </div>
           </>
         )}
 

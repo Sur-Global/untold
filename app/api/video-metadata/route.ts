@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { extractYouTubeId } from '@/lib/youtube'
+import { extractYouTubeTranscript, type TranscriptCue } from '@/lib/transcript'
 
 export interface VideoChapter {
   timestamp: string
@@ -14,6 +15,7 @@ export interface VideoMetadata {
   tags?: string[]
   author?: string
   chapters?: VideoChapter[]
+  transcript?: TranscriptCue[]
   platform: 'youtube' | 'vimeo' | 'unknown'
 }
 
@@ -204,8 +206,11 @@ export async function GET(req: NextRequest) {
   try {
     const youtubeId = extractYouTubeId(url)
     if (youtubeId) {
-      const meta = await fetchYouTube(youtubeId, url)
-      return NextResponse.json(meta)
+      const [meta, transcript] = await Promise.all([
+        fetchYouTube(youtubeId, url),
+        extractYouTubeTranscript(youtubeId),
+      ])
+      return NextResponse.json({ ...meta, transcript: transcript ?? undefined })
     }
 
     const vimeoId = extractVimeoId(url)

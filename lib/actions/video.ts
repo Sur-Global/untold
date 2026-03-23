@@ -5,8 +5,6 @@ import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
 import { requireCreator } from '@/lib/require-creator'
 import { slugify } from '@/lib/utils'
-import { extractYouTubeId } from '@/lib/youtube'
-import { extractYouTubeTranscript } from '@/lib/transcript'
 
 export async function createVideo(formData: FormData) {
   const { user } = await requireCreator()
@@ -22,7 +20,8 @@ export async function createVideo(formData: FormData) {
   const featureRequested = formData.get('feature_requested') === 'true'
   const chaptersRaw = formData.get('chapters') as string | null
   const layoutStyle = (formData.get('layout_style') as string)?.trim() || 'standard'
-  const showTranscript = formData.get('show_transcript') === 'true'
+  const transcriptRaw = formData.get('transcript') as string | null
+  const transcript = transcriptRaw ? JSON.parse(transcriptRaw) : null
 
   const slug = `${slugify(title)}-${Date.now().toString(36)}`
 
@@ -64,7 +63,7 @@ export async function createVideo(formData: FormData) {
       duration,
       chapters,
       layout_style: layoutStyle,
-      show_transcript: showTranscript,
+      transcript,
     })
 
   if (metaError) throw new Error(metaError.message ?? 'Failed to save video metadata')
@@ -95,7 +94,8 @@ export async function updateVideo(id: string, formData: FormData) {
   const featureRequested = formData.get('feature_requested') === 'true'
   const chaptersRaw = formData.get('chapters') as string | null
   const layoutStyle = (formData.get('layout_style') as string)?.trim() || 'standard'
-  const showTranscript = formData.get('show_transcript') === 'true'
+  const transcriptRaw = formData.get('transcript') as string | null
+  const transcript = transcriptRaw ? JSON.parse(transcriptRaw) : undefined
 
   const { data: owned } = await (supabase as any)
     .from('content')
@@ -120,20 +120,20 @@ export async function updateVideo(id: string, formData: FormData) {
 
   const chapters = chaptersRaw ? JSON.parse(chaptersRaw) : []
 
+  // Only include transcript in upsert if it was provided (undefined = don't overwrite)
+  const metaPayload: Record<string, unknown> = {
+    content_id: id,
+    embed_url: embedUrl,
+    thumbnail_url: thumbnailUrl,
+    duration,
+    chapters,
+    layout_style: layoutStyle,
+  }
+  if (transcript !== undefined) metaPayload.transcript = transcript
+
   await (supabase as any)
     .from('video_meta')
-    .upsert(
-      {
-        content_id: id,
-        embed_url: embedUrl,
-        thumbnail_url: thumbnailUrl,
-        duration,
-        chapters,
-        layout_style: layoutStyle,
-        show_transcript: showTranscript,
-      },
-      { onConflict: 'content_id' }
-    )
+    .upsert(metaPayload, { onConflict: 'content_id' })
 
   // Sync tags
   const tagIds = tagIdsRaw ? (JSON.parse(tagIdsRaw) as string[]) : []
@@ -146,43 +146,4 @@ export async function updateVideo(id: string, formData: FormData) {
 
   revalidatePath(`/dashboard/videos/${id}/edit`)
   revalidatePath('/dashboard')
-}
-
-export async function extractTranscript(id: string) {
-  const { user } = await requireCreator()
-  const supabase = await createClient()
-
-  // Verify ownership
-  const { data: owned } = await (supabase as any)
-    .from('content')
-    .select('id')
-    .eq('id', id)
-    .eq('author_id', user.id)
-    .single()
-
-  if (!owned) return
-
-  // Get embed URL
-  const { data: meta } = await (supabase as any)
-    .from('video_meta')
-    .select('embed_url')
-    .eq('content_id', id)
-    .single()
-
-  if (!meta?.embed_url) return
-
-  const videoId = extractYouTubeId(meta.embed_url)
-  if (!videoId) return
-
-  const transcript = await extractYouTubeTranscript(videoId)
-  if (!transcript) return
-
-  await (supabase as any)
-    .from('video_meta')
-    .update({ transcript })
-    .eq('content_id', id)
-
-  revalidatePath('/dashboard', 'layout')
-  // Best-effort revalidation of public video pages — may not wildcard all locales
-  revalidatePath('/[locale]/videos/[slug]', 'page')
 }

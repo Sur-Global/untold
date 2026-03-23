@@ -54,7 +54,7 @@ export default async function VideoPage({ params }: PageProps) {
         profiles!author_id ( id, display_name, slug, avatar_url, bio, location ),
         content_translations ( title, body, description, locale ),
         content_tags ( tags ( slug, names ) ),
-        video_meta ( embed_url, thumbnail_url, duration, chapters, show_transcript, transcript )
+        video_meta ( embed_url, thumbnail_url, duration, chapters, transcript )
       `)
       .eq('slug', slug)
       .eq('type', 'video')
@@ -250,7 +250,7 @@ export default async function VideoPage({ params }: PageProps) {
           )}
 
           {/* Transcript panel */}
-          {meta?.show_transcript && Array.isArray(meta?.transcript) && meta.transcript.length > 0 && (
+          {Array.isArray(meta?.transcript) && meta.transcript.length > 0 && (
             <TranscriptPanel transcript={meta.transcript as TranscriptCue[]} />
           )}
 
