@@ -83,7 +83,7 @@ export default async function ArticlePage({ params }: PageProps) {
   const needsBody = locale !== 'en' && !!englishBody && (usingFallback || !body)
 
   // Pre-render body to HTML server-side for correct multi-column and block rendering
-  const prerenderedBody = body ? await renderBodyToHtml(body) : undefined
+  const prerenderedBody = body ? await renderBodyToHtml(body) ?? undefined : undefined
 
   // Author bio translation
   const profileTrans = author?.profile_translations as Record<string, { bio?: string }> | null

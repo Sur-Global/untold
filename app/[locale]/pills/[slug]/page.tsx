@@ -53,7 +53,7 @@ export default async function PillPage({ params }: PageProps) {
   const body = usingFallback ? null : (t.body as Record<string, unknown> | null)
   const needsBody = locale !== 'en' && !!englishBody && (usingFallback || !body)
 
-  const prerenderedBody = body ? await renderBodyToHtml(body) : undefined
+  const prerenderedBody = body ? await renderBodyToHtml(body) ?? undefined : undefined
 
   if (needsBody) {
     after(async () => {
