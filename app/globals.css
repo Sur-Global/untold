@@ -214,3 +214,14 @@ article:hover .card-image-shine {
 .bn-container[data-color-scheme] {
   background: #ffffff !important;
 }
+
+/* Multi-column article layout */
+@media (max-width: 768px) {
+  .bn-column-list {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+.bn-column > * + * {
+  margin-top: 1rem;
+}
