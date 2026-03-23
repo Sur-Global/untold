@@ -1,5 +1,5 @@
 'use client'
-import { Link } from '@/i18n/navigation'
+import { Link, useRouter } from '@/i18n/navigation'
 import { BookmarkButton } from '@/components/social/BookmarkButton'
 
 // ─── Shared helpers ────────────────────────────────────────────────────────────
@@ -115,6 +115,7 @@ export function LargeArticleCard({
   likesCount,
   isFeatured,
 }: LargeArticleCardProps) {
+  const router = useRouter()
   return (
     <Link
       href={`/articles/${slug}`}
@@ -162,20 +163,20 @@ export function LargeArticleCard({
         )}
         {categoryTag && (
           categoryTagSlug ? (
-            <Link
-              href={`/tag/${categoryTagSlug}`}
+            <button
               className="ml-auto px-3 py-1 rounded-full text-xs hover:opacity-80 transition-opacity"
               style={{
                 background: 'rgba(253,252,250,0.9)',
                 color: '#5d4e37',
                 fontFamily: 'JetBrains Mono, monospace',
                 fontSize: 11,
-                textDecoration: 'none',
+                border: 'none',
+                cursor: 'pointer',
               }}
-              onClick={(e) => e.stopPropagation()}
+              onClick={(e) => { e.preventDefault(); e.stopPropagation(); router.push(`/tag/${categoryTagSlug}`) }}
             >
               {categoryTag}
-            </Link>
+            </button>
           ) : (
             <span
               className="ml-auto px-3 py-1 rounded-full text-xs"
@@ -299,6 +300,7 @@ export function VideoCard({
   isLoggedIn = false,
 }: VideoCardProps) {
   const image = thumbnailUrl ?? coverImageUrl
+  const router = useRouter()
 
   return (
     <div>
@@ -333,20 +335,20 @@ export function VideoCard({
         {/* Category badge */}
         {categoryTag && (
           categoryTagSlug ? (
-            <Link
-              href={`/tag/${categoryTagSlug}`}
+            <button
               className="absolute top-3 left-3 text-xs px-3 py-1 rounded-full hover:opacity-80 transition-opacity"
               style={{
                 background: 'rgba(253,252,250,0.92)',
                 color: '#5d4e37',
                 fontFamily: 'JetBrains Mono, monospace',
                 fontSize: 11,
-                textDecoration: 'none',
+                border: 'none',
+                cursor: 'pointer',
               }}
-              onClick={(e) => e.stopPropagation()}
+              onClick={(e) => { e.preventDefault(); e.stopPropagation(); router.push(`/tag/${categoryTagSlug}`) }}
             >
               {categoryTag}
-            </Link>
+            </button>
           ) : (
             <span
               className="absolute top-3 left-3 text-xs px-3 py-1 rounded-full"
