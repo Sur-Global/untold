@@ -9,6 +9,7 @@ import { triggerTagTranslations } from '@/lib/trigger-tag-translations'
 import { Navigation } from '@/components/layout/Navigation'
 import { Footer } from '@/components/layout/Footer'
 import { ContentCard } from '@/components/content/ContentCard'
+import { TranslationRefresher } from '@/components/TranslationRefresher'
 import { ArticlesFilter } from './ArticlesFilter'
 import type { TagItem } from './ArticlesFilter'
 import Link from 'next/link'
@@ -139,11 +140,13 @@ export default async function ArticlesPage({ params, searchParams }: PageProps) 
   }
 
   // Trigger background translation for articles without a locale translation yet
+  let pendingTranslations = false
   if (locale !== 'en' && articles && articles.length > 0) {
     const untranslatedIds = (articles as any[])
       .filter(a => !(a.content_translations ?? []).some((t: any) => t.locale === locale))
       .map((a: any) => a.id)
     if (untranslatedIds.length > 0) {
+      pendingTranslations = true
       after(() => triggerListingTranslations(untranslatedIds, locale))
     }
     after(() => triggerTagTranslations(locale))
@@ -167,6 +170,7 @@ export default async function ArticlesPage({ params, searchParams }: PageProps) 
 
   return (
     <>
+      <TranslationRefresher pending={pendingTranslations} />
       <Navigation {...navProps} />
       <main className="bg-background min-h-screen">
         {/* Hero / filter section */}

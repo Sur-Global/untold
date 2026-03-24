@@ -7,6 +7,7 @@ import { triggerTagTranslations } from '@/lib/trigger-tag-translations'
 import { Navigation } from '@/components/layout/Navigation'
 import { Footer } from '@/components/layout/Footer'
 import { ContentCard } from '@/components/content/ContentCard'
+import { TranslationRefresher } from '@/components/TranslationRefresher'
 import { Link } from '@/i18n/navigation'
 import { getTranslations } from 'next-intl/server'
 import {
@@ -151,6 +152,7 @@ export default async function HomePage({ params }: PageProps) {
   }
 
   // Trigger background translation for untranslated listing items
+  let pendingTranslations = false
   if (locale !== 'en') {
     const allFetchedItems = [
       ...(featuredArticle ? [featuredArticle] : []),
@@ -161,6 +163,7 @@ export default async function HomePage({ params }: PageProps) {
       .map((i: any) => i.id)
     const uniqueIds = [...new Set(untranslatedIds)] as string[]
     if (uniqueIds.length > 0) {
+      pendingTranslations = true
       after(() => triggerListingTranslations(uniqueIds, locale))
     }
     after(() => triggerTagTranslations(locale))
@@ -240,6 +243,7 @@ export default async function HomePage({ params }: PageProps) {
 
   return (
     <>
+      <TranslationRefresher pending={pendingTranslations} />
       <Navigation {...navProps} />
       <main>
         {/* Hero — cream background, two-column */}

@@ -7,6 +7,7 @@ import { triggerTagTranslations } from '@/lib/trigger-tag-translations'
 import { Navigation } from '@/components/layout/Navigation'
 import { Footer } from '@/components/layout/Footer'
 import { ContentCard } from '@/components/content/ContentCard'
+import { TranslationRefresher } from '@/components/TranslationRefresher'
 
 const PAGE_SIZE = 12
 
@@ -56,11 +57,13 @@ export default async function VideosPage({ params, searchParams }: PageProps) {
 
   const totalPages = Math.ceil((count ?? 0) / PAGE_SIZE)
 
+  let pendingTranslations = false
   if (locale !== 'en' && items && items.length > 0) {
     const untranslatedIds = (items as any[])
       .filter(i => !(i.content_translations ?? []).some((t: any) => t.locale === locale))
       .map((i: any) => i.id)
     if (untranslatedIds.length > 0) {
+      pendingTranslations = true
       after(() => triggerListingTranslations(untranslatedIds, locale))
     }
     after(() => triggerTagTranslations(locale))
@@ -68,6 +71,7 @@ export default async function VideosPage({ params, searchParams }: PageProps) {
 
   return (
     <>
+      <TranslationRefresher pending={pendingTranslations} />
       <Navigation {...navProps} />
       <main className="max-w-7xl mx-auto px-4 sm:px-6 py-16">
         <div className="mb-12">

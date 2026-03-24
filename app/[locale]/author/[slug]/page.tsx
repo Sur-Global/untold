@@ -10,6 +10,7 @@ import { Navigation } from '@/components/layout/Navigation'
 import { Footer } from '@/components/layout/Footer'
 import { FollowButton } from '@/components/social/FollowButton'
 import { AuthorContentTabs } from '@/components/author/AuthorContentTabs'
+import { TranslationRefresher } from '@/components/TranslationRefresher'
 
 interface PageProps {
   params: Promise<{ locale: string; slug: string }>
@@ -103,11 +104,13 @@ export default async function AuthorPage({ params }: PageProps) {
   })
 
   // Trigger background translation for untranslated content items on this author page
+  let pendingTranslations = false
   if (locale !== 'en' && (content ?? []).length > 0) {
     const untranslatedIds = (content as any[])
       .filter(i => !(i.content_translations ?? []).some((t: any) => t.locale === locale))
       .map((i: any) => i.id)
     if (untranslatedIds.length > 0) {
+      pendingTranslations = true
       after(() => triggerListingTranslations(untranslatedIds, locale))
     }
   }
@@ -150,6 +153,7 @@ export default async function AuthorPage({ params }: PageProps) {
 
   return (
     <>
+      <TranslationRefresher pending={pendingTranslations} />
       <Navigation {...navProps} />
 
       {/* Author profile header */}
