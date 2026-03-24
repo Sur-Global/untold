@@ -27,8 +27,13 @@ export async function proxy(request: NextRequest) {
     }
   )
 
-  // getUser() validates the token server-side and refreshes it if needed
-  await supabase.auth.getUser()
+  // getUser() validates the token server-side and refreshes it if needed.
+  // On concurrent requests the same refresh token can be used twice; catch
+  // that case and sign out so the browser gets a clean session.
+  const { error } = await supabase.auth.getUser()
+  if (error?.code === 'refresh_token_already_used') {
+    await supabase.auth.signOut()
+  }
 
   return response
 }
