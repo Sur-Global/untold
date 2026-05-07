@@ -9,8 +9,10 @@ export default defineConfig({
     globals: true,
     setupFiles: ['./tests/setup.ts'],
     exclude: ['**/node_modules/**', '**/tests/e2e/**'],
-    deps: {
-      inline: ['next-intl'],
+    server: {
+      deps: {
+        inline: ['next-intl'],
+      },
     },
   },
   resolve: {
