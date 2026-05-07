@@ -1,0 +1,153 @@
+- generic [active] [ref=e1]:
+  - banner [ref=e2]:
+    - generic [ref=e3]:
+      - link "UNTOLD" [ref=e4] [cursor=pointer]:
+        - /url: /
+      - navigation [ref=e5]:
+        - link "Articles" [ref=e6] [cursor=pointer]:
+          - /url: /articles
+        - link "Videos" [ref=e7] [cursor=pointer]:
+          - /url: /videos
+        - link "Podcasts" [ref=e8] [cursor=pointer]:
+          - /url: /podcasts
+        - link "Knowledge Pills" [ref=e9] [cursor=pointer]:
+          - /url: /pills
+        - link "Courses" [ref=e10] [cursor=pointer]:
+          - /url: /courses
+    - generic [ref=e11]:
+      - button "EN" [ref=e12]
+      - link "Log in" [ref=e13] [cursor=pointer]:
+        - /url: /auth/login
+      - link "Sign up" [ref=e14] [cursor=pointer]:
+        - /url: /auth/signup
+  - main [ref=e15]:
+    - generic [ref=e16]:
+      - link "Back" [ref=e17] [cursor=pointer]:
+        - /url: /articles
+        - img [ref=e18]
+        - text: Back
+      - article [ref=e20]:
+        - generic [ref=e21]:
+          - link "Education" [ref=e22] [cursor=pointer]:
+            - /url: /tag/education
+            - img [ref=e23]
+            - text: Education
+          - link "Decoloniality" [ref=e25] [cursor=pointer]:
+            - /url: /tag/decoloniality
+            - img [ref=e26]
+            - text: Decoloniality
+        - heading "Mother Tongue Matters" [level=1] [ref=e28]
+        - paragraph [ref=e29]: Research consistently shows that children learn better in their first language. Yet most African education systems still use European languages as primary media of instruction.
+        - generic [ref=e30]:
+          - generic [ref=e31]:
+            - img "Nkechi Osei" [ref=e33]
+            - link "Nkechi Osei" [ref=e34] [cursor=pointer]:
+              - /url: /author/nkechi-osei
+          - generic [ref=e35]:
+            - generic [ref=e36]:
+              - img [ref=e37]
+              - generic [ref=e40]: March 12, 2026
+            - generic [ref=e41]:
+              - img [ref=e42]
+              - generic [ref=e45]: 2 min read
+        - generic [ref=e46]:
+          - button "267" [disabled] [ref=e47]:
+            - img [ref=e48]
+            - generic [ref=e50]: "267"
+          - button "Save" [disabled] [ref=e51]:
+            - img [ref=e52]
+            - generic [ref=e54]: Save
+          - button "Share article" [ref=e55]:
+            - img [ref=e56]
+            - text: Share
+        - img "Mother Tongue Matters" [ref=e60]
+        - generic [ref=e61]:
+          - paragraph [ref=e62]: The evidence is not ambiguous. Decades of educational research consistently finds that children learn foundational concepts faster, retain information better, and develop stronger critical thinking skills when taught in their mother tongue, at least in the early years of schooling.
+          - img "Children learning to read in their first language" [ref=e63]
+          - heading "Yet Most African Children Are Taught in Foreign Languages" [level=2] [ref=e64]
+          - paragraph [ref=e65]: Across most of sub-Saharan Africa, children are taught in English, French, or Portuguese from their first day of school — languages that many of them do not speak at home and that their parents may not speak at all.
+          - blockquote [ref=e66]:
+            - paragraph [ref=e67]: "\"The real barrier is prestige. Decades of colonial education have created hierarchies in which European languages are associated with education and opportunity, while African languages are associated with tradition and limited prospects. These are colonial constructions — but they are deeply internalised.\""
+          - heading "The Evidence for Mother Tongue Instruction" [level=2] [ref=e68]
+          - list [ref=e69]:
+            - listitem [ref=e70]:
+              - paragraph [ref=e71]: "UNICEF: children taught in mother tongue for first 6 years show significantly higher secondary school completion rates"
+            - listitem [ref=e72]:
+              - paragraph [ref=e73]: "South Africa's Language in Education Policy: schools using home languages as medium of instruction show improved maths scores"
+            - listitem [ref=e74]:
+              - paragraph [ref=e75]: "Ethiopia's regional language education policy: strongly correlated with reduced dropout rates in primary school"
+            - listitem [ref=e76]:
+              - paragraph [ref=e77]: "Papua New Guinea's Tok Ples Pre-school programme: children enter formal schooling better prepared across all subjects"
+          - heading "What Needs to Happen" [level=3] [ref=e78]
+          - paragraph [ref=e79]: Reversing this requires sustained investment in producing educational materials in African languages, training teachers to deliver high-quality instruction, and — most difficult of all — changing the social prestige calculus that makes African-language instruction feel like a second-best option. The research is clear. The will to act on it is what is lacking.
+        - generic [ref=e80]:
+          - heading "About the Author" [level=3] [ref=e81]
+          - generic [ref=e82]:
+            - img "Nkechi Osei" [ref=e84]
+            - generic [ref=e85]:
+              - heading "Nkechi Osei" [level=4] [ref=e86]
+              - paragraph [ref=e87]: Accra, Ghana
+              - paragraph [ref=e88]: Education activist and curriculum designer reimagining what schooling looks like for African youth. Co-founder of the Pan-African Futures Learning Network. Her work challenges colonial education frameworks and centres Black epistemologies.
+              - link "View profile →" [ref=e89] [cursor=pointer]:
+                - /url: /author/nkechi-osei
+  - contentinfo [ref=e90]:
+    - generic [ref=e91]:
+      - generic [ref=e92]:
+        - generic [ref=e93]:
+          - heading "UNTOLD" [level=4] [ref=e94]
+          - paragraph [ref=e95]: Exploring ideas that transform the future.
+        - generic [ref=e96]:
+          - paragraph [ref=e97]: Content
+          - list [ref=e98]:
+            - listitem [ref=e99]:
+              - link "Articles" [ref=e100] [cursor=pointer]:
+                - /url: /articles
+            - listitem [ref=e101]:
+              - link "Videos" [ref=e102] [cursor=pointer]:
+                - /url: /videos
+            - listitem [ref=e103]:
+              - link "Podcasts" [ref=e104] [cursor=pointer]:
+                - /url: /podcasts
+            - listitem [ref=e105]:
+              - link "Pills" [ref=e106] [cursor=pointer]:
+                - /url: /pills
+            - listitem [ref=e107]:
+              - link "Courses" [ref=e108] [cursor=pointer]:
+                - /url: /courses
+        - generic [ref=e109]:
+          - paragraph [ref=e110]: Topics
+          - list [ref=e111]:
+            - listitem [ref=e112]:
+              - link "Decoloniality" [ref=e113] [cursor=pointer]:
+                - /url: /tag/decoloniality
+            - listitem [ref=e114]:
+              - link "Sustainability" [ref=e115] [cursor=pointer]:
+                - /url: /tag/sustainability
+            - listitem [ref=e116]:
+              - link "Technology" [ref=e117] [cursor=pointer]:
+                - /url: /tag/technology
+            - listitem [ref=e118]:
+              - link "Education" [ref=e119] [cursor=pointer]:
+                - /url: /tag/education
+            - listitem [ref=e120]:
+              - link "Responsible AI" [ref=e121] [cursor=pointer]:
+                - /url: /tag/responsible-ai
+        - generic [ref=e122]:
+          - paragraph [ref=e123]: Connect
+          - list [ref=e124]:
+            - listitem [ref=e125]:
+              - link "About" [ref=e126] [cursor=pointer]:
+                - /url: /about
+            - listitem [ref=e127]:
+              - link "Contact" [ref=e128] [cursor=pointer]:
+                - /url: /contact
+            - listitem [ref=e129]:
+              - link "Newsletter" [ref=e130] [cursor=pointer]:
+                - /url: /newsletter
+            - listitem [ref=e131]:
+              - link "Become a Creator" [ref=e132] [cursor=pointer]:
+                - /url: /become-creator
+      - generic [ref=e133]: © 2026 UNTOLD. All rights reserved. A Sur Global publication.
+  - button "Open Next.js Dev Tools" [ref=e139] [cursor=pointer]:
+    - img [ref=e140]
+  - alert [ref=e143]

@@ -1,0 +1,1 @@
+[     515ms] [WARNING] %c%s%c [tiptap warn]: Duplicate extension names found: ['underline']. This can lead to issues. background: #e6e6e6;background: light-dark(rgba(0,0,0,0.1), rgba(255,255,255,0.25));color: #000000;color: light-dark(#000000, #ffffff);border-radius: 2px  Server   @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js:2431

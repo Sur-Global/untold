@@ -1,0 +1,68 @@
+Total messages: 36 (Errors: 10, Warnings: 0)
+
+[INFO] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold @ webpack-internal:///(app-pages-browser)/./node_modules/next/dist/next-devtools/shared/forward-logs-shared.js:27
+[LOG] [HMR] connected @ webpack-internal:///(app-pages-browser)/./node_modules/next/dist/next-devtools/shared/forward-logs-shared.js:27
+[ERROR] Base UI: A component that acts as a button expected a native <button> because the `nativeButton` prop is true. Rendering a non-<button> removes native button semantics, which can impact forms and accessibility. Use a real <button> in the `render` prop, or set `nativeButton` to `false`.
+    at Button (webpack-internal:///(app-pages-browser)/./components/ui/button.tsx:41:87)
+    at Navigation (webpack-internal:///(app-pages-browser)/./components/layout/Navigation.tsx:97:112)
+    at HomePage (about://React/Server/webpack-internal:///(rsc)/./app/%5Blocale%5D/page.tsx?28:35:88) @ :0
+[ERROR] Base UI: A component that acts as a button expected a native <button> because the `nativeButton` prop is true. Rendering a non-<button> removes native button semantics, which can impact forms and accessibility. Use a real <button> in the `render` prop, or set `nativeButton` to `false`.
+    at Button (webpack-internal:///(app-pages-browser)/./components/ui/button.tsx:41:87)
+    at Navigation (webpack-internal:///(app-pages-browser)/./components/layout/Navigation.tsx:113:112)
+    at HomePage (about://React/Server/webpack-internal:///(rsc)/./app/%5Blocale%5D/page.tsx?28:35:88) @ :0
+[LOG] [Fast Refresh] rebuilding @ webpack-internal:///(app-pages-browser)/./node_modules/next/dist/next-devtools/shared/forward-logs-shared.js:27
+[LOG] [Fast Refresh] done in 182ms @ webpack-internal:///(app-pages-browser)/./node_modules/next/dist/next-devtools/shared/forward-logs-shared.js:27
+[LOG] %c Console Ninja extension is connected to Next.js browser, background: rgb(30,30,30); color: rgb(255,213,92) see https://tinyurl.com/2vt8jxzw for more info. @ :0
+[INFO] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold @ webpack-internal:///(app-pages-browser)/./node_modules/next/dist/next-devtools/shared/forward-logs-shared.js:27
+[LOG] [HMR] connected @ webpack-internal:///(app-pages-browser)/./node_modules/next/dist/next-devtools/shared/forward-logs-shared.js:27
+[ERROR] Base UI: A component that acts as a button expected a native <button> because the `nativeButton` prop is true. Rendering a non-<button> removes native button semantics, which can impact forms and accessibility. Use a real <button> in the `render` prop, or set `nativeButton` to `false`.
+    at Button (webpack-internal:///(app-pages-browser)/./components/ui/button.tsx:41:87)
+    at Navigation (webpack-internal:///(app-pages-browser)/./components/layout/Navigation.tsx:97:112)
+    at HomePage (about://React/Server/webpack-internal:///(rsc)/./app/%5Blocale%5D/page.tsx?28:35:88) @ :0
+[ERROR] Base UI: A component that acts as a button expected a native <button> because the `nativeButton` prop is true. Rendering a non-<button> removes native button semantics, which can impact forms and accessibility. Use a real <button> in the `render` prop, or set `nativeButton` to `false`.
+    at Button (webpack-internal:///(app-pages-browser)/./components/ui/button.tsx:41:87)
+    at Navigation (webpack-internal:///(app-pages-browser)/./components/layout/Navigation.tsx:113:112)
+    at HomePage (about://React/Server/webpack-internal:///(rsc)/./app/%5Blocale%5D/page.tsx?28:35:88) @ :0
+[LOG] [Fast Refresh] rebuilding @ webpack-internal:///(app-pages-browser)/./node_modules/next/dist/next-devtools/shared/forward-logs-shared.js:27
+[LOG] [Fast Refresh] rebuilding @ webpack-internal:///(app-pages-browser)/./node_modules/next/dist/next-devtools/shared/forward-logs-shared.js:27
+[LOG] [Fast Refresh] done in 19ms @ webpack-internal:///(app-pages-browser)/./node_modules/next/dist/next-devtools/shared/forward-logs-shared.js:27
+[LOG] [Fast Refresh] done in 122ms @ webpack-internal:///(app-pages-browser)/./node_modules/next/dist/next-devtools/shared/forward-logs-shared.js:27
+[LOG] %c Console Ninja extension is connected to Next.js browser, background: rgb(30,30,30); color: rgb(255,213,92) see https://tinyurl.com/2vt8jxzw for more info. @ :0
+[INFO] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold @ webpack-internal:///(app-pages-browser)/./node_modules/next/dist/next-devtools/shared/forward-logs-shared.js:27
+[LOG] [HMR] connected @ webpack-internal:///(app-pages-browser)/./node_modules/next/dist/next-devtools/shared/forward-logs-shared.js:27
+[ERROR] Base UI: A component that acts as a button expected a native <button> because the `nativeButton` prop is true. Rendering a non-<button> removes native button semantics, which can impact forms and accessibility. Use a real <button> in the `render` prop, or set `nativeButton` to `false`.
+    at Button (webpack-internal:///(app-pages-browser)/./components/ui/button.tsx:41:87)
+    at Navigation (webpack-internal:///(app-pages-browser)/./components/layout/Navigation.tsx:97:112)
+    at HomePage (about://React/Server/webpack-internal:///(rsc)/./app/%5Blocale%5D/page.tsx?28:35:88) @ :0
+[ERROR] Base UI: A component that acts as a button expected a native <button> because the `nativeButton` prop is true. Rendering a non-<button> removes native button semantics, which can impact forms and accessibility. Use a real <button> in the `render` prop, or set `nativeButton` to `false`.
+    at Button (webpack-internal:///(app-pages-browser)/./components/ui/button.tsx:41:87)
+    at Navigation (webpack-internal:///(app-pages-browser)/./components/layout/Navigation.tsx:113:112)
+    at HomePage (about://React/Server/webpack-internal:///(rsc)/./app/%5Blocale%5D/page.tsx?28:35:88) @ :0
+[LOG] [Fast Refresh] rebuilding @ webpack-internal:///(app-pages-browser)/./node_modules/next/dist/next-devtools/shared/forward-logs-shared.js:27
+[LOG] [Fast Refresh] done in 119ms @ webpack-internal:///(app-pages-browser)/./node_modules/next/dist/next-devtools/shared/forward-logs-shared.js:27
+[LOG] %c Console Ninja extension is connected to Next.js browser, background: rgb(30,30,30); color: rgb(255,213,92) see https://tinyurl.com/2vt8jxzw for more info. @ :0
+[INFO] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold @ webpack-internal:///(app-pages-browser)/./node_modules/next/dist/next-devtools/shared/forward-logs-shared.js:27
+[LOG] [HMR] connected @ webpack-internal:///(app-pages-browser)/./node_modules/next/dist/next-devtools/shared/forward-logs-shared.js:27
+[ERROR] Base UI: A component that acts as a button expected a native <button> because the `nativeButton` prop is true. Rendering a non-<button> removes native button semantics, which can impact forms and accessibility. Use a real <button> in the `render` prop, or set `nativeButton` to `false`.
+    at Button (webpack-internal:///(app-pages-browser)/./components/ui/button.tsx:41:87)
+    at Navigation (webpack-internal:///(app-pages-browser)/./components/layout/Navigation.tsx:97:112)
+    at HomePage (about://React/Server/webpack-internal:///(rsc)/./app/%5Blocale%5D/page.tsx?28:35:88) @ :0
+[ERROR] Base UI: A component that acts as a button expected a native <button> because the `nativeButton` prop is true. Rendering a non-<button> removes native button semantics, which can impact forms and accessibility. Use a real <button> in the `render` prop, or set `nativeButton` to `false`.
+    at Button (webpack-internal:///(app-pages-browser)/./components/ui/button.tsx:41:87)
+    at Navigation (webpack-internal:///(app-pages-browser)/./components/layout/Navigation.tsx:113:112)
+    at HomePage (about://React/Server/webpack-internal:///(rsc)/./app/%5Blocale%5D/page.tsx?28:35:88) @ :0
+[LOG] [Fast Refresh] rebuilding @ webpack-internal:///(app-pages-browser)/./node_modules/next/dist/next-devtools/shared/forward-logs-shared.js:27
+[LOG] [Fast Refresh] done in 222ms @ webpack-internal:///(app-pages-browser)/./node_modules/next/dist/next-devtools/shared/forward-logs-shared.js:27
+[LOG] %c Console Ninja extension is connected to Next.js browser, background: rgb(30,30,30); color: rgb(255,213,92) see https://tinyurl.com/2vt8jxzw for more info. @ :0
+[INFO] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold @ webpack-internal:///(app-pages-browser)/./node_modules/next/dist/next-devtools/shared/forward-logs-shared.js:27
+[LOG] [HMR] connected @ webpack-internal:///(app-pages-browser)/./node_modules/next/dist/next-devtools/shared/forward-logs-shared.js:27
+[ERROR] Base UI: A component that acts as a button expected a native <button> because the `nativeButton` prop is true. Rendering a non-<button> removes native button semantics, which can impact forms and accessibility. Use a real <button> in the `render` prop, or set `nativeButton` to `false`.
+    at Button (webpack-internal:///(app-pages-browser)/./components/ui/button.tsx:41:87)
+    at Navigation (webpack-internal:///(app-pages-browser)/./components/layout/Navigation.tsx:97:112)
+    at HomePage (about://React/Server/webpack-internal:///(rsc)/./app/%5Blocale%5D/page.tsx?28:35:88) @ :0
+[ERROR] Base UI: A component that acts as a button expected a native <button> because the `nativeButton` prop is true. Rendering a non-<button> removes native button semantics, which can impact forms and accessibility. Use a real <button> in the `render` prop, or set `nativeButton` to `false`.
+    at Button (webpack-internal:///(app-pages-browser)/./components/ui/button.tsx:41:87)
+    at Navigation (webpack-internal:///(app-pages-browser)/./components/layout/Navigation.tsx:113:112)
+    at HomePage (about://React/Server/webpack-internal:///(rsc)/./app/%5Blocale%5D/page.tsx?28:35:88) @ :0
+[LOG] [Fast Refresh] rebuilding @ webpack-internal:///(app-pages-browser)/./node_modules/next/dist/next-devtools/shared/forward-logs-shared.js:27
+[LOG] [Fast Refresh] done in 196ms @ webpack-internal:///(app-pages-browser)/./node_modules/next/dist/next-devtools/shared/forward-logs-shared.js:27

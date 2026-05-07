@@ -1,0 +1,188 @@
+- generic [active] [ref=e1]:
+  - banner [ref=e2]:
+    - generic [ref=e3]:
+      - link "UNTOLD" [ref=e4] [cursor=pointer]:
+        - /url: /
+      - navigation [ref=e5]:
+        - link "Articles" [ref=e6] [cursor=pointer]:
+          - /url: /articles
+        - link "Videos" [ref=e7] [cursor=pointer]:
+          - /url: /videos
+        - link "Podcasts" [ref=e8] [cursor=pointer]:
+          - /url: /podcasts
+        - link "Knowledge Pills" [ref=e9] [cursor=pointer]:
+          - /url: /pills
+        - link "Courses" [ref=e10] [cursor=pointer]:
+          - /url: /courses
+    - generic [ref=e11]:
+      - button "EN" [ref=e12]
+      - link "Log in" [ref=e13] [cursor=pointer]:
+        - /url: /auth/login
+      - link "Sign up" [ref=e14] [cursor=pointer]:
+        - /url: /auth/signup
+  - generic [ref=e17]:
+    - img "Amara Diallo" [ref=e19]
+    - generic [ref=e20]:
+      - heading "Amara Diallo" [level=1] [ref=e21]
+      - paragraph [ref=e22]: Researcher at the intersection of decolonial theory and emerging technologies. Based in Dakar, exploring how African communities can shape — rather than be shaped by — digital futures. Author of "Code & Colony" (2023).
+      - generic [ref=e23]:
+        - generic [ref=e24]:
+          - img [ref=e25]
+          - text: Dakar, Senegal
+        - link "Website" [ref=e28] [cursor=pointer]:
+          - /url: https://amaradiallo.com
+          - img [ref=e29]
+          - text: Website
+        - generic [ref=e32]:
+          - img [ref=e33]
+          - text: Joined March 2026
+      - generic [ref=e36]:
+        - generic [ref=e37]:
+          - strong [ref=e38]: "1240"
+          - text: followers
+        - generic [ref=e39]:
+          - strong [ref=e40]: "0"
+          - text: following
+  - generic [ref=e43]:
+    - button "All (3)" [ref=e44]: All (3)
+    - button "Articles (3)" [ref=e46]
+  - generic [ref=e48]:
+    - heading "Articles" [level=2] [ref=e49]
+    - generic [ref=e50]:
+      - article [ref=e51]:
+        - link "Who Owns the Algorithm? Featured ai governance Who Owns the Algorithm? When Silicon Valley exports its AI systems to Africa, it also exports its assumptions, blind spots, and power structures. Amara Diallo Amara Diallo Author 347 Save" [ref=e52] [cursor=pointer]:
+          - /url: /articles/who-owns-the-algorithm
+          - generic [ref=e53]:
+            - img "Who Owns the Algorithm?" [ref=e54]
+            - generic [ref=e56]:
+              - img [ref=e57]
+              - generic [ref=e59]: Featured
+            - generic [ref=e60]: ai governance
+            - generic [ref=e61]:
+              - heading "Who Owns the Algorithm?" [level=3] [ref=e62]
+              - paragraph [ref=e63]: When Silicon Valley exports its AI systems to Africa, it also exports its assumptions, blind spots, and power structures.
+              - generic [ref=e64]:
+                - generic [ref=e65]:
+                  - img "Amara Diallo" [ref=e66]
+                  - generic [ref=e68]:
+                    - generic [ref=e69]: Amara Diallo
+                    - generic [ref=e70]: Author
+                - generic [ref=e71]:
+                  - button "347" [disabled] [ref=e72]:
+                    - img [ref=e73]
+                    - text: "347"
+                  - button "Save" [disabled] [ref=e75]:
+                    - img [ref=e76]
+                    - text: Save
+      - generic [ref=e78]:
+        - article [ref=e79]:
+          - link "Decolonizing the Digital Library decoloniality" [ref=e80] [cursor=pointer]:
+            - /url: /articles/decolonizing-the-digital-library
+            - generic [ref=e81]:
+              - img "Decolonizing the Digital Library" [ref=e82]
+              - generic [ref=e84]: decoloniality
+          - generic [ref=e85]:
+            - heading "Decolonizing the Digital Library" [level=3] [ref=e86]:
+              - link "Decolonizing the Digital Library" [ref=e87] [cursor=pointer]:
+                - /url: /articles/decolonizing-the-digital-library
+            - paragraph [ref=e88]: Wikipedia has more articles about fictional places in Tolkien's Middle-earth than about entire African countries. That is not an accident.
+          - generic [ref=e90]:
+            - generic [ref=e91]:
+              - img "Amara Diallo" [ref=e92]
+              - generic [ref=e94]:
+                - link "Amara Diallo" [ref=e95] [cursor=pointer]:
+                  - /url: /author/amara-diallo
+                - generic [ref=e96]: Author
+            - generic [ref=e97]:
+              - button "218" [disabled] [ref=e98]:
+                - img [ref=e99]
+                - generic [ref=e101]: "218"
+              - button "Save" [disabled] [ref=e102]:
+                - img [ref=e103]
+                - generic [ref=e105]: Save
+        - article [ref=e106]:
+          - link "The Myth of the Leapfrog decoloniality" [ref=e107] [cursor=pointer]:
+            - /url: /articles/the-myth-of-the-leapfrog
+            - generic [ref=e108]:
+              - img "The Myth of the Leapfrog" [ref=e109]
+              - generic [ref=e111]: decoloniality
+          - generic [ref=e112]:
+            - heading "The Myth of the Leapfrog" [level=3] [ref=e113]:
+              - link "The Myth of the Leapfrog" [ref=e114] [cursor=pointer]:
+                - /url: /articles/the-myth-of-the-leapfrog
+            - paragraph [ref=e115]: Africa will skip landlines and go straight to smartphones, we were told. But leapfrogging infrastructure doesn't mean leapfrogging power.
+          - generic [ref=e117]:
+            - generic [ref=e118]:
+              - img "Amara Diallo" [ref=e119]
+              - generic [ref=e121]:
+                - link "Amara Diallo" [ref=e122] [cursor=pointer]:
+                  - /url: /author/amara-diallo
+                - generic [ref=e123]: Author
+            - generic [ref=e124]:
+              - button "432" [disabled] [ref=e125]:
+                - img [ref=e126]
+                - generic [ref=e128]: "432"
+              - button "Save" [disabled] [ref=e129]:
+                - img [ref=e130]
+                - generic [ref=e132]: Save
+  - contentinfo [ref=e133]:
+    - generic [ref=e134]:
+      - generic [ref=e135]:
+        - generic [ref=e136]:
+          - heading "UNTOLD" [level=4] [ref=e137]
+          - paragraph [ref=e138]: Exploring ideas that transform the future.
+        - generic [ref=e139]:
+          - paragraph [ref=e140]: Content
+          - list [ref=e141]:
+            - listitem [ref=e142]:
+              - link "Articles" [ref=e143] [cursor=pointer]:
+                - /url: /articles
+            - listitem [ref=e144]:
+              - link "Videos" [ref=e145] [cursor=pointer]:
+                - /url: /videos
+            - listitem [ref=e146]:
+              - link "Podcasts" [ref=e147] [cursor=pointer]:
+                - /url: /podcasts
+            - listitem [ref=e148]:
+              - link "Pills" [ref=e149] [cursor=pointer]:
+                - /url: /pills
+            - listitem [ref=e150]:
+              - link "Courses" [ref=e151] [cursor=pointer]:
+                - /url: /courses
+        - generic [ref=e152]:
+          - paragraph [ref=e153]: Topics
+          - list [ref=e154]:
+            - listitem [ref=e155]:
+              - link "Decoloniality" [ref=e156] [cursor=pointer]:
+                - /url: /tag/decoloniality
+            - listitem [ref=e157]:
+              - link "Sustainability" [ref=e158] [cursor=pointer]:
+                - /url: /tag/sustainability
+            - listitem [ref=e159]:
+              - link "Technology" [ref=e160] [cursor=pointer]:
+                - /url: /tag/technology
+            - listitem [ref=e161]:
+              - link "Education" [ref=e162] [cursor=pointer]:
+                - /url: /tag/education
+            - listitem [ref=e163]:
+              - link "Responsible AI" [ref=e164] [cursor=pointer]:
+                - /url: /tag/responsible-ai
+        - generic [ref=e165]:
+          - paragraph [ref=e166]: Connect
+          - list [ref=e167]:
+            - listitem [ref=e168]:
+              - link "About" [ref=e169] [cursor=pointer]:
+                - /url: /about
+            - listitem [ref=e170]:
+              - link "Contact" [ref=e171] [cursor=pointer]:
+                - /url: /contact
+            - listitem [ref=e172]:
+              - link "Newsletter" [ref=e173] [cursor=pointer]:
+                - /url: /newsletter
+            - listitem [ref=e174]:
+              - link "Become a Creator" [ref=e175] [cursor=pointer]:
+                - /url: /become-creator
+      - generic [ref=e176]: © 2026 UNTOLD. All rights reserved. A Sur Global publication.
+  - button "Open Next.js Dev Tools" [ref=e182] [cursor=pointer]:
+    - img [ref=e183]
+  - alert [ref=e186]

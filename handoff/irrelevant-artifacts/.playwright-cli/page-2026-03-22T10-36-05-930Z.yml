@@ -1,0 +1,86 @@
+- generic [active] [ref=e1]:
+  - banner [ref=e2]:
+    - generic [ref=e3]:
+      - link "UNTOLD" [ref=e4] [cursor=pointer]:
+        - /url: /
+      - navigation [ref=e5]:
+        - link "Articles" [ref=e6] [cursor=pointer]:
+          - /url: /articles
+        - link "Videos" [ref=e7] [cursor=pointer]:
+          - /url: /videos
+        - link "Podcasts" [ref=e8] [cursor=pointer]:
+          - /url: /podcasts
+        - link "Knowledge Pills" [ref=e9] [cursor=pointer]:
+          - /url: /pills
+        - link "Courses" [ref=e10] [cursor=pointer]:
+          - /url: /courses
+      - generic [ref=e11]:
+        - button "EN" [ref=e12]
+        - generic [ref=e13]:
+          - link "Dashboard" [ref=e14] [cursor=pointer]:
+            - /url: /dashboard
+          - link "Create" [ref=e15] [cursor=pointer]:
+            - /url: /create
+  - main [ref=e16]:
+    - heading "My Bookmarks" [level=1] [ref=e17]
+    - paragraph [ref=e18]: No bookmarks yet. Visit any content page and click the bookmark icon.
+  - contentinfo [ref=e19]:
+    - generic [ref=e20]:
+      - generic [ref=e21]:
+        - generic [ref=e22]:
+          - heading "UNTOLD" [level=4] [ref=e23]
+          - paragraph [ref=e24]: Exploring ideas that transform the future.
+        - generic [ref=e25]:
+          - paragraph [ref=e26]: Content
+          - list [ref=e27]:
+            - listitem [ref=e28]:
+              - link "Articles" [ref=e29] [cursor=pointer]:
+                - /url: /articles
+            - listitem [ref=e30]:
+              - link "Videos" [ref=e31] [cursor=pointer]:
+                - /url: /videos
+            - listitem [ref=e32]:
+              - link "Podcasts" [ref=e33] [cursor=pointer]:
+                - /url: /podcasts
+            - listitem [ref=e34]:
+              - link "Pills" [ref=e35] [cursor=pointer]:
+                - /url: /pills
+            - listitem [ref=e36]:
+              - link "Courses" [ref=e37] [cursor=pointer]:
+                - /url: /courses
+        - generic [ref=e38]:
+          - paragraph [ref=e39]: Topics
+          - list [ref=e40]:
+            - listitem [ref=e41]:
+              - link "Decoloniality" [ref=e42] [cursor=pointer]:
+                - /url: /tag/decoloniality
+            - listitem [ref=e43]:
+              - link "Sustainability" [ref=e44] [cursor=pointer]:
+                - /url: /tag/sustainability
+            - listitem [ref=e45]:
+              - link "Technology" [ref=e46] [cursor=pointer]:
+                - /url: /tag/technology
+            - listitem [ref=e47]:
+              - link "Education" [ref=e48] [cursor=pointer]:
+                - /url: /tag/education
+            - listitem [ref=e49]:
+              - link "Responsible AI" [ref=e50] [cursor=pointer]:
+                - /url: /tag/responsible-ai
+        - generic [ref=e51]:
+          - paragraph [ref=e52]: Connect
+          - list [ref=e53]:
+            - listitem [ref=e54]:
+              - link "About" [ref=e55] [cursor=pointer]:
+                - /url: /about
+            - listitem [ref=e56]:
+              - link "Contact" [ref=e57] [cursor=pointer]:
+                - /url: /contact
+            - listitem [ref=e58]:
+              - link "Newsletter" [ref=e59] [cursor=pointer]:
+                - /url: /newsletter
+            - listitem [ref=e60]:
+              - link "Become a Creator" [ref=e61] [cursor=pointer]:
+                - /url: /become-creator
+      - generic [ref=e62]: © 2026 UNTOLD. All rights reserved. A Sur Global publication.
+  - button "Open Next.js Dev Tools" [ref=e68] [cursor=pointer]:
+    - img [ref=e69]

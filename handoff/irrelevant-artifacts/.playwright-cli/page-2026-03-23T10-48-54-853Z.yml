@@ -1,0 +1,495 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e6] [cursor=pointer]:
+    - button "Open Next.js Dev Tools" [ref=e7]:
+      - img [ref=e8]
+    - generic [ref=e11]:
+      - button "Open issues overlay" [ref=e12]:
+        - generic [ref=e13]:
+          - generic [ref=e14]: "2"
+          - generic [ref=e15]: "3"
+        - generic [ref=e16]:
+          - text: Issue
+          - generic [ref=e17]: s
+      - button "Collapse issues badge" [ref=e18]:
+        - img [ref=e19]
+  - banner [ref=e21]:
+    - generic [ref=e22]:
+      - link "UNTOLD" [ref=e23] [cursor=pointer]:
+        - /url: /
+      - navigation [ref=e24]:
+        - link "Articles" [ref=e25] [cursor=pointer]:
+          - /url: /articles
+        - link "Videos" [ref=e26] [cursor=pointer]:
+          - /url: /videos
+        - link "Podcasts" [ref=e27] [cursor=pointer]:
+          - /url: /podcasts
+        - link "Knowledge Pills" [ref=e28] [cursor=pointer]:
+          - /url: /pills
+        - link "Courses" [ref=e29] [cursor=pointer]:
+          - /url: /courses
+      - generic [ref=e30]:
+        - link "Search" [ref=e31] [cursor=pointer]:
+          - /url: /search
+          - img [ref=e32]
+        - button "EN" [ref=e35] [cursor=pointer]:
+          - img [ref=e36]
+          - generic [ref=e40]: EN
+        - generic [ref=e41]: "|"
+        - link "Log in" [ref=e42] [cursor=pointer]:
+          - /url: /auth/login
+  - main [ref=e43]:
+    - generic [ref=e45]:
+      - generic [ref=e46]:
+        - heading "THE FUTURE OF KNOWLEDGE IS COLLABORATIVE" [level=1] [ref=e47]
+        - paragraph [ref=e48]: The untold stories, insights, and knowledge from creators across the Global South.
+        - generic [ref=e49]:
+          - link "Get Started Free →" [ref=e50] [cursor=pointer]:
+            - /url: /auth/login
+          - link "Browse Courses" [ref=e51] [cursor=pointer]:
+            - /url: /courses
+        - generic [ref=e52]:
+          - link "Indigenous Rights 11 resources" [ref=e53] [cursor=pointer]:
+            - /url: /articles?tag=indigenous-rights
+            - paragraph [ref=e54]: Indigenous Rights
+            - paragraph [ref=e55]: 11 resources
+          - link "Decoloniality 9 resources" [ref=e56] [cursor=pointer]:
+            - /url: /articles?tag=decoloniality
+            - paragraph [ref=e57]: Decoloniality
+            - paragraph [ref=e58]: 9 resources
+          - link "Climate Justice 7 resources" [ref=e59] [cursor=pointer]:
+            - /url: /articles?tag=climate-justice
+            - paragraph [ref=e60]: Climate Justice
+            - paragraph [ref=e61]: 7 resources
+        - generic [ref=e62]:
+          - generic [ref=e63]: Updated daily
+          - generic [ref=e65]: Curated content
+      - generic [ref=e67]:
+        - link "How Police Surveillance Tech Is Targeting Black Communities ★ Featured How Police Surveillance Tech Is Targeting Black Communities" [ref=e68] [cursor=pointer]:
+          - /url: /articles/how-police-surveillance-tech-is-targeting-black-communities
+          - img "How Police Surveillance Tech Is Targeting Black Communities" [ref=e69]
+          - generic [ref=e72]: ★ Featured
+          - heading "How Police Surveillance Tech Is Targeting Black Communities" [level=3] [ref=e74]
+        - generic [ref=e75]:
+          - link "Indigenous Rights" [ref=e76] [cursor=pointer]:
+            - /url: /articles?tag=indigenous-rights
+            - generic [ref=e77]: Indigenous Rights
+          - link "Decoloniality" [ref=e78] [cursor=pointer]:
+            - /url: /articles?tag=decoloniality
+            - generic [ref=e79]: Decoloniality
+    - generic [ref=e80]:
+      - generic [ref=e81]:
+        - generic [ref=e82]:
+          - generic [ref=e83]:
+            - heading "Featured Articles" [level=2] [ref=e84]
+            - paragraph [ref=e85]: The latest stories
+          - link "View all →" [ref=e86] [cursor=pointer]:
+            - /url: /articles
+        - generic [ref=e87]:
+          - generic [ref=e88]:
+            - link "How Police Surveillance Tech Is Targeting Black Communities ★ FEATURED Surveillance How Police Surveillance Tech Is Targeting Black Communities Facial recognition systems deployed across Lagos, Nairobi and Cape Town raise urgent questions about consent and the right to be forgotten. Fatima Al-Hassan Fatima Al-Hassan 47" [ref=e90] [cursor=pointer]:
+              - /url: /articles/how-police-surveillance-tech-is-targeting-black-communities
+              - img "How Police Surveillance Tech Is Targeting Black Communities" [ref=e91]
+              - generic [ref=e93]:
+                - generic [ref=e94]: ★ FEATURED
+                - link "Surveillance" [ref=e95]:
+                  - /url: /tag/surveillance
+              - generic [ref=e96]:
+                - heading "How Police Surveillance Tech Is Targeting Black Communities" [level=3] [ref=e97]
+                - paragraph [ref=e98]: Facial recognition systems deployed across Lagos, Nairobi and Cape Town raise urgent questions about consent and the right to be forgotten.
+                - generic [ref=e99]:
+                  - generic [ref=e100]:
+                    - img "Fatima Al-Hassan" [ref=e101]
+                    - paragraph [ref=e103]: Fatima Al-Hassan
+                  - generic [ref=e105]:
+                    - img [ref=e106]
+                    - text: "47"
+            - generic [ref=e108]:
+              - article [ref=e109]:
+                - generic [ref=e110]:
+                  - 'link "The AI Colonialism Problem: Who Builds, Who Benefits" [ref=e111] [cursor=pointer]':
+                    - /url: /articles/the-ai-colonialism-problem-who-builds-who-benefits
+                    - 'img "The AI Colonialism Problem: Who Builds, Who Benefits" [ref=e112]'
+                  - link "Artificial Intelligence" [ref=e114] [cursor=pointer]:
+                    - /url: /tag/artificial-intelligence
+                  - generic "Featured" [ref=e115]: ★
+                - generic [ref=e116]:
+                  - 'heading "The AI Colonialism Problem: Who Builds, Who Benefits" [level=3] [ref=e117]':
+                    - 'link "The AI Colonialism Problem: Who Builds, Who Benefits" [ref=e118] [cursor=pointer]':
+                      - /url: /articles/the-ai-colonialism-problem-who-builds-who-benefits
+                  - paragraph [ref=e119]: "As AI reshapes global knowledge, researchers from India, Brazil and Nigeria ask: whose reality gets encoded into these systems?"
+                - generic [ref=e120]:
+                  - generic [ref=e122]:
+                    - img "Priya Sharma" [ref=e123]
+                    - link "Priya Sharma" [ref=e125] [cursor=pointer]:
+                      - /url: /author/priya-sharma
+                  - generic [ref=e126]:
+                    - generic [ref=e127]:
+                      - img [ref=e128]
+                      - text: "83"
+                    - button "Sign in to bookmark" [disabled] [ref=e130]:
+                      - img [ref=e131]
+              - article [ref=e133]:
+                - generic [ref=e134]:
+                  - 'link "Indigenous Data Sovereignty: Reclaiming the Narrative" [ref=e135] [cursor=pointer]':
+                    - /url: /articles/indigenous-data-sovereignty-reclaiming-the-narrative
+                    - 'img "Indigenous Data Sovereignty: Reclaiming the Narrative" [ref=e136]'
+                  - link "Indigenous Rights" [ref=e138] [cursor=pointer]:
+                    - /url: /tag/indigenous-rights
+                  - generic "Featured" [ref=e139]: ★
+                - generic [ref=e140]:
+                  - 'heading "Indigenous Data Sovereignty: Reclaiming the Narrative" [level=3] [ref=e141]':
+                    - 'link "Indigenous Data Sovereignty: Reclaiming the Narrative" [ref=e142] [cursor=pointer]':
+                      - /url: /articles/indigenous-data-sovereignty-reclaiming-the-narrative
+                  - paragraph [ref=e143]: Indigenous communities worldwide are building data governance frameworks to keep knowledge about their lands and peoples under t…
+                - generic [ref=e144]:
+                  - generic [ref=e146]:
+                    - generic [ref=e147]: T
+                    - link "test" [ref=e149] [cursor=pointer]:
+                      - /url: /author/user-38ec6058
+                  - generic [ref=e150]:
+                    - generic [ref=e151]:
+                      - img [ref=e152]
+                      - text: "63"
+                    - button "Sign in to bookmark" [disabled] [ref=e154]:
+                      - img [ref=e155]
+          - generic [ref=e157]:
+            - article [ref=e158]:
+              - generic [ref=e159]:
+                - link "Mother Tongue Matters" [ref=e160] [cursor=pointer]:
+                  - /url: /articles/mother-tongue-matters
+                  - img "Mother Tongue Matters" [ref=e161]
+                - link "Education" [ref=e163] [cursor=pointer]:
+                  - /url: /tag/education
+                - generic "Featured" [ref=e164]: ★
+              - generic [ref=e165]:
+                - heading "Mother Tongue Matters" [level=3] [ref=e166]:
+                  - link "Mother Tongue Matters" [ref=e167] [cursor=pointer]:
+                    - /url: /articles/mother-tongue-matters
+                - paragraph [ref=e168]: Research consistently shows that children learn better in their first language. Yet most African education systems still use Eur…
+              - generic [ref=e169]:
+                - generic [ref=e171]:
+                  - img "Nkechi Osei" [ref=e172]
+                  - link "Nkechi Osei" [ref=e174] [cursor=pointer]:
+                    - /url: /author/nkechi-osei
+                - generic [ref=e175]:
+                  - generic [ref=e176]:
+                    - img [ref=e177]
+                    - text: "267"
+                  - button "Sign in to bookmark" [disabled] [ref=e179]:
+                    - img [ref=e180]
+            - article [ref=e182]:
+              - generic [ref=e183]:
+                - link "AI Governance Without the South" [ref=e184] [cursor=pointer]:
+                  - /url: /articles/ai-governance-without-the-south
+                  - img "AI Governance Without the South" [ref=e185]
+                - link "AI Governance" [ref=e187] [cursor=pointer]:
+                  - /url: /tag/ai-governance
+                - generic "Featured" [ref=e188]: ★
+              - generic [ref=e189]:
+                - heading "AI Governance Without the South" [level=3] [ref=e190]:
+                  - link "AI Governance Without the South" [ref=e191] [cursor=pointer]:
+                    - /url: /articles/ai-governance-without-the-south
+                - paragraph [ref=e192]: The EU AI Act, the US Executive Order, the G7 AI Code of Conduct. Major AI governance frameworks are being written without the v…
+              - generic [ref=e193]:
+                - generic [ref=e195]:
+                  - img "Siddharth Rao" [ref=e196]
+                  - link "Siddharth Rao" [ref=e198] [cursor=pointer]:
+                    - /url: /author/siddharth-rao
+                - generic [ref=e199]:
+                  - generic [ref=e200]:
+                    - img [ref=e201]
+                    - text: "621"
+                  - button "Sign in to bookmark" [disabled] [ref=e203]:
+                    - img [ref=e204]
+      - generic [ref=e206]:
+        - generic [ref=e207]:
+          - generic [ref=e208]:
+            - heading "Videos" [level=2] [ref=e209]
+            - paragraph [ref=e210]: Visual content
+          - link "View all →" [ref=e211] [cursor=pointer]:
+            - /url: /videos
+        - generic [ref=e212]:
+          - generic [ref=e213]:
+            - link "How to create Chapters in Youtube Videos Urban Planning 4:42" [ref=e214] [cursor=pointer]:
+              - /url: /videos/how-to-create-chapters-in-youtube-videos-mn2z8wxb
+              - img "How to create Chapters in Youtube Videos" [ref=e215]
+              - link "Urban Planning" [ref=e217]:
+                - /url: /tag/urban-planning
+              - img [ref=e220]
+              - generic [ref=e222]:
+                - img [ref=e223]
+                - text: 4:42
+            - generic [ref=e226]:
+              - link "How to create Chapters in Youtube Videos" [ref=e227] [cursor=pointer]:
+                - /url: /videos/how-to-create-chapters-in-youtube-videos-mn2z8wxb
+                - heading "How to create Chapters in Youtube Videos" [level=3] [ref=e228]
+              - generic [ref=e229]:
+                - generic [ref=e230]: "N"
+                - link "Noah Laux" [ref=e232] [cursor=pointer]:
+                  - /url: /author/noah-laux
+              - generic [ref=e233]:
+                - generic [ref=e234]:
+                  - img [ref=e235]
+                  - text: "0"
+                - button "Sign in to bookmark" [disabled] [ref=e237]:
+                  - img [ref=e238]
+          - generic [ref=e240]:
+            - link "Marylin" [ref=e241] [cursor=pointer]:
+              - /url: /videos/marylin-mn1w9hk4
+              - img "Marylin" [ref=e242]
+              - img [ref=e246]
+            - generic [ref=e248]:
+              - link "Marylin" [ref=e249] [cursor=pointer]:
+                - /url: /videos/marylin-mn1w9hk4
+                - heading "Marylin" [level=3] [ref=e250]
+              - generic [ref=e251]:
+                - generic [ref=e252]: "N"
+                - link "Noah Laux" [ref=e254] [cursor=pointer]:
+                  - /url: /author/noah-laux
+              - generic [ref=e255]:
+                - generic [ref=e256]:
+                  - img [ref=e257]
+                  - text: "0"
+                - button "Sign in to bookmark" [disabled] [ref=e259]:
+                  - img [ref=e260]
+          - generic [ref=e262]:
+            - 'link "Inside the Amazon: Drone Footage from the Frontlines Deforestation 18:42" [ref=e263] [cursor=pointer]':
+              - /url: /videos/inside-the-amazon-drone-footage-from-the-frontlines
+              - 'img "Inside the Amazon: Drone Footage from the Frontlines" [ref=e264]'
+              - link "Deforestation" [ref=e266]:
+                - /url: /tag/deforestation
+              - img [ref=e269]
+              - generic [ref=e271]:
+                - img [ref=e272]
+                - text: 18:42
+            - generic [ref=e275]:
+              - 'link "Inside the Amazon: Drone Footage from the Frontlines" [ref=e276] [cursor=pointer]':
+                - /url: /videos/inside-the-amazon-drone-footage-from-the-frontlines
+                - 'heading "Inside the Amazon: Drone Footage from the Frontlines" [level=3] [ref=e277]'
+              - generic [ref=e278]:
+                - img "Diego Vargas" [ref=e279]
+                - link "Diego Vargas" [ref=e281] [cursor=pointer]:
+                  - /url: /author/diego-vargas
+              - generic [ref=e282]:
+                - generic [ref=e283]:
+                  - img [ref=e284]
+                  - text: "91"
+                - button "Sign in to bookmark" [disabled] [ref=e286]:
+                  - img [ref=e287]
+      - generic [ref=e289]:
+        - generic [ref=e290]:
+          - generic [ref=e291]:
+            - heading "Podcasts" [level=2] [ref=e292]
+            - paragraph [ref=e293]: Listen and learn
+          - link "View all →" [ref=e294] [cursor=pointer]:
+            - /url: /podcasts
+        - generic [ref=e295]:
+          - generic [ref=e296]:
+            - link "Test Podcast Episode" [ref=e297] [cursor=pointer]:
+              - /url: /podcasts/test-podcast-episode-mn1msf7o
+              - heading "Test Podcast Episode" [level=3] [ref=e300]
+            - generic [ref=e301]:
+              - generic [ref=e302]: T
+              - link "test" [ref=e304] [cursor=pointer]:
+                - /url: /author/user-38ec6058
+          - generic [ref=e305]:
+            - 'link "The Invisible Border — Ep. 12: Climate and Migration Episode 12 The Invisible Border — Ep. 12: Climate and Migration 54:18" [ref=e306] [cursor=pointer]':
+              - /url: /podcasts/the-invisible-border-ep-12-climate-and-migration
+              - 'img "The Invisible Border — Ep. 12: Climate and Migration" [ref=e308]'
+              - generic [ref=e309]:
+                - paragraph [ref=e310]: Episode 12
+                - 'heading "The Invisible Border — Ep. 12: Climate and Migration" [level=3] [ref=e311]'
+                - generic [ref=e312]:
+                  - img [ref=e313]
+                  - text: 54:18
+            - generic [ref=e316]:
+              - img "Amara Diallo" [ref=e317]
+              - link "Amara Diallo" [ref=e319] [cursor=pointer]:
+                - /url: /author/amara-diallo
+      - generic [ref=e320]:
+        - generic [ref=e321]:
+          - generic [ref=e322]:
+            - heading "Knowledge Pills" [level=2] [ref=e323]
+            - paragraph [ref=e324]: Quick insights
+          - link "View all →" [ref=e325] [cursor=pointer]:
+            - /url: /pills
+        - generic [ref=e326]:
+          - generic [ref=e327]:
+            - link "What Is Data Colonialism?" [ref=e328] [cursor=pointer]:
+              - /url: /pills/what-is-data-colonialism
+              - img "What Is Data Colonialism?" [ref=e329]
+            - generic [ref=e330]:
+              - generic [ref=e331]:
+                - link "Digital Rights" [ref=e332] [cursor=pointer]:
+                  - /url: /tag/digital-rights
+                - generic [ref=e333]:
+                  - button "Sign in to bookmark" [disabled] [ref=e334]:
+                    - img [ref=e335]
+                  - button "Share" [ref=e337] [cursor=pointer]:
+                    - img [ref=e338]
+              - link "What Is Data Colonialism?" [ref=e343] [cursor=pointer]:
+                - /url: /pills/what-is-data-colonialism
+                - heading "What Is Data Colonialism?" [level=3] [ref=e344]
+              - paragraph [ref=e345]: How the extraction of personal data from communities in the Global South mirrors historical patterns of colonial resource extraction.
+              - generic [ref=e346]:
+                - img "Priya Sharma" [ref=e347]
+                - link "Priya Sharma" [ref=e349] [cursor=pointer]:
+                  - /url: /author/priya-sharma
+          - generic [ref=e350]:
+            - link "Understanding the Right to Be Forgotten" [ref=e351] [cursor=pointer]:
+              - /url: /pills/understanding-the-right-to-be-forgotten
+              - img "Understanding the Right to Be Forgotten" [ref=e352]
+            - generic [ref=e353]:
+              - generic [ref=e355]:
+                - button "Sign in to bookmark" [disabled] [ref=e356]:
+                  - img [ref=e357]
+                - button "Share" [ref=e359] [cursor=pointer]:
+                  - img [ref=e360]
+              - link "Understanding the Right to Be Forgotten" [ref=e365] [cursor=pointer]:
+                - /url: /pills/understanding-the-right-to-be-forgotten
+                - heading "Understanding the Right to Be Forgotten" [level=3] [ref=e366]
+              - paragraph [ref=e367]: A quick guide to one of digital rights' most contested concepts — and why it matters differently depending on where you live.
+              - generic [ref=e368]:
+                - img "Fatima Al-Hassan" [ref=e369]
+                - link "Fatima Al-Hassan" [ref=e371] [cursor=pointer]:
+                  - /url: /author/fatima-al-hassan
+          - generic [ref=e372]:
+            - link "What Is \"Loss and Damage\" in Climate Negotiations?" [ref=e373] [cursor=pointer]:
+              - /url: /pills/what-is-loss-and-damage-in-climate-negotiations
+              - img "What Is \"Loss and Damage\" in Climate Negotiations?" [ref=e374]
+            - generic [ref=e375]:
+              - generic [ref=e376]:
+                - link "Climate Justice" [ref=e377] [cursor=pointer]:
+                  - /url: /tag/climate-justice
+                - generic [ref=e378]:
+                  - button "Sign in to bookmark" [disabled] [ref=e379]:
+                    - img [ref=e380]
+                  - button "Share" [ref=e382] [cursor=pointer]:
+                    - img [ref=e383]
+              - link "What Is \"Loss and Damage\" in Climate Negotiations?" [ref=e388] [cursor=pointer]:
+                - /url: /pills/what-is-loss-and-damage-in-climate-negotiations
+                - heading "What Is \"Loss and Damage\" in Climate Negotiations?" [level=3] [ref=e389]
+              - paragraph [ref=e390]: One of the most contested concepts in international climate policy, explained simply.
+              - generic [ref=e391]:
+                - img "Amara Diallo" [ref=e392]
+                - link "Amara Diallo" [ref=e394] [cursor=pointer]:
+                  - /url: /author/amara-diallo
+          - generic [ref=e395]:
+            - 'link "The Amazon Fund: How It Works" [ref=e396] [cursor=pointer]':
+              - /url: /pills/the-amazon-fund-how-it-works
+              - 'img "The Amazon Fund: How It Works" [ref=e397]'
+            - generic [ref=e398]:
+              - generic [ref=e400]:
+                - button "Sign in to bookmark" [disabled] [ref=e401]:
+                  - img [ref=e402]
+                - button "Share" [ref=e404] [cursor=pointer]:
+                  - img [ref=e405]
+              - 'link "The Amazon Fund: How It Works" [ref=e410] [cursor=pointer]':
+                - /url: /pills/the-amazon-fund-how-it-works
+                - 'heading "The Amazon Fund: How It Works" [level=3] [ref=e411]'
+              - paragraph [ref=e412]: Norway and Germany have committed billions to protect the Amazon. Here's what that money actually does.
+              - generic [ref=e413]:
+                - img "Diego Vargas" [ref=e414]
+                - link "Diego Vargas" [ref=e416] [cursor=pointer]:
+                  - /url: /author/diego-vargas
+          - generic [ref=e417]:
+            - 'link "Indigenous Rights: UNDRIP Explained" [ref=e418] [cursor=pointer]':
+              - /url: /pills/indigenous-rights-undrip-explained
+              - 'img "Indigenous Rights: UNDRIP Explained" [ref=e419]'
+            - generic [ref=e420]:
+              - generic [ref=e421]:
+                - link "Indigenous Rights" [ref=e422] [cursor=pointer]:
+                  - /url: /tag/indigenous-rights
+                - generic [ref=e423]:
+                  - button "Sign in to bookmark" [disabled] [ref=e424]:
+                    - img [ref=e425]
+                  - button "Share" [ref=e427] [cursor=pointer]:
+                    - img [ref=e428]
+              - 'link "Indigenous Rights: UNDRIP Explained" [ref=e433] [cursor=pointer]':
+                - /url: /pills/indigenous-rights-undrip-explained
+                - 'heading "Indigenous Rights: UNDRIP Explained" [level=3] [ref=e434]'
+              - paragraph [ref=e435]: The UN Declaration on the Rights of Indigenous Peoples — what it says, who opposed it, and why it still matters.
+              - generic [ref=e436]:
+                - generic [ref=e437]: T
+                - link "test" [ref=e439] [cursor=pointer]:
+                  - /url: /author/user-38ec6058
+          - generic [ref=e440]:
+            - 'link "Algorithmic Bias: Five Things to Know" [ref=e441] [cursor=pointer]':
+              - /url: /pills/algorithmic-bias-five-things-to-know
+              - 'img "Algorithmic Bias: Five Things to Know" [ref=e442]'
+            - generic [ref=e443]:
+              - generic [ref=e444]:
+                - link "Artificial Intelligence" [ref=e445] [cursor=pointer]:
+                  - /url: /tag/artificial-intelligence
+                - generic [ref=e446]:
+                  - button "Sign in to bookmark" [disabled] [ref=e447]:
+                    - img [ref=e448]
+                  - button "Share" [ref=e450] [cursor=pointer]:
+                    - img [ref=e451]
+              - 'link "Algorithmic Bias: Five Things to Know" [ref=e456] [cursor=pointer]':
+                - /url: /pills/algorithmic-bias-five-things-to-know
+                - 'heading "Algorithmic Bias: Five Things to Know" [level=3] [ref=e457]'
+              - paragraph [ref=e458]: From hiring algorithms to facial recognition — a plain-language guide to why AI systems discriminate and what we can do about it.
+              - generic [ref=e459]:
+                - img "Priya Sharma" [ref=e460]
+                - link "Priya Sharma" [ref=e462] [cursor=pointer]:
+                  - /url: /author/priya-sharma
+  - contentinfo [ref=e463]:
+    - generic [ref=e464]:
+      - generic [ref=e465]:
+        - generic [ref=e466]:
+          - heading "UNTOLD" [level=4] [ref=e467]
+          - paragraph [ref=e468]: Exploring ideas that transform the future.
+        - generic [ref=e469]:
+          - paragraph [ref=e470]: Content
+          - list [ref=e471]:
+            - listitem [ref=e472]:
+              - link "Articles" [ref=e473] [cursor=pointer]:
+                - /url: /articles
+            - listitem [ref=e474]:
+              - link "Videos" [ref=e475] [cursor=pointer]:
+                - /url: /videos
+            - listitem [ref=e476]:
+              - link "Podcasts" [ref=e477] [cursor=pointer]:
+                - /url: /podcasts
+            - listitem [ref=e478]:
+              - link "Pills" [ref=e479] [cursor=pointer]:
+                - /url: /pills
+            - listitem [ref=e480]:
+              - link "Courses" [ref=e481] [cursor=pointer]:
+                - /url: /courses
+        - generic [ref=e482]:
+          - paragraph [ref=e483]: Topics
+          - list [ref=e484]:
+            - listitem [ref=e485]:
+              - link "Decoloniality" [ref=e486] [cursor=pointer]:
+                - /url: /tag/decoloniality
+            - listitem [ref=e487]:
+              - link "Sustainability" [ref=e488] [cursor=pointer]:
+                - /url: /tag/sustainability
+            - listitem [ref=e489]:
+              - link "Technology" [ref=e490] [cursor=pointer]:
+                - /url: /tag/technology
+            - listitem [ref=e491]:
+              - link "Education" [ref=e492] [cursor=pointer]:
+                - /url: /tag/education
+            - listitem [ref=e493]:
+              - link "Responsible AI" [ref=e494] [cursor=pointer]:
+                - /url: /tag/responsible-ai
+        - generic [ref=e495]:
+          - paragraph [ref=e496]: Connect
+          - list [ref=e497]:
+            - listitem [ref=e498]:
+              - link "About" [ref=e499] [cursor=pointer]:
+                - /url: /about
+            - listitem [ref=e500]:
+              - link "Contact" [ref=e501] [cursor=pointer]:
+                - /url: /contact
+            - listitem [ref=e502]:
+              - link "Newsletter" [ref=e503] [cursor=pointer]:
+                - /url: /newsletter
+            - listitem [ref=e504]:
+              - link "Become a Creator" [ref=e505] [cursor=pointer]:
+                - /url: /become-creator
+      - generic [ref=e506]: © 2026 UNTOLD. All rights reserved. A Sur Global publication.
+  - alert [ref=e507]

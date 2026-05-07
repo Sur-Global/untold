@@ -1,0 +1,71 @@
+[    2010ms] [ERROR] Base UI: A component that acts as a button expected a native <button> because the `nativeButton` prop is true. Rendering a non-<button> removes native button semantics, which can impact forms and accessibility. Use a real <button> in the `render` prop, or set `nativeButton` to `false`.
+    at Button (webpack-internal:///(app-pages-browser)/./components/ui/button.tsx:15:87)
+    at Navigation (webpack-internal:///(app-pages-browser)/./components/layout/Navigation.tsx:97:112)
+    at BookmarksPage (about://React/Server/webpack-internal:///(rsc)/./app/%5Blocale%5D/dashboard/bookmarks/page.tsx?30:45:88) @ :0
+[    2010ms] [ERROR] Base UI: A component that acts as a button expected a native <button> because the `nativeButton` prop is true. Rendering a non-<button> removes native button semantics, which can impact forms and accessibility. Use a real <button> in the `render` prop, or set `nativeButton` to `false`.
+    at Button (webpack-internal:///(app-pages-browser)/./components/ui/button.tsx:15:87)
+    at Navigation (webpack-internal:///(app-pages-browser)/./components/layout/Navigation.tsx:113:112)
+    at BookmarksPage (about://React/Server/webpack-internal:///(rsc)/./app/%5Blocale%5D/dashboard/bookmarks/page.tsx?30:45:88) @ :0
+[    4773ms] [ERROR] Base UI: A component that acts as a button expected a native <button> because the `nativeButton` prop is true. Rendering a non-<button> removes native button semantics, which can impact forms and accessibility. Use a real <button> in the `render` prop, or set `nativeButton` to `false`.
+    at Button (webpack-internal:///(app-pages-browser)/./components/ui/button.tsx:15:87)
+    at Navigation (webpack-internal:///(app-pages-browser)/./components/layout/Navigation.tsx:97:112)
+    at BookmarksPage (about://React/Server/webpack-internal:///(rsc)/./app/%5Blocale%5D/dashboard/bookmarks/page.tsx?30:45:88) @ :0
+[    4773ms] [ERROR] Base UI: A component that acts as a button expected a native <button> because the `nativeButton` prop is true. Rendering a non-<button> removes native button semantics, which can impact forms and accessibility. Use a real <button> in the `render` prop, or set `nativeButton` to `false`.
+    at Button (webpack-internal:///(app-pages-browser)/./components/ui/button.tsx:15:87)
+    at Navigation (webpack-internal:///(app-pages-browser)/./components/layout/Navigation.tsx:113:112)
+    at BookmarksPage (about://React/Server/webpack-internal:///(rsc)/./app/%5Blocale%5D/dashboard/bookmarks/page.tsx?30:45:88) @ :0
+[    8197ms] [ERROR] Base UI: A component that acts as a button expected a native <button> because the `nativeButton` prop is true. Rendering a non-<button> removes native button semantics, which can impact forms and accessibility. Use a real <button> in the `render` prop, or set `nativeButton` to `false`.
+    at Button (webpack-internal:///(app-pages-browser)/./components/ui/button.tsx:15:87)
+    at Navigation (webpack-internal:///(app-pages-browser)/./components/layout/Navigation.tsx:97:112)
+    at BookmarksPage (about://React/Server/webpack-internal:///(rsc)/./app/%5Blocale%5D/dashboard/bookmarks/page.tsx?30:45:88) @ :0
+[    8198ms] [ERROR] Base UI: A component that acts as a button expected a native <button> because the `nativeButton` prop is true. Rendering a non-<button> removes native button semantics, which can impact forms and accessibility. Use a real <button> in the `render` prop, or set `nativeButton` to `false`.
+    at Button (webpack-internal:///(app-pages-browser)/./components/ui/button.tsx:15:87)
+    at Navigation (webpack-internal:///(app-pages-browser)/./components/layout/Navigation.tsx:113:112)
+    at BookmarksPage (about://React/Server/webpack-internal:///(rsc)/./app/%5Blocale%5D/dashboard/bookmarks/page.tsx?30:45:88) @ :0
+[    9967ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost:3000/dashboard/bookmarks?_rsc=kd32w:0
+[   10665ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost:3000/dashboard/bookmarks:0
+[   11120ms] Error: Manifest file is empty
+    at evalManifest (file:///Users/noahlaux/code/surglobal/untold/node_modules/next/dist/server/load-manifest.external.js:83:37)
+    at loadManifestFromRelativePath (file:///Users/noahlaux/code/surglobal/untold/node_modules/next/dist/server/load-manifest.external.js:109:16)
+    at AppPageRouteModule.loadManifests (file:///Users/noahlaux/code/surglobal/untold/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:71:36620)
+    at AppPageRouteModule.prepare (file:///Users/noahlaux/code/surglobal/untold/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:71:41329)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async Module.handler (webpack-internal:///(rsc)/./node_modules/next/dist/build/webpack/loaders/next-app-loader/index.js?name=app%2F%5Blocale%5D%2Fdashboard%2Fbookmarks%2Fpage&page=%2F%5Blocale%5D%2Fdashboard%2Fbookmarks%2Fpage&appPaths=%2F%5Blocale%5D%2Fdashboard%2Fbookmarks%2Fpage&allNormalizedAppPaths=&pagePath=private-next-app-dir%2F%5Blocale%5D%2Fdashboard%2Fbookmarks%2Fpage.tsx&appDir=%2FUsers%2Fnoahlaux%2Fcode%2Fsurglobal%2Funtold%2Fapp&pageExtensions=tsx&pageExtensions=ts&pageExtensions=jsx&pageExtensions=js&rootDir=%2FUsers%2Fnoahlaux%2Fcode%2Fsurglobal%2Funtold&isDev=true&tsconfigPath=&basePath=&assetPrefix=&nextConfigOutput=&preferredRegion=&middlewareConfig=e30%3D&isGlobalNotFoundEnabled=!:258:27)
+    at async DevServer.renderToResponseWithComponentsImpl (file:///Users/noahlaux/code/surglobal/untold/node_modules/next/dist/server/base-server.js:1454:9)
+    at async DevServer.renderPageComponent (file:///Users/noahlaux/code/surglobal/untold/node_modules/next/dist/server/base-server.js:1506:24)
+    at async DevServer.renderToResponseImpl (file:///Users/noahlaux/code/surglobal/untold/node_modules/next/dist/server/base-server.js:1556:32)
+    at async DevServer.pipeImpl (file:///Users/noahlaux/code/surglobal/untold/node_modules/next/dist/server/base-server.js:1043:25)
+    at async NextNodeServer.handleCatchallRenderRequest (file:///Users/noahlaux/code/surglobal/untold/node_modules/next/dist/server/next-server.js:338:17)
+    at async DevServer.handleRequestImpl (file:///Users/noahlaux/code/surglobal/untold/node_modules/next/dist/server/base-server.js:934:17)
+    at async (file:///Users/noahlaux/code/surglobal/untold/node_modules/next/dist/server/dev/next-dev-server.js:394:20)
+    at async Span.traceAsyncFn (file:///Users/noahlaux/code/surglobal/untold/node_modules/next/dist/trace/trace.js:164:20)
+    at async DevServer.handleRequest (file:///Users/noahlaux/code/surglobal/untold/node_modules/next/dist/server/dev/next-dev-server.js:390:24)
+    at async invokeRender (file:///Users/noahlaux/code/surglobal/untold/node_modules/next/dist/server/lib/router-server.js:253:21)
+    at async handleRequest (file:///Users/noahlaux/code/surglobal/untold/node_modules/next/dist/server/lib/router-server.js:452:24)
+    at async requestHandlerImpl (file:///Users/noahlaux/code/surglobal/untold/node_modules/next/dist/server/lib/router-server.js:501:13)
+    at async Server.requestListener (file:///Users/noahlaux/code/surglobal/untold/node_modules/next/dist/server/lib/start-server.js:227:13)
+[   11314ms] [WARNING] [Fast Refresh] performing full reload because your application had an unrecoverable error @ webpack-internal:///(pages-dir-browser)/./node_modules/next/dist/next-devtools/shared/forward-logs-shared.js:27
+[   11498ms] [WARNING] [Fast Refresh] performing full reload because your application had an unrecoverable error @ webpack-internal:///(pages-dir-browser)/./node_modules/next/dist/next-devtools/shared/forward-logs-shared.js:27
+[   12235ms] [WARNING] [Fast Refresh] performing full reload because your application had an unrecoverable error @ webpack-internal:///(pages-dir-browser)/./node_modules/next/dist/next-devtools/shared/forward-logs-shared.js:27
+[   12431ms] [WARNING] [Fast Refresh] performing full reload because your application had an unrecoverable error @ webpack-internal:///(pages-dir-browser)/./node_modules/next/dist/next-devtools/shared/forward-logs-shared.js:27
+[   12659ms] [WARNING] [Fast Refresh] performing full reload because your application had an unrecoverable error @ webpack-internal:///(pages-dir-browser)/./node_modules/next/dist/next-devtools/shared/forward-logs-shared.js:27
+[   12823ms] [WARNING] [Fast Refresh] performing full reload because your application had an unrecoverable error @ webpack-internal:///(pages-dir-browser)/./node_modules/next/dist/next-devtools/shared/forward-logs-shared.js:27
+[   13003ms] [WARNING] [Fast Refresh] performing full reload because your application had an unrecoverable error @ webpack-internal:///(pages-dir-browser)/./node_modules/next/dist/next-devtools/shared/forward-logs-shared.js:27
+[   13362ms] [WARNING] [Fast Refresh] performing full reload because your application had an unrecoverable error @ webpack-internal:///(pages-dir-browser)/./node_modules/next/dist/next-devtools/shared/forward-logs-shared.js:27
+[   13677ms] [WARNING] [Fast Refresh] performing full reload because your application had an unrecoverable error @ webpack-internal:///(pages-dir-browser)/./node_modules/next/dist/next-devtools/shared/forward-logs-shared.js:27
+[   14266ms] [WARNING] [Fast Refresh] performing full reload because your application had an unrecoverable error @ webpack-internal:///(pages-dir-browser)/./node_modules/next/dist/next-devtools/shared/forward-logs-shared.js:27
+[   14326ms] [WARNING] [Fast Refresh] performing full reload because your application had an unrecoverable error @ webpack-internal:///(pages-dir-browser)/./node_modules/next/dist/next-devtools/shared/forward-logs-shared.js:27
+[   14573ms] [WARNING] [Fast Refresh] performing full reload because your application had an unrecoverable error @ webpack-internal:///(pages-dir-browser)/./node_modules/next/dist/next-devtools/shared/forward-logs-shared.js:27
+[   14801ms] [WARNING] [Fast Refresh] performing full reload because your application had an unrecoverable error @ webpack-internal:///(pages-dir-browser)/./node_modules/next/dist/next-devtools/shared/forward-logs-shared.js:27
+[   14940ms] [WARNING] [Fast Refresh] performing full reload because your application had an unrecoverable error @ webpack-internal:///(pages-dir-browser)/./node_modules/next/dist/next-devtools/shared/forward-logs-shared.js:27
+[   15125ms] [WARNING] [Fast Refresh] performing full reload because your application had an unrecoverable error @ webpack-internal:///(pages-dir-browser)/./node_modules/next/dist/next-devtools/shared/forward-logs-shared.js:27
+[   15297ms] [WARNING] [Fast Refresh] performing full reload because your application had an unrecoverable error @ webpack-internal:///(pages-dir-browser)/./node_modules/next/dist/next-devtools/shared/forward-logs-shared.js:27
+[   15468ms] [WARNING] [Fast Refresh] performing full reload because your application had an unrecoverable error @ webpack-internal:///(pages-dir-browser)/./node_modules/next/dist/next-devtools/shared/forward-logs-shared.js:27
+[   15641ms] [WARNING] [Fast Refresh] performing full reload because your application had an unrecoverable error @ webpack-internal:///(pages-dir-browser)/./node_modules/next/dist/next-devtools/shared/forward-logs-shared.js:27
+[   15817ms] [WARNING] [Fast Refresh] performing full reload because your application had an unrecoverable error @ webpack-internal:///(pages-dir-browser)/./node_modules/next/dist/next-devtools/shared/forward-logs-shared.js:27
+[   15992ms] [WARNING] [Fast Refresh] performing full reload because your application had an unrecoverable error @ webpack-internal:///(pages-dir-browser)/./node_modules/next/dist/next-devtools/shared/forward-logs-shared.js:27
+[   16253ms] [WARNING] [Fast Refresh] performing full reload because your application had an unrecoverable error @ webpack-internal:///(pages-dir-browser)/./node_modules/next/dist/next-devtools/shared/forward-logs-shared.js:27
+[   16496ms] [WARNING] [Fast Refresh] performing full reload because your application had an unrecoverable error @ webpack-internal:///(pages-dir-browser)/./node_modules/next/dist/next-devtools/shared/forward-logs-shared.js:27
+[   16856ms] [WARNING] [Fast Refresh] performing full reload because your application had an unrecoverable error @ webpack-internal:///(pages-dir-browser)/./node_modules/next/dist/next-devtools/shared/forward-logs-shared.js:27
+[   17005ms] [WARNING] [Fast Refresh] performing full reload because your application had an unrecoverable error @ webpack-internal:///(pages-dir-browser)/./node_modules/next/dist/next-devtools/shared/forward-logs-shared.js:27
+[   17186ms] [WARNING] [Fast Refresh] performing full reload because your application had an unrecoverable error @ webpack-internal:///(pages-dir-browser)/./node_modules/next/dist/next-devtools/shared/forward-logs-shared.js:27

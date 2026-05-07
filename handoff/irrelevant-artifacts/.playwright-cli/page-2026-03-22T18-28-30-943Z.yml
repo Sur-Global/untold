@@ -1,0 +1,154 @@
+- generic [active] [ref=e1]:
+  - banner [ref=e2]:
+    - generic [ref=e3]:
+      - link "UNTOLD" [ref=e4] [cursor=pointer]:
+        - /url: /
+      - navigation [ref=e5]:
+        - link "Articles" [ref=e6] [cursor=pointer]:
+          - /url: /articles
+        - link "Videos" [ref=e7] [cursor=pointer]:
+          - /url: /videos
+        - link "Podcasts" [ref=e8] [cursor=pointer]:
+          - /url: /podcasts
+        - link "Knowledge Pills" [ref=e9] [cursor=pointer]:
+          - /url: /pills
+        - link "Courses" [ref=e10] [cursor=pointer]:
+          - /url: /courses
+    - generic [ref=e11]:
+      - button "EN" [ref=e12]
+      - link "Log in" [ref=e13] [cursor=pointer]:
+        - /url: /auth/login
+      - link "Sign up" [ref=e14] [cursor=pointer]:
+        - /url: /auth/signup
+  - main [ref=e15]:
+    - generic [ref=e16]:
+      - link "Back" [ref=e17] [cursor=pointer]:
+        - /url: /articles
+        - img [ref=e18]
+        - text: Back
+      - article [ref=e20]:
+        - generic [ref=e21]:
+          - link "AI Governance" [ref=e22] [cursor=pointer]:
+            - /url: /tag/ai-governance
+            - img [ref=e23]
+            - text: AI Governance
+          - link "Decoloniality" [ref=e25] [cursor=pointer]:
+            - /url: /tag/decoloniality
+            - img [ref=e26]
+            - text: Decoloniality
+        - heading "Who Owns the Algorithm?" [level=1] [ref=e28]
+        - paragraph [ref=e29]: When Silicon Valley exports its AI systems to Africa, it also exports its assumptions, blind spots, and power structures.
+        - generic [ref=e30]:
+          - generic [ref=e31]:
+            - img "Amara Diallo" [ref=e33]
+            - link "Amara Diallo" [ref=e34] [cursor=pointer]:
+              - /url: /author/amara-diallo
+          - generic [ref=e35]:
+            - generic [ref=e36]:
+              - img [ref=e37]
+              - generic [ref=e40]: January 14, 2026
+            - generic [ref=e41]:
+              - img [ref=e42]
+              - generic [ref=e45]: 2 min read
+        - generic [ref=e46]:
+          - button "347" [disabled] [ref=e47]:
+            - img [ref=e48]
+            - generic [ref=e50]: "347"
+          - button "Save" [disabled] [ref=e51]:
+            - img [ref=e52]
+            - generic [ref=e54]: Save
+          - button "Share article" [ref=e55]:
+            - img [ref=e56]
+            - text: Share
+        - img "Who Owns the Algorithm?" [ref=e60]
+        - generic [ref=e61]:
+          - paragraph [ref=e62]: Every AI system encodes the values, assumptions, and blind spots of those who built it. When a hiring algorithm trained on decades of Silicon Valley employment data is deployed to filter job applications in Lagos or Nairobi, it doesn't just assess candidates — it replicates a specific vision of who is "employable."
+          - heading "The Quiet Colonialism of Code" [level=2] [ref=e63]
+          - paragraph [ref=e64]: This is the quiet colonialism of the algorithmic age. Unlike the explicit coercion of historical colonialism, algorithmic power operates through the appearance of neutrality and efficiency. The system is just math, we are told. The model simply reflects patterns in the data.
+          - paragraph [ref=e65]: But data is never neutral. It is a historical record, and history is written by those with power. When African governments and companies adopt AI systems built elsewhere — often under favourable commercial terms or donor-funded development programmes — they are also adopting the epistemological frameworks embedded in those systems.
+          - blockquote [ref=e66]:
+            - paragraph [ref=e67]: "\"I am because we are.\" The Ubuntu principle offers a fundamentally different basis for thinking about individual assessment, community impact, and systemic risk than the liberal individualism that underpins most current AI ethics frameworks."
+          - heading "What Would African-Built AI Look Like?" [level=2] [ref=e68]
+          - paragraph [ref=e69]: What would African-built AI look like? Not just AI trained on African languages or local datasets, but AI systems that reflect African philosophical frameworks, communal values, and ways of knowing.
+          - heading "The Case for AI Sovereignty" [level=3] [ref=e70]
+          - paragraph [ref=e71]: "This is not an argument against AI. It is an argument for AI sovereignty: the right of communities to shape, interrogate, and where necessary reject the algorithmic systems that govern their lives. Without that sovereignty, digital transformation becomes just another vector for dependency."
+          - list [ref=e72]:
+            - listitem [ref=e73]:
+              - paragraph [ref=e74]: Data governance frameworks co-designed with communities
+            - listitem [ref=e75]:
+              - paragraph [ref=e76]: Open-source models trained on African-language corpora
+            - listitem [ref=e77]:
+              - paragraph [ref=e78]: Regulatory capacity built in African institutions, not outsourced to foreign consultants
+            - listitem [ref=e79]:
+              - paragraph [ref=e80]: Public AI infrastructure owned by African states and civil society
+        - generic [ref=e81]:
+          - heading "About the Author" [level=3] [ref=e82]
+          - generic [ref=e83]:
+            - img "Amara Diallo" [ref=e85]
+            - generic [ref=e86]:
+              - heading "Amara Diallo" [level=4] [ref=e87]
+              - paragraph [ref=e88]: Dakar, Senegal
+              - paragraph [ref=e89]: Researcher at the intersection of decolonial theory and emerging technologies. Based in Dakar, exploring how African communities can shape — rather than be shaped by — digital futures. Author of "Code & Colony" (2023).
+              - link "View profile →" [ref=e90] [cursor=pointer]:
+                - /url: /author/amara-diallo
+  - contentinfo [ref=e91]:
+    - generic [ref=e92]:
+      - generic [ref=e93]:
+        - generic [ref=e94]:
+          - heading "UNTOLD" [level=4] [ref=e95]
+          - paragraph [ref=e96]: Exploring ideas that transform the future.
+        - generic [ref=e97]:
+          - paragraph [ref=e98]: Content
+          - list [ref=e99]:
+            - listitem [ref=e100]:
+              - link "Articles" [ref=e101] [cursor=pointer]:
+                - /url: /articles
+            - listitem [ref=e102]:
+              - link "Videos" [ref=e103] [cursor=pointer]:
+                - /url: /videos
+            - listitem [ref=e104]:
+              - link "Podcasts" [ref=e105] [cursor=pointer]:
+                - /url: /podcasts
+            - listitem [ref=e106]:
+              - link "Pills" [ref=e107] [cursor=pointer]:
+                - /url: /pills
+            - listitem [ref=e108]:
+              - link "Courses" [ref=e109] [cursor=pointer]:
+                - /url: /courses
+        - generic [ref=e110]:
+          - paragraph [ref=e111]: Topics
+          - list [ref=e112]:
+            - listitem [ref=e113]:
+              - link "Decoloniality" [ref=e114] [cursor=pointer]:
+                - /url: /tag/decoloniality
+            - listitem [ref=e115]:
+              - link "Sustainability" [ref=e116] [cursor=pointer]:
+                - /url: /tag/sustainability
+            - listitem [ref=e117]:
+              - link "Technology" [ref=e118] [cursor=pointer]:
+                - /url: /tag/technology
+            - listitem [ref=e119]:
+              - link "Education" [ref=e120] [cursor=pointer]:
+                - /url: /tag/education
+            - listitem [ref=e121]:
+              - link "Responsible AI" [ref=e122] [cursor=pointer]:
+                - /url: /tag/responsible-ai
+        - generic [ref=e123]:
+          - paragraph [ref=e124]: Connect
+          - list [ref=e125]:
+            - listitem [ref=e126]:
+              - link "About" [ref=e127] [cursor=pointer]:
+                - /url: /about
+            - listitem [ref=e128]:
+              - link "Contact" [ref=e129] [cursor=pointer]:
+                - /url: /contact
+            - listitem [ref=e130]:
+              - link "Newsletter" [ref=e131] [cursor=pointer]:
+                - /url: /newsletter
+            - listitem [ref=e132]:
+              - link "Become a Creator" [ref=e133] [cursor=pointer]:
+                - /url: /become-creator
+      - generic [ref=e134]: © 2026 UNTOLD. All rights reserved. A Sur Global publication.
+  - button "Open Next.js Dev Tools" [ref=e140] [cursor=pointer]:
+    - img [ref=e141]
+  - alert [ref=e144]

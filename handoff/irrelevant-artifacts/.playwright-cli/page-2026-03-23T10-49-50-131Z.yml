@@ -1,0 +1,155 @@
+- generic [active] [ref=e1]:
+  - button "Open Next.js Dev Tools" [ref=e7] [cursor=pointer]:
+    - img [ref=e8]
+  - banner [ref=e11]:
+    - generic [ref=e12]:
+      - link "UNTOLD" [ref=e13] [cursor=pointer]:
+        - /url: /
+      - navigation [ref=e14]:
+        - link "Articles" [ref=e15] [cursor=pointer]:
+          - /url: /articles
+        - link "Videos" [ref=e16] [cursor=pointer]:
+          - /url: /videos
+        - link "Podcasts" [ref=e17] [cursor=pointer]:
+          - /url: /podcasts
+        - link "Knowledge Pills" [ref=e18] [cursor=pointer]:
+          - /url: /pills
+        - link "Courses" [ref=e19] [cursor=pointer]:
+          - /url: /courses
+      - generic [ref=e20]:
+        - link "Search" [ref=e21] [cursor=pointer]:
+          - /url: /search
+          - img [ref=e22]
+        - button "EN" [ref=e25] [cursor=pointer]:
+          - img [ref=e26]
+          - generic [ref=e30]: EN
+        - generic [ref=e31]:
+          - generic [ref=e32]: "|"
+          - link "Dashboard" [ref=e33] [cursor=pointer]:
+            - /url: /dashboard
+          - generic [ref=e34]: "|"
+          - link "Create" [ref=e35] [cursor=pointer]:
+            - /url: /create
+          - generic [ref=e36]: "|"
+          - button "Log out" [ref=e38] [cursor=pointer]
+  - main [ref=e39]:
+    - generic [ref=e40]:
+      - generic [ref=e41]:
+        - link "← Dashboard" [ref=e42] [cursor=pointer]:
+          - /url: /dashboard
+          - img [ref=e43]
+          - text: ← Dashboard
+        - generic [ref=e45]:
+          - generic [ref=e46]:
+            - heading "Edit Video" [level=1] [ref=e47]
+            - paragraph [ref=e48]: Edit text, layout, and images for your video
+          - generic [ref=e49]:
+            - generic [ref=e50]: ✓ Saved
+            - generic [ref=e51]: published
+      - generic [ref=e52]:
+        - button "Text" [ref=e53] [cursor=pointer]
+        - button "Layout" [ref=e54] [cursor=pointer]
+        - button "Images" [ref=e55] [cursor=pointer]
+      - generic [ref=e56]:
+        - generic [ref=e57]:
+          - generic [ref=e58]: Video URL
+          - generic [ref=e59]:
+            - textbox "Paste a YouTube, Vimeo, or other video URL" [ref=e60]: https://www.youtube.com/watch?v=dQw4w9WgXcQ
+            - button "Extract Info" [ref=e61] [cursor=pointer]
+        - generic [ref=e62]:
+          - generic [ref=e63]: Video Title
+          - textbox "Title" [ref=e64]: "Decolonising the Museum: Who Owns Cultural Heritage?"
+        - generic [ref=e65]:
+          - generic [ref=e66]: Description
+          - textbox [ref=e69]:
+            - paragraph [ref=e74]: As major European museums return some African artefacts, what does real restitution look like? A conversation with curators, activists, and communities of origin.
+        - generic [ref=e75]:
+          - generic [ref=e76]:
+            - generic [ref=e77]: Duration
+            - textbox "Duration (e.g. 45:00)" [ref=e78]: 31:07
+          - generic [ref=e79]:
+            - generic [ref=e80]: Topic / Category
+            - generic [ref=e82]:
+              - generic [ref=e83]:
+                - text: Indigenous Rights
+                - button "Remove Indigenous Rights" [ref=e84] [cursor=pointer]: ×
+              - textbox [ref=e85]
+        - generic [ref=e86]:
+          - generic [ref=e87]: Video Chapters
+          - generic [ref=e88]:
+            - textbox "0:00" [ref=e89]
+            - textbox "Chapter title" [ref=e90]
+            - button "Remove chapter" [ref=e91] [cursor=pointer]:
+              - img [ref=e92]
+          - button "Add Chapter" [ref=e94] [cursor=pointer]:
+            - img [ref=e95]
+            - text: Add Chapter
+        - generic [ref=e98] [cursor=pointer]:
+          - checkbox "✨ Submit for featured content at UNTOLD.ink Your content will be published immediately on your personal UNTOLD page. If approved by an Editor, it could become featured content with higher visibility on the homepage and in searches." [ref=e99]
+          - generic [ref=e100]:
+            - paragraph [ref=e101]: ✨ Submit for featured content at UNTOLD.ink
+            - paragraph [ref=e102]: Your content will be published immediately on your personal UNTOLD page. If approved by an Editor, it could become featured content with higher visibility on the homepage and in searches.
+      - generic [ref=e103]:
+        - button "Save changes" [ref=e104] [cursor=pointer]:
+          - img [ref=e105]
+          - text: Save changes
+        - button "Unpublish" [ref=e108] [cursor=pointer]
+        - button "Delete" [ref=e109] [cursor=pointer]
+  - contentinfo [ref=e110]:
+    - generic [ref=e111]:
+      - generic [ref=e112]:
+        - generic [ref=e113]:
+          - heading "UNTOLD" [level=4] [ref=e114]
+          - paragraph [ref=e115]: Exploring ideas that transform the future.
+        - generic [ref=e116]:
+          - paragraph [ref=e117]: Content
+          - list [ref=e118]:
+            - listitem [ref=e119]:
+              - link "Articles" [ref=e120] [cursor=pointer]:
+                - /url: /articles
+            - listitem [ref=e121]:
+              - link "Videos" [ref=e122] [cursor=pointer]:
+                - /url: /videos
+            - listitem [ref=e123]:
+              - link "Podcasts" [ref=e124] [cursor=pointer]:
+                - /url: /podcasts
+            - listitem [ref=e125]:
+              - link "Pills" [ref=e126] [cursor=pointer]:
+                - /url: /pills
+            - listitem [ref=e127]:
+              - link "Courses" [ref=e128] [cursor=pointer]:
+                - /url: /courses
+        - generic [ref=e129]:
+          - paragraph [ref=e130]: Topics
+          - list [ref=e131]:
+            - listitem [ref=e132]:
+              - link "Decoloniality" [ref=e133] [cursor=pointer]:
+                - /url: /tag/decoloniality
+            - listitem [ref=e134]:
+              - link "Sustainability" [ref=e135] [cursor=pointer]:
+                - /url: /tag/sustainability
+            - listitem [ref=e136]:
+              - link "Technology" [ref=e137] [cursor=pointer]:
+                - /url: /tag/technology
+            - listitem [ref=e138]:
+              - link "Education" [ref=e139] [cursor=pointer]:
+                - /url: /tag/education
+            - listitem [ref=e140]:
+              - link "Responsible AI" [ref=e141] [cursor=pointer]:
+                - /url: /tag/responsible-ai
+        - generic [ref=e142]:
+          - paragraph [ref=e143]: Connect
+          - list [ref=e144]:
+            - listitem [ref=e145]:
+              - link "About" [ref=e146] [cursor=pointer]:
+                - /url: /about
+            - listitem [ref=e147]:
+              - link "Contact" [ref=e148] [cursor=pointer]:
+                - /url: /contact
+            - listitem [ref=e149]:
+              - link "Newsletter" [ref=e150] [cursor=pointer]:
+                - /url: /newsletter
+            - listitem [ref=e151]:
+              - link "Become a Creator" [ref=e152] [cursor=pointer]:
+                - /url: /become-creator
+      - generic [ref=e153]: © 2026 UNTOLD. All rights reserved. A Sur Global publication.

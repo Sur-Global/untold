@@ -1,0 +1,216 @@
+[     283ms] [ERROR] Base UI: A component that acts as a button expected a native <button> because the `nativeButton` prop is true. Rendering a non-<button> removes native button semantics, which can impact forms and accessibility. Use a real <button> in the `render` prop, or set `nativeButton` to `false`.
+    at Button (webpack-internal:///(app-pages-browser)/./components/ui/button.tsx:41:87)
+    at Navigation (webpack-internal:///(app-pages-browser)/./components/layout/Navigation.tsx:97:112)
+    at HomePage (about://React/Server/webpack-internal:///(rsc)/./app/%5Blocale%5D/page.tsx?28:35:88) @ :0
+[     283ms] [ERROR] Base UI: A component that acts as a button expected a native <button> because the `nativeButton` prop is true. Rendering a non-<button> removes native button semantics, which can impact forms and accessibility. Use a real <button> in the `render` prop, or set `nativeButton` to `false`.
+    at Button (webpack-internal:///(app-pages-browser)/./components/ui/button.tsx:41:87)
+    at Navigation (webpack-internal:///(app-pages-browser)/./components/layout/Navigation.tsx:113:112)
+    at HomePage (about://React/Server/webpack-internal:///(rsc)/./app/%5Blocale%5D/page.tsx?28:35:88) @ :0
+[    1369ms] [ERROR] Base UI: A component that acts as a button expected a native <button> because the `nativeButton` prop is true. Rendering a non-<button> removes native button semantics, which can impact forms and accessibility. Use a real <button> in the `render` prop, or set `nativeButton` to `false`.
+    at Button (webpack-internal:///(app-pages-browser)/./components/ui/button.tsx:41:87)
+    at Navigation (webpack-internal:///(app-pages-browser)/./components/layout/Navigation.tsx:97:112)
+    at HomePage (about://React/Server/webpack-internal:///(rsc)/./app/%5Blocale%5D/page.tsx?28:35:88) @ :0
+[    1369ms] [ERROR] Base UI: A component that acts as a button expected a native <button> because the `nativeButton` prop is true. Rendering a non-<button> removes native button semantics, which can impact forms and accessibility. Use a real <button> in the `render` prop, or set `nativeButton` to `false`.
+    at Button (webpack-internal:///(app-pages-browser)/./components/ui/button.tsx:41:87)
+    at Navigation (webpack-internal:///(app-pages-browser)/./components/layout/Navigation.tsx:113:112)
+    at HomePage (about://React/Server/webpack-internal:///(rsc)/./app/%5Blocale%5D/page.tsx?28:35:88) @ :0
+[    3220ms] [ERROR] Base UI: A component that acts as a button expected a native <button> because the `nativeButton` prop is true. Rendering a non-<button> removes native button semantics, which can impact forms and accessibility. Use a real <button> in the `render` prop, or set `nativeButton` to `false`.
+    at Button (webpack-internal:///(app-pages-browser)/./components/ui/button.tsx:41:87)
+    at Navigation (webpack-internal:///(app-pages-browser)/./components/layout/Navigation.tsx:97:112)
+    at HomePage (about://React/Server/webpack-internal:///(rsc)/./app/%5Blocale%5D/page.tsx?28:35:88) @ :0
+[    3220ms] [ERROR] Base UI: A component that acts as a button expected a native <button> because the `nativeButton` prop is true. Rendering a non-<button> removes native button semantics, which can impact forms and accessibility. Use a real <button> in the `render` prop, or set `nativeButton` to `false`.
+    at Button (webpack-internal:///(app-pages-browser)/./components/ui/button.tsx:41:87)
+    at Navigation (webpack-internal:///(app-pages-browser)/./components/layout/Navigation.tsx:113:112)
+    at HomePage (about://React/Server/webpack-internal:///(rsc)/./app/%5Blocale%5D/page.tsx?28:35:88) @ :0
+[    5031ms] [ERROR] Base UI: A component that acts as a button expected a native <button> because the `nativeButton` prop is true. Rendering a non-<button> removes native button semantics, which can impact forms and accessibility. Use a real <button> in the `render` prop, or set `nativeButton` to `false`.
+    at Button (webpack-internal:///(app-pages-browser)/./components/ui/button.tsx:41:87)
+    at Navigation (webpack-internal:///(app-pages-browser)/./components/layout/Navigation.tsx:97:112)
+    at HomePage (about://React/Server/webpack-internal:///(rsc)/./app/%5Blocale%5D/page.tsx?28:35:88) @ :0
+[    5032ms] [ERROR] Base UI: A component that acts as a button expected a native <button> because the `nativeButton` prop is true. Rendering a non-<button> removes native button semantics, which can impact forms and accessibility. Use a real <button> in the `render` prop, or set `nativeButton` to `false`.
+    at Button (webpack-internal:///(app-pages-browser)/./components/ui/button.tsx:41:87)
+    at Navigation (webpack-internal:///(app-pages-browser)/./components/layout/Navigation.tsx:113:112)
+    at HomePage (about://React/Server/webpack-internal:///(rsc)/./app/%5Blocale%5D/page.tsx?28:35:88) @ :0
+[    7050ms] [ERROR] Base UI: A component that acts as a button expected a native <button> because the `nativeButton` prop is true. Rendering a non-<button> removes native button semantics, which can impact forms and accessibility. Use a real <button> in the `render` prop, or set `nativeButton` to `false`.
+    at Button (webpack-internal:///(app-pages-browser)/./components/ui/button.tsx:41:87)
+    at Navigation (webpack-internal:///(app-pages-browser)/./components/layout/Navigation.tsx:97:112)
+    at HomePage (about://React/Server/webpack-internal:///(rsc)/./app/%5Blocale%5D/page.tsx?28:35:88) @ :0
+[    7050ms] [ERROR] Base UI: A component that acts as a button expected a native <button> because the `nativeButton` prop is true. Rendering a non-<button> removes native button semantics, which can impact forms and accessibility. Use a real <button> in the `render` prop, or set `nativeButton` to `false`.
+    at Button (webpack-internal:///(app-pages-browser)/./components/ui/button.tsx:41:87)
+    at Navigation (webpack-internal:///(app-pages-browser)/./components/layout/Navigation.tsx:113:112)
+    at HomePage (about://React/Server/webpack-internal:///(rsc)/./app/%5Blocale%5D/page.tsx?28:35:88) @ :0
+[    9270ms] [ERROR] Base UI: A component that acts as a button expected a native <button> because the `nativeButton` prop is true. Rendering a non-<button> removes native button semantics, which can impact forms and accessibility. Use a real <button> in the `render` prop, or set `nativeButton` to `false`.
+    at Button (webpack-internal:///(app-pages-browser)/./components/ui/button.tsx:41:87)
+    at Navigation (webpack-internal:///(app-pages-browser)/./components/layout/Navigation.tsx:97:112)
+    at HomePage (about://React/Server/webpack-internal:///(rsc)/./app/%5Blocale%5D/page.tsx?28:35:88) @ :0
+[    9271ms] [ERROR] Base UI: A component that acts as a button expected a native <button> because the `nativeButton` prop is true. Rendering a non-<button> removes native button semantics, which can impact forms and accessibility. Use a real <button> in the `render` prop, or set `nativeButton` to `false`.
+    at Button (webpack-internal:///(app-pages-browser)/./components/ui/button.tsx:41:87)
+    at Navigation (webpack-internal:///(app-pages-browser)/./components/layout/Navigation.tsx:113:112)
+    at HomePage (about://React/Server/webpack-internal:///(rsc)/./app/%5Blocale%5D/page.tsx?28:35:88) @ :0
+[   14041ms] [ERROR] Base UI: A component that acts as a button expected a native <button> because the `nativeButton` prop is true. Rendering a non-<button> removes native button semantics, which can impact forms and accessibility. Use a real <button> in the `render` prop, or set `nativeButton` to `false`.
+    at Button (webpack-internal:///(app-pages-browser)/./components/ui/button.tsx:41:87)
+    at Navigation (webpack-internal:///(app-pages-browser)/./components/layout/Navigation.tsx:97:112)
+    at HomePage (about://React/Server/webpack-internal:///(rsc)/./app/%5Blocale%5D/page.tsx?28:35:88) @ :0
+[   14042ms] [ERROR] Base UI: A component that acts as a button expected a native <button> because the `nativeButton` prop is true. Rendering a non-<button> removes native button semantics, which can impact forms and accessibility. Use a real <button> in the `render` prop, or set `nativeButton` to `false`.
+    at Button (webpack-internal:///(app-pages-browser)/./components/ui/button.tsx:41:87)
+    at Navigation (webpack-internal:///(app-pages-browser)/./components/layout/Navigation.tsx:113:112)
+    at HomePage (about://React/Server/webpack-internal:///(rsc)/./app/%5Blocale%5D/page.tsx?28:35:88) @ :0
+[   16696ms] [ERROR] Base UI: A component that acts as a button expected a native <button> because the `nativeButton` prop is true. Rendering a non-<button> removes native button semantics, which can impact forms and accessibility. Use a real <button> in the `render` prop, or set `nativeButton` to `false`.
+    at Button (webpack-internal:///(app-pages-browser)/./components/ui/button.tsx:41:87)
+    at Navigation (webpack-internal:///(app-pages-browser)/./components/layout/Navigation.tsx:97:112)
+    at HomePage (about://React/Server/webpack-internal:///(rsc)/./app/%5Blocale%5D/page.tsx?28:35:88) @ :0
+[   16696ms] [ERROR] Base UI: A component that acts as a button expected a native <button> because the `nativeButton` prop is true. Rendering a non-<button> removes native button semantics, which can impact forms and accessibility. Use a real <button> in the `render` prop, or set `nativeButton` to `false`.
+    at Button (webpack-internal:///(app-pages-browser)/./components/ui/button.tsx:41:87)
+    at Navigation (webpack-internal:///(app-pages-browser)/./components/layout/Navigation.tsx:113:112)
+    at HomePage (about://React/Server/webpack-internal:///(rsc)/./app/%5Blocale%5D/page.tsx?28:35:88) @ :0
+[   19244ms] [ERROR] Base UI: A component that acts as a button expected a native <button> because the `nativeButton` prop is true. Rendering a non-<button> removes native button semantics, which can impact forms and accessibility. Use a real <button> in the `render` prop, or set `nativeButton` to `false`.
+    at Button (webpack-internal:///(app-pages-browser)/./components/ui/button.tsx:41:87)
+    at Navigation (webpack-internal:///(app-pages-browser)/./components/layout/Navigation.tsx:97:112)
+    at HomePage (about://React/Server/webpack-internal:///(rsc)/./app/%5Blocale%5D/page.tsx?28:35:88) @ :0
+[   19245ms] [ERROR] Base UI: A component that acts as a button expected a native <button> because the `nativeButton` prop is true. Rendering a non-<button> removes native button semantics, which can impact forms and accessibility. Use a real <button> in the `render` prop, or set `nativeButton` to `false`.
+    at Button (webpack-internal:///(app-pages-browser)/./components/ui/button.tsx:41:87)
+    at Navigation (webpack-internal:///(app-pages-browser)/./components/layout/Navigation.tsx:113:112)
+    at HomePage (about://React/Server/webpack-internal:///(rsc)/./app/%5Blocale%5D/page.tsx?28:35:88) @ :0
+[   21312ms] [ERROR] Base UI: A component that acts as a button expected a native <button> because the `nativeButton` prop is true. Rendering a non-<button> removes native button semantics, which can impact forms and accessibility. Use a real <button> in the `render` prop, or set `nativeButton` to `false`.
+    at Button (webpack-internal:///(app-pages-browser)/./components/ui/button.tsx:41:87)
+    at Navigation (webpack-internal:///(app-pages-browser)/./components/layout/Navigation.tsx:97:112)
+    at HomePage (about://React/Server/webpack-internal:///(rsc)/./app/%5Blocale%5D/page.tsx?28:35:88) @ :0
+[   21312ms] [ERROR] Base UI: A component that acts as a button expected a native <button> because the `nativeButton` prop is true. Rendering a non-<button> removes native button semantics, which can impact forms and accessibility. Use a real <button> in the `render` prop, or set `nativeButton` to `false`.
+    at Button (webpack-internal:///(app-pages-browser)/./components/ui/button.tsx:41:87)
+    at Navigation (webpack-internal:///(app-pages-browser)/./components/layout/Navigation.tsx:113:112)
+    at HomePage (about://React/Server/webpack-internal:///(rsc)/./app/%5Blocale%5D/page.tsx?28:35:88) @ :0
+[   23323ms] [ERROR] Base UI: A component that acts as a button expected a native <button> because the `nativeButton` prop is true. Rendering a non-<button> removes native button semantics, which can impact forms and accessibility. Use a real <button> in the `render` prop, or set `nativeButton` to `false`.
+    at Button (webpack-internal:///(app-pages-browser)/./components/ui/button.tsx:41:87)
+    at Navigation (webpack-internal:///(app-pages-browser)/./components/layout/Navigation.tsx:97:112)
+    at HomePage (about://React/Server/webpack-internal:///(rsc)/./app/%5Blocale%5D/page.tsx?28:35:88) @ :0
+[   23323ms] [ERROR] Base UI: A component that acts as a button expected a native <button> because the `nativeButton` prop is true. Rendering a non-<button> removes native button semantics, which can impact forms and accessibility. Use a real <button> in the `render` prop, or set `nativeButton` to `false`.
+    at Button (webpack-internal:///(app-pages-browser)/./components/ui/button.tsx:41:87)
+    at Navigation (webpack-internal:///(app-pages-browser)/./components/layout/Navigation.tsx:113:112)
+    at HomePage (about://React/Server/webpack-internal:///(rsc)/./app/%5Blocale%5D/page.tsx?28:35:88) @ :0
+[   25165ms] [ERROR] Base UI: A component that acts as a button expected a native <button> because the `nativeButton` prop is true. Rendering a non-<button> removes native button semantics, which can impact forms and accessibility. Use a real <button> in the `render` prop, or set `nativeButton` to `false`.
+    at Button (webpack-internal:///(app-pages-browser)/./components/ui/button.tsx:41:87)
+    at Navigation (webpack-internal:///(app-pages-browser)/./components/layout/Navigation.tsx:97:112)
+    at HomePage (about://React/Server/webpack-internal:///(rsc)/./app/%5Blocale%5D/page.tsx?28:35:88) @ :0
+[   25166ms] [ERROR] Base UI: A component that acts as a button expected a native <button> because the `nativeButton` prop is true. Rendering a non-<button> removes native button semantics, which can impact forms and accessibility. Use a real <button> in the `render` prop, or set `nativeButton` to `false`.
+    at Button (webpack-internal:///(app-pages-browser)/./components/ui/button.tsx:41:87)
+    at Navigation (webpack-internal:///(app-pages-browser)/./components/layout/Navigation.tsx:113:112)
+    at HomePage (about://React/Server/webpack-internal:///(rsc)/./app/%5Blocale%5D/page.tsx?28:35:88) @ :0
+[   27181ms] [ERROR] Base UI: A component that acts as a button expected a native <button> because the `nativeButton` prop is true. Rendering a non-<button> removes native button semantics, which can impact forms and accessibility. Use a real <button> in the `render` prop, or set `nativeButton` to `false`.
+    at Button (webpack-internal:///(app-pages-browser)/./components/ui/button.tsx:41:87)
+    at Navigation (webpack-internal:///(app-pages-browser)/./components/layout/Navigation.tsx:97:112)
+    at HomePage (about://React/Server/webpack-internal:///(rsc)/./app/%5Blocale%5D/page.tsx?28:35:88) @ :0
+[   27181ms] [ERROR] Base UI: A component that acts as a button expected a native <button> because the `nativeButton` prop is true. Rendering a non-<button> removes native button semantics, which can impact forms and accessibility. Use a real <button> in the `render` prop, or set `nativeButton` to `false`.
+    at Button (webpack-internal:///(app-pages-browser)/./components/ui/button.tsx:41:87)
+    at Navigation (webpack-internal:///(app-pages-browser)/./components/layout/Navigation.tsx:113:112)
+    at HomePage (about://React/Server/webpack-internal:///(rsc)/./app/%5Blocale%5D/page.tsx?28:35:88) @ :0
+[   29271ms] [ERROR] Base UI: A component that acts as a button expected a native <button> because the `nativeButton` prop is true. Rendering a non-<button> removes native button semantics, which can impact forms and accessibility. Use a real <button> in the `render` prop, or set `nativeButton` to `false`.
+    at Button (webpack-internal:///(app-pages-browser)/./components/ui/button.tsx:41:87)
+    at Navigation (webpack-internal:///(app-pages-browser)/./components/layout/Navigation.tsx:97:112)
+    at HomePage (about://React/Server/webpack-internal:///(rsc)/./app/%5Blocale%5D/page.tsx?28:35:88) @ :0
+[   29271ms] [ERROR] Base UI: A component that acts as a button expected a native <button> because the `nativeButton` prop is true. Rendering a non-<button> removes native button semantics, which can impact forms and accessibility. Use a real <button> in the `render` prop, or set `nativeButton` to `false`.
+    at Button (webpack-internal:///(app-pages-browser)/./components/ui/button.tsx:41:87)
+    at Navigation (webpack-internal:///(app-pages-browser)/./components/layout/Navigation.tsx:113:112)
+    at HomePage (about://React/Server/webpack-internal:///(rsc)/./app/%5Blocale%5D/page.tsx?28:35:88) @ :0
+[   31166ms] [ERROR] Base UI: A component that acts as a button expected a native <button> because the `nativeButton` prop is true. Rendering a non-<button> removes native button semantics, which can impact forms and accessibility. Use a real <button> in the `render` prop, or set `nativeButton` to `false`.
+    at Button (webpack-internal:///(app-pages-browser)/./components/ui/button.tsx:41:87)
+    at Navigation (webpack-internal:///(app-pages-browser)/./components/layout/Navigation.tsx:97:112)
+    at HomePage (about://React/Server/webpack-internal:///(rsc)/./app/%5Blocale%5D/page.tsx?28:35:88) @ :0
+[   31166ms] [ERROR] Base UI: A component that acts as a button expected a native <button> because the `nativeButton` prop is true. Rendering a non-<button> removes native button semantics, which can impact forms and accessibility. Use a real <button> in the `render` prop, or set `nativeButton` to `false`.
+    at Button (webpack-internal:///(app-pages-browser)/./components/ui/button.tsx:41:87)
+    at Navigation (webpack-internal:///(app-pages-browser)/./components/layout/Navigation.tsx:113:112)
+    at HomePage (about://React/Server/webpack-internal:///(rsc)/./app/%5Blocale%5D/page.tsx?28:35:88) @ :0
+[   32898ms] [ERROR] Base UI: A component that acts as a button expected a native <button> because the `nativeButton` prop is true. Rendering a non-<button> removes native button semantics, which can impact forms and accessibility. Use a real <button> in the `render` prop, or set `nativeButton` to `false`.
+    at Button (webpack-internal:///(app-pages-browser)/./components/ui/button.tsx:41:87)
+    at Navigation (webpack-internal:///(app-pages-browser)/./components/layout/Navigation.tsx:97:112)
+    at HomePage (about://React/Server/webpack-internal:///(rsc)/./app/%5Blocale%5D/page.tsx?28:35:88) @ :0
+[   32899ms] [ERROR] Base UI: A component that acts as a button expected a native <button> because the `nativeButton` prop is true. Rendering a non-<button> removes native button semantics, which can impact forms and accessibility. Use a real <button> in the `render` prop, or set `nativeButton` to `false`.
+    at Button (webpack-internal:///(app-pages-browser)/./components/ui/button.tsx:41:87)
+    at Navigation (webpack-internal:///(app-pages-browser)/./components/layout/Navigation.tsx:113:112)
+    at HomePage (about://React/Server/webpack-internal:///(rsc)/./app/%5Blocale%5D/page.tsx?28:35:88) @ :0
+[   34613ms] [ERROR] Base UI: A component that acts as a button expected a native <button> because the `nativeButton` prop is true. Rendering a non-<button> removes native button semantics, which can impact forms and accessibility. Use a real <button> in the `render` prop, or set `nativeButton` to `false`.
+    at Button (webpack-internal:///(app-pages-browser)/./components/ui/button.tsx:41:87)
+    at Navigation (webpack-internal:///(app-pages-browser)/./components/layout/Navigation.tsx:97:112)
+    at HomePage (about://React/Server/webpack-internal:///(rsc)/./app/%5Blocale%5D/page.tsx?28:35:88) @ :0
+[   34613ms] [ERROR] Base UI: A component that acts as a button expected a native <button> because the `nativeButton` prop is true. Rendering a non-<button> removes native button semantics, which can impact forms and accessibility. Use a real <button> in the `render` prop, or set `nativeButton` to `false`.
+    at Button (webpack-internal:///(app-pages-browser)/./components/ui/button.tsx:41:87)
+    at Navigation (webpack-internal:///(app-pages-browser)/./components/layout/Navigation.tsx:113:112)
+    at HomePage (about://React/Server/webpack-internal:///(rsc)/./app/%5Blocale%5D/page.tsx?28:35:88) @ :0
+[   36352ms] [ERROR] Base UI: A component that acts as a button expected a native <button> because the `nativeButton` prop is true. Rendering a non-<button> removes native button semantics, which can impact forms and accessibility. Use a real <button> in the `render` prop, or set `nativeButton` to `false`.
+    at Button (webpack-internal:///(app-pages-browser)/./components/ui/button.tsx:41:87)
+    at Navigation (webpack-internal:///(app-pages-browser)/./components/layout/Navigation.tsx:97:112)
+    at HomePage (about://React/Server/webpack-internal:///(rsc)/./app/%5Blocale%5D/page.tsx?28:35:88) @ :0
+[   36352ms] [ERROR] Base UI: A component that acts as a button expected a native <button> because the `nativeButton` prop is true. Rendering a non-<button> removes native button semantics, which can impact forms and accessibility. Use a real <button> in the `render` prop, or set `nativeButton` to `false`.
+    at Button (webpack-internal:///(app-pages-browser)/./components/ui/button.tsx:41:87)
+    at Navigation (webpack-internal:///(app-pages-browser)/./components/layout/Navigation.tsx:113:112)
+    at HomePage (about://React/Server/webpack-internal:///(rsc)/./app/%5Blocale%5D/page.tsx?28:35:88) @ :0
+[   38242ms] [ERROR] Base UI: A component that acts as a button expected a native <button> because the `nativeButton` prop is true. Rendering a non-<button> removes native button semantics, which can impact forms and accessibility. Use a real <button> in the `render` prop, or set `nativeButton` to `false`.
+    at Button (webpack-internal:///(app-pages-browser)/./components/ui/button.tsx:41:87)
+    at Navigation (webpack-internal:///(app-pages-browser)/./components/layout/Navigation.tsx:97:112)
+    at HomePage (about://React/Server/webpack-internal:///(rsc)/./app/%5Blocale%5D/page.tsx?28:35:88) @ :0
+[   38243ms] [ERROR] Base UI: A component that acts as a button expected a native <button> because the `nativeButton` prop is true. Rendering a non-<button> removes native button semantics, which can impact forms and accessibility. Use a real <button> in the `render` prop, or set `nativeButton` to `false`.
+    at Button (webpack-internal:///(app-pages-browser)/./components/ui/button.tsx:41:87)
+    at Navigation (webpack-internal:///(app-pages-browser)/./components/layout/Navigation.tsx:113:112)
+    at HomePage (about://React/Server/webpack-internal:///(rsc)/./app/%5Blocale%5D/page.tsx?28:35:88) @ :0
+[   40147ms] [ERROR] Base UI: A component that acts as a button expected a native <button> because the `nativeButton` prop is true. Rendering a non-<button> removes native button semantics, which can impact forms and accessibility. Use a real <button> in the `render` prop, or set `nativeButton` to `false`.
+    at Button (webpack-internal:///(app-pages-browser)/./components/ui/button.tsx:41:87)
+    at Navigation (webpack-internal:///(app-pages-browser)/./components/layout/Navigation.tsx:97:112)
+    at HomePage (about://React/Server/webpack-internal:///(rsc)/./app/%5Blocale%5D/page.tsx?28:35:88) @ :0
+[   40147ms] [ERROR] Base UI: A component that acts as a button expected a native <button> because the `nativeButton` prop is true. Rendering a non-<button> removes native button semantics, which can impact forms and accessibility. Use a real <button> in the `render` prop, or set `nativeButton` to `false`.
+    at Button (webpack-internal:///(app-pages-browser)/./components/ui/button.tsx:41:87)
+    at Navigation (webpack-internal:///(app-pages-browser)/./components/layout/Navigation.tsx:113:112)
+    at HomePage (about://React/Server/webpack-internal:///(rsc)/./app/%5Blocale%5D/page.tsx?28:35:88) @ :0
+[   42144ms] [ERROR] Base UI: A component that acts as a button expected a native <button> because the `nativeButton` prop is true. Rendering a non-<button> removes native button semantics, which can impact forms and accessibility. Use a real <button> in the `render` prop, or set `nativeButton` to `false`.
+    at Button (webpack-internal:///(app-pages-browser)/./components/ui/button.tsx:41:87)
+    at Navigation (webpack-internal:///(app-pages-browser)/./components/layout/Navigation.tsx:97:112)
+    at HomePage (about://React/Server/webpack-internal:///(rsc)/./app/%5Blocale%5D/page.tsx?28:35:88) @ :0
+[   42144ms] [ERROR] Base UI: A component that acts as a button expected a native <button> because the `nativeButton` prop is true. Rendering a non-<button> removes native button semantics, which can impact forms and accessibility. Use a real <button> in the `render` prop, or set `nativeButton` to `false`.
+    at Button (webpack-internal:///(app-pages-browser)/./components/ui/button.tsx:41:87)
+    at Navigation (webpack-internal:///(app-pages-browser)/./components/layout/Navigation.tsx:113:112)
+    at HomePage (about://React/Server/webpack-internal:///(rsc)/./app/%5Blocale%5D/page.tsx?28:35:88) @ :0
+[   43795ms] [ERROR] Base UI: A component that acts as a button expected a native <button> because the `nativeButton` prop is true. Rendering a non-<button> removes native button semantics, which can impact forms and accessibility. Use a real <button> in the `render` prop, or set `nativeButton` to `false`.
+    at Button (webpack-internal:///(app-pages-browser)/./components/ui/button.tsx:41:87)
+    at Navigation (webpack-internal:///(app-pages-browser)/./components/layout/Navigation.tsx:97:112)
+    at HomePage (about://React/Server/webpack-internal:///(rsc)/./app/%5Blocale%5D/page.tsx?28:35:88) @ :0
+[   43795ms] [ERROR] Base UI: A component that acts as a button expected a native <button> because the `nativeButton` prop is true. Rendering a non-<button> removes native button semantics, which can impact forms and accessibility. Use a real <button> in the `render` prop, or set `nativeButton` to `false`.
+    at Button (webpack-internal:///(app-pages-browser)/./components/ui/button.tsx:41:87)
+    at Navigation (webpack-internal:///(app-pages-browser)/./components/layout/Navigation.tsx:113:112)
+    at HomePage (about://React/Server/webpack-internal:///(rsc)/./app/%5Blocale%5D/page.tsx?28:35:88) @ :0
+[   45619ms] [ERROR] Base UI: A component that acts as a button expected a native <button> because the `nativeButton` prop is true. Rendering a non-<button> removes native button semantics, which can impact forms and accessibility. Use a real <button> in the `render` prop, or set `nativeButton` to `false`.
+    at Button (webpack-internal:///(app-pages-browser)/./components/ui/button.tsx:41:87)
+    at Navigation (webpack-internal:///(app-pages-browser)/./components/layout/Navigation.tsx:97:112)
+    at HomePage (about://React/Server/webpack-internal:///(rsc)/./app/%5Blocale%5D/page.tsx?28:35:88) @ :0
+[   45620ms] [ERROR] Base UI: A component that acts as a button expected a native <button> because the `nativeButton` prop is true. Rendering a non-<button> removes native button semantics, which can impact forms and accessibility. Use a real <button> in the `render` prop, or set `nativeButton` to `false`.
+    at Button (webpack-internal:///(app-pages-browser)/./components/ui/button.tsx:41:87)
+    at Navigation (webpack-internal:///(app-pages-browser)/./components/layout/Navigation.tsx:113:112)
+    at HomePage (about://React/Server/webpack-internal:///(rsc)/./app/%5Blocale%5D/page.tsx?28:35:88) @ :0
+[   47391ms] [ERROR] Base UI: A component that acts as a button expected a native <button> because the `nativeButton` prop is true. Rendering a non-<button> removes native button semantics, which can impact forms and accessibility. Use a real <button> in the `render` prop, or set `nativeButton` to `false`.
+    at Button (webpack-internal:///(app-pages-browser)/./components/ui/button.tsx:41:87)
+    at Navigation (webpack-internal:///(app-pages-browser)/./components/layout/Navigation.tsx:97:112)
+    at HomePage (about://React/Server/webpack-internal:///(rsc)/./app/%5Blocale%5D/page.tsx?28:35:88) @ :0
+[   47391ms] [ERROR] Base UI: A component that acts as a button expected a native <button> because the `nativeButton` prop is true. Rendering a non-<button> removes native button semantics, which can impact forms and accessibility. Use a real <button> in the `render` prop, or set `nativeButton` to `false`.
+    at Button (webpack-internal:///(app-pages-browser)/./components/ui/button.tsx:41:87)
+    at Navigation (webpack-internal:///(app-pages-browser)/./components/layout/Navigation.tsx:113:112)
+    at HomePage (about://React/Server/webpack-internal:///(rsc)/./app/%5Blocale%5D/page.tsx?28:35:88) @ :0
+[   49204ms] [ERROR] Base UI: A component that acts as a button expected a native <button> because the `nativeButton` prop is true. Rendering a non-<button> removes native button semantics, which can impact forms and accessibility. Use a real <button> in the `render` prop, or set `nativeButton` to `false`.
+    at Button (webpack-internal:///(app-pages-browser)/./components/ui/button.tsx:41:87)
+    at Navigation (webpack-internal:///(app-pages-browser)/./components/layout/Navigation.tsx:97:112)
+    at HomePage (about://React/Server/webpack-internal:///(rsc)/./app/%5Blocale%5D/page.tsx?28:35:88) @ :0
+[   49205ms] [ERROR] Base UI: A component that acts as a button expected a native <button> because the `nativeButton` prop is true. Rendering a non-<button> removes native button semantics, which can impact forms and accessibility. Use a real <button> in the `render` prop, or set `nativeButton` to `false`.
+    at Button (webpack-internal:///(app-pages-browser)/./components/ui/button.tsx:41:87)
+    at Navigation (webpack-internal:///(app-pages-browser)/./components/layout/Navigation.tsx:113:112)
+    at HomePage (about://React/Server/webpack-internal:///(rsc)/./app/%5Blocale%5D/page.tsx?28:35:88) @ :0
+[   50941ms] [ERROR] Base UI: A component that acts as a button expected a native <button> because the `nativeButton` prop is true. Rendering a non-<button> removes native button semantics, which can impact forms and accessibility. Use a real <button> in the `render` prop, or set `nativeButton` to `false`.
+    at Button (webpack-internal:///(app-pages-browser)/./components/ui/button.tsx:41:87)
+    at Navigation (webpack-internal:///(app-pages-browser)/./components/layout/Navigation.tsx:97:112)
+    at HomePage (about://React/Server/webpack-internal:///(rsc)/./app/%5Blocale%5D/page.tsx?28:35:88) @ :0
+[   50942ms] [ERROR] Base UI: A component that acts as a button expected a native <button> because the `nativeButton` prop is true. Rendering a non-<button> removes native button semantics, which can impact forms and accessibility. Use a real <button> in the `render` prop, or set `nativeButton` to `false`.
+    at Button (webpack-internal:///(app-pages-browser)/./components/ui/button.tsx:41:87)
+    at Navigation (webpack-internal:///(app-pages-browser)/./components/layout/Navigation.tsx:113:112)
+    at HomePage (about://React/Server/webpack-internal:///(rsc)/./app/%5Blocale%5D/page.tsx?28:35:88) @ :0
+[   52702ms] [ERROR] Base UI: A component that acts as a button expected a native <button> because the `nativeButton` prop is true. Rendering a non-<button> removes native button semantics, which can impact forms and accessibility. Use a real <button> in the `render` prop, or set `nativeButton` to `false`.
+    at Button (webpack-internal:///(app-pages-browser)/./components/ui/button.tsx:41:87)
+    at Navigation (webpack-internal:///(app-pages-browser)/./components/layout/Navigation.tsx:97:112)
+    at HomePage (about://React/Server/webpack-internal:///(rsc)/./app/%5Blocale%5D/page.tsx?28:35:88) @ :0
+[   52703ms] [ERROR] Base UI: A component that acts as a button expected a native <button> because the `nativeButton` prop is true. Rendering a non-<button> removes native button semantics, which can impact forms and accessibility. Use a real <button> in the `render` prop, or set `nativeButton` to `false`.
+    at Button (webpack-internal:///(app-pages-browser)/./components/ui/button.tsx:41:87)
+    at Navigation (webpack-internal:///(app-pages-browser)/./components/layout/Navigation.tsx:113:112)
+    at HomePage (about://React/Server/webpack-internal:///(rsc)/./app/%5Blocale%5D/page.tsx?28:35:88) @ :0

@@ -1,0 +1,123 @@
+- generic [active] [ref=e1]:
+  - banner [ref=e2]:
+    - generic [ref=e3]:
+      - link "UNTOLD" [ref=e4] [cursor=pointer]:
+        - /url: /
+      - navigation [ref=e5]:
+        - link "Articles" [ref=e6] [cursor=pointer]:
+          - /url: /articles
+        - link "Videos" [ref=e7] [cursor=pointer]:
+          - /url: /videos
+        - link "Podcasts" [ref=e8] [cursor=pointer]:
+          - /url: /podcasts
+        - link "Knowledge Pills" [ref=e9] [cursor=pointer]:
+          - /url: /pills
+        - link "Courses" [ref=e10] [cursor=pointer]:
+          - /url: /courses
+      - generic [ref=e11]:
+        - link "Search" [ref=e12] [cursor=pointer]:
+          - /url: /search
+          - img [ref=e13]
+        - button "EN" [ref=e16] [cursor=pointer]:
+          - img [ref=e17]
+          - generic [ref=e21]: EN
+        - generic [ref=e22]: "|"
+        - link "Log in" [ref=e23] [cursor=pointer]:
+          - /url: /auth/login
+  - main [ref=e24]:
+    - generic [ref=e25]:
+      - link "Back" [ref=e26] [cursor=pointer]:
+        - /url: /articles
+        - img [ref=e27]
+        - text: Back
+      - article [ref=e29]:
+        - heading "ohoh" [level=1] [ref=e30]
+        - generic [ref=e31]:
+          - generic [ref=e32]:
+            - generic [ref=e34]: "N"
+            - link "Noah Laux" [ref=e35] [cursor=pointer]:
+              - /url: /author/noah-laux
+          - generic [ref=e37]:
+            - generic [ref=e38]:
+              - img [ref=e39]
+              - generic [ref=e42]: March 23, 2026
+            - generic [ref=e43]:
+              - img [ref=e44]
+              - generic [ref=e47]: 1 min read
+        - generic [ref=e48]:
+          - button "1" [disabled] [ref=e49]:
+            - img [ref=e50]
+            - generic [ref=e52]: "1"
+          - button "Sign in to bookmark" [disabled] [ref=e53]:
+            - img [ref=e54]
+          - button "Share article" [ref=e56] [cursor=pointer]:
+            - img [ref=e57]
+            - text: Share
+        - generic [ref=e60]:
+          - heading "About the Author" [level=3] [ref=e61]
+          - generic [ref=e62]:
+            - generic [ref=e64]: "N"
+            - generic [ref=e65]:
+              - heading "Noah Laux" [level=4] [ref=e66]
+              - link "View profile →" [ref=e67] [cursor=pointer]:
+                - /url: /author/noah-laux
+  - contentinfo [ref=e68]:
+    - generic [ref=e69]:
+      - generic [ref=e70]:
+        - generic [ref=e71]:
+          - heading "UNTOLD" [level=4] [ref=e72]
+          - paragraph [ref=e73]: Exploring ideas that transform the future.
+        - generic [ref=e74]:
+          - paragraph [ref=e75]: Content
+          - list [ref=e76]:
+            - listitem [ref=e77]:
+              - link "Articles" [ref=e78] [cursor=pointer]:
+                - /url: /articles
+            - listitem [ref=e79]:
+              - link "Videos" [ref=e80] [cursor=pointer]:
+                - /url: /videos
+            - listitem [ref=e81]:
+              - link "Podcasts" [ref=e82] [cursor=pointer]:
+                - /url: /podcasts
+            - listitem [ref=e83]:
+              - link "Pills" [ref=e84] [cursor=pointer]:
+                - /url: /pills
+            - listitem [ref=e85]:
+              - link "Courses" [ref=e86] [cursor=pointer]:
+                - /url: /courses
+        - generic [ref=e87]:
+          - paragraph [ref=e88]: Topics
+          - list [ref=e89]:
+            - listitem [ref=e90]:
+              - link "Decoloniality" [ref=e91] [cursor=pointer]:
+                - /url: /tag/decoloniality
+            - listitem [ref=e92]:
+              - link "Sustainability" [ref=e93] [cursor=pointer]:
+                - /url: /tag/sustainability
+            - listitem [ref=e94]:
+              - link "Technology" [ref=e95] [cursor=pointer]:
+                - /url: /tag/technology
+            - listitem [ref=e96]:
+              - link "Education" [ref=e97] [cursor=pointer]:
+                - /url: /tag/education
+            - listitem [ref=e98]:
+              - link "Responsible AI" [ref=e99] [cursor=pointer]:
+                - /url: /tag/responsible-ai
+        - generic [ref=e100]:
+          - paragraph [ref=e101]: Connect
+          - list [ref=e102]:
+            - listitem [ref=e103]:
+              - link "About" [ref=e104] [cursor=pointer]:
+                - /url: /about
+            - listitem [ref=e105]:
+              - link "Contact" [ref=e106] [cursor=pointer]:
+                - /url: /contact
+            - listitem [ref=e107]:
+              - link "Newsletter" [ref=e108] [cursor=pointer]:
+                - /url: /newsletter
+            - listitem [ref=e109]:
+              - link "Become a Creator" [ref=e110] [cursor=pointer]:
+                - /url: /become-creator
+      - generic [ref=e111]: © 2026 UNTOLD. All rights reserved. A Sur Global publication.
+  - button "Open Next.js Dev Tools" [ref=e117] [cursor=pointer]:
+    - img [ref=e118]

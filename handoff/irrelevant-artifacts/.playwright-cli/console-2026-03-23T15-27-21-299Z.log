@@ -1,0 +1,46 @@
+[ 1181678ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost:3000/articles/ohoh-mn3avq3j?_rsc=1crv3:0
+[ 1182604ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost:3000/articles/ohoh-mn3avq3j?_rsc=1crv3:0
+[ 1182640ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost:3000/articles/ohoh-mn3avq3j:0
+[ 1183363ms] TypeError: createContext only works in Client Components. Add the "use client" directive at the top of the file to use it. Read more: https://nextjs.org/docs/messages/context-in-server-component
+    at module evaluation (file:///Users/noahlaux/code/surglobal/untold/.next/dev/server/chunks/ssr/node_modules_@floating-ui_react_dist_0ko1_-r._.js:744:241)
+    at <unknown> (file:///Users/noahlaux/code/surglobal/untold/.next/dev/server/chunks/ssr/[turbopack]_runtime.js:1291:27)
+    at runWithHooks (file:///Users/noahlaux/code/surglobal/untold/.next/dev/server/chunks/ssr/[turbopack]_runtime.js:1554:9)
+    at instantiateModuleShared (file:///Users/noahlaux/code/surglobal/untold/.next/dev/server/chunks/ssr/[turbopack]_runtime.js:1289:9)
+    at instantiateModule (file:///Users/noahlaux/code/surglobal/untold/.next/dev/server/chunks/ssr/[turbopack]_runtime.js:1557:23)
+    at getOrInstantiateModuleFromParent (file:///Users/noahlaux/code/surglobal/untold/.next/dev/server/chunks/ssr/[turbopack]_runtime.js:1593:23)
+    at Context.esmImport [as i] (file:///Users/noahlaux/code/surglobal/untold/.next/dev/server/chunks/ssr/[turbopack]_runtime.js:281:20)
+    at module evaluation (file:///Users/noahlaux/code/surglobal/untold/.next/dev/server/chunks/ssr/node_modules_@blocknote_react_dist_blocknote-react_0nu2kom.js:284:219)
+    at <unknown> (file:///Users/noahlaux/code/surglobal/untold/.next/dev/server/chunks/ssr/[turbopack]_runtime.js:1291:27)
+    at runWithHooks (file:///Users/noahlaux/code/surglobal/untold/.next/dev/server/chunks/ssr/[turbopack]_runtime.js:1554:9)
+[ 1208375ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost:3000/articles/ohoh-mn3avq3j:0
+[ 1208446ms] TypeError: createContext only works in Client Components. Add the "use client" directive at the top of the file to use it. Read more: https://nextjs.org/docs/messages/context-in-server-component
+    at module evaluation (file:///Users/noahlaux/code/surglobal/untold/.next/dev/server/chunks/ssr/node_modules_@floating-ui_react_dist_0ko1_-r._.js:744:241)
+    at <unknown> (file:///Users/noahlaux/code/surglobal/untold/.next/dev/server/chunks/ssr/[turbopack]_runtime.js:1291:27)
+    at runWithHooks (file:///Users/noahlaux/code/surglobal/untold/.next/dev/server/chunks/ssr/[turbopack]_runtime.js:1554:9)
+    at instantiateModuleShared (file:///Users/noahlaux/code/surglobal/untold/.next/dev/server/chunks/ssr/[turbopack]_runtime.js:1289:9)
+    at instantiateModule (file:///Users/noahlaux/code/surglobal/untold/.next/dev/server/chunks/ssr/[turbopack]_runtime.js:1557:23)
+    at getOrInstantiateModuleFromParent (file:///Users/noahlaux/code/surglobal/untold/.next/dev/server/chunks/ssr/[turbopack]_runtime.js:1593:23)
+    at Context.esmImport [as i] (file:///Users/noahlaux/code/surglobal/untold/.next/dev/server/chunks/ssr/[turbopack]_runtime.js:281:20)
+    at module evaluation (file:///Users/noahlaux/code/surglobal/untold/.next/dev/server/chunks/ssr/node_modules_@blocknote_react_dist_blocknote-react_0nu2kom.js:284:219)
+    at <unknown> (file:///Users/noahlaux/code/surglobal/untold/.next/dev/server/chunks/ssr/[turbopack]_runtime.js:1291:27)
+    at runWithHooks (file:///Users/noahlaux/code/surglobal/untold/.next/dev/server/chunks/ssr/[turbopack]_runtime.js:1554:9)
+[ 1242995ms] [WARNING] [Fast Refresh] performing full reload because your application had an unrecoverable error @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_0u_w_5s._.js:1226
+[ 1243831ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost:3000/articles/ohoh-mn3avq3j:0
+[ 1243850ms] TypeError: createContext only works in Client Components. Add the "use client" directive at the top of the file to use it. Read more: https://nextjs.org/docs/messages/context-in-server-component
+    at module evaluation (file:///Users/noahlaux/code/surglobal/untold/.next/dev/server/chunks/ssr/node_modules_@floating-ui_react_dist_0ko1_-r._.js:744:241)
+    at <unknown> (file:///Users/noahlaux/code/surglobal/untold/.next/dev/server/chunks/ssr/[turbopack]_runtime.js:1291:27)
+    at runWithHooks (file:///Users/noahlaux/code/surglobal/untold/.next/dev/server/chunks/ssr/[turbopack]_runtime.js:1554:9)
+    at instantiateModuleShared (file:///Users/noahlaux/code/surglobal/untold/.next/dev/server/chunks/ssr/[turbopack]_runtime.js:1289:9)
+    at instantiateModule (file:///Users/noahlaux/code/surglobal/untold/.next/dev/server/chunks/ssr/[turbopack]_runtime.js:1557:23)
+    at getOrInstantiateModuleFromParent (file:///Users/noahlaux/code/surglobal/untold/.next/dev/server/chunks/ssr/[turbopack]_runtime.js:1593:23)
+    at Context.esmImport [as i] (file:///Users/noahlaux/code/surglobal/untold/.next/dev/server/chunks/ssr/[turbopack]_runtime.js:281:20)
+    at module evaluation (file:///Users/noahlaux/code/surglobal/untold/.next/dev/server/chunks/ssr/node_modules_@blocknote_react_dist_blocknote-react_0nu2kom.js:284:219)
+    at <unknown> (file:///Users/noahlaux/code/surglobal/untold/.next/dev/server/chunks/ssr/[turbopack]_runtime.js:1291:27)
+    at runWithHooks (file:///Users/noahlaux/code/surglobal/untold/.next/dev/server/chunks/ssr/[turbopack]_runtime.js:1554:9)
+[ 1333427ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost:3000/articles/ohoh-mn3avq3j:0
+[ 1334260ms] SecurityError: localStorage is not available for opaque origins
+    at resolveErrorDev (http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_0p3wegg._.js:1919:105)
+    at processFullStringRow (http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_0p3wegg._.js:2434:29)
+    at processFullBinaryRow (http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_0p3wegg._.js:2393:9)
+    at processBinaryChunk (http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_0p3wegg._.js:2502:221)
+    at progress (http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_0p3wegg._.js:2689:13)

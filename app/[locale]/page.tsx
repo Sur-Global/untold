@@ -1,6 +1,7 @@
 import { after } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
 import { getNavProps } from '@/lib/nav'
+import { getPlatformSettings } from '@/lib/data/platform-settings'
 import { getTranslation } from '@/lib/content'
 import { triggerListingTranslations } from '@/lib/trigger-listing-translations'
 import { triggerTagTranslations } from '@/lib/trigger-tag-translations'
@@ -27,6 +28,18 @@ export default async function HomePage({ params }: PageProps) {
   const supabase = await createClient()
   const t = await getTranslations('home')
   const tListings = await getTranslations('listings')
+  const platform = await getPlatformSettings()
+  const featuredArticleLimit = platform.featuredContent.count
+  const heroHeadline =
+    platform.homeHero.title.trim() || t('heroHeadline')
+  const heroSubtext =
+    platform.homeHero.subtitle.trim() || t('heroSubtext')
+  const featuredLayoutClass =
+    platform.featuredContent.layout === 'carousel'
+      ? 'flex gap-5 overflow-x-auto pb-2 snap-x snap-mandatory'
+      : platform.featuredContent.layout === 'list'
+        ? 'flex flex-col gap-5'
+        : 'space-y-5'
 
   const [
     { userId, ...navProps },
@@ -73,7 +86,7 @@ export default async function HomePage({ params }: PageProps) {
       .eq('status', 'published')
       .eq('is_featured', true)
       .order('published_at', { ascending: false })
-      .limit(5),
+      .limit(Math.max(1, Math.min(24, featuredArticleLimit))),
     // Videos
     (supabase as any)
       .from('content')
@@ -244,7 +257,12 @@ export default async function HomePage({ params }: PageProps) {
   return (
     <>
       <TranslationRefresher pending={pendingTranslations} />
-      <Navigation {...navProps} />
+      <Navigation
+        isLoggedIn={navProps.isLoggedIn}
+        userRole={navProps.userRole}
+        cmsNavItems={navProps.cmsNavItems}
+        showSearchInHeader={navProps.showSearchInHeader}
+      />
       <main>
         {/* Hero — cream background, two-column */}
         <section className="px-4 sm:px-6 py-16 lg:py-20" style={{ background: '#F5F1E8' }}>
@@ -256,14 +274,14 @@ export default async function HomePage({ params }: PageProps) {
                 className="mb-6 leading-[1.1]"
                 style={{ fontSize: 'clamp(32px,5vw,50px)', color: '#2C2420' }}
               >
-                {t('heroHeadline')}
+                {heroHeadline}
               </h1>
 
               <p
                 className="mb-8 leading-relaxed"
                 style={{ color: '#5D4E37', fontFamily: 'Inter, sans-serif', fontSize: 18, maxWidth: 480 }}
               >
-                {t('heroSubtext')}
+                {heroSubtext}
               </p>
 
               <div className="flex flex-wrap gap-4 mb-10">
@@ -355,7 +373,7 @@ export default async function HomePage({ params }: PageProps) {
             </div>
 
             {/* Right column: featured article card + 2 small tag cards */}
-            {featuredArticle && heroTrans && (
+            {platform.featuredSections.articles && featuredArticle && heroTrans && (
               <div className="shrink-0 flex flex-col gap-4 w-full lg:w-[360px]">
                 {/* Big featured card */}
                 <Link
@@ -433,7 +451,8 @@ export default async function HomePage({ params }: PageProps) {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-16 space-y-20">
 
           {/* Featured Articles — large hero card + smaller featured cards */}
-          {(featuredArticle || featuredArticles.length > 0) && (
+          {platform.featuredSections.articles &&
+            (featuredArticle || featuredArticles.length > 0) && (
             <section>
               <SectionHeader
                 title={t('featuredArticles')}
@@ -442,7 +461,7 @@ export default async function HomePage({ params }: PageProps) {
                 viewAllLabel={t('viewAll')}
               />
 
-              <div className="mt-6 space-y-5">
+              <div className={`mt-6 ${featuredLayoutClass}`}>
                 {/* Top: large card full-width on mobile, side-by-side on md+ */}
                 <div className="flex flex-col md:flex-row gap-5 md:items-stretch">
                   {/* Large featured card */}
@@ -479,7 +498,7 @@ export default async function HomePage({ params }: PageProps) {
 
                 {/* Bottom row: 2 more cards, side-by-side only on md+ */}
                 {featuredArticles.length > 2 && (
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                  <div className="grid w-full min-w-0 grid-cols-1 gap-5 md:grid-cols-2">
                     {featuredArticles.slice(2, 4).map((item: any) => (
                       <ContentCard
                         key={item.id}
@@ -493,7 +512,7 @@ export default async function HomePage({ params }: PageProps) {
           )}
 
           {/* Videos */}
-          {(videos ?? []).length > 0 && (
+          {platform.featuredSections.videos && (videos ?? []).length > 0 && (
             <section>
               <SectionHeader
                 title={t('videos')}
@@ -529,7 +548,7 @@ export default async function HomePage({ params }: PageProps) {
           )}
 
           {/* Podcasts */}
-          {(podcasts ?? []).length > 0 && (
+          {platform.featuredSections.podcasts && (podcasts ?? []).length > 0 && (
             <section>
               <SectionHeader
                 title={t('podcasts')}
@@ -562,7 +581,7 @@ export default async function HomePage({ params }: PageProps) {
           )}
 
           {/* Knowledge Pills — 3×2 */}
-          {(pills ?? []).length > 0 && (
+          {platform.featuredSections.pills && (pills ?? []).length > 0 && (
             <section>
               <SectionHeader
                 title={t('pills')}
@@ -597,7 +616,7 @@ export default async function HomePage({ params }: PageProps) {
           )}
 
           {/* Courses */}
-          {(courses ?? []).length > 0 && (
+          {platform.featuredSections.courses && (courses ?? []).length > 0 && (
             <section>
               <div className="text-center mb-8">
                 <h2 style={{ color: '#2C2420' }}>{t('courses')}</h2>

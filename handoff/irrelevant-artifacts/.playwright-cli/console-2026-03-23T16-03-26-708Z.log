@@ -1,0 +1,47 @@
+[     499ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost:3000/da/articles/ohoh-mn3avq3j:0
+[  196478ms] [ERROR] Yjs was already imported. This breaks constructor checks and will lead to issues! - https://github.com/yjs/yjs/issues/438 @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js:3272
+[  196671ms] RangeError: Duplicate use of selection JSON ID multiple-node
+    at Selection.jsonID (http://localhost:3000/_next/static/chunks/node_modules_00ir1gh._.js:12234:38)
+    at module evaluation (http://localhost:3000/_next/static/chunks/node_modules_%40blocknote_core_dist_04214l-._.js:6614:167)
+    at http://localhost:3000/_next/static/chunks/turbopack-_0p44nws._.js:1307:27
+    at runModuleExecutionHooks (http://localhost:3000/_next/static/chunks/turbopack-_0p44nws._.js:1636:13)
+    at instantiateModuleShared (http://localhost:3000/_next/static/chunks/turbopack-_0p44nws._.js:1305:9)
+    at instantiateModule (http://localhost:3000/_next/static/chunks/turbopack-_0p44nws._.js:1621:12)
+    at getOrInstantiateModuleFromParent (http://localhost:3000/_next/static/chunks/turbopack-_0p44nws._.js:1604:12)
+    at DevContext.esmImport [as i] (http://localhost:3000/_next/static/chunks/turbopack-_0p44nws._.js:278:20)
+    at module evaluation (http://localhost:3000/_next/static/chunks/node_modules_%40blocknote_core_dist_04214l-._.js:7422:200)
+    at http://localhost:3000/_next/static/chunks/turbopack-_0p44nws._.js:1307:27
+    at runModuleExecutionHooks (http://localhost:3000/_next/static/chunks/turbopack-_0p44nws._.js:1636:13)
+    at instantiateModuleShared (http://localhost:3000/_next/static/chunks/turbopack-_0p44nws._.js:1305:9)
+    at instantiateModule (http://localhost:3000/_next/static/chunks/turbopack-_0p44nws._.js:1621:12)
+    at getOrInstantiateModuleFromParent (http://localhost:3000/_next/static/chunks/turbopack-_0p44nws._.js:1604:12)
+    at DevContext.esmImport [as i] (http://localhost:3000/_next/static/chunks/turbopack-_0p44nws._.js:278:20)
+    at module evaluation (http://localhost:3000/_next/static/chunks/node_modules_%40blocknote_react_dist_blocknote-react_0pw8o84.js:274:245)
+    at http://localhost:3000/_next/static/chunks/turbopack-_0p44nws._.js:1307:27
+    at runModuleExecutionHooks (http://localhost:3000/_next/static/chunks/turbopack-_0p44nws._.js:1636:13)
+    at instantiateModuleShared (http://localhost:3000/_next/static/chunks/turbopack-_0p44nws._.js:1305:9)
+    at instantiateModule (http://localhost:3000/_next/static/chunks/turbopack-_0p44nws._.js:1621:12)
+    at getOrInstantiateModuleFromParent (http://localhost:3000/_next/static/chunks/turbopack-_0p44nws._.js:1604:12)
+    at DevContext.esmImport [as i] (http://localhost:3000/_next/static/chunks/turbopack-_0p44nws._.js:278:20)
+    at module evaluation (http://localhost:3000/_next/static/chunks/node_modules_%40blocknote_0nm92rn._.js:27:195)
+    at http://localhost:3000/_next/static/chunks/turbopack-_0p44nws._.js:1307:27
+    at runModuleExecutionHooks (http://localhost:3000/_next/static/chunks/turbopack-_0p44nws._.js:1636:13)
+    at instantiateModuleShared (http://localhost:3000/_next/static/chunks/turbopack-_0p44nws._.js:1305:9)
+    at instantiateModule (http://localhost:3000/_next/static/chunks/turbopack-_0p44nws._.js:1621:12)
+    at getOrInstantiateModuleFromParent (http://localhost:3000/_next/static/chunks/turbopack-_0p44nws._.js:1604:12)
+    at DevContext.esmImport [as i] (http://localhost:3000/_next/static/chunks/turbopack-_0p44nws._.js:278:20)
+    at module evaluation (http://localhost:3000/_next/static/chunks/_0gf6_t5._.js?id=%255Bproject%255D%252Fcomponents%252Fcontent%252FBlockNoteReader.tsx+%255Bapp-client%255D+%2528ecmascript%2529:10:199)
+    at http://localhost:3000/_next/static/chunks/turbopack-_0p44nws._.js:1307:27
+    at runModuleExecutionHooks (http://localhost:3000/_next/static/chunks/turbopack-_0p44nws._.js:1636:13)
+    at instantiateModuleShared (http://localhost:3000/_next/static/chunks/turbopack-_0p44nws._.js:1305:9)
+    at instantiateModule (http://localhost:3000/_next/static/chunks/turbopack-_0p44nws._.js:1621:12)
+    at getOrInstantiateModuleFromParent (http://localhost:3000/_next/static/chunks/turbopack-_0p44nws._.js:1604:12)
+    at DevContext.esmImport [as i] (http://localhost:3000/_next/static/chunks/turbopack-_0p44nws._.js:278:20)
+    at module evaluation (http://localhost:3000/_next/static/chunks/components_content_BlockNoteReader_tsx_11uqcxt._.js:68:47)
+    at http://localhost:3000/_next/static/chunks/turbopack-_0p44nws._.js:1307:27
+    at runModuleExecutionHooks (http://localhost:3000/_next/static/chunks/turbopack-_0p44nws._.js:1636:13)
+    at instantiateModuleShared (http://localhost:3000/_next/static/chunks/turbopack-_0p44nws._.js:1305:9)
+    at instantiateModule (http://localhost:3000/_next/static/chunks/turbopack-_0p44nws._.js:1621:12)
+    at getOrInstantiateModuleFromParent (http://localhost:3000/_next/static/chunks/turbopack-_0p44nws._.js:1604:12)
+    at DevContext.esmImport [as i] (http://localhost:3000/_next/static/chunks/turbopack-_0p44nws._.js:278:20)
+    at eval (http://localhost:3000/_next/static/chunks/components_content_BlockNoteReader_tsx_0ogjc5r._.js?id=%255Bproject%255D%252Fcomponents%252Fcontent%252FBlockNoteReader.tsx+%255Bapp-client%255D+%2528ecmascript%252C+next%252Fdynamic+entry%252C+async+loader%2529:271:16)

@@ -29,20 +29,22 @@ export function ContentByTypeChart({ data }: Props) {
     )
   }
   return (
-    <ResponsiveContainer width="100%" height={200}>
-      <BarChart data={data} margin={{ top: 4, right: 4, left: -20, bottom: 0 }}>
-        <XAxis dataKey="type" tick={{ fontSize: 12 }} />
-        <YAxis tick={{ fontSize: 12 }} allowDecimals={false} />
-        <Tooltip />
-        <Bar dataKey="count" radius={[4, 4, 0, 0]}>
-          {data.map((entry) => (
-            <Cell
-              key={entry.type}
-              fill={TYPE_COLORS[entry.type] ?? '#888'}
-            />
-          ))}
-        </Bar>
-      </BarChart>
-    </ResponsiveContainer>
+    <div className="text-muted-foreground">
+      <ResponsiveContainer width="100%" height={200}>
+        <BarChart data={data} margin={{ top: 4, right: 4, left: -20, bottom: 0 }}>
+          <XAxis dataKey="type" tick={{ fontSize: 12, fill: 'currentColor' }} />
+          <YAxis tick={{ fontSize: 12, fill: 'currentColor' }} allowDecimals={false} />
+          <Tooltip />
+          <Bar dataKey="count" radius={[4, 4, 0, 0]}>
+            {data.map((entry) => (
+              <Cell
+                key={entry.type}
+                fill={TYPE_COLORS[entry.type] ?? '#888'}
+              />
+            ))}
+          </Bar>
+        </BarChart>
+      </ResponsiveContainer>
+    </div>
   )
 }

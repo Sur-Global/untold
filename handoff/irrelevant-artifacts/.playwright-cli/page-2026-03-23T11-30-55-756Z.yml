@@ -1,0 +1,233 @@
+- generic [active] [ref=e10]:
+  - button "Open Next.js Dev Tools" [ref=e6] [cursor=pointer]:
+    - img [ref=e7]
+  - banner [ref=e20]:
+    - generic [ref=e21]:
+      - link "UNTOLD" [ref=e22] [cursor=pointer]:
+        - /url: /
+      - navigation [ref=e23]:
+        - link "Articles" [ref=e24] [cursor=pointer]:
+          - /url: /articles
+        - link "Videos" [ref=e25] [cursor=pointer]:
+          - /url: /videos
+        - link "Podcasts" [ref=e26] [cursor=pointer]:
+          - /url: /podcasts
+        - link "Knowledge Pills" [ref=e27] [cursor=pointer]:
+          - /url: /pills
+        - link "Courses" [ref=e28] [cursor=pointer]:
+          - /url: /courses
+      - generic [ref=e29]:
+        - link "Search" [ref=e30] [cursor=pointer]:
+          - /url: /search
+          - img [ref=e31]
+        - button "EN" [ref=e34] [cursor=pointer]:
+          - img [ref=e35]
+          - generic [ref=e39]: EN
+        - generic [ref=e40]:
+          - generic [ref=e41]: "|"
+          - link "Dashboard" [ref=e42] [cursor=pointer]:
+            - /url: /dashboard
+          - generic [ref=e43]: "|"
+          - link "Create" [ref=e44] [cursor=pointer]:
+            - /url: /create
+          - generic [ref=e45]: "|"
+          - button "Log out" [ref=e47] [cursor=pointer]
+  - main [ref=e48]:
+    - generic [ref=e49]:
+      - generic [ref=e50]:
+        - link "← Dashboard" [ref=e51] [cursor=pointer]:
+          - /url: /dashboard
+          - img [ref=e52]
+          - text: ← Dashboard
+        - generic [ref=e54]:
+          - generic [ref=e55]:
+            - heading "Edit Video" [level=1] [ref=e56]
+            - paragraph [ref=e57]: Edit text, layout, and images for your video
+          - generic [ref=e58]:
+            - generic [ref=e59]: Unsaved
+            - generic [ref=e60]: published
+      - generic [ref=e61]:
+        - button "Text" [ref=e62] [cursor=pointer]
+        - button "Layout" [ref=e63] [cursor=pointer]
+        - button "Images" [ref=e64] [cursor=pointer]
+      - generic [ref=e65]:
+        - generic [ref=e66]:
+          - generic [ref=e67]: Video URL
+          - generic [ref=e68]:
+            - textbox "Paste a YouTube, Vimeo, or other video URL" [ref=e69]: https://www.youtube.com/watch?v=6lSLyERSuh4
+            - button "Extract Info" [ref=e70] [cursor=pointer]
+        - paragraph [ref=e168]: ✓ Transcript extracted (113 cues)
+        - generic [ref=e71]:
+          - generic [ref=e72]: Video Title
+          - textbox "Title" [ref=e73]: How to create Chapters in Youtube Videos
+        - generic [ref=e74]:
+          - generic [ref=e75]: Description
+          - textbox [ref=e78]:
+            - generic [ref=e79]:
+              - paragraph [ref=e172]:
+                - text: 🚀 START HERE → https://www.robthemaritimer.com/start
+                - text: (All my free guides, community links, and ways to work with me — all in one place.)
+              - paragraph [ref=e176]: ⸻
+              - paragraph [ref=e180]:
+                - text: 🎁 FREE RESOURCES
+                - text: "• YouTube Kickstart Kit (YTKK): https://www.robthemaritimer.com/youtube-kickstart-kit"
+                - text: "• YouTube Stats Tracker: https://www.robthemaritimer.com/youtube-stats-tracker"
+                - text: "• Join CREATORS COVE: https://www.robthemaritimer.com/creators-cove-over-40-youtuber"
+              - paragraph [ref=e184]: ⸻
+              - paragraph [ref=e188]:
+                - text: 🧢 WORK WITH ME
+                - text: "• Book a 1-on-1 Zoom Call: https://calendly.com/robthemaritimer/coaching-strategy-call"
+              - paragraph [ref=e192]: ⸻
+              - paragraph [ref=e196]:
+                - text: 🎓 MY COURSES
+                - text: "• ✅ Camera Confidence 101: https://www.robthemaritimer.com/camera-confidence-minicourse"
+                - text: "• ✅ Over 40 YouTube Starter Course: https://www.robthemaritimer.com/over40-youtube-starter-course"
+                - text: "• ✅ Live Streaming Made Easy: https://www.robthemaritimer.com/live-streaming-made-easy"
+              - paragraph [ref=e200]: ⸻
+              - paragraph [ref=e204]:
+                - text: 🧰 SOFTWARE I USE
+                - text: • Epidemic Sound (music & sound effects) – https://share.epidemicsound.com/6ndir1 — 30 days FREE + 50% off for 2 months
+                - text: • Kajabi (all-in-one business platform) – https://app.kajabi.com/r/pmCPerYj/t/seyylndg — 30-day FREE trial!
+                - text: • Camtasia (video editing) – https://www.robthemaritimer.com/camtasia — 10% OFF!
+                - text: • VidIQ (YouTube growth tools) – https://vidiq.com/robthemaritimer/ — Start today for only $1!
+                - text: • Canva (design & thumbnails) – https://partner.canva.com/4eLZm1 — 30-day FREE trial!
+                - text: • Ecamm Live (live streaming software) – https://www.ecamm.com/mac/ecammlive/?fp_ref=rob12 — 14-day FREE trial!
+              - paragraph [ref=e208]: ⸻
+              - paragraph [ref=e212]: 🎥 EQUIPMENT I USE
+              - paragraph [ref=e216]:
+                - text: DJI Mic – https://amzn.to/3XuQJTt
+                - text: Eucos Selfie Stick – https://amzn.to/3UDzXAw
+                - text: JOBY GorillaPod – https://amzn.to/3B5WlMj
+                - text: Quadlock Case – https://amzn.to/3xUII1o
+                - text: Quadlock Tripod Mount – https://amzn.to/3zPufnO
+                - text: Sony ZV-E10 Camera – https://amzn.to/3zJATvN
+                - text: Sigma 16mm f1.4 Lens – https://amzn.to/3SEDSwL
+                - text: Synco Mic-D2 Shotgun Mic – https://amzn.to/3HIOg0g
+                - text: Focusrite Scarlett 2i2 – https://amzn.to/3SH4qNX
+                - text: Stream Deck – https://amzn.to/4mnixnR
+                - text: Neewer 18” LED Light Panels – https://amzn.to/42fLECj
+              - paragraph [ref=e220]: ⸻
+              - paragraph [ref=e224]: By using the affiliate links above, I may earn a small commission if you decide to make a purchase — at no extra cost to you. Your support helps me continue creating helpful content. 🙏
+              - paragraph [ref=e228]: ⸻
+              - paragraph [ref=e232]:
+                - text: I’m Rob the Maritimer, and I make videos and host live streams to help people over 40 succeed on YouTube.
+                - text: I share everything I’ve learned — from software to storytelling — to make your creator journey easier.
+              - paragraph [ref=e236]: ⚓ Subscribe for weekly videos and live streams!
+              - paragraph [ref=e240]:
+                - text: Talk soon,
+                - text: Rob
+              - paragraph [ref=e244]:
+                - text: "🌍 Website: https://www.robthemaritimer.com"
+                - text: "📸 Instagram: https://www.instagram.com/rob_themaritimer"
+              - paragraph [ref=e248]
+        - generic [ref=e88]:
+          - generic [ref=e89]:
+            - generic [ref=e90]: Duration
+            - textbox "Duration (e.g. 45:00)" [ref=e91]: 4:42
+          - generic [ref=e92]:
+            - generic [ref=e93]: Topic / Category
+            - generic [ref=e95]:
+              - generic [ref=e96]:
+                - text: Indigenous Rights
+                - button "Remove Indigenous Rights" [ref=e97] [cursor=pointer]: ×
+              - textbox [ref=e98]
+        - generic [ref=e99]:
+          - generic [ref=e100]: Video Chapters
+          - generic [ref=e101]:
+            - textbox "0:00" [ref=e102]
+            - textbox "Chapter title" [ref=e103]: Intro
+            - button "Remove chapter" [ref=e104] [cursor=pointer]:
+              - img [ref=e105]
+          - generic [ref=e249]:
+            - textbox "0:00" [ref=e250]: 0:48
+            - textbox "Chapter title" [ref=e251]: Locate the video
+            - button "Remove chapter" [ref=e252] [cursor=pointer]:
+              - img [ref=e253]
+          - generic [ref=e255]:
+            - textbox "0:00" [ref=e256]: 1:10
+            - textbox "Chapter title" [ref=e257]: Add chapters
+            - button "Remove chapter" [ref=e258] [cursor=pointer]:
+              - img [ref=e259]
+          - generic [ref=e261]:
+            - textbox "0:00" [ref=e262]: 2:55
+            - textbox "Chapter title" [ref=e263]: Tips
+            - button "Remove chapter" [ref=e264] [cursor=pointer]:
+              - img [ref=e265]
+          - generic [ref=e267]:
+            - textbox "0:00" [ref=e268]: 4:07
+            - textbox "Chapter title" [ref=e269]: Outro
+            - button "Remove chapter" [ref=e270] [cursor=pointer]:
+              - img [ref=e271]
+          - button "Add Chapter" [ref=e107] [cursor=pointer]:
+            - img [ref=e108]
+            - text: Add Chapter
+        - generic [ref=e111] [cursor=pointer]:
+          - checkbox "✨ Submit for featured content at UNTOLD.ink Your content will be published immediately on your personal UNTOLD page. If approved by an Editor, it could become featured content with higher visibility on the homepage and in searches." [ref=e112]
+          - generic [ref=e113]:
+            - paragraph [ref=e114]: ✨ Submit for featured content at UNTOLD.ink
+            - paragraph [ref=e115]: Your content will be published immediately on your personal UNTOLD page. If approved by an Editor, it could become featured content with higher visibility on the homepage and in searches.
+      - generic [ref=e116]:
+        - button "Save changes" [ref=e117] [cursor=pointer]:
+          - img [ref=e118]
+          - text: Save changes
+        - button "Unpublish" [ref=e121] [cursor=pointer]
+        - button "Delete" [ref=e122] [cursor=pointer]
+  - contentinfo [ref=e123]:
+    - generic [ref=e124]:
+      - generic [ref=e125]:
+        - generic [ref=e126]:
+          - heading "UNTOLD" [level=4] [ref=e127]
+          - paragraph [ref=e128]: Exploring ideas that transform the future.
+        - generic [ref=e129]:
+          - paragraph [ref=e130]: Content
+          - list [ref=e131]:
+            - listitem [ref=e132]:
+              - link "Articles" [ref=e133] [cursor=pointer]:
+                - /url: /articles
+            - listitem [ref=e134]:
+              - link "Videos" [ref=e135] [cursor=pointer]:
+                - /url: /videos
+            - listitem [ref=e136]:
+              - link "Podcasts" [ref=e137] [cursor=pointer]:
+                - /url: /podcasts
+            - listitem [ref=e138]:
+              - link "Pills" [ref=e139] [cursor=pointer]:
+                - /url: /pills
+            - listitem [ref=e140]:
+              - link "Courses" [ref=e141] [cursor=pointer]:
+                - /url: /courses
+        - generic [ref=e142]:
+          - paragraph [ref=e143]: Topics
+          - list [ref=e144]:
+            - listitem [ref=e145]:
+              - link "Decoloniality" [ref=e146] [cursor=pointer]:
+                - /url: /tag/decoloniality
+            - listitem [ref=e147]:
+              - link "Sustainability" [ref=e148] [cursor=pointer]:
+                - /url: /tag/sustainability
+            - listitem [ref=e149]:
+              - link "Technology" [ref=e150] [cursor=pointer]:
+                - /url: /tag/technology
+            - listitem [ref=e151]:
+              - link "Education" [ref=e152] [cursor=pointer]:
+                - /url: /tag/education
+            - listitem [ref=e153]:
+              - link "Responsible AI" [ref=e154] [cursor=pointer]:
+                - /url: /tag/responsible-ai
+        - generic [ref=e155]:
+          - paragraph [ref=e156]: Connect
+          - list [ref=e157]:
+            - listitem [ref=e158]:
+              - link "About" [ref=e159] [cursor=pointer]:
+                - /url: /about
+            - listitem [ref=e160]:
+              - link "Contact" [ref=e161] [cursor=pointer]:
+                - /url: /contact
+            - listitem [ref=e162]:
+              - link "Newsletter" [ref=e163] [cursor=pointer]:
+                - /url: /newsletter
+            - listitem [ref=e164]:
+              - link "Become a Creator" [ref=e165] [cursor=pointer]:
+                - /url: /become-creator
+      - generic [ref=e166]: © 2026 UNTOLD. All rights reserved. A Sur Global publication.
+  - alert [ref=e167]

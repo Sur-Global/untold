@@ -1,0 +1,448 @@
+- generic [active] [ref=e1]:
+  - banner [ref=e2]:
+    - generic [ref=e3]:
+      - link "UNTOLD" [ref=e4] [cursor=pointer]:
+        - /url: /
+      - generic [ref=e5]:
+        - navigation [ref=e6]:
+          - link "Articles" [ref=e7] [cursor=pointer]:
+            - /url: /articles
+          - link "Videos" [ref=e8] [cursor=pointer]:
+            - /url: /videos
+          - link "Podcasts" [ref=e9] [cursor=pointer]:
+            - /url: /podcasts
+          - link "Knowledge Pills" [ref=e10] [cursor=pointer]:
+            - /url: /pills
+          - link "Courses" [ref=e11] [cursor=pointer]:
+            - /url: /courses
+        - link "Search" [ref=e12] [cursor=pointer]:
+          - /url: /search
+          - img [ref=e13]
+    - generic [ref=e16]:
+      - button "English" [ref=e17]:
+        - img [ref=e18]
+        - generic [ref=e22]: English
+      - link "Sign in" [ref=e23] [cursor=pointer]:
+        - /url: /auth/login
+  - main [ref=e24]:
+    - generic [ref=e26]:
+      - generic [ref=e27]:
+        - heading "ARTICLES" [level=1] [ref=e28]
+        - paragraph [ref=e29]: In-depth analysis, research and reflections on responsible technology, accessibility and decolonial thinking.
+      - generic [ref=e30]:
+        - generic [ref=e32]:
+          - img
+          - searchbox "Search articles..." [ref=e33]
+        - generic [ref=e34]:
+          - button "All" [ref=e35]
+          - button "Featured" [ref=e36]
+          - button "Trending" [ref=e37]
+          - button "Recent" [ref=e38]
+        - generic [ref=e39]:
+          - button "AI Governance" [ref=e40]
+          - button "Climate Justice" [ref=e41]
+          - button "Data Sovereignty" [ref=e42]
+          - button "Decoloniality" [ref=e43]
+          - button "Education" [ref=e44]
+          - button "Feminism" [ref=e45]
+          - button "Indigenous Rights" [ref=e46]
+          - button "Media Freedom" [ref=e47]
+          - button "Surveillance" [ref=e48]
+          - button "Urban Planning" [ref=e49]
+    - generic [ref=e50]:
+      - generic [ref=e51]:
+        - article [ref=e52]:
+          - generic [ref=e53]:
+            - link "Mother Tongue Matters" [ref=e54] [cursor=pointer]:
+              - /url: /articles/mother-tongue-matters
+              - img "Mother Tongue Matters" [ref=e55]
+            - generic [ref=e57]: Education
+            - generic "Featured" [ref=e58]: ★
+          - generic [ref=e59]:
+            - heading "Mother Tongue Matters" [level=3] [ref=e60]:
+              - link "Mother Tongue Matters" [ref=e61] [cursor=pointer]:
+                - /url: /articles/mother-tongue-matters
+            - paragraph [ref=e62]: Research consistently shows that children learn better in their first language. Yet most African education systems still use European languages as primary media of instruction.
+          - generic [ref=e63]:
+            - generic [ref=e65]:
+              - img "Nkechi Osei" [ref=e66]
+              - generic [ref=e67]:
+                - link "Nkechi Osei" [ref=e68] [cursor=pointer]:
+                  - /url: /author/nkechi-osei
+                - link "listings.readMoreBy" [ref=e69] [cursor=pointer]:
+                  - /url: /author/nkechi-osei
+            - generic [ref=e70]:
+              - generic [ref=e71]:
+                - img [ref=e72]
+                - text: "267"
+              - button "Save" [disabled] [ref=e74]:
+                - img [ref=e75]
+                - generic [ref=e77]: Save
+        - article [ref=e78]:
+          - generic [ref=e79]:
+            - link "AI Governance Without the South" [ref=e80] [cursor=pointer]:
+              - /url: /articles/ai-governance-without-the-south
+              - img "AI Governance Without the South" [ref=e81]
+            - generic [ref=e83]: AI Governance
+            - generic "Featured" [ref=e84]: ★
+          - generic [ref=e85]:
+            - heading "AI Governance Without the South" [level=3] [ref=e86]:
+              - link "AI Governance Without the South" [ref=e87] [cursor=pointer]:
+                - /url: /articles/ai-governance-without-the-south
+            - paragraph [ref=e88]: The EU AI Act, the US Executive Order, the G7 AI Code of Conduct. Major AI governance frameworks are being written without the voices of those most affected.
+          - generic [ref=e89]:
+            - generic [ref=e91]:
+              - img "Siddharth Rao" [ref=e92]
+              - generic [ref=e93]:
+                - link "Siddharth Rao" [ref=e94] [cursor=pointer]:
+                  - /url: /author/siddharth-rao
+                - link "listings.readMoreBy" [ref=e95] [cursor=pointer]:
+                  - /url: /author/siddharth-rao
+            - generic [ref=e96]:
+              - generic [ref=e97]:
+                - img [ref=e98]
+                - text: "621"
+              - button "Save" [disabled] [ref=e100]:
+                - img [ref=e101]
+                - generic [ref=e103]: Save
+        - article [ref=e104]:
+          - generic [ref=e105]:
+            - link "The Amazon Is Not Empty" [ref=e106] [cursor=pointer]:
+              - /url: /articles/the-amazon-is-not-empty
+              - img "The Amazon Is Not Empty" [ref=e107]
+            - generic [ref=e109]: Climate Justice
+            - generic "Featured" [ref=e110]: ★
+          - generic [ref=e111]:
+            - heading "The Amazon Is Not Empty" [level=3] [ref=e112]:
+              - link "The Amazon Is Not Empty" [ref=e113] [cursor=pointer]:
+                - /url: /articles/the-amazon-is-not-empty
+            - paragraph [ref=e114]: The fiction of terra nullius — empty land ripe for development — is alive and well in contemporary environmental policy. Indigenous communities pay the price.
+          - generic [ref=e115]:
+            - generic [ref=e117]:
+              - img "Valentina Morales" [ref=e118]
+              - generic [ref=e119]:
+                - link "Valentina Morales" [ref=e120] [cursor=pointer]:
+                  - /url: /author/valentina-morales
+                - link "listings.readMoreBy" [ref=e121] [cursor=pointer]:
+                  - /url: /author/valentina-morales
+            - generic [ref=e122]:
+              - generic [ref=e123]:
+                - img [ref=e124]
+                - text: "512"
+              - button "Save" [disabled] [ref=e126]:
+                - img [ref=e127]
+                - generic [ref=e129]: Save
+        - article [ref=e130]:
+          - generic [ref=e131]:
+            - link "90 days, still no tomatoes" [ref=e132] [cursor=pointer]:
+              - /url: /articles/sdfsdfsdf-mn1w7w9a
+              - img "90 days, still no tomatoes" [ref=e133]
+            - generic [ref=e135]: Article
+          - generic [ref=e136]:
+            - heading "90 days, still no tomatoes" [level=3] [ref=e137]:
+              - link "90 days, still no tomatoes" [ref=e138] [cursor=pointer]:
+                - /url: /articles/sdfsdfsdf-mn1w7w9a
+            - paragraph [ref=e139]: Waiting for an eternity
+          - generic [ref=e140]:
+            - generic [ref=e141]:
+              - generic [ref=e142]:
+                - generic [ref=e143]: "N"
+                - generic [ref=e144]:
+                  - link "Noah Laux" [ref=e145] [cursor=pointer]:
+                    - /url: /author/noah-laux
+                  - link "listings.readMoreBy" [ref=e146] [cursor=pointer]:
+                    - /url: /author/noah-laux
+              - generic [ref=e147]:
+                - img [ref=e148]
+                - generic [ref=e151]: 1 min
+            - generic [ref=e152]:
+              - generic [ref=e153]:
+                - img [ref=e154]
+                - text: "0"
+              - button "Save" [disabled] [ref=e156]:
+                - img [ref=e157]
+                - generic [ref=e159]: Save
+        - article [ref=e160]:
+          - generic [ref=e161]:
+            - link "Marilyn for ever" [ref=e162] [cursor=pointer]:
+              - /url: /articles/my-title-mn1mfh35
+              - img "Marilyn for ever" [ref=e163]
+            - generic [ref=e165]: Article
+          - generic [ref=e166]:
+            - heading "Marilyn for ever" [level=3] [ref=e167]:
+              - link "Marilyn for ever" [ref=e168] [cursor=pointer]:
+                - /url: /articles/my-title-mn1mfh35
+            - paragraph [ref=e169]: In grammar, an article is any of a small set of words or affixes (such as a, an, and the in English) used with nouns to limit or give definiteness to the application. The category of articles constitutes a part of speech. These words represent a specific object, depending on the situation, but a is less specific than the.
+          - generic [ref=e170]:
+            - generic [ref=e171]:
+              - generic [ref=e172]:
+                - generic [ref=e173]: "N"
+                - generic [ref=e174]:
+                  - link "Noah Laux" [ref=e175] [cursor=pointer]:
+                    - /url: /author/noah-laux
+                  - link "listings.readMoreBy" [ref=e176] [cursor=pointer]:
+                    - /url: /author/noah-laux
+              - generic [ref=e177]:
+                - img [ref=e178]
+                - generic [ref=e181]: 2 min
+            - generic [ref=e182]:
+              - generic [ref=e183]:
+                - img [ref=e184]
+                - text: "1"
+              - button "Save" [disabled] [ref=e186]:
+                - img [ref=e187]
+                - generic [ref=e189]: Save
+        - article [ref=e190]:
+          - generic [ref=e191]:
+            - link "The Surveillance State Comes for the Press" [ref=e192] [cursor=pointer]:
+              - /url: /articles/the-surveillance-state-comes-for-the-press
+              - img "The Surveillance State Comes for the Press" [ref=e193]
+            - generic [ref=e195]: Media Freedom
+          - generic [ref=e196]:
+            - heading "The Surveillance State Comes for the Press" [level=3] [ref=e197]:
+              - link "The Surveillance State Comes for the Press" [ref=e198] [cursor=pointer]:
+                - /url: /articles/the-surveillance-state-comes-for-the-press
+            - paragraph [ref=e199]: In country after country, anti-terrorism laws and cybercrime legislation are being used not against terrorists or criminals — but against journalists.
+          - generic [ref=e200]:
+            - generic [ref=e202]:
+              - img "Leila Hassan" [ref=e203]
+              - generic [ref=e204]:
+                - link "Leila Hassan" [ref=e205] [cursor=pointer]:
+                  - /url: /author/leila-hassan
+                - link "listings.readMoreBy" [ref=e206] [cursor=pointer]:
+                  - /url: /author/leila-hassan
+            - generic [ref=e207]:
+              - generic [ref=e208]:
+                - img [ref=e209]
+                - text: "892"
+              - button "Save" [disabled] [ref=e211]:
+                - img [ref=e212]
+                - generic [ref=e214]: Save
+        - article [ref=e215]:
+          - generic [ref=e216]:
+            - 'link "Lithium: The New Silver" [ref=e217] [cursor=pointer]':
+              - /url: /articles/lithium-the-new-silver
+              - 'img "Lithium: The New Silver" [ref=e218]'
+            - generic [ref=e220]: Indigenous Rights
+          - generic [ref=e221]:
+            - 'heading "Lithium: The New Silver" [level=3] [ref=e222]':
+              - 'link "Lithium: The New Silver" [ref=e223] [cursor=pointer]':
+                - /url: /articles/lithium-the-new-silver
+            - paragraph [ref=e224]: Bolivia's Salar de Uyuni holds the world's largest lithium reserves. The green energy transition needs it. The question is who will pay the price.
+          - generic [ref=e225]:
+            - generic [ref=e227]:
+              - img "Rafael Quispe" [ref=e228]
+              - generic [ref=e229]:
+                - link "Rafael Quispe" [ref=e230] [cursor=pointer]:
+                  - /url: /author/rafael-quispe
+                - link "listings.readMoreBy" [ref=e231] [cursor=pointer]:
+                  - /url: /author/rafael-quispe
+            - generic [ref=e232]:
+              - generic [ref=e233]:
+                - img [ref=e234]
+                - text: "672"
+              - button "Save" [disabled] [ref=e236]:
+                - img [ref=e237]
+                - generic [ref=e239]: Save
+        - article [ref=e240]:
+          - generic [ref=e241]:
+            - link "Learning While Black in British Schools" [ref=e242] [cursor=pointer]:
+              - /url: /articles/learning-while-black-in-british-schools
+              - img "Learning While Black in British Schools" [ref=e243]
+            - generic [ref=e245]: Education
+          - generic [ref=e246]:
+            - heading "Learning While Black in British Schools" [level=3] [ref=e247]:
+              - link "Learning While Black in British Schools" [ref=e248] [cursor=pointer]:
+                - /url: /articles/learning-while-black-in-british-schools
+            - paragraph [ref=e249]: Black British students are more likely to be excluded, less likely to be identified as gifted, and more likely to be steered away from academic pathways. The data is damning.
+          - generic [ref=e250]:
+            - generic [ref=e252]:
+              - img "Nkechi Osei" [ref=e253]
+              - generic [ref=e254]:
+                - link "Nkechi Osei" [ref=e255] [cursor=pointer]:
+                  - /url: /author/nkechi-osei
+                - link "listings.readMoreBy" [ref=e256] [cursor=pointer]:
+                  - /url: /author/nkechi-osei
+            - generic [ref=e257]:
+              - generic [ref=e258]:
+                - img [ref=e259]
+                - text: "734"
+              - button "Save" [disabled] [ref=e261]:
+                - img [ref=e262]
+                - generic [ref=e264]: Save
+        - article [ref=e265]:
+          - generic [ref=e266]:
+            - link "Who Owns the Algorithm?" [ref=e267] [cursor=pointer]:
+              - /url: /articles/who-owns-the-algorithm
+              - img "Who Owns the Algorithm?" [ref=e268]
+            - generic [ref=e270]: AI Governance
+          - generic [ref=e271]:
+            - heading "Who Owns the Algorithm?" [level=3] [ref=e272]:
+              - link "Who Owns the Algorithm?" [ref=e273] [cursor=pointer]:
+                - /url: /articles/who-owns-the-algorithm
+            - paragraph [ref=e274]: When Silicon Valley exports its AI systems to Africa, it also exports its assumptions, blind spots, and power structures.
+          - generic [ref=e275]:
+            - generic [ref=e277]:
+              - img "Amara Diallo" [ref=e278]
+              - generic [ref=e279]:
+                - link "Amara Diallo" [ref=e280] [cursor=pointer]:
+                  - /url: /author/amara-diallo
+                - link "listings.readMoreBy" [ref=e281] [cursor=pointer]:
+                  - /url: /author/amara-diallo
+            - generic [ref=e282]:
+              - generic [ref=e283]:
+                - img [ref=e284]
+                - text: "347"
+              - button "Save" [disabled] [ref=e286]:
+                - img [ref=e287]
+                - generic [ref=e289]: Save
+        - article [ref=e290]:
+          - generic [ref=e291]:
+            - 'link "The Arabic Internet: The Missing Billion" [ref=e292] [cursor=pointer]':
+              - /url: /articles/arabic-internet-the-missing-billion
+              - 'img "The Arabic Internet: The Missing Billion" [ref=e293]'
+            - generic [ref=e295]: Media Freedom
+          - generic [ref=e296]:
+            - 'heading "The Arabic Internet: The Missing Billion" [level=3] [ref=e297]':
+              - 'link "The Arabic Internet: The Missing Billion" [ref=e298] [cursor=pointer]':
+                - /url: /articles/arabic-internet-the-missing-billion
+            - paragraph [ref=e299]: Arabic is the fifth most spoken language in the world. Yet Arabic-language content accounts for less than 1% of the internet. This is not a technical problem.
+          - generic [ref=e300]:
+            - generic [ref=e302]:
+              - img "Leila Hassan" [ref=e303]
+              - generic [ref=e304]:
+                - link "Leila Hassan" [ref=e305] [cursor=pointer]:
+                  - /url: /author/leila-hassan
+                - link "listings.readMoreBy" [ref=e306] [cursor=pointer]:
+                  - /url: /author/leila-hassan
+            - generic [ref=e307]:
+              - generic [ref=e308]:
+                - img [ref=e309]
+                - text: "314"
+              - button "Save" [disabled] [ref=e311]:
+                - img [ref=e312]
+                - generic [ref=e314]: Save
+        - article [ref=e315]:
+          - generic [ref=e316]:
+            - link "The Myth of Neutral Data" [ref=e317] [cursor=pointer]:
+              - /url: /articles/the-myth-of-neutral-data
+              - img "The Myth of Neutral Data" [ref=e318]
+            - generic [ref=e320]: Data Sovereignty
+          - generic [ref=e321]:
+            - heading "The Myth of Neutral Data" [level=3] [ref=e322]:
+              - link "The Myth of Neutral Data" [ref=e323] [cursor=pointer]:
+                - /url: /articles/the-myth-of-neutral-data
+            - paragraph [ref=e324]: There is no such thing as raw data. Every dataset is a set of choices — about what to measure, how to measure it, and whose lives are considered worth counting.
+          - generic [ref=e325]:
+            - generic [ref=e327]:
+              - img "Siddharth Rao" [ref=e328]
+              - generic [ref=e329]:
+                - link "Siddharth Rao" [ref=e330] [cursor=pointer]:
+                  - /url: /author/siddharth-rao
+                - link "listings.readMoreBy" [ref=e331] [cursor=pointer]:
+                  - /url: /author/siddharth-rao
+            - generic [ref=e332]:
+              - generic [ref=e333]:
+                - img [ref=e334]
+                - text: "446"
+              - button "Save" [disabled] [ref=e336]:
+                - img [ref=e337]
+                - generic [ref=e339]: Save
+        - article [ref=e340]:
+          - generic [ref=e341]:
+            - 'link "Pan-African Futures: Reimagining Education" [ref=e342] [cursor=pointer]':
+              - /url: /articles/pan-african-futures-reimagining-education
+              - 'img "Pan-African Futures: Reimagining Education" [ref=e343]'
+            - generic [ref=e345]: Education
+          - generic [ref=e346]:
+            - 'heading "Pan-African Futures: Reimagining Education" [level=3] [ref=e347]':
+              - 'link "Pan-African Futures: Reimagining Education" [ref=e348] [cursor=pointer]':
+                - /url: /articles/pan-african-futures-reimagining-education
+            - paragraph [ref=e349]: What if African children learned history from African perspectives? What if the starting point wasn't Greece and Rome but Kemet and Mali?
+          - generic [ref=e350]:
+            - generic [ref=e352]:
+              - img "Nkechi Osei" [ref=e353]
+              - generic [ref=e354]:
+                - link "Nkechi Osei" [ref=e355] [cursor=pointer]:
+                  - /url: /author/nkechi-osei
+                - link "listings.readMoreBy" [ref=e356] [cursor=pointer]:
+                  - /url: /author/nkechi-osei
+            - generic [ref=e357]:
+              - generic [ref=e358]:
+                - img [ref=e359]
+                - text: "298"
+              - button "Save" [disabled] [ref=e361]:
+                - img [ref=e362]
+                - generic [ref=e364]: Save
+      - link "Load more articles" [ref=e366] [cursor=pointer]:
+        - /url: "?limit=24"
+  - contentinfo [ref=e367]:
+    - generic [ref=e368]:
+      - generic [ref=e369]:
+        - generic [ref=e370]:
+          - heading "UNTOLD" [level=4] [ref=e371]
+          - paragraph [ref=e372]: Exploring ideas that transform the future.
+        - generic [ref=e373]:
+          - paragraph [ref=e374]: Content
+          - list [ref=e375]:
+            - listitem [ref=e376]:
+              - link "Articles" [ref=e377] [cursor=pointer]:
+                - /url: /articles
+            - listitem [ref=e378]:
+              - link "Videos" [ref=e379] [cursor=pointer]:
+                - /url: /videos
+            - listitem [ref=e380]:
+              - link "Podcasts" [ref=e381] [cursor=pointer]:
+                - /url: /podcasts
+            - listitem [ref=e382]:
+              - link "Pills" [ref=e383] [cursor=pointer]:
+                - /url: /pills
+            - listitem [ref=e384]:
+              - link "Courses" [ref=e385] [cursor=pointer]:
+                - /url: /courses
+        - generic [ref=e386]:
+          - paragraph [ref=e387]: Topics
+          - list [ref=e388]:
+            - listitem [ref=e389]:
+              - link "Decoloniality" [ref=e390] [cursor=pointer]:
+                - /url: /tag/decoloniality
+            - listitem [ref=e391]:
+              - link "Sustainability" [ref=e392] [cursor=pointer]:
+                - /url: /tag/sustainability
+            - listitem [ref=e393]:
+              - link "Technology" [ref=e394] [cursor=pointer]:
+                - /url: /tag/technology
+            - listitem [ref=e395]:
+              - link "Education" [ref=e396] [cursor=pointer]:
+                - /url: /tag/education
+            - listitem [ref=e397]:
+              - link "Responsible AI" [ref=e398] [cursor=pointer]:
+                - /url: /tag/responsible-ai
+        - generic [ref=e399]:
+          - paragraph [ref=e400]: Connect
+          - list [ref=e401]:
+            - listitem [ref=e402]:
+              - link "About" [ref=e403] [cursor=pointer]:
+                - /url: /about
+            - listitem [ref=e404]:
+              - link "Contact" [ref=e405] [cursor=pointer]:
+                - /url: /contact
+            - listitem [ref=e406]:
+              - link "Newsletter" [ref=e407] [cursor=pointer]:
+                - /url: /newsletter
+            - listitem [ref=e408]:
+              - link "Become a Creator" [ref=e409] [cursor=pointer]:
+                - /url: /become-creator
+      - generic [ref=e410]: © 2026 UNTOLD. All rights reserved. A Sur Global publication.
+  - generic [ref=e415] [cursor=pointer]:
+    - button "Open Next.js Dev Tools" [ref=e416]:
+      - img [ref=e417]
+    - generic [ref=e420]:
+      - button "Open issues overlay" [ref=e421]:
+        - generic [ref=e422]:
+          - generic [ref=e423]: "0"
+          - generic [ref=e424]: "1"
+        - generic [ref=e425]: Issue
+      - button "Collapse issues badge" [ref=e426]:
+        - img [ref=e427]
+  - alert [ref=e429]

@@ -1,0 +1,1 @@
+[    1977ms] [WARNING] [tiptap warn]: Duplicate extension names found: ['link', 'underline']. This can lead to issues. @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js:2431

@@ -1,0 +1,174 @@
+- generic [active] [ref=e1]:
+  - banner [ref=e2]:
+    - generic [ref=e3]:
+      - link "UNTOLD" [ref=e4] [cursor=pointer]:
+        - /url: /
+      - navigation [ref=e5]:
+        - link "Articles" [ref=e6] [cursor=pointer]:
+          - /url: /articles
+        - link "Videos" [ref=e7] [cursor=pointer]:
+          - /url: /videos
+        - link "Podcasts" [ref=e8] [cursor=pointer]:
+          - /url: /podcasts
+        - link "Knowledge Pills" [ref=e9] [cursor=pointer]:
+          - /url: /pills
+        - link "Courses" [ref=e10] [cursor=pointer]:
+          - /url: /courses
+      - generic [ref=e11]:
+        - link "Search" [ref=e12] [cursor=pointer]:
+          - /url: /search
+          - img [ref=e13]
+        - button "EN" [ref=e16] [cursor=pointer]:
+          - img [ref=e17]
+          - generic [ref=e21]: EN
+        - generic [ref=e22]: "|"
+        - link "Log in" [ref=e23] [cursor=pointer]:
+          - /url: /auth/login
+  - main [ref=e24]:
+    - generic [ref=e25]:
+      - link "Back" [ref=e26] [cursor=pointer]:
+        - /url: /videos
+        - img [ref=e27]
+        - text: Back
+      - generic [ref=e29]:
+        - link "Deforestation" [ref=e30] [cursor=pointer]:
+          - /url: /tag/deforestation
+          - img [ref=e31]
+          - text: Deforestation
+        - link "Indigenous Rights" [ref=e33] [cursor=pointer]:
+          - /url: /tag/indigenous-rights
+          - img [ref=e34]
+          - text: Indigenous Rights
+      - 'heading "Inside the Amazon: Drone Footage from the Frontlines" [level=1] [ref=e36]'
+      - generic [ref=e37]:
+        - link "Diego Vargas Diego Vargas São Paulo, Brazil" [ref=e38] [cursor=pointer]:
+          - /url: /author/diego-vargas
+          - img "Diego Vargas" [ref=e40]
+          - generic [ref=e41]:
+            - paragraph [ref=e42]: Diego Vargas
+            - paragraph [ref=e43]: São Paulo, Brazil
+        - generic [ref=e44]:
+          - generic [ref=e45]:
+            - img [ref=e46]
+            - generic [ref=e49]: March 16, 2026
+          - generic [ref=e50]:
+            - img [ref=e51]
+            - generic [ref=e54]: 18:42
+      - iframe [ref=e57]:
+        - generic [active] [ref=f3e1]:
+          - generic "YouTube Video Player" [ref=f3e3]
+          - generic [ref=f3e5]:
+            - generic:
+              - generic:
+                - button "Play video" [ref=f3e10] [cursor=pointer]:
+                  - generic [ref=f3e13]:
+                    - img
+                - button "Hide player controls" [ref=f3e14] [cursor=pointer]
+                - generic [ref=f3e16]:
+                  - generic [ref=f3e21]:
+                    - generic [ref=f3e22]:
+                      - link "Rick Astley - Never Gonna Give You Up (Official Video) (4K Remaster)" [ref=f3e23] [cursor=pointer]:
+                        - /url: https://www.youtube.com/watch?v=dQw4w9WgXcQ
+                      - link "Rick Astley" [ref=f3e24] [cursor=pointer]:
+                        - /url: /channel/UCuAXFkgsw1L7xaCfnd5JJOw
+                        - generic [ref=f3e25]: Rick Astley
+                    - generic [ref=f3e26]:
+                      - button "thumbnail-image" [ref=f3e27] [cursor=pointer]:
+                        - img "thumbnail-image" [ref=f3e28]
+                      - generic [ref=f3e30]:
+                        - generic: Rick Astley
+                        - generic: 4.47M subscribers
+                  - generic [ref=f3e31]:
+                    - button "Share" [ref=f3e34] [cursor=pointer]:
+                      - generic [ref=f3e38]:
+                        - img
+                    - link "Watch on YouTube" [ref=f3e45] [cursor=pointer]:
+                      - /url: https://www.youtube.com/watch?v=dQw4w9WgXcQ
+                      - generic [ref=f3e48]:
+                        - text: Watch on
+                        - img [ref=f3e50]:
+                          - generic [ref=f3e52]:
+                            - img
+      - generic [ref=e58]:
+        - button "91" [disabled] [ref=e59]:
+          - img [ref=e60]
+          - generic [ref=e62]: "91"
+        - button "Sign in to bookmark" [disabled] [ref=e63]:
+          - img [ref=e64]
+        - button "Share article" [ref=e66] [cursor=pointer]:
+          - img [ref=e67]
+          - text: Share
+      - generic [ref=e70]:
+        - heading "Description" [level=3] [ref=e71]
+        - paragraph [ref=e74]: Diego Vargas takes us deep into the Javari Valley with exclusive drone footage documenting deforestation in real time. Indigenous monitors guide the way.
+      - generic [ref=e75]:
+        - heading "About the Creator" [level=3] [ref=e76]
+        - generic [ref=e77]:
+          - img "Diego Vargas" [ref=e79]
+          - generic [ref=e80]:
+            - heading "Diego Vargas" [level=4] [ref=e81]
+            - paragraph [ref=e82]: São Paulo, Brazil
+            - paragraph [ref=e83]: Investigative journalist and video producer from São Paulo. Reporting on Amazon deforestation, Indigenous land rights, and environmental crime.
+            - link "View profile →" [ref=e84] [cursor=pointer]:
+              - /url: /author/diego-vargas
+  - contentinfo [ref=e85]:
+    - generic [ref=e86]:
+      - generic [ref=e87]:
+        - generic [ref=e88]:
+          - heading "UNTOLD" [level=4] [ref=e89]
+          - paragraph [ref=e90]: Exploring ideas that transform the future.
+        - generic [ref=e91]:
+          - paragraph [ref=e92]: Content
+          - list [ref=e93]:
+            - listitem [ref=e94]:
+              - link "Articles" [ref=e95] [cursor=pointer]:
+                - /url: /articles
+            - listitem [ref=e96]:
+              - link "Videos" [ref=e97] [cursor=pointer]:
+                - /url: /videos
+            - listitem [ref=e98]:
+              - link "Podcasts" [ref=e99] [cursor=pointer]:
+                - /url: /podcasts
+            - listitem [ref=e100]:
+              - link "Pills" [ref=e101] [cursor=pointer]:
+                - /url: /pills
+            - listitem [ref=e102]:
+              - link "Courses" [ref=e103] [cursor=pointer]:
+                - /url: /courses
+        - generic [ref=e104]:
+          - paragraph [ref=e105]: Topics
+          - list [ref=e106]:
+            - listitem [ref=e107]:
+              - link "Decoloniality" [ref=e108] [cursor=pointer]:
+                - /url: /tag/decoloniality
+            - listitem [ref=e109]:
+              - link "Sustainability" [ref=e110] [cursor=pointer]:
+                - /url: /tag/sustainability
+            - listitem [ref=e111]:
+              - link "Technology" [ref=e112] [cursor=pointer]:
+                - /url: /tag/technology
+            - listitem [ref=e113]:
+              - link "Education" [ref=e114] [cursor=pointer]:
+                - /url: /tag/education
+            - listitem [ref=e115]:
+              - link "Responsible AI" [ref=e116] [cursor=pointer]:
+                - /url: /tag/responsible-ai
+        - generic [ref=e117]:
+          - paragraph [ref=e118]: Connect
+          - list [ref=e119]:
+            - listitem [ref=e120]:
+              - link "About" [ref=e121] [cursor=pointer]:
+                - /url: /about
+            - listitem [ref=e122]:
+              - link "Contact" [ref=e123] [cursor=pointer]:
+                - /url: /contact
+            - listitem [ref=e124]:
+              - link "Newsletter" [ref=e125] [cursor=pointer]:
+                - /url: /newsletter
+            - listitem [ref=e126]:
+              - link "Become a Creator" [ref=e127] [cursor=pointer]:
+                - /url: /become-creator
+      - generic [ref=e128]: © 2026 UNTOLD. All rights reserved. A Sur Global publication.
+  - button "Open Next.js Dev Tools" [ref=e134] [cursor=pointer]:
+    - img [ref=e135]
+  - alert [ref=e138]

@@ -1,0 +1,178 @@
+- generic [active] [ref=e1]:
+  - button "Open Next.js Dev Tools" [ref=e7] [cursor=pointer]:
+    - img [ref=e8]
+  - alert [ref=e11]
+  - banner [ref=e12]:
+    - generic [ref=e13]:
+      - link "UNTOLD" [ref=e14] [cursor=pointer]:
+        - /url: /
+      - navigation [ref=e15]:
+        - link "Articles" [ref=e16] [cursor=pointer]:
+          - /url: /articles
+        - link "Videos" [ref=e17] [cursor=pointer]:
+          - /url: /videos
+        - link "Podcasts" [ref=e18] [cursor=pointer]:
+          - /url: /podcasts
+        - link "Knowledge Pills" [ref=e19] [cursor=pointer]:
+          - /url: /pills
+        - link "Courses" [ref=e20] [cursor=pointer]:
+          - /url: /courses
+      - generic [ref=e21]:
+        - button "EN" [ref=e22]
+        - generic [ref=e23]:
+          - link "Dashboard" [ref=e24] [cursor=pointer]:
+            - /url: /dashboard
+          - link "Create" [ref=e25] [cursor=pointer]:
+            - /url: /create
+  - main [ref=e26]:
+    - generic [ref=e27]:
+      - heading "My Content" [level=1] [ref=e28]
+      - link "Create" [ref=e29] [cursor=pointer]:
+        - /url: /create
+    - list [ref=e30]:
+      - listitem [ref=e31]:
+        - generic [ref=e32]:
+          - paragraph [ref=e33]: Test Podcast Episode
+          - paragraph [ref=e34]: Mar 22, 2026
+        - generic [ref=e35]: Podcast
+        - generic [ref=e36]: published
+        - generic [ref=e37]:
+          - link "Edit" [ref=e38] [cursor=pointer]:
+            - /url: /dashboard/podcasts/8c08071f-c98d-4296-b44d-50265c48f202/edit
+          - button "Unpublish" [ref=e40]
+          - button "Delete" [ref=e41]
+      - listitem [ref=e42]:
+        - generic [ref=e43]:
+          - paragraph [ref=e44]: Test Course
+          - paragraph [ref=e45]: Mar 22, 2026
+        - generic [ref=e46]: Course
+        - generic [ref=e47]: draft
+        - generic [ref=e48]:
+          - link "Edit" [ref=e49] [cursor=pointer]:
+            - /url: /dashboard/courses/d8c2128e-d8b8-44fc-8a71-058e74b02362/edit
+          - button "Publish" [ref=e51]
+          - button "Delete" [ref=e52]
+      - listitem [ref=e53]:
+        - generic [ref=e54]:
+          - paragraph [ref=e55]: Test Knowledge Pill
+          - paragraph [ref=e56]: Mar 22, 2026
+        - generic [ref=e57]: Pill
+        - generic [ref=e58]: draft
+        - generic [ref=e59]:
+          - link "Edit" [ref=e60] [cursor=pointer]:
+            - /url: /dashboard/pills/030020e1-f977-4350-bf66-5f84c1211809/edit
+          - button "Publish" [ref=e62]
+          - button "Delete" [ref=e63]
+      - listitem [ref=e64]:
+        - generic [ref=e65]:
+          - paragraph [ref=e66]: Test Video
+          - paragraph [ref=e67]: Mar 22, 2026
+        - generic [ref=e68]: Video
+        - generic [ref=e69]: draft
+        - generic [ref=e70]:
+          - link "Edit" [ref=e71] [cursor=pointer]:
+            - /url: /dashboard/videos/54077e28-9f3f-4219-8248-2b6b00f3d8fe/edit
+          - button "Publish" [ref=e73]
+          - button "Delete" [ref=e74]
+      - listitem [ref=e75]:
+        - generic [ref=e76]:
+          - paragraph [ref=e77]: Test Article from Playwright
+          - paragraph [ref=e78]: Mar 22, 2026
+        - generic [ref=e79]: Article
+        - generic [ref=e80]: draft
+        - generic [ref=e81]:
+          - link "Edit" [ref=e82] [cursor=pointer]:
+            - /url: /dashboard/articles/780d6938-fd18-48ce-a55f-25181f24de9a/edit
+          - button "Publish" [ref=e84]
+          - button "Delete" [ref=e85]
+      - listitem [ref=e86]:
+        - generic [ref=e87]:
+          - paragraph [ref=e88]: (Untitled)
+          - paragraph [ref=e89]: Mar 22, 2026
+        - generic [ref=e90]: Article
+        - generic [ref=e91]: draft
+        - generic [ref=e92]:
+          - link "Edit" [ref=e93] [cursor=pointer]:
+            - /url: /dashboard/articles/01c05785-360a-4b1a-8957-d3c840ed2e09/edit
+          - button "Publish" [ref=e95]
+          - button "Delete" [ref=e96]
+      - listitem [ref=e97]:
+        - generic [ref=e98]:
+          - paragraph [ref=e99]: (Untitled)
+          - paragraph [ref=e100]: Mar 22, 2026
+        - generic [ref=e101]: Article
+        - generic [ref=e102]: draft
+        - generic [ref=e103]:
+          - link "Edit" [ref=e104] [cursor=pointer]:
+            - /url: /dashboard/articles/09165af3-d173-43b8-8c2c-bcc003f46c34/edit
+          - button "Publish" [ref=e106]
+          - button "Delete" [ref=e107]
+      - listitem [ref=e108]:
+        - generic [ref=e109]:
+          - paragraph [ref=e110]: Test Article from Playwright
+          - paragraph [ref=e111]: Mar 22, 2026
+        - generic [ref=e112]: Article
+        - generic [ref=e113]: draft
+        - generic [ref=e114]:
+          - link "Edit" [ref=e115] [cursor=pointer]:
+            - /url: /dashboard/articles/e974b313-ca5e-488d-b948-cdd4fe10a8d5/edit
+          - button "Publish" [ref=e117]
+          - button "Delete" [ref=e118]
+  - contentinfo [ref=e119]:
+    - generic [ref=e120]:
+      - generic [ref=e121]:
+        - generic [ref=e122]:
+          - heading "UNTOLD" [level=4] [ref=e123]
+          - paragraph [ref=e124]: Exploring ideas that transform the future.
+        - generic [ref=e125]:
+          - paragraph [ref=e126]: Content
+          - list [ref=e127]:
+            - listitem [ref=e128]:
+              - link "Articles" [ref=e129] [cursor=pointer]:
+                - /url: /articles
+            - listitem [ref=e130]:
+              - link "Videos" [ref=e131] [cursor=pointer]:
+                - /url: /videos
+            - listitem [ref=e132]:
+              - link "Podcasts" [ref=e133] [cursor=pointer]:
+                - /url: /podcasts
+            - listitem [ref=e134]:
+              - link "Pills" [ref=e135] [cursor=pointer]:
+                - /url: /pills
+            - listitem [ref=e136]:
+              - link "Courses" [ref=e137] [cursor=pointer]:
+                - /url: /courses
+        - generic [ref=e138]:
+          - paragraph [ref=e139]: Topics
+          - list [ref=e140]:
+            - listitem [ref=e141]:
+              - link "Decoloniality" [ref=e142] [cursor=pointer]:
+                - /url: /tag/decoloniality
+            - listitem [ref=e143]:
+              - link "Sustainability" [ref=e144] [cursor=pointer]:
+                - /url: /tag/sustainability
+            - listitem [ref=e145]:
+              - link "Technology" [ref=e146] [cursor=pointer]:
+                - /url: /tag/technology
+            - listitem [ref=e147]:
+              - link "Education" [ref=e148] [cursor=pointer]:
+                - /url: /tag/education
+            - listitem [ref=e149]:
+              - link "Responsible AI" [ref=e150] [cursor=pointer]:
+                - /url: /tag/responsible-ai
+        - generic [ref=e151]:
+          - paragraph [ref=e152]: Connect
+          - list [ref=e153]:
+            - listitem [ref=e154]:
+              - link "About" [ref=e155] [cursor=pointer]:
+                - /url: /about
+            - listitem [ref=e156]:
+              - link "Contact" [ref=e157] [cursor=pointer]:
+                - /url: /contact
+            - listitem [ref=e158]:
+              - link "Newsletter" [ref=e159] [cursor=pointer]:
+                - /url: /newsletter
+            - listitem [ref=e160]:
+              - link "Become a Creator" [ref=e161] [cursor=pointer]:
+                - /url: /become-creator
+      - generic [ref=e162]: © 2026 UNTOLD. All rights reserved. A Sur Global publication.

@@ -1,0 +1,25 @@
+[     437ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost:3000/da/articles/ohoh-mn3avq3j:0
+[     727ms] SecurityError: localStorage is not available for opaque origins
+    at resolveErrorDev (http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_0p3wegg._.js:1919:105)
+    at processFullStringRow (http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_0p3wegg._.js:2434:29)
+    at processFullBinaryRow (http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_0p3wegg._.js:2393:9)
+    at processBinaryChunk (http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_0p3wegg._.js:2502:221)
+    at progress (http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_0p3wegg._.js:2689:13)
+[  523627ms] ReferenceError: prerenderedBody is not defined
+    at ArticlePage (about://React/Server/file:///Users/noahlaux/code/surglobal/untold/.next/dev/server/chunks/ssr/%255Broot-of-the-server%255D__12q_p_z._.js?id=%255Bproject%255D%252Fapp%252F%255Blocale%255D%252Farticles%252F%255Bslug%255D%252Fpage.tsx+%255Bapp-rsc%255D+%2528ecmascript%2529?223:577:58)
+    at resolveErrorDev (http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_0p3wegg._.js:1919:150)
+    at processFullStringRow (http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_0p3wegg._.js:2434:29)
+    at processFullBinaryRow (http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_0p3wegg._.js:2393:9)
+    at processBinaryChunk (http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_0p3wegg._.js:2502:221)
+    at progress (http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_0p3wegg._.js:2689:13)
+[  524607ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost:3000/da/articles/ohoh-mn3avq3j:0
+[  524762ms] ReferenceError: prerenderedBody is not defined
+    at ArticlePage (about://React/Server/file:///Users/noahlaux/code/surglobal/untold/.next/dev/server/chunks/ssr/%255Broot-of-the-server%255D__12q_p_z._.js?id=%255Bproject%255D%252Fapp%252F%255Blocale%255D%252Farticles%252F%255Bslug%255D%252Fpage.tsx+%255Bapp-rsc%255D+%2528ecmascript%2529?0:577:58)
+    at resolveErrorDev (http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_0p3wegg._.js:1919:105)
+    at processFullStringRow (http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_0p3wegg._.js:2434:29)
+    at processFullBinaryRow (http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_0p3wegg._.js:2393:9)
+    at processBinaryChunk (http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_0p3wegg._.js:2502:221)
+    at progress (http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_0p3wegg._.js:2689:13)
+[  527867ms] [WARNING] The resource http://localhost:3000/_next/static/chunks/node_modules_126khc1._.css was preloaded using link preload but not used within a few seconds from the window's load event. Please make sure it has an appropriate `as` value and it is preloaded intentionally. @ http://localhost:3000/da/articles/ohoh-mn3avq3j:0
+[  547401ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost:3000/da/articles/ohoh-mn3avq3j:0
+[  564406ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost:3000/da/articles/ohoh-mn3avq3j:0

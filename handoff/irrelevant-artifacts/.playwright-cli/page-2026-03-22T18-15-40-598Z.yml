@@ -1,0 +1,138 @@
+- generic [active] [ref=e1]:
+  - banner [ref=e2]:
+    - generic [ref=e3]:
+      - link "UNTOLD" [ref=e4] [cursor=pointer]:
+        - /url: /
+      - navigation [ref=e5]:
+        - link "Articles" [ref=e6] [cursor=pointer]:
+          - /url: /articles
+        - link "Videos" [ref=e7] [cursor=pointer]:
+          - /url: /videos
+        - link "Podcasts" [ref=e8] [cursor=pointer]:
+          - /url: /podcasts
+        - link "Knowledge Pills" [ref=e9] [cursor=pointer]:
+          - /url: /pills
+        - link "Courses" [ref=e10] [cursor=pointer]:
+          - /url: /courses
+    - generic [ref=e11]:
+      - button "EN" [ref=e12]
+      - link "Log in" [ref=e13] [cursor=pointer]:
+        - /url: /auth/login
+      - link "Sign up" [ref=e14] [cursor=pointer]:
+        - /url: /auth/signup
+  - main [ref=e15]:
+    - generic [ref=e16]:
+      - link "Back" [ref=e17] [cursor=pointer]:
+        - /url: /articles
+        - img [ref=e18]
+        - text: Back
+      - article [ref=e20]:
+        - generic [ref=e21]:
+          - link "AI Governance" [ref=e22] [cursor=pointer]:
+            - /url: /tag/ai-governance
+            - img [ref=e23]
+            - text: AI Governance
+          - link "Data Sovereignty" [ref=e25] [cursor=pointer]:
+            - /url: /tag/data-sovereignty
+            - img [ref=e26]
+            - text: Data Sovereignty
+        - heading "AI Governance Without the South" [level=1] [ref=e28]
+        - paragraph [ref=e29]: The EU AI Act, the US Executive Order, the G7 AI Code of Conduct. Major AI governance frameworks are being written without the voices of those most affected.
+        - generic [ref=e30]:
+          - generic [ref=e31]:
+            - img "Siddharth Rao" [ref=e33]
+            - link "Siddharth Rao" [ref=e34] [cursor=pointer]:
+              - /url: /author/siddharth-rao
+          - generic [ref=e35]:
+            - generic [ref=e36]:
+              - img [ref=e37]
+              - generic [ref=e40]: February 28, 2026
+            - generic [ref=e41]:
+              - img [ref=e42]
+              - generic [ref=e45]: 2 min read
+        - generic [ref=e46]:
+          - button "621" [disabled] [ref=e47]:
+            - img [ref=e48]
+            - generic [ref=e50]: "621"
+          - button "Save" [disabled] [ref=e51]:
+            - img [ref=e52]
+            - generic [ref=e54]: Save
+          - button "Share article" [ref=e55]:
+            - img [ref=e56]
+            - text: Share
+        - img "AI Governance Without the South" [ref=e60]
+        - generic [ref=e61]:
+          - paragraph [ref=e62]: The global governance of artificial intelligence is being shaped by a remarkably narrow set of actors. The EU AI Act, the United States Executive Order on AI, the G7 Hiroshima AI Process, the OECD AI Principles — all of these have been driven by rich, technologically advanced nations with large domestic AI industries.
+          - paragraph [ref=e63]: "The Global South is largely absent from these conversations, except as an afterthought: a market to be entered, a population to be served, or a source of cheap data labelling labour. The assumption is that governance frameworks developed in Washington, Brussels, and Tokyo will be universal — or that developing nations will simply adopt them wholesale, as they adopted WTO rules and Basel banking accords."
+          - paragraph [ref=e64]: This assumption deserves scrutiny. AI systems deployed in India, Nigeria, or Indonesia face different contexts, different failure modes, and different stakes than the same systems deployed in Germany or California. A content moderation algorithm calibrated for English-language text will behave unpredictably in Tamil, Yoruba, or Bahasa. A facial recognition system trained predominantly on European faces will have higher error rates for darker-skinned individuals — with consequences that range from inconvenient to deadly when deployed by police forces.
+          - paragraph [ref=e65]: Southern nations are not passive recipients of AI technology. India is building its own large language models. Nigeria has a growing AI startup ecosystem. Indonesia is investing in national AI infrastructure. These efforts deserve governance frameworks that reflect their contexts and values, not just compliance templates designed for Silicon Valley.
+          - paragraph [ref=e66]: The urgency is real. AI governance architecture is being built now, and path dependency is strong. The frameworks being written today will shape the technology — and its power distribution — for decades. If the Global South is not at the table, it will be on the menu.
+        - generic [ref=e67]:
+          - heading "About the Author" [level=3] [ref=e68]
+          - generic [ref=e69]:
+            - img "Siddharth Rao" [ref=e71]
+            - generic [ref=e72]:
+              - heading "Siddharth Rao" [level=4] [ref=e73]
+              - link "View profile →" [ref=e74] [cursor=pointer]:
+                - /url: /author/siddharth-rao
+  - contentinfo [ref=e75]:
+    - generic [ref=e76]:
+      - generic [ref=e77]:
+        - generic [ref=e78]:
+          - heading "UNTOLD" [level=4] [ref=e79]
+          - paragraph [ref=e80]: Exploring ideas that transform the future.
+        - generic [ref=e81]:
+          - paragraph [ref=e82]: Content
+          - list [ref=e83]:
+            - listitem [ref=e84]:
+              - link "Articles" [ref=e85] [cursor=pointer]:
+                - /url: /articles
+            - listitem [ref=e86]:
+              - link "Videos" [ref=e87] [cursor=pointer]:
+                - /url: /videos
+            - listitem [ref=e88]:
+              - link "Podcasts" [ref=e89] [cursor=pointer]:
+                - /url: /podcasts
+            - listitem [ref=e90]:
+              - link "Pills" [ref=e91] [cursor=pointer]:
+                - /url: /pills
+            - listitem [ref=e92]:
+              - link "Courses" [ref=e93] [cursor=pointer]:
+                - /url: /courses
+        - generic [ref=e94]:
+          - paragraph [ref=e95]: Topics
+          - list [ref=e96]:
+            - listitem [ref=e97]:
+              - link "Decoloniality" [ref=e98] [cursor=pointer]:
+                - /url: /tag/decoloniality
+            - listitem [ref=e99]:
+              - link "Sustainability" [ref=e100] [cursor=pointer]:
+                - /url: /tag/sustainability
+            - listitem [ref=e101]:
+              - link "Technology" [ref=e102] [cursor=pointer]:
+                - /url: /tag/technology
+            - listitem [ref=e103]:
+              - link "Education" [ref=e104] [cursor=pointer]:
+                - /url: /tag/education
+            - listitem [ref=e105]:
+              - link "Responsible AI" [ref=e106] [cursor=pointer]:
+                - /url: /tag/responsible-ai
+        - generic [ref=e107]:
+          - paragraph [ref=e108]: Connect
+          - list [ref=e109]:
+            - listitem [ref=e110]:
+              - link "About" [ref=e111] [cursor=pointer]:
+                - /url: /about
+            - listitem [ref=e112]:
+              - link "Contact" [ref=e113] [cursor=pointer]:
+                - /url: /contact
+            - listitem [ref=e114]:
+              - link "Newsletter" [ref=e115] [cursor=pointer]:
+                - /url: /newsletter
+            - listitem [ref=e116]:
+              - link "Become a Creator" [ref=e117] [cursor=pointer]:
+                - /url: /become-creator
+      - generic [ref=e118]: © 2026 UNTOLD. All rights reserved. A Sur Global publication.
+  - button "Open Next.js Dev Tools" [ref=e124] [cursor=pointer]:
+    - img [ref=e125]
+  - alert [ref=e128]

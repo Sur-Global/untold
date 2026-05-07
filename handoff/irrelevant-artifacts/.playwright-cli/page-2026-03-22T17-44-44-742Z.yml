@@ -1,0 +1,138 @@
+- generic [active] [ref=e1]:
+  - banner [ref=e2]:
+    - generic [ref=e3]:
+      - link "UNTOLD" [ref=e4] [cursor=pointer]:
+        - /url: /
+      - navigation [ref=e5]:
+        - link "Articles" [ref=e6] [cursor=pointer]:
+          - /url: /articles
+        - link "Videos" [ref=e7] [cursor=pointer]:
+          - /url: /videos
+        - link "Podcasts" [ref=e8] [cursor=pointer]:
+          - /url: /podcasts
+        - link "Knowledge Pills" [ref=e9] [cursor=pointer]:
+          - /url: /pills
+        - link "Courses" [ref=e10] [cursor=pointer]:
+          - /url: /courses
+    - generic [ref=e11]:
+      - button "EN" [ref=e12]
+      - link "Log in" [ref=e13] [cursor=pointer]:
+        - /url: /auth/login
+      - link "Sign up" [ref=e14] [cursor=pointer]:
+        - /url: /auth/signup
+  - main [ref=e15]:
+    - generic [ref=e16]:
+      - link "Back" [ref=e17] [cursor=pointer]:
+        - /url: /articles
+        - img [ref=e18]
+        - text: Back
+      - article [ref=e20]:
+        - heading "Marilyn for ever" [level=1] [ref=e21]
+        - paragraph [ref=e22]: In grammar, an article is any of a small set of words or affixes (such as a, an, and the in English) used with nouns to limit or give definiteness to the application. The category of articles constitutes a part of speech. These words represent a specific object, depending on the situation, but a is less specific than the.
+        - generic [ref=e23]:
+          - generic [ref=e24]:
+            - generic [ref=e26]: "N"
+            - link "Noah Laux" [ref=e28] [cursor=pointer]:
+              - /url: /author/noah-laux
+          - generic [ref=e29]:
+            - generic [ref=e30]:
+              - img [ref=e31]
+              - generic [ref=e34]: March 22, 2026
+            - generic [ref=e35]:
+              - img [ref=e36]
+              - generic [ref=e39]: 2 min read
+        - generic [ref=e40]:
+          - button "♡" [disabled] [ref=e41]:
+            - generic [ref=e42]: ♡
+          - button "🏷" [disabled] [ref=e43]
+          - button "Share article" [ref=e44]:
+            - img [ref=e45]
+            - text: Share
+        - img "Marilyn for ever" [ref=e49]
+        - generic [ref=e50]:
+          - paragraph [ref=e51]:
+            - text: In grammar, an article is any of a small set of words or affixes (such as a, an, and the in English) used with nouns to limit or give definiteness to the
+            - link "application" [ref=e52] [cursor=pointer]:
+              - /url: https://www.dr.dk
+            - text: . The category of articles constitutes a part of speech. These words represent a specific object, depending on the situation, but a is less specific than the.
+          - paragraph [ref=e53]: Articles combine with nouns to form noun phrases, and typically specify the grammatical definiteness of the noun phrase. In English, the and a (rendered as an when followed by a vowel sound) are the definite and indefinite articles respectively. Articles in many other languages also carry additional grammatical information such as gender, number, and case. Articles are part of a broader category called determiners, which also include demonstratives, possessive determiners, and quantifiers. In linguistic interlinear glossing, articles are abbreviated as ART.
+          - paragraph [ref=e54]: Types of article
+          - paragraph [ref=e55]: Definite article
+          - paragraph [ref=e56]: "\"Definite article\" redirects here. For the comedy album, see Definite Article."
+          - paragraph [ref=e57]: A definite article is an article that marks a definite noun phrase. Definite articles, such as the English the, are used to refer to a particular member of a group. It may be something that the speaker has already mentioned, or it may be something uniquely specified.
+          - paragraph [ref=e58]: For example, Sentence 1 uses the definite article and thus expresses a request for a particular book. In contrast, Sentence 2 uses an indefinite article and thus conveys that the speaker would be satisfied with any book.
+          - paragraph [ref=e59]: Give me the book.
+          - paragraph [ref=e60]: Give me a book.
+          - paragraph [ref=e61]: "The definite article can also be used in English to indicate a specific class among other classes:"
+          - paragraph [ref=e62]: The cabbage white butterfly lays its eggs on members of the Brassica genus.
+          - paragraph [ref=e63]: However, recent developments show that definite articles are morphological elements linked to certain noun types due to lexicalization. Under this point of view, definiteness does not play a role in the selection of a definite article more than the lexical entry attached to the article.[clarification needed][1][2]
+          - paragraph [ref=e64]: Some languages (such as the continental North Germanic languages, Bulgarian or Romanian) have definite articles only as suffixes.
+        - generic [ref=e65]:
+          - heading "About the Author" [level=3] [ref=e66]
+          - generic [ref=e67]:
+            - generic [ref=e69]: "N"
+            - generic [ref=e70]:
+              - heading "Noah Laux" [level=4] [ref=e71]
+              - link "View profile →" [ref=e72] [cursor=pointer]:
+                - /url: /author/noah-laux
+  - contentinfo [ref=e73]:
+    - generic [ref=e74]:
+      - generic [ref=e75]:
+        - generic [ref=e76]:
+          - heading "UNTOLD" [level=4] [ref=e77]
+          - paragraph [ref=e78]: Exploring ideas that transform the future.
+        - generic [ref=e79]:
+          - paragraph [ref=e80]: Content
+          - list [ref=e81]:
+            - listitem [ref=e82]:
+              - link "Articles" [ref=e83] [cursor=pointer]:
+                - /url: /articles
+            - listitem [ref=e84]:
+              - link "Videos" [ref=e85] [cursor=pointer]:
+                - /url: /videos
+            - listitem [ref=e86]:
+              - link "Podcasts" [ref=e87] [cursor=pointer]:
+                - /url: /podcasts
+            - listitem [ref=e88]:
+              - link "Pills" [ref=e89] [cursor=pointer]:
+                - /url: /pills
+            - listitem [ref=e90]:
+              - link "Courses" [ref=e91] [cursor=pointer]:
+                - /url: /courses
+        - generic [ref=e92]:
+          - paragraph [ref=e93]: Topics
+          - list [ref=e94]:
+            - listitem [ref=e95]:
+              - link "Decoloniality" [ref=e96] [cursor=pointer]:
+                - /url: /tag/decoloniality
+            - listitem [ref=e97]:
+              - link "Sustainability" [ref=e98] [cursor=pointer]:
+                - /url: /tag/sustainability
+            - listitem [ref=e99]:
+              - link "Technology" [ref=e100] [cursor=pointer]:
+                - /url: /tag/technology
+            - listitem [ref=e101]:
+              - link "Education" [ref=e102] [cursor=pointer]:
+                - /url: /tag/education
+            - listitem [ref=e103]:
+              - link "Responsible AI" [ref=e104] [cursor=pointer]:
+                - /url: /tag/responsible-ai
+        - generic [ref=e105]:
+          - paragraph [ref=e106]: Connect
+          - list [ref=e107]:
+            - listitem [ref=e108]:
+              - link "About" [ref=e109] [cursor=pointer]:
+                - /url: /about
+            - listitem [ref=e110]:
+              - link "Contact" [ref=e111] [cursor=pointer]:
+                - /url: /contact
+            - listitem [ref=e112]:
+              - link "Newsletter" [ref=e113] [cursor=pointer]:
+                - /url: /newsletter
+            - listitem [ref=e114]:
+              - link "Become a Creator" [ref=e115] [cursor=pointer]:
+                - /url: /become-creator
+      - generic [ref=e116]: © 2026 UNTOLD. All rights reserved. A Sur Global publication.
+  - button "Open Next.js Dev Tools" [ref=e122] [cursor=pointer]:
+    - img [ref=e123]
+  - alert [ref=e126]

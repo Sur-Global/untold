@@ -205,5 +205,18 @@
     "videoUrlExtracting": "Extraction…",
     "reExtractTranscript": "Ré-extraire la transcription",
     "reExtractingTranscript": "Extraction…"
+  },
+  "footer": {
+    "brandTitle": "UNTOLD",
+    "brandTagline": "Explorer les idées qui transforment l'avenir.",
+    "contentHeading": "Contenu",
+    "topicsHeading": "Sujets",
+    "pagesHeading": "Pages",
+    "copyright": "© {year} UNTOLD. Tous droits réservés. Une publication Sur Global.",
+    "topicDecoloniality": "Décolonialité",
+    "topicSustainability": "Durabilité",
+    "topicTechnology": "Technologie",
+    "topicEducation": "Éducation",
+    "topicResponsibleAI": "IA responsable"
   }
 }

@@ -1,0 +1,147 @@
+- generic [active] [ref=e1]:
+  - banner [ref=e2]:
+    - generic [ref=e3]:
+      - link "UNTOLD" [ref=e4] [cursor=pointer]:
+        - /url: /
+      - navigation [ref=e5]:
+        - link "Artikler" [ref=e6] [cursor=pointer]:
+          - /url: /articles
+        - link "Videoer" [ref=e7] [cursor=pointer]:
+          - /url: /videos
+        - link "Podcasts" [ref=e8] [cursor=pointer]:
+          - /url: /podcasts
+        - link "Videnspiller" [ref=e9] [cursor=pointer]:
+          - /url: /pills
+        - link "Kurser" [ref=e10] [cursor=pointer]:
+          - /url: /courses
+      - generic [ref=e11]:
+        - link "Søg" [ref=e12] [cursor=pointer]:
+          - /url: /search
+          - img [ref=e13]
+        - button "DA" [ref=e16] [cursor=pointer]:
+          - img [ref=e17]
+          - generic [ref=e21]: DA
+        - generic [ref=e22]: "|"
+        - link "Log ind" [ref=e23] [cursor=pointer]:
+          - /url: /auth/login
+  - main [ref=e24]:
+    - generic [ref=e25]:
+      - link "Back" [ref=e26] [cursor=pointer]:
+        - /url: /articles
+        - img [ref=e27]
+        - text: Back
+      - article [ref=e29]:
+        - generic [ref=e30]:
+          - link "Surveillance" [ref=e31] [cursor=pointer]:
+            - /url: /tag/surveillance
+            - img [ref=e32]
+            - text: Surveillance
+          - link "Police" [ref=e34] [cursor=pointer]:
+            - /url: /tag/police
+            - img [ref=e35]
+            - text: Police
+          - link "Digital Rights" [ref=e37] [cursor=pointer]:
+            - /url: /tag/digital-rights
+            - img [ref=e38]
+            - text: Digital Rights
+        - heading "Hvordan politiets overvågningsteknologi rammer de sorte samfund" [level=1] [ref=e40]
+        - paragraph [ref=e41]: Ansigtsgenkendelsessystemer, der er taget i brug i Lagos, Nairobi og Cape Town, rejser presserende spørgsmål om samtykke og retten til at blive glemt.
+        - generic [ref=e42]:
+          - generic [ref=e43]:
+            - img "Fatima Al-Hassan" [ref=e45]
+            - link "Fatima Al-Hassan" [ref=e46] [cursor=pointer]:
+              - /url: /author/fatima-al-hassan
+          - generic [ref=e48]:
+            - generic [ref=e49]:
+              - img [ref=e50]
+              - generic [ref=e53]: 19. marts 2026
+            - generic [ref=e54]:
+              - img [ref=e55]
+              - generic [ref=e58]: 1 min læsning
+        - generic [ref=e59]:
+          - button "47" [disabled] [ref=e60]:
+            - img [ref=e61]
+            - generic [ref=e63]: "47"
+          - button "Sign in to bookmark" [disabled] [ref=e64]:
+            - img [ref=e65]
+          - button "Share article" [ref=e67] [cursor=pointer]:
+            - img [ref=e68]
+            - text: Share
+        - figure [ref=e71]:
+          - img "Hvordan politiets overvågningsteknologi rammer de sorte samfund" [ref=e73]
+        - generic [ref=e74]:
+          - paragraph [ref=e75]: Overalt på det afrikanske kontinent indføres en ny bølge af politiovervågningsteknologi i overvejende sorte lokalsamfund — ofte uden offentlig debat, uden uafhængig kontrol og uden mulighed for at klage for dem, der fejlagtigt identificeres.
+          - paragraph [ref=e76]: I Lagos har delstatsregeringen i al stilhed opsat tusindvis af ansigtsgenkendelseskameraer i kvarterer med lav indkomst. I Nairobi bruger politiet software til præventiv politiarbejde, der er trænet på anholdelsesregistre, som i uforholdsmæssig høj grad afspejler historisk overpolicering. I Cape Town anvender et pilotprojekt nummerpladescannere og biometriske databaser til at spore bevægelser rundt om i byen.
+          - paragraph [ref=e77]: "\"Algoritmen ser dig ikke som et menneske. Den ser dig som et datapunkt,\" siger dr. Nkechi Okonkwo, forsker i digitale rettigheder ved African Network for Surveillance Accountability. \"Og når det datapunkt er forkert – hvilket det ofte er for mørkere hudfarver – rammer konsekvenserne udelukkende den enkelte person, ikke systemet.\""
+          - paragraph [ref=e78]: Undersøgelser viser gang på gang, at kommercielle ansigtsgenkendelsessystemer har betydeligt højere fejlprocenter for mørkhudede kvinder og mænd, hvor de i nogle tilfælde identificerer dem forkert i op til 34 % af tilfældene, sammenlignet med fejlprocenter på under 1 % for lyshudede mænd. Alligevel købes disse systemer fra internationale leverandører og tages i brug med minimal lokal testning eller validering.
+        - generic [ref=e79]:
+          - heading "About the Author" [level=3] [ref=e80]
+          - generic [ref=e81]:
+            - img "Fatima Al-Hassan" [ref=e83]
+            - generic [ref=e84]:
+              - heading "Fatima Al-Hassan" [level=4] [ref=e85]
+              - paragraph [ref=e86]: Lagos, Nigeria
+              - paragraph [ref=e87]: Award-winning author and cultural critic from Lagos. Her work explores postcolonial narratives, oral history, and the politics of memory.
+              - link "View profile →" [ref=e88] [cursor=pointer]:
+                - /url: /author/fatima-al-hassan
+  - contentinfo [ref=e89]:
+    - generic [ref=e90]:
+      - generic [ref=e91]:
+        - generic [ref=e92]:
+          - heading "UNTOLD" [level=4] [ref=e93]
+          - paragraph [ref=e94]: Exploring ideas that transform the future.
+        - generic [ref=e95]:
+          - paragraph [ref=e96]: Content
+          - list [ref=e97]:
+            - listitem [ref=e98]:
+              - link "Articles" [ref=e99] [cursor=pointer]:
+                - /url: /articles
+            - listitem [ref=e100]:
+              - link "Videos" [ref=e101] [cursor=pointer]:
+                - /url: /videos
+            - listitem [ref=e102]:
+              - link "Podcasts" [ref=e103] [cursor=pointer]:
+                - /url: /podcasts
+            - listitem [ref=e104]:
+              - link "Pills" [ref=e105] [cursor=pointer]:
+                - /url: /pills
+            - listitem [ref=e106]:
+              - link "Courses" [ref=e107] [cursor=pointer]:
+                - /url: /courses
+        - generic [ref=e108]:
+          - paragraph [ref=e109]: Topics
+          - list [ref=e110]:
+            - listitem [ref=e111]:
+              - link "Decoloniality" [ref=e112] [cursor=pointer]:
+                - /url: /tag/decoloniality
+            - listitem [ref=e113]:
+              - link "Sustainability" [ref=e114] [cursor=pointer]:
+                - /url: /tag/sustainability
+            - listitem [ref=e115]:
+              - link "Technology" [ref=e116] [cursor=pointer]:
+                - /url: /tag/technology
+            - listitem [ref=e117]:
+              - link "Education" [ref=e118] [cursor=pointer]:
+                - /url: /tag/education
+            - listitem [ref=e119]:
+              - link "Responsible AI" [ref=e120] [cursor=pointer]:
+                - /url: /tag/responsible-ai
+        - generic [ref=e121]:
+          - paragraph [ref=e122]: Connect
+          - list [ref=e123]:
+            - listitem [ref=e124]:
+              - link "About" [ref=e125] [cursor=pointer]:
+                - /url: /about
+            - listitem [ref=e126]:
+              - link "Contact" [ref=e127] [cursor=pointer]:
+                - /url: /contact
+            - listitem [ref=e128]:
+              - link "Newsletter" [ref=e129] [cursor=pointer]:
+                - /url: /newsletter
+            - listitem [ref=e130]:
+              - link "Become a Creator" [ref=e131] [cursor=pointer]:
+                - /url: /become-creator
+      - generic [ref=e132]: © 2026 UNTOLD. All rights reserved. A Sur Global publication.
+  - button "Open Next.js Dev Tools" [ref=e138] [cursor=pointer]:
+    - img [ref=e139]
+  - alert [ref=e142]

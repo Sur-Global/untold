@@ -1,0 +1,266 @@
+- generic [active] [ref=e1]:
+  - banner [ref=e2]:
+    - generic [ref=e3]:
+      - link "UNTOLD" [ref=e4] [cursor=pointer]:
+        - /url: /
+      - generic [ref=e5]:
+        - navigation [ref=e6]:
+          - link "Articles" [ref=e7] [cursor=pointer]:
+            - /url: /articles
+          - link "Videos" [ref=e8] [cursor=pointer]:
+            - /url: /videos
+          - link "Podcasts" [ref=e9] [cursor=pointer]:
+            - /url: /podcasts
+          - link "Knowledge Pills" [ref=e10] [cursor=pointer]:
+            - /url: /pills
+          - link "Courses" [ref=e11] [cursor=pointer]:
+            - /url: /courses
+        - link "Search" [ref=e12] [cursor=pointer]:
+          - /url: /search
+          - img [ref=e13]
+    - generic [ref=e16]:
+      - button "English" [ref=e17] [cursor=pointer]:
+        - img [ref=e18]
+        - generic [ref=e22]: English
+      - link "Sign in" [ref=e23] [cursor=pointer]:
+        - /url: /auth/login
+  - main [ref=e24]:
+    - generic [ref=e26]:
+      - generic [ref=e27]:
+        - heading "THE FUTURE OF KNOWLEDGE IS COLLABORATIVE" [level=1] [ref=e28]
+        - paragraph [ref=e29]: The untold stories, insights, and knowledge from creators across the Global South.
+        - generic [ref=e30]:
+          - link "Get Started Free →" [ref=e31] [cursor=pointer]:
+            - /url: /auth/login
+          - link "Browse Courses" [ref=e32] [cursor=pointer]:
+            - /url: /courses
+        - generic [ref=e33]:
+          - link "Decoloniality 5+ resources" [ref=e34] [cursor=pointer]:
+            - /url: /articles?tag=decoloniality
+            - paragraph [ref=e35]: Decoloniality
+            - paragraph [ref=e36]: 5+ resources
+          - link "Indigenous Rights 5+ resources" [ref=e37] [cursor=pointer]:
+            - /url: /articles?tag=indigenous-rights
+            - paragraph [ref=e38]: Indigenous Rights
+            - paragraph [ref=e39]: 5+ resources
+          - link "Education 5+ resources" [ref=e40] [cursor=pointer]:
+            - /url: /articles?tag=education
+            - paragraph [ref=e41]: Education
+            - paragraph [ref=e42]: 5+ resources
+        - generic [ref=e43]:
+          - generic [ref=e44]: Updated daily
+          - generic [ref=e46]: Curated content
+      - generic [ref=e48]:
+        - link "Mother Tongue Matters ★ Featured Mother Tongue Matters" [ref=e49] [cursor=pointer]:
+          - /url: /articles/mother-tongue-matters
+          - img "Mother Tongue Matters" [ref=e50]
+          - generic [ref=e53]: ★ Featured
+          - heading "Mother Tongue Matters" [level=3] [ref=e55]
+        - generic [ref=e56]:
+          - link "Decoloniality" [ref=e57] [cursor=pointer]:
+            - /url: /articles?tag=decoloniality
+            - generic [ref=e58]: Decoloniality
+          - link "Indigenous Rights" [ref=e59] [cursor=pointer]:
+            - /url: /articles?tag=indigenous-rights
+            - generic [ref=e60]: Indigenous Rights
+    - generic [ref=e61]:
+      - generic [ref=e62]:
+        - generic [ref=e63]:
+          - generic [ref=e64]:
+            - heading "Featured Articles" [level=2] [ref=e65]
+            - paragraph [ref=e66]: The latest stories
+          - link "View all →" [ref=e67] [cursor=pointer]:
+            - /url: /articles
+        - generic [ref=e69]:
+          - link "Mother Tongue Matters ★ FEATURED Education Mother Tongue Matters Research consistently shows that children learn better in their first language. Yet most African education systems still use European languages as primary media of instruction. Nkechi Osei Nkechi Osei listings.readMoreBy 267" [ref=e71] [cursor=pointer]:
+            - /url: /articles/mother-tongue-matters
+            - img "Mother Tongue Matters" [ref=e72]
+            - generic [ref=e74]:
+              - generic [ref=e75]: ★ FEATURED
+              - generic [ref=e76]: Education
+            - generic [ref=e77]:
+              - heading "Mother Tongue Matters" [level=3] [ref=e78]
+              - paragraph [ref=e79]: Research consistently shows that children learn better in their first language. Yet most African education systems still use European languages as primary media of instruction.
+              - generic [ref=e80]:
+                - generic [ref=e81]:
+                  - img "Nkechi Osei" [ref=e82]
+                  - generic [ref=e83]:
+                    - paragraph [ref=e84]: Nkechi Osei
+                    - paragraph [ref=e85]: listings.readMoreBy
+                - generic [ref=e87]:
+                  - img [ref=e88]
+                  - text: "267"
+          - generic [ref=e90]:
+            - article [ref=e91]:
+              - generic [ref=e92]:
+                - link "AI Governance Without the South" [ref=e93] [cursor=pointer]:
+                  - /url: /articles/ai-governance-without-the-south
+                  - img "AI Governance Without the South" [ref=e94]
+                - generic [ref=e96]: AI Governance
+                - generic "Featured" [ref=e97]: ★
+              - generic [ref=e98]:
+                - heading "AI Governance Without the South" [level=3] [ref=e99]:
+                  - link "AI Governance Without the South" [ref=e100] [cursor=pointer]:
+                    - /url: /articles/ai-governance-without-the-south
+                - paragraph [ref=e101]: The EU AI Act, the US Executive Order, the G7 AI Code of Conduct. Major AI governance frameworks are being written without the voices of those most affected.
+              - generic [ref=e102]:
+                - generic [ref=e104]:
+                  - img "Siddharth Rao" [ref=e105]
+                  - generic [ref=e106]:
+                    - link "Siddharth Rao" [ref=e107] [cursor=pointer]:
+                      - /url: /author/siddharth-rao
+                    - link "listings.readMoreBy" [ref=e108] [cursor=pointer]:
+                      - /url: /author/siddharth-rao
+                - generic [ref=e109]:
+                  - generic [ref=e110]:
+                    - img [ref=e111]
+                    - text: "621"
+                  - button "Save" [disabled] [ref=e113]:
+                    - img [ref=e114]
+                    - generic [ref=e116]: Save
+            - article [ref=e117]:
+              - generic [ref=e118]:
+                - link "The Amazon Is Not Empty" [ref=e119] [cursor=pointer]:
+                  - /url: /articles/the-amazon-is-not-empty
+                  - img "The Amazon Is Not Empty" [ref=e120]
+                - generic [ref=e122]: Climate Justice
+                - generic "Featured" [ref=e123]: ★
+              - generic [ref=e124]:
+                - heading "The Amazon Is Not Empty" [level=3] [ref=e125]:
+                  - link "The Amazon Is Not Empty" [ref=e126] [cursor=pointer]:
+                    - /url: /articles/the-amazon-is-not-empty
+                - paragraph [ref=e127]: The fiction of terra nullius — empty land ripe for development — is alive and well in contemporary environmental policy. Indigenous communities pay the price.
+              - generic [ref=e128]:
+                - generic [ref=e130]:
+                  - img "Valentina Morales" [ref=e131]
+                  - generic [ref=e132]:
+                    - link "Valentina Morales" [ref=e133] [cursor=pointer]:
+                      - /url: /author/valentina-morales
+                    - link "listings.readMoreBy" [ref=e134] [cursor=pointer]:
+                      - /url: /author/valentina-morales
+                - generic [ref=e135]:
+                  - generic [ref=e136]:
+                    - img [ref=e137]
+                    - text: "512"
+                  - button "Save" [disabled] [ref=e139]:
+                    - img [ref=e140]
+                    - generic [ref=e142]: Save
+      - generic [ref=e143]:
+        - generic [ref=e144]:
+          - generic [ref=e145]:
+            - heading "Videos" [level=2] [ref=e146]
+            - paragraph [ref=e147]: Visual content
+          - link "View all →" [ref=e148] [cursor=pointer]:
+            - /url: /videos
+        - generic [ref=e150]:
+          - link "10" [ref=e151] [cursor=pointer]:
+            - /url: /videos/marylin-mn1w9hk4
+            - img [ref=e156]
+            - generic [ref=e158]:
+              - img [ref=e159]
+              - text: "10"
+          - generic [ref=e162]:
+            - link "Marylin" [ref=e163] [cursor=pointer]:
+              - /url: /videos/marylin-mn1w9hk4
+              - heading "Marylin" [level=3] [ref=e164]
+            - generic [ref=e165]:
+              - generic [ref=e166]: "N"
+              - generic [ref=e167]:
+                - link "Noah Laux" [ref=e168] [cursor=pointer]:
+                  - /url: /author/noah-laux
+                - paragraph [ref=e169]: listings.readMoreBy
+            - generic [ref=e170]:
+              - generic [ref=e171]:
+                - img [ref=e172]
+                - text: "0"
+              - button "Save" [disabled] [ref=e174]:
+                - img [ref=e175]
+                - generic [ref=e177]: Save
+      - generic [ref=e178]:
+        - generic [ref=e179]:
+          - generic [ref=e180]:
+            - heading "Podcasts" [level=2] [ref=e181]
+            - paragraph [ref=e182]: Listen and learn
+          - link "View all →" [ref=e183] [cursor=pointer]:
+            - /url: /podcasts
+        - generic [ref=e185]:
+          - link "Test Podcast Episode" [ref=e186] [cursor=pointer]:
+            - /url: /podcasts/test-podcast-episode-mn1msf7o
+            - heading "Test Podcast Episode" [level=3] [ref=e189]
+          - generic [ref=e190]:
+            - generic [ref=e191]: T
+            - generic [ref=e192]:
+              - link "test" [ref=e193] [cursor=pointer]:
+                - /url: /author/user-38ec6058
+              - link "listings.readMoreBy" [ref=e194] [cursor=pointer]:
+                - /url: /author/user-38ec6058
+  - contentinfo [ref=e195]:
+    - generic [ref=e196]:
+      - generic [ref=e197]:
+        - generic [ref=e198]:
+          - heading "UNTOLD" [level=4] [ref=e199]
+          - paragraph [ref=e200]: Exploring ideas that transform the future.
+        - generic [ref=e201]:
+          - paragraph [ref=e202]: Content
+          - list [ref=e203]:
+            - listitem [ref=e204]:
+              - link "Articles" [ref=e205] [cursor=pointer]:
+                - /url: /articles
+            - listitem [ref=e206]:
+              - link "Videos" [ref=e207] [cursor=pointer]:
+                - /url: /videos
+            - listitem [ref=e208]:
+              - link "Podcasts" [ref=e209] [cursor=pointer]:
+                - /url: /podcasts
+            - listitem [ref=e210]:
+              - link "Pills" [ref=e211] [cursor=pointer]:
+                - /url: /pills
+            - listitem [ref=e212]:
+              - link "Courses" [ref=e213] [cursor=pointer]:
+                - /url: /courses
+        - generic [ref=e214]:
+          - paragraph [ref=e215]: Topics
+          - list [ref=e216]:
+            - listitem [ref=e217]:
+              - link "Decoloniality" [ref=e218] [cursor=pointer]:
+                - /url: /tag/decoloniality
+            - listitem [ref=e219]:
+              - link "Sustainability" [ref=e220] [cursor=pointer]:
+                - /url: /tag/sustainability
+            - listitem [ref=e221]:
+              - link "Technology" [ref=e222] [cursor=pointer]:
+                - /url: /tag/technology
+            - listitem [ref=e223]:
+              - link "Education" [ref=e224] [cursor=pointer]:
+                - /url: /tag/education
+            - listitem [ref=e225]:
+              - link "Responsible AI" [ref=e226] [cursor=pointer]:
+                - /url: /tag/responsible-ai
+        - generic [ref=e227]:
+          - paragraph [ref=e228]: Connect
+          - list [ref=e229]:
+            - listitem [ref=e230]:
+              - link "About" [ref=e231] [cursor=pointer]:
+                - /url: /about
+            - listitem [ref=e232]:
+              - link "Contact" [ref=e233] [cursor=pointer]:
+                - /url: /contact
+            - listitem [ref=e234]:
+              - link "Newsletter" [ref=e235] [cursor=pointer]:
+                - /url: /newsletter
+            - listitem [ref=e236]:
+              - link "Become a Creator" [ref=e237] [cursor=pointer]:
+                - /url: /become-creator
+      - generic [ref=e238]: © 2026 UNTOLD. All rights reserved. A Sur Global publication.
+  - generic [ref=e243] [cursor=pointer]:
+    - button "Open Next.js Dev Tools" [ref=e244]:
+      - img [ref=e245]
+    - generic [ref=e248]:
+      - button "Open issues overlay" [ref=e249]:
+        - generic [ref=e250]:
+          - generic [ref=e251]: "0"
+          - generic [ref=e252]: "1"
+        - generic [ref=e253]: Issue
+      - button "Collapse issues badge" [ref=e254]:
+        - img [ref=e255]
+  - alert [ref=e257]

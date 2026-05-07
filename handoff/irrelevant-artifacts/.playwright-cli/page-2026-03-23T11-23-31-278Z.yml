@@ -1,0 +1,25 @@
+- generic [active] [ref=e1]:
+  - main [ref=e2]:
+    - generic [ref=e3]:
+      - generic [ref=e5]: Welcome back
+      - generic [ref=e6]:
+        - generic [ref=e7]:
+          - button "Continue with Google" [ref=e9] [cursor=pointer]:
+            - img
+            - text: Continue with Google
+          - generic [ref=e14]: or
+          - generic [ref=e15]:
+            - generic [ref=e16]:
+              - generic [ref=e17]: Email
+              - textbox "Email" [ref=e18]
+            - generic [ref=e19]:
+              - generic [ref=e20]: Password
+              - textbox "Password" [ref=e21]
+            - button "Log in" [ref=e22] [cursor=pointer]
+        - paragraph [ref=e23]:
+          - text: Don't have an account?
+          - link "Sign up" [ref=e24] [cursor=pointer]:
+            - /url: /auth/signup
+  - button "Open Next.js Dev Tools" [ref=e30] [cursor=pointer]:
+    - img [ref=e31]
+  - alert [ref=e34]

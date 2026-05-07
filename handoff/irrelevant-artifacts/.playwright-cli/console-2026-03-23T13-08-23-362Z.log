@@ -1,0 +1,1374 @@
+[ 1071951ms] [ERROR] ./app/[locale]/articles/[slug]/page.tsx:342:13
+Expected '</', got 'ident'
+  340 |               </div>
+  341 |             )}
+> 342 |           </article>
+      |             ^^^^^^^
+  343 |         </div>
+  344 |       </main>
+  345 |       <Footer />
+
+Parsing ecmascript source code failed @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js:3272
+[ 1072409ms] [ERROR] ./app/[locale]/articles/[slug]/page.tsx:342:13
+Expected '</', got 'ident'
+  340 |               </div>
+  341 |             )}
+> 342 |           </article>
+      |             ^^^^^^^
+  343 |         </div>
+  344 |       </main>
+  345 |       <Footer />
+
+Parsing ecmascript source code failed @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js:3272
+[ 1072467ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost:3000/da/articles/how-police-surveillance-tech-is-targeting-black-communities?_rsc=19gnl:0
+[ 1072482ms] [ERROR] ./app/[locale]/articles/[slug]/page.tsx:342:13
+Expected '</', got 'ident'
+  340 |               </div>
+  341 |             )}
+> 342 |           </article>
+      |             ^^^^^^^
+  343 |         </div>
+  344 |       </main>
+  345 |       <Footer />
+
+Parsing ecmascript source code failed @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js:3272
+[ 1072536ms] [ERROR] ./app/[locale]/articles/[slug]/page.tsx:342:13
+Expected '</', got 'ident'
+  340 |               </div>
+  341 |             )}
+> 342 |           </article>
+      |             ^^^^^^^
+  343 |         </div>
+  344 |       </main>
+  345 |       <Footer />
+
+Parsing ecmascript source code failed @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js:3272
+[ 1072573ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost:3000/da/articles/how-police-surveillance-tech-is-targeting-black-communities:0
+[ 1072729ms] Error: ./app/[locale]/articles/[slug]/page.tsx:342:13
+Expected '</', got 'ident'
+  340 |               </div>
+  341 |             )}
+> 342 |           </article>
+      |             ^^^^^^^
+  343 |         </div>
+  344 |       </main>
+  345 |       <Footer />
+
+Parsing ecmascript source code failed
+
+
+    at <unknown> (Error: ./app/[locale]/articles/[slug]/page.tsx:342:13)
+    at Object.getCompilationErrors (file:///Users/noahlaux/code/surglobal/untold/node_modules/next/dist/server/dev/hot-reloader-turbopack.js:1189:59)
+    at DevBundlerService.getCompilationError (file:///Users/noahlaux/code/surglobal/untold/node_modules/next/dist/server/lib/dev-bundler-service.js:44:55)
+    at DevServer.getCompilationError (file:///Users/noahlaux/code/surglobal/untold/node_modules/next/dist/server/dev/next-dev-server.js:719:42)
+    at DevServer.findPageComponents (file:///Users/noahlaux/code/surglobal/untold/node_modules/next/dist/server/dev/next-dev-server.js:689:43)
+    at async DevServer.renderErrorToResponseImpl (file:///Users/noahlaux/code/surglobal/untold/node_modules/next/dist/server/base-server.js:1745:26)
+[ 1072695ms] [ERROR] ./app/[locale]/articles/[slug]/page.tsx:342:13
+Expected '</', got 'ident'
+  340 |               </div>
+  341 |             )}
+> 342 |           </article>
+      |             ^^^^^^^
+  343 |         </div>
+  344 |       </main>
+  345 |       <Footer />
+
+Parsing ecmascript source code failed @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_0u_w_5s._.js:1945
+[ 1072753ms] [ERROR] ./app/[locale]/articles/[slug]/page.tsx:342:13
+Expected '</', got 'ident'
+  340 |               </div>
+  341 |             )}
+> 342 |           </article>
+      |             ^^^^^^^
+  343 |         </div>
+  344 |       </main>
+  345 |       <Footer />
+
+Parsing ecmascript source code failed @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_0u_w_5s._.js:1945
+[ 1072807ms] [ERROR] ./app/[locale]/articles/[slug]/page.tsx:342:13
+Expected '</', got 'ident'
+  340 |               </div>
+  341 |             )}
+> 342 |           </article>
+      |             ^^^^^^^
+  343 |         </div>
+  344 |       </main>
+  345 |       <Footer />
+
+Parsing ecmascript source code failed @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_0u_w_5s._.js:1945
+[ 1072865ms] [ERROR] ./app/[locale]/articles/[slug]/page.tsx:342:13
+Expected '</', got 'ident'
+  340 |               </div>
+  341 |             )}
+> 342 |           </article>
+      |             ^^^^^^^
+  343 |         </div>
+  344 |       </main>
+  345 |       <Footer />
+
+Parsing ecmascript source code failed @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_0u_w_5s._.js:1945
+[ 1072922ms] [ERROR] ./app/[locale]/articles/[slug]/page.tsx:342:13
+Expected '</', got 'ident'
+  340 |               </div>
+  341 |             )}
+> 342 |           </article>
+      |             ^^^^^^^
+  343 |         </div>
+  344 |       </main>
+  345 |       <Footer />
+
+Parsing ecmascript source code failed @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_0u_w_5s._.js:1945
+[ 1072979ms] [ERROR] ./app/[locale]/articles/[slug]/page.tsx:342:13
+Expected '</', got 'ident'
+  340 |               </div>
+  341 |             )}
+> 342 |           </article>
+      |             ^^^^^^^
+  343 |         </div>
+  344 |       </main>
+  345 |       <Footer />
+
+Parsing ecmascript source code failed @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_0u_w_5s._.js:1945
+[ 1073042ms] [ERROR] ./app/[locale]/articles/[slug]/page.tsx:342:13
+Expected '</', got 'ident'
+  340 |               </div>
+  341 |             )}
+> 342 |           </article>
+      |             ^^^^^^^
+  343 |         </div>
+  344 |       </main>
+  345 |       <Footer />
+
+Parsing ecmascript source code failed @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_0u_w_5s._.js:1945
+[ 1073106ms] [ERROR] ./app/[locale]/articles/[slug]/page.tsx:342:13
+Expected '</', got 'ident'
+  340 |               </div>
+  341 |             )}
+> 342 |           </article>
+      |             ^^^^^^^
+  343 |         </div>
+  344 |       </main>
+  345 |       <Footer />
+
+Parsing ecmascript source code failed @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_0u_w_5s._.js:1945
+[ 1073165ms] [ERROR] ./app/[locale]/articles/[slug]/page.tsx:342:13
+Expected '</', got 'ident'
+  340 |               </div>
+  341 |             )}
+> 342 |           </article>
+      |             ^^^^^^^
+  343 |         </div>
+  344 |       </main>
+  345 |       <Footer />
+
+Parsing ecmascript source code failed @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_0u_w_5s._.js:1945
+[ 1073224ms] [ERROR] ./app/[locale]/articles/[slug]/page.tsx:342:13
+Expected '</', got 'ident'
+  340 |               </div>
+  341 |             )}
+> 342 |           </article>
+      |             ^^^^^^^
+  343 |         </div>
+  344 |       </main>
+  345 |       <Footer />
+
+Parsing ecmascript source code failed @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_0u_w_5s._.js:1945
+[ 1073284ms] [ERROR] ./app/[locale]/articles/[slug]/page.tsx:342:13
+Expected '</', got 'ident'
+  340 |               </div>
+  341 |             )}
+> 342 |           </article>
+      |             ^^^^^^^
+  343 |         </div>
+  344 |       </main>
+  345 |       <Footer />
+
+Parsing ecmascript source code failed @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_0u_w_5s._.js:1945
+[ 1073379ms] [ERROR] ./app/[locale]/articles/[slug]/page.tsx:342:13
+Expected '</', got 'ident'
+  340 |               </div>
+  341 |             )}
+> 342 |           </article>
+      |             ^^^^^^^
+  343 |         </div>
+  344 |       </main>
+  345 |       <Footer />
+
+Parsing ecmascript source code failed @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_0u_w_5s._.js:1945
+[ 1073444ms] [ERROR] ./app/[locale]/articles/[slug]/page.tsx:342:13
+Expected '</', got 'ident'
+  340 |               </div>
+  341 |             )}
+> 342 |           </article>
+      |             ^^^^^^^
+  343 |         </div>
+  344 |       </main>
+  345 |       <Footer />
+
+Parsing ecmascript source code failed @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_0u_w_5s._.js:1945
+[ 1073523ms] [ERROR] ./app/[locale]/articles/[slug]/page.tsx:342:13
+Expected '</', got 'ident'
+  340 |               </div>
+  341 |             )}
+> 342 |           </article>
+      |             ^^^^^^^
+  343 |         </div>
+  344 |       </main>
+  345 |       <Footer />
+
+Parsing ecmascript source code failed @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_0u_w_5s._.js:1945
+[ 1073575ms] [ERROR] ./app/[locale]/articles/[slug]/page.tsx:342:13
+Expected '</', got 'ident'
+  340 |               </div>
+  341 |             )}
+> 342 |           </article>
+      |             ^^^^^^^
+  343 |         </div>
+  344 |       </main>
+  345 |       <Footer />
+
+Parsing ecmascript source code failed @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_0u_w_5s._.js:1945
+[ 1073634ms] [ERROR] ./app/[locale]/articles/[slug]/page.tsx:342:13
+Expected '</', got 'ident'
+  340 |               </div>
+  341 |             )}
+> 342 |           </article>
+      |             ^^^^^^^
+  343 |         </div>
+  344 |       </main>
+  345 |       <Footer />
+
+Parsing ecmascript source code failed @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_0u_w_5s._.js:1945
+[ 1073689ms] [ERROR] ./app/[locale]/articles/[slug]/page.tsx:342:13
+Expected '</', got 'ident'
+  340 |               </div>
+  341 |             )}
+> 342 |           </article>
+      |             ^^^^^^^
+  343 |         </div>
+  344 |       </main>
+  345 |       <Footer />
+
+Parsing ecmascript source code failed @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_0u_w_5s._.js:1945
+[ 1073747ms] [ERROR] ./app/[locale]/articles/[slug]/page.tsx:342:13
+Expected '</', got 'ident'
+  340 |               </div>
+  341 |             )}
+> 342 |           </article>
+      |             ^^^^^^^
+  343 |         </div>
+  344 |       </main>
+  345 |       <Footer />
+
+Parsing ecmascript source code failed @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_0u_w_5s._.js:1945
+[ 1073806ms] [ERROR] ./app/[locale]/articles/[slug]/page.tsx:342:13
+Expected '</', got 'ident'
+  340 |               </div>
+  341 |             )}
+> 342 |           </article>
+      |             ^^^^^^^
+  343 |         </div>
+  344 |       </main>
+  345 |       <Footer />
+
+Parsing ecmascript source code failed @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_0u_w_5s._.js:1945
+[ 1073866ms] [ERROR] ./app/[locale]/articles/[slug]/page.tsx:342:13
+Expected '</', got 'ident'
+  340 |               </div>
+  341 |             )}
+> 342 |           </article>
+      |             ^^^^^^^
+  343 |         </div>
+  344 |       </main>
+  345 |       <Footer />
+
+Parsing ecmascript source code failed @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_0u_w_5s._.js:1945
+[ 1073925ms] [ERROR] ./app/[locale]/articles/[slug]/page.tsx:342:13
+Expected '</', got 'ident'
+  340 |               </div>
+  341 |             )}
+> 342 |           </article>
+      |             ^^^^^^^
+  343 |         </div>
+  344 |       </main>
+  345 |       <Footer />
+
+Parsing ecmascript source code failed @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_0u_w_5s._.js:1945
+[ 1073983ms] [ERROR] ./app/[locale]/articles/[slug]/page.tsx:342:13
+Expected '</', got 'ident'
+  340 |               </div>
+  341 |             )}
+> 342 |           </article>
+      |             ^^^^^^^
+  343 |         </div>
+  344 |       </main>
+  345 |       <Footer />
+
+Parsing ecmascript source code failed @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_0u_w_5s._.js:1945
+[ 1074048ms] [ERROR] ./app/[locale]/articles/[slug]/page.tsx:342:13
+Expected '</', got 'ident'
+  340 |               </div>
+  341 |             )}
+> 342 |           </article>
+      |             ^^^^^^^
+  343 |         </div>
+  344 |       </main>
+  345 |       <Footer />
+
+Parsing ecmascript source code failed @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_0u_w_5s._.js:1945
+[ 1074108ms] [ERROR] ./app/[locale]/articles/[slug]/page.tsx:342:13
+Expected '</', got 'ident'
+  340 |               </div>
+  341 |             )}
+> 342 |           </article>
+      |             ^^^^^^^
+  343 |         </div>
+  344 |       </main>
+  345 |       <Footer />
+
+Parsing ecmascript source code failed @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_0u_w_5s._.js:1945
+[ 1074169ms] [ERROR] ./app/[locale]/articles/[slug]/page.tsx:342:13
+Expected '</', got 'ident'
+  340 |               </div>
+  341 |             )}
+> 342 |           </article>
+      |             ^^^^^^^
+  343 |         </div>
+  344 |       </main>
+  345 |       <Footer />
+
+Parsing ecmascript source code failed @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_0u_w_5s._.js:1945
+[ 1074228ms] [ERROR] ./app/[locale]/articles/[slug]/page.tsx:342:13
+Expected '</', got 'ident'
+  340 |               </div>
+  341 |             )}
+> 342 |           </article>
+      |             ^^^^^^^
+  343 |         </div>
+  344 |       </main>
+  345 |       <Footer />
+
+Parsing ecmascript source code failed @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_0u_w_5s._.js:1945
+[ 1074287ms] [ERROR] ./app/[locale]/articles/[slug]/page.tsx:342:13
+Expected '</', got 'ident'
+  340 |               </div>
+  341 |             )}
+> 342 |           </article>
+      |             ^^^^^^^
+  343 |         </div>
+  344 |       </main>
+  345 |       <Footer />
+
+Parsing ecmascript source code failed @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_0u_w_5s._.js:1945
+[ 1074347ms] [ERROR] ./app/[locale]/articles/[slug]/page.tsx:342:13
+Expected '</', got 'ident'
+  340 |               </div>
+  341 |             )}
+> 342 |           </article>
+      |             ^^^^^^^
+  343 |         </div>
+  344 |       </main>
+  345 |       <Footer />
+
+Parsing ecmascript source code failed @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_0u_w_5s._.js:1945
+[ 1074409ms] [ERROR] ./app/[locale]/articles/[slug]/page.tsx:342:13
+Expected '</', got 'ident'
+  340 |               </div>
+  341 |             )}
+> 342 |           </article>
+      |             ^^^^^^^
+  343 |         </div>
+  344 |       </main>
+  345 |       <Footer />
+
+Parsing ecmascript source code failed @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_0u_w_5s._.js:1945
+[ 1074471ms] [ERROR] ./app/[locale]/articles/[slug]/page.tsx:342:13
+Expected '</', got 'ident'
+  340 |               </div>
+  341 |             )}
+> 342 |           </article>
+      |             ^^^^^^^
+  343 |         </div>
+  344 |       </main>
+  345 |       <Footer />
+
+Parsing ecmascript source code failed @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_0u_w_5s._.js:1945
+[ 1074535ms] [ERROR] ./app/[locale]/articles/[slug]/page.tsx:342:13
+Expected '</', got 'ident'
+  340 |               </div>
+  341 |             )}
+> 342 |           </article>
+      |             ^^^^^^^
+  343 |         </div>
+  344 |       </main>
+  345 |       <Footer />
+
+Parsing ecmascript source code failed @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_0u_w_5s._.js:1945
+[ 1074598ms] [ERROR] ./app/[locale]/articles/[slug]/page.tsx:342:13
+Expected '</', got 'ident'
+  340 |               </div>
+  341 |             )}
+> 342 |           </article>
+      |             ^^^^^^^
+  343 |         </div>
+  344 |       </main>
+  345 |       <Footer />
+
+Parsing ecmascript source code failed @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_0u_w_5s._.js:1945
+[ 1074651ms] [ERROR] ./app/[locale]/articles/[slug]/page.tsx:342:13
+Expected '</', got 'ident'
+  340 |               </div>
+  341 |             )}
+> 342 |           </article>
+      |             ^^^^^^^
+  343 |         </div>
+  344 |       </main>
+  345 |       <Footer />
+
+Parsing ecmascript source code failed @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_0u_w_5s._.js:1945
+[ 1074714ms] [ERROR] ./app/[locale]/articles/[slug]/page.tsx:342:13
+Expected '</', got 'ident'
+  340 |               </div>
+  341 |             )}
+> 342 |           </article>
+      |             ^^^^^^^
+  343 |         </div>
+  344 |       </main>
+  345 |       <Footer />
+
+Parsing ecmascript source code failed @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_0u_w_5s._.js:1945
+[ 1074771ms] [ERROR] ./app/[locale]/articles/[slug]/page.tsx:342:13
+Expected '</', got 'ident'
+  340 |               </div>
+  341 |             )}
+> 342 |           </article>
+      |             ^^^^^^^
+  343 |         </div>
+  344 |       </main>
+  345 |       <Footer />
+
+Parsing ecmascript source code failed @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_0u_w_5s._.js:1945
+[ 1074829ms] [ERROR] ./app/[locale]/articles/[slug]/page.tsx:342:13
+Expected '</', got 'ident'
+  340 |               </div>
+  341 |             )}
+> 342 |           </article>
+      |             ^^^^^^^
+  343 |         </div>
+  344 |       </main>
+  345 |       <Footer />
+
+Parsing ecmascript source code failed @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_0u_w_5s._.js:1945
+[ 1074889ms] [ERROR] ./app/[locale]/articles/[slug]/page.tsx:342:13
+Expected '</', got 'ident'
+  340 |               </div>
+  341 |             )}
+> 342 |           </article>
+      |             ^^^^^^^
+  343 |         </div>
+  344 |       </main>
+  345 |       <Footer />
+
+Parsing ecmascript source code failed @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_0u_w_5s._.js:1945
+[ 1074952ms] [ERROR] ./app/[locale]/articles/[slug]/page.tsx:342:13
+Expected '</', got 'ident'
+  340 |               </div>
+  341 |             )}
+> 342 |           </article>
+      |             ^^^^^^^
+  343 |         </div>
+  344 |       </main>
+  345 |       <Footer />
+
+Parsing ecmascript source code failed @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_0u_w_5s._.js:1945
+[ 1075013ms] [ERROR] ./app/[locale]/articles/[slug]/page.tsx:342:13
+Expected '</', got 'ident'
+  340 |               </div>
+  341 |             )}
+> 342 |           </article>
+      |             ^^^^^^^
+  343 |         </div>
+  344 |       </main>
+  345 |       <Footer />
+
+Parsing ecmascript source code failed @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_0u_w_5s._.js:1945
+[ 1075079ms] [ERROR] ./app/[locale]/articles/[slug]/page.tsx:342:13
+Expected '</', got 'ident'
+  340 |               </div>
+  341 |             )}
+> 342 |           </article>
+      |             ^^^^^^^
+  343 |         </div>
+  344 |       </main>
+  345 |       <Footer />
+
+Parsing ecmascript source code failed @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_0u_w_5s._.js:1945
+[ 1075137ms] [ERROR] ./app/[locale]/articles/[slug]/page.tsx:342:13
+Expected '</', got 'ident'
+  340 |               </div>
+  341 |             )}
+> 342 |           </article>
+      |             ^^^^^^^
+  343 |         </div>
+  344 |       </main>
+  345 |       <Footer />
+
+Parsing ecmascript source code failed @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_0u_w_5s._.js:1945
+[ 1075195ms] [ERROR] ./app/[locale]/articles/[slug]/page.tsx:342:13
+Expected '</', got 'ident'
+  340 |               </div>
+  341 |             )}
+> 342 |           </article>
+      |             ^^^^^^^
+  343 |         </div>
+  344 |       </main>
+  345 |       <Footer />
+
+Parsing ecmascript source code failed @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_0u_w_5s._.js:1945
+[ 1075255ms] [ERROR] ./app/[locale]/articles/[slug]/page.tsx:342:13
+Expected '</', got 'ident'
+  340 |               </div>
+  341 |             )}
+> 342 |           </article>
+      |             ^^^^^^^
+  343 |         </div>
+  344 |       </main>
+  345 |       <Footer />
+
+Parsing ecmascript source code failed @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_0u_w_5s._.js:1945
+[ 1075314ms] [ERROR] ./app/[locale]/articles/[slug]/page.tsx:342:13
+Expected '</', got 'ident'
+  340 |               </div>
+  341 |             )}
+> 342 |           </article>
+      |             ^^^^^^^
+  343 |         </div>
+  344 |       </main>
+  345 |       <Footer />
+
+Parsing ecmascript source code failed @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_0u_w_5s._.js:1945
+[ 1075371ms] [ERROR] ./app/[locale]/articles/[slug]/page.tsx:342:13
+Expected '</', got 'ident'
+  340 |               </div>
+  341 |             )}
+> 342 |           </article>
+      |             ^^^^^^^
+  343 |         </div>
+  344 |       </main>
+  345 |       <Footer />
+
+Parsing ecmascript source code failed @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_0u_w_5s._.js:1945
+[ 1075428ms] [ERROR] ./app/[locale]/articles/[slug]/page.tsx:342:13
+Expected '</', got 'ident'
+  340 |               </div>
+  341 |             )}
+> 342 |           </article>
+      |             ^^^^^^^
+  343 |         </div>
+  344 |       </main>
+  345 |       <Footer />
+
+Parsing ecmascript source code failed @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_0u_w_5s._.js:1945
+[ 1075484ms] [ERROR] ./app/[locale]/articles/[slug]/page.tsx:342:13
+Expected '</', got 'ident'
+  340 |               </div>
+  341 |             )}
+> 342 |           </article>
+      |             ^^^^^^^
+  343 |         </div>
+  344 |       </main>
+  345 |       <Footer />
+
+Parsing ecmascript source code failed @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_0u_w_5s._.js:1945
+[ 1075542ms] [ERROR] ./app/[locale]/articles/[slug]/page.tsx:342:13
+Expected '</', got 'ident'
+  340 |               </div>
+  341 |             )}
+> 342 |           </article>
+      |             ^^^^^^^
+  343 |         </div>
+  344 |       </main>
+  345 |       <Footer />
+
+Parsing ecmascript source code failed @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_0u_w_5s._.js:1945
+[ 1075601ms] [ERROR] ./app/[locale]/articles/[slug]/page.tsx:342:13
+Expected '</', got 'ident'
+  340 |               </div>
+  341 |             )}
+> 342 |           </article>
+      |             ^^^^^^^
+  343 |         </div>
+  344 |       </main>
+  345 |       <Footer />
+
+Parsing ecmascript source code failed @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_0u_w_5s._.js:1945
+[ 1075662ms] [ERROR] ./app/[locale]/articles/[slug]/page.tsx:342:13
+Expected '</', got 'ident'
+  340 |               </div>
+  341 |             )}
+> 342 |           </article>
+      |             ^^^^^^^
+  343 |         </div>
+  344 |       </main>
+  345 |       <Footer />
+
+Parsing ecmascript source code failed @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_0u_w_5s._.js:1945
+[ 1075721ms] [ERROR] ./app/[locale]/articles/[slug]/page.tsx:342:13
+Expected '</', got 'ident'
+  340 |               </div>
+  341 |             )}
+> 342 |           </article>
+      |             ^^^^^^^
+  343 |         </div>
+  344 |       </main>
+  345 |       <Footer />
+
+Parsing ecmascript source code failed @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_0u_w_5s._.js:1945
+[ 1075778ms] [ERROR] ./app/[locale]/articles/[slug]/page.tsx:342:13
+Expected '</', got 'ident'
+  340 |               </div>
+  341 |             )}
+> 342 |           </article>
+      |             ^^^^^^^
+  343 |         </div>
+  344 |       </main>
+  345 |       <Footer />
+
+Parsing ecmascript source code failed @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_0u_w_5s._.js:1945
+[ 1075837ms] [ERROR] ./app/[locale]/articles/[slug]/page.tsx:342:13
+Expected '</', got 'ident'
+  340 |               </div>
+  341 |             )}
+> 342 |           </article>
+      |             ^^^^^^^
+  343 |         </div>
+  344 |       </main>
+  345 |       <Footer />
+
+Parsing ecmascript source code failed @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_0u_w_5s._.js:1945
+[ 1075896ms] [ERROR] ./app/[locale]/articles/[slug]/page.tsx:342:13
+Expected '</', got 'ident'
+  340 |               </div>
+  341 |             )}
+> 342 |           </article>
+      |             ^^^^^^^
+  343 |         </div>
+  344 |       </main>
+  345 |       <Footer />
+
+Parsing ecmascript source code failed @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_0u_w_5s._.js:1945
+[ 1075957ms] [ERROR] ./app/[locale]/articles/[slug]/page.tsx:342:13
+Expected '</', got 'ident'
+  340 |               </div>
+  341 |             )}
+> 342 |           </article>
+      |             ^^^^^^^
+  343 |         </div>
+  344 |       </main>
+  345 |       <Footer />
+
+Parsing ecmascript source code failed @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_0u_w_5s._.js:1945
+[ 1076021ms] [ERROR] ./app/[locale]/articles/[slug]/page.tsx:342:13
+Expected '</', got 'ident'
+  340 |               </div>
+  341 |             )}
+> 342 |           </article>
+      |             ^^^^^^^
+  343 |         </div>
+  344 |       </main>
+  345 |       <Footer />
+
+Parsing ecmascript source code failed @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_0u_w_5s._.js:1945
+[ 1076082ms] [ERROR] ./app/[locale]/articles/[slug]/page.tsx:342:13
+Expected '</', got 'ident'
+  340 |               </div>
+  341 |             )}
+> 342 |           </article>
+      |             ^^^^^^^
+  343 |         </div>
+  344 |       </main>
+  345 |       <Footer />
+
+Parsing ecmascript source code failed @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_0u_w_5s._.js:1945
+[ 1076143ms] [ERROR] ./app/[locale]/articles/[slug]/page.tsx:342:13
+Expected '</', got 'ident'
+  340 |               </div>
+  341 |             )}
+> 342 |           </article>
+      |             ^^^^^^^
+  343 |         </div>
+  344 |       </main>
+  345 |       <Footer />
+
+Parsing ecmascript source code failed @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_0u_w_5s._.js:1945
+[ 1076205ms] [ERROR] ./app/[locale]/articles/[slug]/page.tsx:342:13
+Expected '</', got 'ident'
+  340 |               </div>
+  341 |             )}
+> 342 |           </article>
+      |             ^^^^^^^
+  343 |         </div>
+  344 |       </main>
+  345 |       <Footer />
+
+Parsing ecmascript source code failed @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_0u_w_5s._.js:1945
+[ 1076268ms] [ERROR] ./app/[locale]/articles/[slug]/page.tsx:342:13
+Expected '</', got 'ident'
+  340 |               </div>
+  341 |             )}
+> 342 |           </article>
+      |             ^^^^^^^
+  343 |         </div>
+  344 |       </main>
+  345 |       <Footer />
+
+Parsing ecmascript source code failed @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_0u_w_5s._.js:1945
+[ 1076330ms] [ERROR] ./app/[locale]/articles/[slug]/page.tsx:342:13
+Expected '</', got 'ident'
+  340 |               </div>
+  341 |             )}
+> 342 |           </article>
+      |             ^^^^^^^
+  343 |         </div>
+  344 |       </main>
+  345 |       <Footer />
+
+Parsing ecmascript source code failed @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_0u_w_5s._.js:1945
+[ 1076391ms] [ERROR] ./app/[locale]/articles/[slug]/page.tsx:342:13
+Expected '</', got 'ident'
+  340 |               </div>
+  341 |             )}
+> 342 |           </article>
+      |             ^^^^^^^
+  343 |         </div>
+  344 |       </main>
+  345 |       <Footer />
+
+Parsing ecmascript source code failed @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_0u_w_5s._.js:1945
+[ 1076456ms] [ERROR] ./app/[locale]/articles/[slug]/page.tsx:342:13
+Expected '</', got 'ident'
+  340 |               </div>
+  341 |             )}
+> 342 |           </article>
+      |             ^^^^^^^
+  343 |         </div>
+  344 |       </main>
+  345 |       <Footer />
+
+Parsing ecmascript source code failed @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_0u_w_5s._.js:1945
+[ 1076514ms] [ERROR] ./app/[locale]/articles/[slug]/page.tsx:342:13
+Expected '</', got 'ident'
+  340 |               </div>
+  341 |             )}
+> 342 |           </article>
+      |             ^^^^^^^
+  343 |         </div>
+  344 |       </main>
+  345 |       <Footer />
+
+Parsing ecmascript source code failed @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_0u_w_5s._.js:1945
+[ 1076578ms] [ERROR] ./app/[locale]/articles/[slug]/page.tsx:342:13
+Expected '</', got 'ident'
+  340 |               </div>
+  341 |             )}
+> 342 |           </article>
+      |             ^^^^^^^
+  343 |         </div>
+  344 |       </main>
+  345 |       <Footer />
+
+Parsing ecmascript source code failed @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_0u_w_5s._.js:1945
+[ 1076643ms] [ERROR] ./app/[locale]/articles/[slug]/page.tsx:342:13
+Expected '</', got 'ident'
+  340 |               </div>
+  341 |             )}
+> 342 |           </article>
+      |             ^^^^^^^
+  343 |         </div>
+  344 |       </main>
+  345 |       <Footer />
+
+Parsing ecmascript source code failed @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_0u_w_5s._.js:1945
+[ 1076707ms] [ERROR] ./app/[locale]/articles/[slug]/page.tsx:342:13
+Expected '</', got 'ident'
+  340 |               </div>
+  341 |             )}
+> 342 |           </article>
+      |             ^^^^^^^
+  343 |         </div>
+  344 |       </main>
+  345 |       <Footer />
+
+Parsing ecmascript source code failed @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_0u_w_5s._.js:1945
+[ 1076767ms] [ERROR] ./app/[locale]/articles/[slug]/page.tsx:342:13
+Expected '</', got 'ident'
+  340 |               </div>
+  341 |             )}
+> 342 |           </article>
+      |             ^^^^^^^
+  343 |         </div>
+  344 |       </main>
+  345 |       <Footer />
+
+Parsing ecmascript source code failed @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_0u_w_5s._.js:1945
+[ 1076829ms] [ERROR] ./app/[locale]/articles/[slug]/page.tsx:342:13
+Expected '</', got 'ident'
+  340 |               </div>
+  341 |             )}
+> 342 |           </article>
+      |             ^^^^^^^
+  343 |         </div>
+  344 |       </main>
+  345 |       <Footer />
+
+Parsing ecmascript source code failed @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_0u_w_5s._.js:1945
+[ 1076886ms] [ERROR] ./app/[locale]/articles/[slug]/page.tsx:342:13
+Expected '</', got 'ident'
+  340 |               </div>
+  341 |             )}
+> 342 |           </article>
+      |             ^^^^^^^
+  343 |         </div>
+  344 |       </main>
+  345 |       <Footer />
+
+Parsing ecmascript source code failed @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_0u_w_5s._.js:1945
+[ 1076946ms] [ERROR] ./app/[locale]/articles/[slug]/page.tsx:342:13
+Expected '</', got 'ident'
+  340 |               </div>
+  341 |             )}
+> 342 |           </article>
+      |             ^^^^^^^
+  343 |         </div>
+  344 |       </main>
+  345 |       <Footer />
+
+Parsing ecmascript source code failed @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_0u_w_5s._.js:1945
+[ 1077004ms] [ERROR] ./app/[locale]/articles/[slug]/page.tsx:342:13
+Expected '</', got 'ident'
+  340 |               </div>
+  341 |             )}
+> 342 |           </article>
+      |             ^^^^^^^
+  343 |         </div>
+  344 |       </main>
+  345 |       <Footer />
+
+Parsing ecmascript source code failed @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_0u_w_5s._.js:1945
+[ 1077063ms] [ERROR] ./app/[locale]/articles/[slug]/page.tsx:342:13
+Expected '</', got 'ident'
+  340 |               </div>
+  341 |             )}
+> 342 |           </article>
+      |             ^^^^^^^
+  343 |         </div>
+  344 |       </main>
+  345 |       <Footer />
+
+Parsing ecmascript source code failed @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_0u_w_5s._.js:1945
+[ 1077124ms] [ERROR] ./app/[locale]/articles/[slug]/page.tsx:342:13
+Expected '</', got 'ident'
+  340 |               </div>
+  341 |             )}
+> 342 |           </article>
+      |             ^^^^^^^
+  343 |         </div>
+  344 |       </main>
+  345 |       <Footer />
+
+Parsing ecmascript source code failed @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_0u_w_5s._.js:1945
+[ 1077184ms] [ERROR] ./app/[locale]/articles/[slug]/page.tsx:342:13
+Expected '</', got 'ident'
+  340 |               </div>
+  341 |             )}
+> 342 |           </article>
+      |             ^^^^^^^
+  343 |         </div>
+  344 |       </main>
+  345 |       <Footer />
+
+Parsing ecmascript source code failed @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_0u_w_5s._.js:1945
+[ 1077247ms] [ERROR] ./app/[locale]/articles/[slug]/page.tsx:342:13
+Expected '</', got 'ident'
+  340 |               </div>
+  341 |             )}
+> 342 |           </article>
+      |             ^^^^^^^
+  343 |         </div>
+  344 |       </main>
+  345 |       <Footer />
+
+Parsing ecmascript source code failed @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_0u_w_5s._.js:1945
+[ 1077310ms] [ERROR] ./app/[locale]/articles/[slug]/page.tsx:342:13
+Expected '</', got 'ident'
+  340 |               </div>
+  341 |             )}
+> 342 |           </article>
+      |             ^^^^^^^
+  343 |         </div>
+  344 |       </main>
+  345 |       <Footer />
+
+Parsing ecmascript source code failed @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_0u_w_5s._.js:1945
+[ 1077370ms] [ERROR] ./app/[locale]/articles/[slug]/page.tsx:342:13
+Expected '</', got 'ident'
+  340 |               </div>
+  341 |             )}
+> 342 |           </article>
+      |             ^^^^^^^
+  343 |         </div>
+  344 |       </main>
+  345 |       <Footer />
+
+Parsing ecmascript source code failed @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_0u_w_5s._.js:1945
+[ 1077431ms] [ERROR] ./app/[locale]/articles/[slug]/page.tsx:342:13
+Expected '</', got 'ident'
+  340 |               </div>
+  341 |             )}
+> 342 |           </article>
+      |             ^^^^^^^
+  343 |         </div>
+  344 |       </main>
+  345 |       <Footer />
+
+Parsing ecmascript source code failed @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_0u_w_5s._.js:1945
+[ 1077499ms] [ERROR] ./app/[locale]/articles/[slug]/page.tsx:342:13
+Expected '</', got 'ident'
+  340 |               </div>
+  341 |             )}
+> 342 |           </article>
+      |             ^^^^^^^
+  343 |         </div>
+  344 |       </main>
+  345 |       <Footer />
+
+Parsing ecmascript source code failed @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_0u_w_5s._.js:1945
+[ 1077561ms] [ERROR] ./app/[locale]/articles/[slug]/page.tsx:342:13
+Expected '</', got 'ident'
+  340 |               </div>
+  341 |             )}
+> 342 |           </article>
+      |             ^^^^^^^
+  343 |         </div>
+  344 |       </main>
+  345 |       <Footer />
+
+Parsing ecmascript source code failed @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_0u_w_5s._.js:1945
+[ 1077623ms] [ERROR] ./app/[locale]/articles/[slug]/page.tsx:342:13
+Expected '</', got 'ident'
+  340 |               </div>
+  341 |             )}
+> 342 |           </article>
+      |             ^^^^^^^
+  343 |         </div>
+  344 |       </main>
+  345 |       <Footer />
+
+Parsing ecmascript source code failed @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_0u_w_5s._.js:1945
+[ 1077684ms] [ERROR] ./app/[locale]/articles/[slug]/page.tsx:342:13
+Expected '</', got 'ident'
+  340 |               </div>
+  341 |             )}
+> 342 |           </article>
+      |             ^^^^^^^
+  343 |         </div>
+  344 |       </main>
+  345 |       <Footer />
+
+Parsing ecmascript source code failed @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_0u_w_5s._.js:1945
+[ 1077742ms] [ERROR] ./app/[locale]/articles/[slug]/page.tsx:342:13
+Expected '</', got 'ident'
+  340 |               </div>
+  341 |             )}
+> 342 |           </article>
+      |             ^^^^^^^
+  343 |         </div>
+  344 |       </main>
+  345 |       <Footer />
+
+Parsing ecmascript source code failed @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_0u_w_5s._.js:1945
+[ 1077799ms] [ERROR] ./app/[locale]/articles/[slug]/page.tsx:342:13
+Expected '</', got 'ident'
+  340 |               </div>
+  341 |             )}
+> 342 |           </article>
+      |             ^^^^^^^
+  343 |         </div>
+  344 |       </main>
+  345 |       <Footer />
+
+Parsing ecmascript source code failed @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_0u_w_5s._.js:1945
+[ 1077857ms] [ERROR] ./app/[locale]/articles/[slug]/page.tsx:342:13
+Expected '</', got 'ident'
+  340 |               </div>
+  341 |             )}
+> 342 |           </article>
+      |             ^^^^^^^
+  343 |         </div>
+  344 |       </main>
+  345 |       <Footer />
+
+Parsing ecmascript source code failed @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_0u_w_5s._.js:1945
+[ 1077916ms] [ERROR] ./app/[locale]/articles/[slug]/page.tsx:342:13
+Expected '</', got 'ident'
+  340 |               </div>
+  341 |             )}
+> 342 |           </article>
+      |             ^^^^^^^
+  343 |         </div>
+  344 |       </main>
+  345 |       <Footer />
+
+Parsing ecmascript source code failed @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_0u_w_5s._.js:1945
+[ 1077976ms] [ERROR] ./app/[locale]/articles/[slug]/page.tsx:342:13
+Expected '</', got 'ident'
+  340 |               </div>
+  341 |             )}
+> 342 |           </article>
+      |             ^^^^^^^
+  343 |         </div>
+  344 |       </main>
+  345 |       <Footer />
+
+Parsing ecmascript source code failed @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_0u_w_5s._.js:1945
+[ 1078036ms] [ERROR] ./app/[locale]/articles/[slug]/page.tsx:342:13
+Expected '</', got 'ident'
+  340 |               </div>
+  341 |             )}
+> 342 |           </article>
+      |             ^^^^^^^
+  343 |         </div>
+  344 |       </main>
+  345 |       <Footer />
+
+Parsing ecmascript source code failed @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_0u_w_5s._.js:1945
+[ 1078097ms] [ERROR] ./app/[locale]/articles/[slug]/page.tsx:342:13
+Expected '</', got 'ident'
+  340 |               </div>
+  341 |             )}
+> 342 |           </article>
+      |             ^^^^^^^
+  343 |         </div>
+  344 |       </main>
+  345 |       <Footer />
+
+Parsing ecmascript source code failed @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_0u_w_5s._.js:1945
+[ 1078157ms] [ERROR] ./app/[locale]/articles/[slug]/page.tsx:342:13
+Expected '</', got 'ident'
+  340 |               </div>
+  341 |             )}
+> 342 |           </article>
+      |             ^^^^^^^
+  343 |         </div>
+  344 |       </main>
+  345 |       <Footer />
+
+Parsing ecmascript source code failed @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_0u_w_5s._.js:1945
+[ 1078219ms] [ERROR] ./app/[locale]/articles/[slug]/page.tsx:342:13
+Expected '</', got 'ident'
+  340 |               </div>
+  341 |             )}
+> 342 |           </article>
+      |             ^^^^^^^
+  343 |         </div>
+  344 |       </main>
+  345 |       <Footer />
+
+Parsing ecmascript source code failed @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_0u_w_5s._.js:1945
+[ 1078280ms] [ERROR] ./app/[locale]/articles/[slug]/page.tsx:342:13
+Expected '</', got 'ident'
+  340 |               </div>
+  341 |             )}
+> 342 |           </article>
+      |             ^^^^^^^
+  343 |         </div>
+  344 |       </main>
+  345 |       <Footer />
+
+Parsing ecmascript source code failed @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_0u_w_5s._.js:1945
+[ 1078336ms] [ERROR] ./app/[locale]/articles/[slug]/page.tsx:342:13
+Expected '</', got 'ident'
+  340 |               </div>
+  341 |             )}
+> 342 |           </article>
+      |             ^^^^^^^
+  343 |         </div>
+  344 |       </main>
+  345 |       <Footer />
+
+Parsing ecmascript source code failed @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_0u_w_5s._.js:1945
+[ 1078396ms] [ERROR] ./app/[locale]/articles/[slug]/page.tsx:342:13
+Expected '</', got 'ident'
+  340 |               </div>
+  341 |             )}
+> 342 |           </article>
+      |             ^^^^^^^
+  343 |         </div>
+  344 |       </main>
+  345 |       <Footer />
+
+Parsing ecmascript source code failed @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_0u_w_5s._.js:1945
+[ 1078458ms] [ERROR] ./app/[locale]/articles/[slug]/page.tsx:342:13
+Expected '</', got 'ident'
+  340 |               </div>
+  341 |             )}
+> 342 |           </article>
+      |             ^^^^^^^
+  343 |         </div>
+  344 |       </main>
+  345 |       <Footer />
+
+Parsing ecmascript source code failed @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_0u_w_5s._.js:1945
+[ 1078519ms] [ERROR] ./app/[locale]/articles/[slug]/page.tsx:342:13
+Expected '</', got 'ident'
+  340 |               </div>
+  341 |             )}
+> 342 |           </article>
+      |             ^^^^^^^
+  343 |         </div>
+  344 |       </main>
+  345 |       <Footer />
+
+Parsing ecmascript source code failed @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_0u_w_5s._.js:1945
+[ 1078580ms] [ERROR] ./app/[locale]/articles/[slug]/page.tsx:342:13
+Expected '</', got 'ident'
+  340 |               </div>
+  341 |             )}
+> 342 |           </article>
+      |             ^^^^^^^
+  343 |         </div>
+  344 |       </main>
+  345 |       <Footer />
+
+Parsing ecmascript source code failed @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_0u_w_5s._.js:1945
+[ 1078641ms] [ERROR] ./app/[locale]/articles/[slug]/page.tsx:342:13
+Expected '</', got 'ident'
+  340 |               </div>
+  341 |             )}
+> 342 |           </article>
+      |             ^^^^^^^
+  343 |         </div>
+  344 |       </main>
+  345 |       <Footer />
+
+Parsing ecmascript source code failed @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_0u_w_5s._.js:1945
+[ 1078703ms] [ERROR] ./app/[locale]/articles/[slug]/page.tsx:342:13
+Expected '</', got 'ident'
+  340 |               </div>
+  341 |             )}
+> 342 |           </article>
+      |             ^^^^^^^
+  343 |         </div>
+  344 |       </main>
+  345 |       <Footer />
+
+Parsing ecmascript source code failed @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_0u_w_5s._.js:1945
+[ 1078762ms] [ERROR] ./app/[locale]/articles/[slug]/page.tsx:342:13
+Expected '</', got 'ident'
+  340 |               </div>
+  341 |             )}
+> 342 |           </article>
+      |             ^^^^^^^
+  343 |         </div>
+  344 |       </main>
+  345 |       <Footer />
+
+Parsing ecmascript source code failed @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_0u_w_5s._.js:1945
+[ 1239027ms] [ERROR] ./app/[locale]/articles/[slug]/page.tsx:9:10
+the name `getTranslations` is defined multiple times
+   7 | import { readTime } from '@/lib/utils'
+   8 | import { formatDate } from '@/lib/format-date'
+>  9 | import { getTranslations } from 'next-intl/server'
+     |          ^^^^^^^^^^^^^^^
+  10 | import { Navigation } from '@/components/layout/Navigation'
+  11 | import { Footer } from '@/components/layout/Footer'
+  12 | import { ArticleBody } from '@/components/content/ArticleBody'
+
+Ecmascript file had an error @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js:3272
+[ 1239170ms] [ERROR] ./app/[locale]/articles/[slug]/page.tsx:9:10
+the name `getTranslations` is defined multiple times
+   7 | import { readTime } from '@/lib/utils'
+   8 | import { formatDate } from '@/lib/format-date'
+>  9 | import { getTranslations } from 'next-intl/server'
+     |          ^^^^^^^^^^^^^^^
+  10 | import { Navigation } from '@/components/layout/Navigation'
+  11 | import { Footer } from '@/components/layout/Footer'
+  12 | import { ArticleBody } from '@/components/content/ArticleBody'
+
+Ecmascript file had an error @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js:3272
+[ 1239208ms] [ERROR] ./app/[locale]/articles/[slug]/page.tsx:9:10
+the name `getTranslations` is defined multiple times
+   7 | import { readTime } from '@/lib/utils'
+   8 | import { formatDate } from '@/lib/format-date'
+>  9 | import { getTranslations } from 'next-intl/server'
+     |          ^^^^^^^^^^^^^^^
+  10 | import { Navigation } from '@/components/layout/Navigation'
+  11 | import { Footer } from '@/components/layout/Footer'
+  12 | import { ArticleBody } from '@/components/content/ArticleBody'
+
+Ecmascript file had an error @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js:3272
+[ 1239263ms] [ERROR] ./app/[locale]/articles/[slug]/page.tsx:9:10
+the name `getTranslations` is defined multiple times
+   7 | import { readTime } from '@/lib/utils'
+   8 | import { formatDate } from '@/lib/format-date'
+>  9 | import { getTranslations } from 'next-intl/server'
+     |          ^^^^^^^^^^^^^^^
+  10 | import { Navigation } from '@/components/layout/Navigation'
+  11 | import { Footer } from '@/components/layout/Footer'
+  12 | import { ArticleBody } from '@/components/content/ArticleBody'
+
+Ecmascript file had an error @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js:3272
+[ 1239273ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost:3000/da/articles/how-police-surveillance-tech-is-targeting-black-communities?_rsc=19gnl:0
+[ 1239294ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost:3000/da/articles/how-police-surveillance-tech-is-targeting-black-communities?_rsc=19gnl:0
+[ 1239319ms] [ERROR] ./app/[locale]/articles/[slug]/page.tsx:9:10
+the name `getTranslations` is defined multiple times
+   7 | import { readTime } from '@/lib/utils'
+   8 | import { formatDate } from '@/lib/format-date'
+>  9 | import { getTranslations } from 'next-intl/server'
+     |          ^^^^^^^^^^^^^^^
+  10 | import { Navigation } from '@/components/layout/Navigation'
+  11 | import { Footer } from '@/components/layout/Footer'
+  12 | import { ArticleBody } from '@/components/content/ArticleBody'
+
+Ecmascript file had an error @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js:3272
+[ 1239405ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost:3000/da/articles/how-police-surveillance-tech-is-targeting-black-communities:0
+[ 1239524ms] Error: ./app/[locale]/articles/[slug]/page.tsx:9:10
+the name `getTranslations` is defined multiple times
+   7 | import { readTime } from '@/lib/utils'
+   8 | import { formatDate } from '@/lib/format-date'
+>  9 | import { getTranslations } from 'next-intl/server'
+     |          ^^^^^^^^^^^^^^^
+  10 | import { Navigation } from '@/components/layout/Navigation'
+  11 | import { Footer } from '@/components/layout/Footer'
+  12 | import { ArticleBody } from '@/components/content/ArticleBody'
+
+Ecmascript file had an error
+
+
+    at <unknown> (Error: ./app/[locale]/articles/[slug]/page.tsx:9:10)
+    at Object.getCompilationErrors (file:///Users/noahlaux/code/surglobal/untold/node_modules/next/dist/server/dev/hot-reloader-turbopack.js:1189:59)
+    at DevBundlerService.getCompilationError (file:///Users/noahlaux/code/surglobal/untold/node_modules/next/dist/server/lib/dev-bundler-service.js:44:55)
+    at DevServer.getCompilationError (file:///Users/noahlaux/code/surglobal/untold/node_modules/next/dist/server/dev/next-dev-server.js:719:42)
+    at DevServer.findPageComponents (file:///Users/noahlaux/code/surglobal/untold/node_modules/next/dist/server/dev/next-dev-server.js:689:43)
+    at async DevServer.renderErrorToResponseImpl (file:///Users/noahlaux/code/surglobal/untold/node_modules/next/dist/server/base-server.js:1745:26)
+[ 1239525ms] [ERROR] ./app/[locale]/articles/[slug]/page.tsx:9:10
+the name `getTranslations` is defined multiple times
+   7 | import { readTime } from '@/lib/utils'
+   8 | import { formatDate } from '@/lib/format-date'
+>  9 | import { getTranslations } from 'next-intl/server'
+     |          ^^^^^^^^^^^^^^^
+  10 | import { Navigation } from '@/components/layout/Navigation'
+  11 | import { Footer } from '@/components/layout/Footer'
+  12 | import { ArticleBody } from '@/components/content/ArticleBody'
+
+Ecmascript file had an error @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_0u_w_5s._.js:1945
+[ 1239578ms] [ERROR] ./app/[locale]/articles/[slug]/page.tsx:9:10
+the name `getTranslations` is defined multiple times
+   7 | import { readTime } from '@/lib/utils'
+   8 | import { formatDate } from '@/lib/format-date'
+>  9 | import { getTranslations } from 'next-intl/server'
+     |          ^^^^^^^^^^^^^^^
+  10 | import { Navigation } from '@/components/layout/Navigation'
+  11 | import { Footer } from '@/components/layout/Footer'
+  12 | import { ArticleBody } from '@/components/content/ArticleBody'
+
+Ecmascript file had an error @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_0u_w_5s._.js:1945
+[ 1239787ms] [ERROR] ./app/[locale]/articles/[slug]/page.tsx:9:10
+the name `getTranslations` is defined multiple times
+   7 | import { readTime } from '@/lib/utils'
+   8 | import { formatDate } from '@/lib/format-date'
+>  9 | import { getTranslations } from 'next-intl/server'
+     |          ^^^^^^^^^^^^^^^
+  10 | import { Navigation } from '@/components/layout/Navigation'
+  11 | import { Footer } from '@/components/layout/Footer'
+  12 | import { ArticleBody } from '@/components/content/ArticleBody'
+
+Ecmascript file had an error @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_0u_w_5s._.js:1945
+[ 1240109ms] [ERROR] ./app/[locale]/articles/[slug]/page.tsx:9:10
+the name `getTranslations` is defined multiple times
+   7 | import { readTime } from '@/lib/utils'
+   8 | import { formatDate } from '@/lib/format-date'
+>  9 | import { getTranslations } from 'next-intl/server'
+     |          ^^^^^^^^^^^^^^^
+  10 | import { Navigation } from '@/components/layout/Navigation'
+  11 | import { Footer } from '@/components/layout/Footer'
+  12 | import { ArticleBody } from '@/components/content/ArticleBody'
+
+Ecmascript file had an error @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_0u_w_5s._.js:1945
+[ 1240427ms] [ERROR] ./app/[locale]/articles/[slug]/page.tsx:9:10
+the name `getTranslations` is defined multiple times
+   7 | import { readTime } from '@/lib/utils'
+   8 | import { formatDate } from '@/lib/format-date'
+>  9 | import { getTranslations } from 'next-intl/server'
+     |          ^^^^^^^^^^^^^^^
+  10 | import { Navigation } from '@/components/layout/Navigation'
+  11 | import { Footer } from '@/components/layout/Footer'
+  12 | import { ArticleBody } from '@/components/content/ArticleBody'
+
+Ecmascript file had an error @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_0u_w_5s._.js:1945
+[ 1240509ms] [ERROR] ./app/[locale]/articles/[slug]/page.tsx:9:10
+the name `getTranslations` is defined multiple times
+   7 | import { readTime } from '@/lib/utils'
+   8 | import { formatDate } from '@/lib/format-date'
+>  9 | import { getTranslations } from 'next-intl/server'
+     |          ^^^^^^^^^^^^^^^
+  10 | import { Navigation } from '@/components/layout/Navigation'
+  11 | import { Footer } from '@/components/layout/Footer'
+  12 | import { ArticleBody } from '@/components/content/ArticleBody'
+
+Ecmascript file had an error @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_0u_w_5s._.js:1945
+[ 1240586ms] [ERROR] ./app/[locale]/articles/[slug]/page.tsx:9:10
+the name `getTranslations` is defined multiple times
+   7 | import { readTime } from '@/lib/utils'
+   8 | import { formatDate } from '@/lib/format-date'
+>  9 | import { getTranslations } from 'next-intl/server'
+     |          ^^^^^^^^^^^^^^^
+  10 | import { Navigation } from '@/components/layout/Navigation'
+  11 | import { Footer } from '@/components/layout/Footer'
+  12 | import { ArticleBody } from '@/components/content/ArticleBody'
+
+Ecmascript file had an error @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_0u_w_5s._.js:1945
+[ 1240753ms] [ERROR] ./app/[locale]/articles/[slug]/page.tsx:9:10
+the name `getTranslations` is defined multiple times
+   7 | import { readTime } from '@/lib/utils'
+   8 | import { formatDate } from '@/lib/format-date'
+>  9 | import { getTranslations } from 'next-intl/server'
+     |          ^^^^^^^^^^^^^^^
+  10 | import { Navigation } from '@/components/layout/Navigation'
+  11 | import { Footer } from '@/components/layout/Footer'
+  12 | import { ArticleBody } from '@/components/content/ArticleBody'
+
+Ecmascript file had an error @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_0u_w_5s._.js:1945
+[ 1241330ms] [ERROR] ./app/[locale]/articles/[slug]/page.tsx:9:10
+the name `getTranslations` is defined multiple times
+   7 | import { readTime } from '@/lib/utils'
+   8 | import { formatDate } from '@/lib/format-date'
+>  9 | import { getTranslations } from 'next-intl/server'
+     |          ^^^^^^^^^^^^^^^
+  10 | import { Navigation } from '@/components/layout/Navigation'
+  11 | import { Footer } from '@/components/layout/Footer'
+  12 | import { ArticleBody } from '@/components/content/ArticleBody'
+
+Ecmascript file had an error @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_0u_w_5s._.js:1945
+[ 1243063ms] [ERROR] ./app/[locale]/articles/[slug]/page.tsx:9:10
+the name `getTranslations` is defined multiple times
+   7 | import { readTime } from '@/lib/utils'
+   8 | import { formatDate } from '@/lib/format-date'
+>  9 | import { getTranslations } from 'next-intl/server'
+     |          ^^^^^^^^^^^^^^^
+  10 | import { Navigation } from '@/components/layout/Navigation'
+  11 | import { Footer } from '@/components/layout/Footer'
+  12 | import { ArticleBody } from '@/components/content/ArticleBody'
+
+Ecmascript file had an error @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_0u_w_5s._.js:1945
+[ 2619627ms] [ERROR] WebSocket connection to 'ws://localhost:3000/_next/webpack-hmr?id=gORZr1kwg7U4cH09kkV-o' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_client_0fhqo1d._.js:13299
+[ 2620638ms] [ERROR] WebSocket connection to 'ws://localhost:3000/_next/webpack-hmr?id=gORZr1kwg7U4cH09kkV-o' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_client_0fhqo1d._.js:13299
+[ 2621785ms] [ERROR] WebSocket connection to 'ws://localhost:3000/_next/webpack-hmr?id=gORZr1kwg7U4cH09kkV-o' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_client_0fhqo1d._.js:13299
+[ 2622788ms] [ERROR] WebSocket connection to 'ws://localhost:3000/_next/webpack-hmr?id=gORZr1kwg7U4cH09kkV-o' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_client_0fhqo1d._.js:13299
+[ 2623799ms] [ERROR] WebSocket connection to 'ws://localhost:3000/_next/webpack-hmr?id=gORZr1kwg7U4cH09kkV-o' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_client_0fhqo1d._.js:13299
+[ 2628809ms] [ERROR] WebSocket connection to 'ws://localhost:3000/_next/webpack-hmr?id=gORZr1kwg7U4cH09kkV-o' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_client_0fhqo1d._.js:13299
+[ 2633829ms] [ERROR] WebSocket connection to 'ws://localhost:3000/_next/webpack-hmr?id=gORZr1kwg7U4cH09kkV-o' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_client_0fhqo1d._.js:13299
+[ 2638843ms] [ERROR] WebSocket connection to 'ws://localhost:3000/_next/webpack-hmr?id=gORZr1kwg7U4cH09kkV-o' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_client_0fhqo1d._.js:13299
+[ 4378312ms] [ERROR] WebSocket connection to 'ws://localhost:3000/_next/webpack-hmr?id=wfNy44DRlDXXTj8Vu5m99' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_client_0fhqo1d._.js:13299
+[ 4379314ms] [ERROR] WebSocket connection to 'ws://localhost:3000/_next/webpack-hmr?id=wfNy44DRlDXXTj8Vu5m99' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_client_0fhqo1d._.js:13299
+[ 4380316ms] [ERROR] WebSocket connection to 'ws://localhost:3000/_next/webpack-hmr?id=wfNy44DRlDXXTj8Vu5m99' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_client_0fhqo1d._.js:13299

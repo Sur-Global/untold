@@ -1,0 +1,103 @@
+[     677ms] [ERROR] In HTML, %s cannot be a descendant of <%s>.
+This will cause a hydration error.%s <a> a 
+
+  ...
+    <SegmentViewNode type="page" pagePath="[locale]/p...">
+      <SegmentTrieNode>
+      <HomePage>
+        <Navigation>
+        <main>
+          <section>
+          <div className="max-w-7xl ...">
+            <section>
+              <div>
+              <div className="mt-6 space...">
+                <div className="flex flex-...">
+                  <div className="w-full md:...">
+                    <LargeArticleCard slug="how-police..." title="How Police..." excerpt="Facial rec..." ...>
+                      <Link href="/articles/..." className="relative f..." style={{height:"100%", ...}}>
+                        <BaseLink ref={null} href="/articles/..." locale={undefined} localeCookie={{name:"NEXT...", ...}} ...>
+                          <LinkComponent ref={null} href="/articles/..." hrefLang={undefined} ...>
+>                           <a
+>                             hrefLang={undefined}
+>                             className="relative flex flex-col rounded-2xl overflow-hidden"
+>                             style={{height:"100%",minHeight:280,background:"#2C2420",border:"1px solid ...",textDecoration:"none", ...}}
+>                             ref={function}
+>                             onClick={function onClick}
+>                             onMouseEnter={function onMouseEnter}
+>                             onTouchStart={function onTouchStart}
+>                             href="/articles/how-police-surveillance-tech-is-targeting-black-communities"
+>                           >
+                              <img>
+                              <div>
+                              ...
+                                <BaseLink ref={null} href="/tag/surve..." locale={undefined} ...>
+                                  <LinkComponent ref={null} href="/tag/surve..." hrefLang={undefined} ...>
+>                                   <a
+>                                     hrefLang={undefined}
+>                                     className="ml-auto px-3 py-1 rounded-full text-xs hover:opacity-80 transition-op..."
+>                                     style={{background:"rgba(253,2...",color:"#5d4e37",fontFamily:"JetBrains ...",fontSize:11, ...}}
+>                                     ref={function}
+>                                     onClick={function onClick}
+>                                     onMouseEnter={function onMouseEnter}
+>                                     onTouchStart={function onTouchStart}
+>                                     href="/tag/surveillance"
+>                                   >
+                              ...
+                  ...
+                ...
+            ...
+        ...
+    ...
+ @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js:3272
+[     677ms] [ERROR] <%s> cannot contain a nested %s.
+See this log for the ancestor stack trace. a <a> @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js:3272
+[     793ms] Error: Hydration failed because the server rendered HTML didn't match the client. As a result this tree will be regenerated on the client. This can happen if a SSR-ed Client Component used:
+
+- A server/client branch `if (typeof window !== 'undefined')`.
+- Variable input such as `Date.now()` or `Math.random()` which changes each time it's called.
+- Date formatting in a user's locale which doesn't match the server.
+- External changing data without sending a snapshot of it along with the HTML.
+- Invalid HTML tag nesting.
+
+It can also happen if the client has a browser extension installed which messes with the HTML before React loaded.
+
+https://react.dev/link/hydration-mismatch
+
+  ...
+    <SegmentViewNode type="page" pagePath="[locale]/p...">
+      <SegmentTrieNode>
+      <HomePage>
+        <Navigation>
+        <main>
+          <section>
+          <div className="max-w-7xl ...">
+            <section>
+              <div>
+              <div className="mt-6 space...">
+                <div className="flex flex-...">
+                  <div className="w-full md:...">
+                    <LargeArticleCard slug="how-police..." title="How Police..." excerpt="Facial rec..." ...>
+                      <Link href="/articles/..." className="relative f..." style={{height:"100%", ...}}>
+                        <BaseLink ref={null} href="/articles/..." locale={undefined} localeCookie={{name:"NEXT...", ...}} ...>
+                          <LinkComponent ref={null} href="/articles/..." hrefLang={undefined} ...>
+                            <a hrefLang={undefined} className="relative f..." style={{height:"100%", ...}} ref={function} ...>
+                              <img>
+                              <div>
++                             <div className="absolute top-4 left-4 right-4 flex items-center justify-between">
+                              ...
+                  ...
+                ...
+            ...
+        ...
+    ...
+
+    at throwOnHydrationMismatch (http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_react-dom_058-ah~._.js:3318:56)
+    at beginWork (http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_react-dom_058-ah~._.js:6758:918)
+    at runWithFiberInDEV (http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_react-dom_058-ah~._.js:965:74)
+    at performUnitOfWork (http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_react-dom_058-ah~._.js:9555:97)
+    at workLoopConcurrentByScheduler (http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_react-dom_058-ah~._.js:9551:58)
+    at renderRootConcurrent (http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_react-dom_058-ah~._.js:9534:71)
+    at performWorkOnRoot (http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_react-dom_058-ah~._.js:9061:150)
+    at performWorkOnRootViaSchedulerTask (http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_react-dom_058-ah~._.js:10255:9)
+    at MessagePort.performWorkUntilDeadline (http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_0rpq4pf._.js:2647:64)

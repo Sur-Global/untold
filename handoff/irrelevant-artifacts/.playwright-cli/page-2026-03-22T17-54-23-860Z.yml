@@ -1,0 +1,291 @@
+- generic [active] [ref=e1]:
+  - banner [ref=e2]:
+    - generic [ref=e3]:
+      - link "UNTOLD" [ref=e4] [cursor=pointer]:
+        - /url: /
+      - navigation [ref=e5]:
+        - link "Articles" [ref=e6] [cursor=pointer]:
+          - /url: /articles
+        - link "Videos" [ref=e7] [cursor=pointer]:
+          - /url: /videos
+        - link "Podcasts" [ref=e8] [cursor=pointer]:
+          - /url: /podcasts
+        - link "Knowledge Pills" [ref=e9] [cursor=pointer]:
+          - /url: /pills
+        - link "Courses" [ref=e10] [cursor=pointer]:
+          - /url: /courses
+    - generic [ref=e11]:
+      - button "EN" [ref=e12]
+      - link "Log in" [ref=e13] [cursor=pointer]:
+        - /url: /auth/login
+      - link "Sign up" [ref=e14] [cursor=pointer]:
+        - /url: /auth/signup
+  - main [ref=e15]:
+    - generic [ref=e16]:
+      - heading "Articles" [level=1] [ref=e17]
+      - paragraph [ref=e18]: In-depth writing from the Global South
+    - generic [ref=e19]:
+      - article [ref=e20]:
+        - generic [ref=e21]:
+          - link "Marilyn for ever" [ref=e22] [cursor=pointer]:
+            - /url: /articles/my-title-mn1mfh35
+            - img "Marilyn for ever" [ref=e23]
+          - generic "Featured" [ref=e24]: ★
+          - generic [ref=e25]: Article
+        - generic [ref=e26]:
+          - heading "Marilyn for ever" [level=3] [ref=e27]:
+            - link "Marilyn for ever" [ref=e28] [cursor=pointer]:
+              - /url: /articles/my-title-mn1mfh35
+          - paragraph [ref=e29]: In grammar, an article is any of a small set of words or affixes (such as a, an, and the in English) used with nouns to limit or give definiteness to the application. The category of articles constitutes a part of speech. These words represent a specific object, depending on the situation, but a is less specific than the.
+          - generic [ref=e30]:
+            - generic [ref=e31]: "N"
+            - link "Noah Laux" [ref=e32] [cursor=pointer]:
+              - /url: /author/noah-laux
+            - generic [ref=e33]: 2 min read
+          - generic [ref=e34]:
+            - generic [ref=e35]: ♥ 0
+            - button "Save" [disabled] [ref=e36]:
+              - img [ref=e37]
+              - generic [ref=e39]: Save
+      - article [ref=e40]:
+        - generic [ref=e41]:
+          - link "90 days, still no tomatoes" [ref=e42] [cursor=pointer]:
+            - /url: /articles/sdfsdfsdf-mn1w7w9a
+            - img "90 days, still no tomatoes" [ref=e43]
+          - generic [ref=e44]: Article
+        - generic [ref=e45]:
+          - heading "90 days, still no tomatoes" [level=3] [ref=e46]:
+            - link "90 days, still no tomatoes" [ref=e47] [cursor=pointer]:
+              - /url: /articles/sdfsdfsdf-mn1w7w9a
+          - paragraph [ref=e48]: Waiting for an eternity
+          - generic [ref=e49]:
+            - generic [ref=e50]: "N"
+            - link "Noah Laux" [ref=e51] [cursor=pointer]:
+              - /url: /author/noah-laux
+            - generic [ref=e52]: 1 min read
+          - generic [ref=e53]:
+            - generic [ref=e54]: ♥ 0
+            - button "Save" [disabled] [ref=e55]:
+              - img [ref=e56]
+              - generic [ref=e58]: Save
+      - article [ref=e59]:
+        - generic [ref=e60]:
+          - 'link "Pan-African Futures: Reimagining Education" [ref=e61] [cursor=pointer]':
+            - /url: /articles/pan-african-futures-reimagining-education
+            - 'img "Pan-African Futures: Reimagining Education" [ref=e62]'
+          - generic [ref=e63]: Article
+        - generic [ref=e64]:
+          - 'heading "Pan-African Futures: Reimagining Education" [level=3] [ref=e65]':
+            - 'link "Pan-African Futures: Reimagining Education" [ref=e66] [cursor=pointer]':
+              - /url: /articles/pan-african-futures-reimagining-education
+          - paragraph [ref=e67]: The African Union's Agenda 2063 envisions an educated, skilled continent. But what kind of education, and designed by whom?
+          - generic [ref=e68]:
+            - img "Nkechi Osei" [ref=e69]
+            - link "Nkechi Osei" [ref=e70] [cursor=pointer]:
+              - /url: /author/nkechi-osei
+          - generic [ref=e71]:
+            - generic [ref=e72]: ♥ 756
+            - button "Save" [disabled] [ref=e73]:
+              - img [ref=e74]
+              - generic [ref=e76]: Save
+      - article [ref=e77]:
+        - generic [ref=e78]:
+          - link "Water Is Not a Commodity" [ref=e79] [cursor=pointer]:
+            - /url: /articles/water-is-not-a-commodity
+            - img "Water Is Not a Commodity" [ref=e80]
+          - generic [ref=e81]: Article
+        - generic [ref=e82]:
+          - heading "Water Is Not a Commodity" [level=3] [ref=e83]:
+            - link "Water Is Not a Commodity" [ref=e84] [cursor=pointer]:
+              - /url: /articles/water-is-not-a-commodity
+          - paragraph [ref=e85]: The battle over water rights in Latin America is also a battle over two fundamentally different visions of what a resource is.
+          - generic [ref=e86]:
+            - img "Valentina Morales" [ref=e87]
+            - link "Valentina Morales" [ref=e88] [cursor=pointer]:
+              - /url: /author/valentina-morales
+          - generic [ref=e89]:
+            - generic [ref=e90]: ♥ 403
+            - button "Save" [disabled] [ref=e91]:
+              - img [ref=e92]
+              - generic [ref=e94]: Save
+      - article [ref=e95]:
+        - generic [ref=e96]:
+          - link "The Myth of Neutral Data" [ref=e97] [cursor=pointer]:
+            - /url: /articles/the-myth-of-neutral-data
+            - img "The Myth of Neutral Data" [ref=e98]
+          - generic [ref=e99]: Article
+        - generic [ref=e100]:
+          - heading "The Myth of Neutral Data" [level=3] [ref=e101]:
+            - link "The Myth of Neutral Data" [ref=e102] [cursor=pointer]:
+              - /url: /articles/the-myth-of-neutral-data
+          - paragraph [ref=e103]: There is no such thing as raw, unmediated data. Every dataset reflects the choices, biases, and power relations of those who created it.
+          - generic [ref=e104]:
+            - img "Siddharth Rao" [ref=e105]
+            - link "Siddharth Rao" [ref=e106] [cursor=pointer]:
+              - /url: /author/siddharth-rao
+          - generic [ref=e107]:
+            - generic [ref=e108]: ♥ 634
+            - button "Save" [disabled] [ref=e109]:
+              - img [ref=e110]
+              - generic [ref=e112]: Save
+      - article [ref=e113]:
+        - generic [ref=e114]:
+          - link "Decolonizing the Digital Library" [ref=e115] [cursor=pointer]:
+            - /url: /articles/decolonizing-the-digital-library
+            - img "Decolonizing the Digital Library" [ref=e116]
+          - generic [ref=e117]: Article
+        - generic [ref=e118]:
+          - heading "Decolonizing the Digital Library" [level=3] [ref=e119]:
+            - link "Decolonizing the Digital Library" [ref=e120] [cursor=pointer]:
+              - /url: /articles/decolonizing-the-digital-library
+          - paragraph [ref=e121]: Wikipedia has 6.7 million English articles and 700,000 in Yoruba. What does that gap tell us about whose knowledge counts?
+          - generic [ref=e122]:
+            - img "Amara Diallo" [ref=e123]
+            - link "Amara Diallo" [ref=e124] [cursor=pointer]:
+              - /url: /author/amara-diallo
+          - generic [ref=e125]:
+            - generic [ref=e126]: ♥ 218
+            - button "Save" [disabled] [ref=e127]:
+              - img [ref=e128]
+              - generic [ref=e130]: Save
+      - article [ref=e131]:
+        - generic [ref=e132]:
+          - link "The Amazon Is Not Empty" [ref=e133] [cursor=pointer]:
+            - /url: /articles/the-amazon-is-not-empty
+            - img "The Amazon Is Not Empty" [ref=e134]
+          - generic [ref=e135]: Article
+        - generic [ref=e136]:
+          - heading "The Amazon Is Not Empty" [level=3] [ref=e137]:
+            - link "The Amazon Is Not Empty" [ref=e138] [cursor=pointer]:
+              - /url: /articles/the-amazon-is-not-empty
+          - paragraph [ref=e139]: "For centuries, colonialism justified extraction by declaring indigenous lands \"uninhabited.\" Today, that fiction has a new face: carbon markets."
+          - generic [ref=e140]:
+            - img "Valentina Morales" [ref=e141]
+            - link "Valentina Morales" [ref=e142] [cursor=pointer]:
+              - /url: /author/valentina-morales
+          - generic [ref=e143]:
+            - generic [ref=e144]: ♥ 592
+            - button "Save" [disabled] [ref=e145]:
+              - img [ref=e146]
+              - generic [ref=e148]: Save
+      - article [ref=e149]:
+        - generic [ref=e150]:
+          - link "Learning While Black in British Schools" [ref=e151] [cursor=pointer]:
+            - /url: /articles/learning-while-black-in-british-schools
+            - img "Learning While Black in British Schools" [ref=e152]
+          - generic [ref=e153]: Article
+        - generic [ref=e154]:
+          - heading "Learning While Black in British Schools" [level=3] [ref=e155]:
+            - link "Learning While Black in British Schools" [ref=e156] [cursor=pointer]:
+              - /url: /articles/learning-while-black-in-british-schools
+          - paragraph [ref=e157]: Black students in the UK are three times more likely to be permanently excluded than their white peers. The data is clear. The response has not been.
+          - generic [ref=e158]:
+            - img "Nkechi Osei" [ref=e159]
+            - link "Nkechi Osei" [ref=e160] [cursor=pointer]:
+              - /url: /author/nkechi-osei
+          - generic [ref=e161]:
+            - generic [ref=e162]: ♥ 1043
+            - button "Save" [disabled] [ref=e163]:
+              - img [ref=e164]
+              - generic [ref=e166]: Save
+      - article [ref=e167]:
+        - generic [ref=e168]:
+          - link "Who Owns the Algorithm?" [ref=e169] [cursor=pointer]:
+            - /url: /articles/who-owns-the-algorithm
+            - img "Who Owns the Algorithm?" [ref=e170]
+          - generic [ref=e171]: Article
+        - generic [ref=e172]:
+          - heading "Who Owns the Algorithm?" [level=3] [ref=e173]:
+            - link "Who Owns the Algorithm?" [ref=e174] [cursor=pointer]:
+              - /url: /articles/who-owns-the-algorithm
+          - paragraph [ref=e175]: When Silicon Valley exports its AI systems to Africa, it also exports its assumptions, blind spots, and power structures.
+          - generic [ref=e176]:
+            - img "Amara Diallo" [ref=e177]
+            - link "Amara Diallo" [ref=e178] [cursor=pointer]:
+              - /url: /author/amara-diallo
+          - generic [ref=e179]:
+            - generic [ref=e180]: ♥ 347
+            - button "Save" [disabled] [ref=e181]:
+              - img [ref=e182]
+              - generic [ref=e184]: Save
+      - article [ref=e185]:
+        - generic [ref=e186]:
+          - link "AI Governance Without the South" [ref=e187] [cursor=pointer]:
+            - /url: /articles/ai-governance-without-the-south
+            - img "AI Governance Without the South" [ref=e188]
+          - generic [ref=e189]: Article
+        - generic [ref=e190]:
+          - heading "AI Governance Without the South" [level=3] [ref=e191]:
+            - link "AI Governance Without the South" [ref=e192] [cursor=pointer]:
+              - /url: /articles/ai-governance-without-the-south
+          - paragraph [ref=e193]: Every major AI safety framework has been written in Washington, London, or Geneva. This is not a coincidence. It is a problem.
+          - generic [ref=e194]:
+            - img "Siddharth Rao" [ref=e195]
+            - link "Siddharth Rao" [ref=e196] [cursor=pointer]:
+              - /url: /author/siddharth-rao
+          - generic [ref=e197]:
+            - generic [ref=e198]: ♥ 871
+            - button "Save" [disabled] [ref=e199]:
+              - img [ref=e200]
+              - generic [ref=e202]: Save
+  - contentinfo [ref=e203]:
+    - generic [ref=e204]:
+      - generic [ref=e205]:
+        - generic [ref=e206]:
+          - heading "UNTOLD" [level=4] [ref=e207]
+          - paragraph [ref=e208]: Exploring ideas that transform the future.
+        - generic [ref=e209]:
+          - paragraph [ref=e210]: Content
+          - list [ref=e211]:
+            - listitem [ref=e212]:
+              - link "Articles" [ref=e213] [cursor=pointer]:
+                - /url: /articles
+            - listitem [ref=e214]:
+              - link "Videos" [ref=e215] [cursor=pointer]:
+                - /url: /videos
+            - listitem [ref=e216]:
+              - link "Podcasts" [ref=e217] [cursor=pointer]:
+                - /url: /podcasts
+            - listitem [ref=e218]:
+              - link "Pills" [ref=e219] [cursor=pointer]:
+                - /url: /pills
+            - listitem [ref=e220]:
+              - link "Courses" [ref=e221] [cursor=pointer]:
+                - /url: /courses
+        - generic [ref=e222]:
+          - paragraph [ref=e223]: Topics
+          - list [ref=e224]:
+            - listitem [ref=e225]:
+              - link "Decoloniality" [ref=e226] [cursor=pointer]:
+                - /url: /tag/decoloniality
+            - listitem [ref=e227]:
+              - link "Sustainability" [ref=e228] [cursor=pointer]:
+                - /url: /tag/sustainability
+            - listitem [ref=e229]:
+              - link "Technology" [ref=e230] [cursor=pointer]:
+                - /url: /tag/technology
+            - listitem [ref=e231]:
+              - link "Education" [ref=e232] [cursor=pointer]:
+                - /url: /tag/education
+            - listitem [ref=e233]:
+              - link "Responsible AI" [ref=e234] [cursor=pointer]:
+                - /url: /tag/responsible-ai
+        - generic [ref=e235]:
+          - paragraph [ref=e236]: Connect
+          - list [ref=e237]:
+            - listitem [ref=e238]:
+              - link "About" [ref=e239] [cursor=pointer]:
+                - /url: /about
+            - listitem [ref=e240]:
+              - link "Contact" [ref=e241] [cursor=pointer]:
+                - /url: /contact
+            - listitem [ref=e242]:
+              - link "Newsletter" [ref=e243] [cursor=pointer]:
+                - /url: /newsletter
+            - listitem [ref=e244]:
+              - link "Become a Creator" [ref=e245] [cursor=pointer]:
+                - /url: /become-creator
+      - generic [ref=e246]: © 2026 UNTOLD. All rights reserved. A Sur Global publication.
+  - button "Open Next.js Dev Tools" [ref=e252] [cursor=pointer]:
+    - img [ref=e253]
+  - alert [ref=e256]

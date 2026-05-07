@@ -1,0 +1,417 @@
+- generic [active] [ref=e1]:
+  - banner [ref=e2]:
+    - generic [ref=e3]:
+      - link "UNTOLD" [ref=e4] [cursor=pointer]:
+        - /url: /
+      - navigation [ref=e5]:
+        - link "Artikler" [ref=e6] [cursor=pointer]:
+          - /url: /articles
+        - link "Videoer" [ref=e7] [cursor=pointer]:
+          - /url: /videos
+        - link "Podcasts" [ref=e8] [cursor=pointer]:
+          - /url: /podcasts
+        - link "Videnspiller" [ref=e9] [cursor=pointer]:
+          - /url: /pills
+        - link "Kurser" [ref=e10] [cursor=pointer]:
+          - /url: /courses
+      - generic [ref=e11]:
+        - link "Søg" [ref=e12] [cursor=pointer]:
+          - /url: /search
+          - img [ref=e13]
+        - button "DA" [ref=e16] [cursor=pointer]:
+          - img [ref=e17]
+          - generic [ref=e21]: DA
+        - generic [ref=e22]: "|"
+        - link "Log ind" [ref=e23] [cursor=pointer]:
+          - /url: /auth/login
+  - main [ref=e24]:
+    - generic [ref=e26]:
+      - generic [ref=e27]:
+        - heading "ARTICLES" [level=1] [ref=e28]
+        - paragraph [ref=e29]: Dybdegående analyser, forskning og refleksioner om ansvarlig teknologi, tilgængelighed og dekolonial tænkning.
+      - generic [ref=e30]:
+        - generic [ref=e32]:
+          - img
+          - searchbox "Søg i artikler..." [ref=e33]
+        - generic [ref=e34]:
+          - button "Alle" [ref=e35] [cursor=pointer]
+          - button "Udvalgte" [ref=e36] [cursor=pointer]
+          - button "Trending" [ref=e37] [cursor=pointer]
+          - button "Seneste" [ref=e38] [cursor=pointer]
+        - generic [ref=e39]:
+          - button "Føj kapitler til YouTube" [ref=e40] [cursor=pointer]
+          - button "tilføj kapitler til YouTube-videoen" [ref=e41] [cursor=pointer]
+          - button "Tilføj kapitler til YouTube-video 2024" [ref=e42] [cursor=pointer]
+          - button "AI-AI-AI-AI-AI-AI-AI-AI-AI-AI-AI-AI-AI-AI-AI-" [ref=e43] [cursor=pointer]
+          - button "Kunstig intelligens" [ref=e44] [cursor=pointer]
+          - button "Klimaretfærdighed" [ref=e45] [cursor=pointer]
+          - button "indholdsskaber" [ref=e46] [cursor=pointer]
+          - button "Datasuverænitet" [ref=e47] [cursor=pointer]
+          - button "Dekolonialitet" [ref=e48] [cursor=pointer]
+          - button "Skovrydning" [ref=e49] [cursor=pointer]
+          - button "Digitale rettigheder" [ref=e50] [cursor=pointer]
+          - button "Uddannelse" [ref=e51] [cursor=pointer]
+          - button "Feminisme" [ref=e52] [cursor=pointer]
+          - button "Sådan tilføjer du kapitler til en YouTube-video" [ref=e53] [cursor=pointer]
+          - button "Sådan tilføjer du et tidsstempel til en YouTube-video" [ref=e54] [cursor=pointer]
+          - button "Oprindelige folks rettigheder" [ref=e55] [cursor=pointer]
+          - button "Mediefrihed" [ref=e56] [cursor=pointer]
+          - button "Politiet" [ref=e57] [cursor=pointer]
+          - button "Overvågning" [ref=e58] [cursor=pointer]
+          - button "Byplanlægning" [ref=e59] [cursor=pointer]
+          - button "YouTube" [ref=e60] [cursor=pointer]
+          - button "YouTube-kapitler" [ref=e61] [cursor=pointer]
+    - generic [ref=e62]:
+      - generic [ref=e63]:
+        - article [ref=e64]:
+          - generic [ref=e65]:
+            - link "Hvordan politiets overvågningsteknologi rammer de sorte samfund" [ref=e66] [cursor=pointer]:
+              - /url: /da/articles/how-police-surveillance-tech-is-targeting-black-communities
+              - img "Hvordan politiets overvågningsteknologi rammer de sorte samfund" [ref=e67]
+            - link "Overvågning" [ref=e69] [cursor=pointer]:
+              - /url: /da/tag/surveillance
+            - generic "Featured" [ref=e70]: ★
+          - generic [ref=e71]:
+            - heading "Hvordan politiets overvågningsteknologi rammer de sorte samfund" [level=3] [ref=e72]:
+              - link "Hvordan politiets overvågningsteknologi rammer de sorte samfund" [ref=e73] [cursor=pointer]:
+                - /url: /da/articles/how-police-surveillance-tech-is-targeting-black-communities
+            - paragraph [ref=e74]: Ansigtsgenkendelsessystemer, der er taget i brug i Lagos, Nairobi og Cape Town, rejser presserende spørgsmål om samtykke og retten til at blive glemt.
+          - generic [ref=e75]:
+            - generic [ref=e77]:
+              - img "Fatima Al-Hassan" [ref=e78]
+              - link "Fatima Al-Hassan" [ref=e80] [cursor=pointer]:
+                - /url: /da/author/fatima-al-hassan
+            - generic [ref=e81]:
+              - generic [ref=e82]:
+                - img [ref=e83]
+                - text: "47"
+              - button "Sign in to bookmark" [disabled] [ref=e85]:
+                - img [ref=e86]
+        - article [ref=e88]:
+          - generic [ref=e89]:
+            - 'link "Problemet med AI-kolonialisme: Hvem udvikler det, og hvem drager fordel af det?" [ref=e90] [cursor=pointer]':
+              - /url: /da/articles/the-ai-colonialism-problem-who-builds-who-benefits
+              - 'img "Problemet med AI-kolonialisme: Hvem udvikler det, og hvem drager fordel af det?" [ref=e91]'
+            - link "Kunstig intelligens" [ref=e93] [cursor=pointer]:
+              - /url: /da/tag/artificial-intelligence
+            - generic "Featured" [ref=e94]: ★
+          - generic [ref=e95]:
+            - 'heading "Problemet med AI-kolonialisme: Hvem udvikler det, og hvem drager fordel af det?" [level=3] [ref=e96]':
+              - 'link "Problemet med AI-kolonialisme: Hvem udvikler det, og hvem drager fordel af det?" [ref=e97] [cursor=pointer]':
+                - /url: /da/articles/the-ai-colonialism-problem-who-builds-who-benefits
+            - paragraph [ref=e98]: "I takt med at kunstig intelligens omformer den globale viden, stiller forskere fra Indien, Brasilien og Nigeria spørgsmålet: Hvilken virkelighed bliver indkodet i disse systemer?"
+          - generic [ref=e99]:
+            - generic [ref=e101]:
+              - img "Priya Sharma" [ref=e102]
+              - link "Priya Sharma" [ref=e104] [cursor=pointer]:
+                - /url: /da/author/priya-sharma
+            - generic [ref=e105]:
+              - generic [ref=e106]:
+                - img [ref=e107]
+                - text: "83"
+              - button "Sign in to bookmark" [disabled] [ref=e109]:
+                - img [ref=e110]
+        - article [ref=e112]:
+          - generic [ref=e113]:
+            - 'link "Indfødtes suverænitet over data: At genvinde fortællingen" [ref=e114] [cursor=pointer]':
+              - /url: /da/articles/indigenous-data-sovereignty-reclaiming-the-narrative
+              - 'img "Indfødtes suverænitet over data: At genvinde fortællingen" [ref=e115]'
+            - link "Oprindelige folks rettigheder" [ref=e117] [cursor=pointer]:
+              - /url: /da/tag/indigenous-rights
+            - generic "Featured" [ref=e118]: ★
+          - generic [ref=e119]:
+            - 'heading "Indfødtes suverænitet over data: At genvinde fortællingen" [level=3] [ref=e120]':
+              - 'link "Indfødtes suverænitet over data: At genvinde fortællingen" [ref=e121] [cursor=pointer]':
+                - /url: /da/articles/indigenous-data-sovereignty-reclaiming-the-narrative
+            - paragraph [ref=e122]: Indfødte samfund over hele verden er i færd med at opbygge rammer for datastyring for at bevare kontrollen over viden om deres landområder og befolkninger.
+          - generic [ref=e123]:
+            - generic [ref=e125]:
+              - generic [ref=e126]: T
+              - link "test" [ref=e128] [cursor=pointer]:
+                - /url: /da/author/user-38ec6058
+            - generic [ref=e129]:
+              - generic [ref=e130]:
+                - img [ref=e131]
+                - text: "63"
+              - button "Sign in to bookmark" [disabled] [ref=e133]:
+                - img [ref=e134]
+        - article [ref=e136]:
+          - generic [ref=e137]:
+            - link "Modersmålet er vigtigt" [ref=e138] [cursor=pointer]:
+              - /url: /da/articles/mother-tongue-matters
+              - img "Modersmålet er vigtigt" [ref=e139]
+            - link "Uddannelse" [ref=e141] [cursor=pointer]:
+              - /url: /da/tag/education
+            - generic "Featured" [ref=e142]: ★
+          - generic [ref=e143]:
+            - heading "Modersmålet er vigtigt" [level=3] [ref=e144]:
+              - link "Modersmålet er vigtigt" [ref=e145] [cursor=pointer]:
+                - /url: /da/articles/mother-tongue-matters
+            - paragraph [ref=e146]: Forskning viser gang på gang, at børn lærer bedst på deres modersmål. Alligevel anvender de fleste afrikanske uddannelsessystemer stadig europæiske sprog som det primære undervisningssprog.
+          - generic [ref=e147]:
+            - generic [ref=e149]:
+              - img "Nkechi Osei" [ref=e150]
+              - link "Nkechi Osei" [ref=e152] [cursor=pointer]:
+                - /url: /da/author/nkechi-osei
+            - generic [ref=e153]:
+              - generic [ref=e154]:
+                - img [ref=e155]
+                - text: "267"
+              - button "Sign in to bookmark" [disabled] [ref=e157]:
+                - img [ref=e158]
+        - article [ref=e160]:
+          - generic [ref=e161]:
+            - link "AI-styring uden Syd" [ref=e162] [cursor=pointer]:
+              - /url: /da/articles/ai-governance-without-the-south
+              - img "AI-styring uden Syd" [ref=e163]
+            - link "AI-AI-AI-AI-AI-AI-AI-AI-AI-AI-AI-AI-AI-AI-AI-" [ref=e165] [cursor=pointer]:
+              - /url: /da/tag/ai-governance
+            - generic "Featured" [ref=e166]: ★
+          - generic [ref=e167]:
+            - heading "AI-styring uden Syd" [level=3] [ref=e168]:
+              - link "AI-styring uden Syd" [ref=e169] [cursor=pointer]:
+                - /url: /da/articles/ai-governance-without-the-south
+            - paragraph [ref=e170]: EU’s AI-lov, den amerikanske præsidentdekret og G7’s adfærdskodeks for AI. De vigtigste rammer for regulering af kunstig intelligens udarbejdes uden inddragelse af de mest berørte parter.
+          - generic [ref=e171]:
+            - generic [ref=e173]:
+              - img "Siddharth Rao" [ref=e174]
+              - link "Siddharth Rao" [ref=e176] [cursor=pointer]:
+                - /url: /da/author/siddharth-rao
+            - generic [ref=e177]:
+              - generic [ref=e178]:
+                - img [ref=e179]
+                - text: "621"
+              - button "Sign in to bookmark" [disabled] [ref=e181]:
+                - img [ref=e182]
+        - article [ref=e184]:
+          - generic [ref=e185]:
+            - link "Amazonas er ikke tom" [ref=e186] [cursor=pointer]:
+              - /url: /da/articles/the-amazon-is-not-empty
+              - img "Amazonas er ikke tom" [ref=e187]
+            - link "Klimaretfærdighed" [ref=e189] [cursor=pointer]:
+              - /url: /da/tag/climate-justice
+            - generic "Featured" [ref=e190]: ★
+          - generic [ref=e191]:
+            - heading "Amazonas er ikke tom" [level=3] [ref=e192]:
+              - link "Amazonas er ikke tom" [ref=e193] [cursor=pointer]:
+                - /url: /da/articles/the-amazon-is-not-empty
+            - paragraph [ref=e194]: Myten om terra nullius – ubesat land, der ligger klar til bebyggelse – lever i bedste velgående i den moderne miljøpolitik. Det er de oprindelige samfund, der betaler prisen.
+          - generic [ref=e195]:
+            - generic [ref=e197]:
+              - img "Valentina Morales" [ref=e198]
+              - link "Valentina Morales" [ref=e200] [cursor=pointer]:
+                - /url: /da/author/valentina-morales
+            - generic [ref=e201]:
+              - generic [ref=e202]:
+                - img [ref=e203]
+                - text: "512"
+              - button "Sign in to bookmark" [disabled] [ref=e205]:
+                - img [ref=e206]
+        - article [ref=e208]:
+          - generic [ref=e209]:
+            - link "Jeg tager af sted" [ref=e210] [cursor=pointer]:
+              - /url: /da/articles/ohoh-mn3avq3j
+              - img "Jeg tager af sted" [ref=e211]
+            - generic [ref=e213]: Artikel
+          - heading "Jeg tager af sted" [level=3] [ref=e215]:
+            - link "Jeg tager af sted" [ref=e216] [cursor=pointer]:
+              - /url: /da/articles/ohoh-mn3avq3j
+          - generic [ref=e217]:
+            - generic [ref=e218]:
+              - generic [ref=e219]:
+                - generic [ref=e220]: "N"
+                - link "Noah Laux" [ref=e222] [cursor=pointer]:
+                  - /url: /da/author/noah-laux
+              - generic [ref=e223]:
+                - img [ref=e224]
+                - generic [ref=e227]: 1 min læsning
+            - generic [ref=e228]:
+              - generic [ref=e229]:
+                - img [ref=e230]
+                - text: "1"
+              - button "Sign in to bookmark" [disabled] [ref=e232]:
+                - img [ref=e233]
+        - article [ref=e235]:
+          - generic [ref=e236]:
+            - link "90 dage, og der er stadig ingen tomater" [ref=e237] [cursor=pointer]:
+              - /url: /da/articles/sdfsdfsdf-mn1w7w9a
+              - img "90 dage, og der er stadig ingen tomater" [ref=e238]
+            - generic [ref=e240]: Artikel
+          - generic [ref=e241]:
+            - heading "90 dage, og der er stadig ingen tomater" [level=3] [ref=e242]:
+              - link "90 dage, og der er stadig ingen tomater" [ref=e243] [cursor=pointer]:
+                - /url: /da/articles/sdfsdfsdf-mn1w7w9a
+            - paragraph [ref=e244]: Det føles som en evighed
+          - generic [ref=e245]:
+            - generic [ref=e246]:
+              - generic [ref=e247]:
+                - generic [ref=e248]: "N"
+                - link "Noah Laux" [ref=e250] [cursor=pointer]:
+                  - /url: /da/author/noah-laux
+              - generic [ref=e251]:
+                - img [ref=e252]
+                - generic [ref=e255]: 1 min læsning
+            - generic [ref=e256]:
+              - generic [ref=e257]:
+                - img [ref=e258]
+                - text: "0"
+              - button "Sign in to bookmark" [disabled] [ref=e260]:
+                - img [ref=e261]
+        - article [ref=e263]:
+          - generic [ref=e264]:
+            - link "Marilyn for evigt" [ref=e265] [cursor=pointer]:
+              - /url: /da/articles/my-title-mn1mfh35
+              - img "Marilyn for evigt" [ref=e266]
+            - generic [ref=e268]: Artikel
+          - generic [ref=e269]:
+            - heading "Marilyn for evigt" [level=3] [ref=e270]:
+              - link "Marilyn for evigt" [ref=e271] [cursor=pointer]:
+                - /url: /da/articles/my-title-mn1mfh35
+            - paragraph [ref=e272]: I grammatikken er en artikel et af en lille gruppe ord eller endelser (som f.eks. a, an og the på engelsk), der bruges sammen med navneord for at afgrænse eller præcisere betydningen. Kategorien af artikler udgør en ordklasse. Disse ord henviser til et bestemt objekt, afhængigt af sammenhængen, men a er mindre specifikt end the.
+          - generic [ref=e273]:
+            - generic [ref=e274]:
+              - generic [ref=e275]:
+                - generic [ref=e276]: "N"
+                - link "Noah Laux" [ref=e278] [cursor=pointer]:
+                  - /url: /da/author/noah-laux
+              - generic [ref=e279]:
+                - img [ref=e280]
+                - generic [ref=e283]: 1 min læsning
+            - generic [ref=e284]:
+              - generic [ref=e285]:
+                - img [ref=e286]
+                - text: "1"
+              - button "Sign in to bookmark" [disabled] [ref=e288]:
+                - img [ref=e289]
+        - article [ref=e291]:
+          - generic [ref=e292]:
+            - 'link "Klimamigration: De ukendte historier fra Sahel" [ref=e293] [cursor=pointer]':
+              - /url: /da/articles/climate-migration-the-untold-stories-from-the-sahel
+              - 'img "Klimamigration: De ukendte historier fra Sahel" [ref=e294]'
+            - link "Klimaretfærdighed" [ref=e296] [cursor=pointer]:
+              - /url: /da/tag/climate-justice
+          - generic [ref=e297]:
+            - 'heading "Klimamigration: De ukendte historier fra Sahel" [level=3] [ref=e298]':
+              - 'link "Klimamigration: De ukendte historier fra Sahel" [ref=e299] [cursor=pointer]':
+                - /url: /da/articles/climate-migration-the-untold-stories-from-the-sahel
+            - paragraph [ref=e300]: "Millioner af mennesker i Niger, Mali og Tchad står over for et umuligt valg: at blive på et land, der ikke længere kan brødføde dem, eller at begive sig ud på den farefulde rejse mod nord."
+          - generic [ref=e301]:
+            - generic [ref=e303]:
+              - img "Amara Diallo" [ref=e304]
+              - link "Amara Diallo" [ref=e306] [cursor=pointer]:
+                - /url: /da/author/amara-diallo
+            - generic [ref=e307]:
+              - generic [ref=e308]:
+                - img [ref=e309]
+                - text: "29"
+              - button "Sign in to bookmark" [disabled] [ref=e311]:
+                - img [ref=e312]
+        - article [ref=e314]:
+          - generic [ref=e315]:
+            - 'link "Amazonas på vippepunktet: Skovrydning og modstand" [ref=e316] [cursor=pointer]':
+              - /url: /da/articles/amazonia-at-the-tipping-point-deforestation-and-resistance
+              - 'img "Amazonas på vippepunktet: Skovrydning og modstand" [ref=e317]'
+            - link "Skovrydning" [ref=e319] [cursor=pointer]:
+              - /url: /da/tag/deforestation
+          - generic [ref=e320]:
+            - 'heading "Amazonas på vippepunktet: Skovrydning og modstand" [level=3] [ref=e321]':
+              - 'link "Amazonas på vippepunktet: Skovrydning og modstand" [ref=e322] [cursor=pointer]':
+                - /url: /da/articles/amazonia-at-the-tipping-point-deforestation-and-resistance
+            - paragraph [ref=e323]: Forskere advarer om, at Amazonas er tæt på et punkt, hvor der ikke længere er vej tilbage. I felten udgør de indfødte observatører og skovforkæmpere den sidste forsvarslinje.
+          - generic [ref=e324]:
+            - generic [ref=e326]:
+              - img "Diego Vargas" [ref=e327]
+              - link "Diego Vargas" [ref=e329] [cursor=pointer]:
+                - /url: /da/author/diego-vargas
+            - generic [ref=e330]:
+              - generic [ref=e331]:
+                - img [ref=e332]
+                - text: "55"
+              - button "Sign in to bookmark" [disabled] [ref=e334]:
+                - img [ref=e335]
+        - article [ref=e337]:
+          - generic [ref=e338]:
+            - link "Overvågningsstaten går efter pressen" [ref=e339] [cursor=pointer]:
+              - /url: /da/articles/the-surveillance-state-comes-for-the-press
+              - img "Overvågningsstaten går efter pressen" [ref=e340]
+            - link "Mediefrihed" [ref=e342] [cursor=pointer]:
+              - /url: /da/tag/media-freedom
+          - generic [ref=e343]:
+            - heading "Overvågningsstaten går efter pressen" [level=3] [ref=e344]:
+              - link "Overvågningsstaten går efter pressen" [ref=e345] [cursor=pointer]:
+                - /url: /da/articles/the-surveillance-state-comes-for-the-press
+            - paragraph [ref=e346]: I det ene land efter det andet bliver antiterrorlovgivning og lovgivning om cyberkriminalitet ikke brugt mod terrorister eller kriminelle — men mod journalister.
+          - generic [ref=e347]:
+            - generic [ref=e349]:
+              - img "Leila Hassan" [ref=e350]
+              - link "Leila Hassan" [ref=e352] [cursor=pointer]:
+                - /url: /da/author/leila-hassan
+            - generic [ref=e353]:
+              - generic [ref=e354]:
+                - img [ref=e355]
+                - text: "892"
+              - button "Sign in to bookmark" [disabled] [ref=e357]:
+                - img [ref=e358]
+      - link "Indlæs flere artikler" [ref=e361] [cursor=pointer]:
+        - /url: "?limit=24"
+  - contentinfo [ref=e362]:
+    - generic [ref=e363]:
+      - generic [ref=e364]:
+        - generic [ref=e365]:
+          - heading "UNTOLD" [level=4] [ref=e366]
+          - paragraph [ref=e367]: Exploring ideas that transform the future.
+        - generic [ref=e368]:
+          - paragraph [ref=e369]: Content
+          - list [ref=e370]:
+            - listitem [ref=e371]:
+              - link "Articles" [ref=e372] [cursor=pointer]:
+                - /url: /articles
+            - listitem [ref=e373]:
+              - link "Videos" [ref=e374] [cursor=pointer]:
+                - /url: /videos
+            - listitem [ref=e375]:
+              - link "Podcasts" [ref=e376] [cursor=pointer]:
+                - /url: /podcasts
+            - listitem [ref=e377]:
+              - link "Pills" [ref=e378] [cursor=pointer]:
+                - /url: /pills
+            - listitem [ref=e379]:
+              - link "Courses" [ref=e380] [cursor=pointer]:
+                - /url: /courses
+        - generic [ref=e381]:
+          - paragraph [ref=e382]: Topics
+          - list [ref=e383]:
+            - listitem [ref=e384]:
+              - link "Decoloniality" [ref=e385] [cursor=pointer]:
+                - /url: /tag/decoloniality
+            - listitem [ref=e386]:
+              - link "Sustainability" [ref=e387] [cursor=pointer]:
+                - /url: /tag/sustainability
+            - listitem [ref=e388]:
+              - link "Technology" [ref=e389] [cursor=pointer]:
+                - /url: /tag/technology
+            - listitem [ref=e390]:
+              - link "Education" [ref=e391] [cursor=pointer]:
+                - /url: /tag/education
+            - listitem [ref=e392]:
+              - link "Responsible AI" [ref=e393] [cursor=pointer]:
+                - /url: /tag/responsible-ai
+        - generic [ref=e394]:
+          - paragraph [ref=e395]: Connect
+          - list [ref=e396]:
+            - listitem [ref=e397]:
+              - link "About" [ref=e398] [cursor=pointer]:
+                - /url: /about
+            - listitem [ref=e399]:
+              - link "Contact" [ref=e400] [cursor=pointer]:
+                - /url: /contact
+            - listitem [ref=e401]:
+              - link "Newsletter" [ref=e402] [cursor=pointer]:
+                - /url: /newsletter
+            - listitem [ref=e403]:
+              - link "Become a Creator" [ref=e404] [cursor=pointer]:
+                - /url: /become-creator
+      - generic [ref=e405]: © 2026 UNTOLD. All rights reserved. A Sur Global publication.
+  - button "Open Next.js Dev Tools" [ref=e411] [cursor=pointer]:
+    - img [ref=e412]
+  - alert [ref=e415]

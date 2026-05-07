@@ -1,0 +1,6 @@
+[  704686ms] [ERROR] WebSocket connection to 'ws://localhost:3000/_next/webpack-hmr?id=cdn8a6g1RtR2XL8eArFeU' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_client_0fhqo1d._.js:13299
+[  705688ms] [ERROR] WebSocket connection to 'ws://localhost:3000/_next/webpack-hmr?id=cdn8a6g1RtR2XL8eArFeU' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_client_0fhqo1d._.js:13299
+[ 1066085ms] [ERROR] WebSocket connection to 'ws://localhost:3000/_next/webpack-hmr?id=KhD2-xXlVGiYAqjiFGbxf' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_client_0fhqo1d._.js:13299
+[ 1097025ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost:3000/author/amara-diallo?_rsc=1cfqb:0
+[ 1097440ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost:3000/author/amara-diallo?_rsc=1cfqb:0
+[ 1097613ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost:3000/author/amara-diallo:0

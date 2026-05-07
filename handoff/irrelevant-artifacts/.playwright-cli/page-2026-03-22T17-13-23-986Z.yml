@@ -1,0 +1,162 @@
+- generic [active] [ref=e1]:
+  - banner [ref=e2]:
+    - generic [ref=e3]:
+      - link "UNTOLD" [ref=e4] [cursor=pointer]:
+        - /url: /
+      - navigation [ref=e5]:
+        - link "Articles" [ref=e6] [cursor=pointer]:
+          - /url: /articles
+        - link "Videos" [ref=e7] [cursor=pointer]:
+          - /url: /videos
+        - link "Podcasts" [ref=e8] [cursor=pointer]:
+          - /url: /podcasts
+        - link "Knowledge Pills" [ref=e9] [cursor=pointer]:
+          - /url: /pills
+        - link "Courses" [ref=e10] [cursor=pointer]:
+          - /url: /courses
+    - generic [ref=e11]:
+      - button "EN" [ref=e12]
+      - link "Dashboard" [ref=e13] [cursor=pointer]:
+        - /url: /dashboard
+      - link "Create" [ref=e14] [cursor=pointer]:
+        - /url: /create
+  - main [ref=e15]:
+    - generic [ref=e17]:
+      - generic [ref=e18]:
+        - paragraph [ref=e19]: Views from the Global South
+        - heading "UNTOLD" [level=1] [ref=e20]
+        - paragraph [ref=e21]: Stories that don't make the front page.
+        - generic [ref=e22]:
+          - link "Start Reading" [ref=e23] [cursor=pointer]:
+            - /url: /articles
+          - link "Explore Content" [ref=e24] [cursor=pointer]:
+            - /url: /articles
+      - link "Marilyn for ever ★ Featured Marilyn for ever Noah Laux" [ref=e25] [cursor=pointer]:
+        - /url: /articles/my-title-mn1mfh35
+        - img "Marilyn for ever" [ref=e26]
+        - generic [ref=e27]:
+          - paragraph [ref=e28]: ★ Featured
+          - heading "Marilyn for ever" [level=3] [ref=e29]
+          - paragraph [ref=e30]: Noah Laux
+    - generic [ref=e31]:
+      - generic [ref=e32]:
+        - generic [ref=e33]:
+          - heading "Featured Articles" [level=2] [ref=e34]
+          - link "View all →" [ref=e35] [cursor=pointer]:
+            - /url: /articles
+        - article [ref=e37]:
+          - generic [ref=e40]: Article
+          - generic [ref=e41]:
+            - heading "Test article" [level=3] [ref=e42]:
+              - link "Test article" [ref=e43] [cursor=pointer]:
+                - /url: /articles/sdfsdfsdf-mn1w7w9a
+            - paragraph [ref=e44]: sdfsdfsdf
+            - generic [ref=e45]:
+              - generic [ref=e46]: "N"
+              - link "Noah Laux" [ref=e47] [cursor=pointer]:
+                - /url: /author/noah-laux
+              - generic [ref=e48]: 1 min read
+            - generic [ref=e49]:
+              - generic [ref=e50]: ♥ 0
+              - button "🏷" [ref=e51]
+      - generic [ref=e52]:
+        - generic [ref=e53]:
+          - heading "Videos" [level=2] [ref=e54]
+          - link "View all →" [ref=e55] [cursor=pointer]:
+            - /url: /videos
+        - article [ref=e57]:
+          - generic [ref=e58]:
+            - generic "Featured" [ref=e60]: ★
+            - generic [ref=e61]: Video
+          - generic [ref=e62]:
+            - heading "Marylin" [level=3] [ref=e63]:
+              - link "Marylin" [ref=e64] [cursor=pointer]:
+                - /url: /videos/marylin-mn1w9hk4
+            - generic [ref=e65]:
+              - generic [ref=e66]: "N"
+              - link "Noah Laux" [ref=e67] [cursor=pointer]:
+                - /url: /author/noah-laux
+            - generic [ref=e68]:
+              - generic [ref=e69]: ♥ 0
+              - button "🏷" [ref=e70]
+      - generic [ref=e71]:
+        - generic [ref=e72]:
+          - heading "Podcasts" [level=2] [ref=e73]
+          - link "View all →" [ref=e74] [cursor=pointer]:
+            - /url: /podcasts
+        - article [ref=e76]:
+          - generic [ref=e77]:
+            - generic "Featured" [ref=e79]: ★
+            - generic [ref=e80]: Podcast
+          - generic [ref=e81]:
+            - heading "Test Podcast Episode" [level=3] [ref=e82]:
+              - link "Test Podcast Episode" [ref=e83] [cursor=pointer]:
+                - /url: /podcasts/test-podcast-episode-mn1msf7o
+            - generic [ref=e84]:
+              - generic [ref=e85]: T
+              - link "test" [ref=e86] [cursor=pointer]:
+                - /url: /author/user-38ec6058
+            - generic [ref=e87]:
+              - generic [ref=e88]: ♥ 0
+              - button "🏷" [ref=e89]
+  - contentinfo [ref=e90]:
+    - generic [ref=e91]:
+      - generic [ref=e92]:
+        - generic [ref=e93]:
+          - heading "UNTOLD" [level=4] [ref=e94]
+          - paragraph [ref=e95]: Exploring ideas that transform the future.
+        - generic [ref=e96]:
+          - paragraph [ref=e97]: Content
+          - list [ref=e98]:
+            - listitem [ref=e99]:
+              - link "Articles" [ref=e100] [cursor=pointer]:
+                - /url: /articles
+            - listitem [ref=e101]:
+              - link "Videos" [ref=e102] [cursor=pointer]:
+                - /url: /videos
+            - listitem [ref=e103]:
+              - link "Podcasts" [ref=e104] [cursor=pointer]:
+                - /url: /podcasts
+            - listitem [ref=e105]:
+              - link "Pills" [ref=e106] [cursor=pointer]:
+                - /url: /pills
+            - listitem [ref=e107]:
+              - link "Courses" [ref=e108] [cursor=pointer]:
+                - /url: /courses
+        - generic [ref=e109]:
+          - paragraph [ref=e110]: Topics
+          - list [ref=e111]:
+            - listitem [ref=e112]:
+              - link "Decoloniality" [ref=e113] [cursor=pointer]:
+                - /url: /tag/decoloniality
+            - listitem [ref=e114]:
+              - link "Sustainability" [ref=e115] [cursor=pointer]:
+                - /url: /tag/sustainability
+            - listitem [ref=e116]:
+              - link "Technology" [ref=e117] [cursor=pointer]:
+                - /url: /tag/technology
+            - listitem [ref=e118]:
+              - link "Education" [ref=e119] [cursor=pointer]:
+                - /url: /tag/education
+            - listitem [ref=e120]:
+              - link "Responsible AI" [ref=e121] [cursor=pointer]:
+                - /url: /tag/responsible-ai
+        - generic [ref=e122]:
+          - paragraph [ref=e123]: Connect
+          - list [ref=e124]:
+            - listitem [ref=e125]:
+              - link "About" [ref=e126] [cursor=pointer]:
+                - /url: /about
+            - listitem [ref=e127]:
+              - link "Contact" [ref=e128] [cursor=pointer]:
+                - /url: /contact
+            - listitem [ref=e129]:
+              - link "Newsletter" [ref=e130] [cursor=pointer]:
+                - /url: /newsletter
+            - listitem [ref=e131]:
+              - link "Become a Creator" [ref=e132] [cursor=pointer]:
+                - /url: /become-creator
+      - generic [ref=e133]: © 2026 UNTOLD. All rights reserved. A Sur Global publication.
+  - button "Open Next.js Dev Tools" [ref=e139] [cursor=pointer]:
+    - img [ref=e140]
+  - alert [ref=e143]

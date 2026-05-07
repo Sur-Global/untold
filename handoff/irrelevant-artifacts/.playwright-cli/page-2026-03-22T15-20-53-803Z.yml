@@ -1,0 +1,101 @@
+- generic [active] [ref=e1]:
+  - banner [ref=e2]:
+    - generic [ref=e3]:
+      - link "UNTOLD" [ref=e4] [cursor=pointer]:
+        - /url: /
+      - navigation [ref=e5]:
+        - link "Articles" [ref=e6] [cursor=pointer]:
+          - /url: /articles
+        - link "Videos" [ref=e7] [cursor=pointer]:
+          - /url: /videos
+        - link "Podcasts" [ref=e8] [cursor=pointer]:
+          - /url: /podcasts
+        - link "Knowledge Pills" [ref=e9] [cursor=pointer]:
+          - /url: /pills
+        - link "Courses" [ref=e10] [cursor=pointer]:
+          - /url: /courses
+    - generic [ref=e11]:
+      - button "EN" [ref=e12]
+      - link "Log in" [ref=e13] [cursor=pointer]:
+        - /url: /auth/login
+      - link "Sign up" [ref=e14] [cursor=pointer]:
+        - /url: /auth/signup
+  - main [ref=e15]:
+    - generic [ref=e16]:
+      - heading "Podcasts" [level=1] [ref=e17]
+      - paragraph [ref=e18]: Listen to audio stories and conversations.
+    - article [ref=e20]:
+      - generic [ref=e21]:
+        - generic "Featured" [ref=e23]: ★
+        - generic [ref=e24]: Podcast
+      - generic [ref=e25]:
+        - heading "Test Podcast Episode" [level=3] [ref=e26]:
+          - link "Test Podcast Episode" [ref=e27] [cursor=pointer]:
+            - /url: /podcasts/test-podcast-episode-mn1msf7o
+        - generic [ref=e28]:
+          - generic [ref=e29]: T
+          - link "test" [ref=e30] [cursor=pointer]:
+            - /url: /author/user-38ec6058
+        - generic [ref=e31]:
+          - generic [ref=e32]: ♥ 0
+          - button "🏷" [disabled] [ref=e33]
+  - contentinfo [ref=e34]:
+    - generic [ref=e35]:
+      - generic [ref=e36]:
+        - generic [ref=e37]:
+          - heading "UNTOLD" [level=4] [ref=e38]
+          - paragraph [ref=e39]: Exploring ideas that transform the future.
+        - generic [ref=e40]:
+          - paragraph [ref=e41]: Content
+          - list [ref=e42]:
+            - listitem [ref=e43]:
+              - link "Articles" [ref=e44] [cursor=pointer]:
+                - /url: /articles
+            - listitem [ref=e45]:
+              - link "Videos" [ref=e46] [cursor=pointer]:
+                - /url: /videos
+            - listitem [ref=e47]:
+              - link "Podcasts" [ref=e48] [cursor=pointer]:
+                - /url: /podcasts
+            - listitem [ref=e49]:
+              - link "Pills" [ref=e50] [cursor=pointer]:
+                - /url: /pills
+            - listitem [ref=e51]:
+              - link "Courses" [ref=e52] [cursor=pointer]:
+                - /url: /courses
+        - generic [ref=e53]:
+          - paragraph [ref=e54]: Topics
+          - list [ref=e55]:
+            - listitem [ref=e56]:
+              - link "Decoloniality" [ref=e57] [cursor=pointer]:
+                - /url: /tag/decoloniality
+            - listitem [ref=e58]:
+              - link "Sustainability" [ref=e59] [cursor=pointer]:
+                - /url: /tag/sustainability
+            - listitem [ref=e60]:
+              - link "Technology" [ref=e61] [cursor=pointer]:
+                - /url: /tag/technology
+            - listitem [ref=e62]:
+              - link "Education" [ref=e63] [cursor=pointer]:
+                - /url: /tag/education
+            - listitem [ref=e64]:
+              - link "Responsible AI" [ref=e65] [cursor=pointer]:
+                - /url: /tag/responsible-ai
+        - generic [ref=e66]:
+          - paragraph [ref=e67]: Connect
+          - list [ref=e68]:
+            - listitem [ref=e69]:
+              - link "About" [ref=e70] [cursor=pointer]:
+                - /url: /about
+            - listitem [ref=e71]:
+              - link "Contact" [ref=e72] [cursor=pointer]:
+                - /url: /contact
+            - listitem [ref=e73]:
+              - link "Newsletter" [ref=e74] [cursor=pointer]:
+                - /url: /newsletter
+            - listitem [ref=e75]:
+              - link "Become a Creator" [ref=e76] [cursor=pointer]:
+                - /url: /become-creator
+      - generic [ref=e77]: © 2026 UNTOLD. All rights reserved. A Sur Global publication.
+  - button "Open Next.js Dev Tools" [ref=e83] [cursor=pointer]:
+    - img [ref=e84]

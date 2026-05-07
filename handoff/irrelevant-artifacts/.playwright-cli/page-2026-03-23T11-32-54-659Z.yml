@@ -1,0 +1,553 @@
+- generic [active] [ref=e1]:
+  - banner [ref=e2]:
+    - generic [ref=e3]:
+      - link "UNTOLD" [ref=e4] [cursor=pointer]:
+        - /url: /
+      - navigation [ref=e5]:
+        - link "Articles" [ref=e6] [cursor=pointer]:
+          - /url: /articles
+        - link "Videos" [ref=e7] [cursor=pointer]:
+          - /url: /videos
+        - link "Podcasts" [ref=e8] [cursor=pointer]:
+          - /url: /podcasts
+        - link "Knowledge Pills" [ref=e9] [cursor=pointer]:
+          - /url: /pills
+        - link "Courses" [ref=e10] [cursor=pointer]:
+          - /url: /courses
+      - generic [ref=e11]:
+        - link "Search" [ref=e12] [cursor=pointer]:
+          - /url: /search
+          - img [ref=e13]
+        - button "EN" [ref=e16] [cursor=pointer]:
+          - img [ref=e17]
+          - generic [ref=e21]: EN
+        - generic [ref=e22]:
+          - generic [ref=e23]: "|"
+          - link "Dashboard" [ref=e24] [cursor=pointer]:
+            - /url: /dashboard
+          - generic [ref=e25]: "|"
+          - link "Create" [ref=e26] [cursor=pointer]:
+            - /url: /create
+          - generic [ref=e27]: "|"
+          - button "Log out" [ref=e29] [cursor=pointer]
+  - main [ref=e30]:
+    - generic [ref=e31]:
+      - link "Back" [ref=e32] [cursor=pointer]:
+        - /url: /videos
+        - img [ref=e33]
+        - text: Back
+      - link "Indigenous Rights" [ref=e36] [cursor=pointer]:
+        - /url: /tag/indigenous-rights
+        - img [ref=e37]
+        - text: Indigenous Rights
+      - heading "How to create Chapters in Youtube Videos" [level=1] [ref=e39]
+      - generic [ref=e40]:
+        - link "T test" [ref=e41] [cursor=pointer]:
+          - /url: /author/user-38ec6058
+          - generic [ref=e43]: T
+          - paragraph [ref=e45]: test
+        - generic [ref=e46]:
+          - generic [ref=e47]:
+            - img [ref=e48]
+            - generic [ref=e51]: March 10, 2026
+          - generic [ref=e52]:
+            - img [ref=e53]
+            - generic [ref=e56]: 4:42
+      - iframe [ref=e59]:
+        - generic [active] [ref=f1e1]:
+          - generic "YouTube Video Player" [ref=f1e3]
+          - generic [ref=f1e5]:
+            - generic:
+              - generic:
+                - button "Play video" [ref=f1e10] [cursor=pointer]:
+                  - generic [ref=f1e13]:
+                    - img
+                - button "Hide player controls" [ref=f1e14] [cursor=pointer]
+                - generic [ref=f1e16]:
+                  - generic [ref=f1e21]:
+                    - generic [ref=f1e22]:
+                      - link "How to create Chapters in Youtube Videos" [ref=f1e23] [cursor=pointer]:
+                        - /url: https://www.youtube.com/watch?v=6lSLyERSuh4
+                      - link "Rob the Maritimer" [ref=f1e24] [cursor=pointer]:
+                        - /url: /channel/UCdrdo3Z6_GEqZ0XGNqMY9iQ
+                        - generic [ref=f1e25]: Rob the Maritimer
+                    - generic [ref=f1e26]:
+                      - button "thumbnail-image" [ref=f1e27] [cursor=pointer]:
+                        - img "thumbnail-image" [ref=f1e28]
+                      - generic [ref=f1e30]:
+                        - generic: Rob the Maritimer
+                        - generic: 103K subscribers
+                  - generic [ref=f1e31]:
+                    - button "Share" [ref=f1e34] [cursor=pointer]:
+                      - generic [ref=f1e38]:
+                        - img
+                    - link "Watch on YouTube" [ref=f1e45] [cursor=pointer]:
+                      - /url: https://www.youtube.com/watch?v=6lSLyERSuh4
+                      - generic [ref=f1e48]:
+                        - text: Watch on
+                        - img [ref=f1e50]:
+                          - generic [ref=f1e52]:
+                            - img
+      - generic [ref=e60]:
+        - button "44" [ref=e61] [cursor=pointer]:
+          - img [ref=e62]
+          - generic [ref=e64]: "44"
+        - button "Bookmark" [ref=e65] [cursor=pointer]:
+          - img [ref=e66]
+        - button "Share article" [ref=e68] [cursor=pointer]:
+          - img [ref=e69]
+          - text: Share
+      - generic [ref=e72]:
+        - heading "Description" [level=3] [ref=e73]
+        - generic [ref=e75]:
+          - paragraph [ref=e76]: 🚀 START HERE → https://www.robthemaritimer.com/start (All my free guides, community links, and ways to work with me — all in one place.)
+          - paragraph [ref=e77]: ⸻
+          - paragraph [ref=e78]: "🎁 FREE RESOURCES • YouTube Kickstart Kit (YTKK): https://www.robthemaritimer.com/youtube-kickstart-kit • YouTube Stats Tracker: https://www.robthemaritimer.com/youtube-stats-tracker • Join CREATORS COVE: https://www.robthemaritimer.com/creators-cove-over-40-youtuber"
+          - paragraph [ref=e79]: ⸻
+          - paragraph [ref=e80]: "🧢 WORK WITH ME • Book a 1-on-1 Zoom Call: https://calendly.com/robthemaritimer/coaching-strategy-call"
+          - paragraph [ref=e81]: ⸻
+          - paragraph [ref=e82]: "🎓 MY COURSES • ✅ Camera Confidence 101: https://www.robthemaritimer.com/camera-confidence-minicourse • ✅ Over 40 YouTube Starter Course: https://www.robthemaritimer.com/over40-youtube-starter-course • ✅ Live Streaming Made Easy: https://www.robthemaritimer.com/live-streaming-made-easy"
+          - paragraph [ref=e83]: ⸻
+          - paragraph [ref=e84]: 🧰 SOFTWARE I USE • Epidemic Sound (music & sound effects) – https://share.epidemicsound.com/6ndir1 — 30 days FREE + 50% off for 2 months • Kajabi (all-in-one business platform) – https://app.kajabi.com/r/pmCPerYj/t/seyylndg — 30-day FREE trial! • Camtasia (video editing) – https://www.robthemaritimer.com/camtasia — 10% OFF! • VidIQ (YouTube growth tools) – https://vidiq.com/robthemaritimer/ — Start today for only $1! • Canva (design & thumbnails) – https://partner.canva.com/4eLZm1 — 30-day FREE trial! • Ecamm Live (live streaming software) – https://www.ecamm.com/mac/ecammlive/?fp_ref=rob12 — 14-day FREE trial!
+          - paragraph [ref=e85]: ⸻
+          - paragraph [ref=e86]: 🎥 EQUIPMENT I USE
+          - paragraph [ref=e87]: DJI Mic – https://amzn.to/3XuQJTt Eucos Selfie Stick – https://amzn.to/3UDzXAw JOBY GorillaPod – https://amzn.to/3B5WlMj Quadlock Case – https://amzn.to/3xUII1o Quadlock Tripod Mount – https://amzn.to/3zPufnO Sony ZV-E10 Camera – https://amzn.to/3zJATvN Sigma 16mm f1.4 Lens – https://amzn.to/3SEDSwL Synco Mic-D2 Shotgun Mic – https://amzn.to/3HIOg0g Focusrite Scarlett 2i2 – https://amzn.to/3SH4qNX Stream Deck – https://amzn.to/4mnixnR Neewer 18” LED Light Panels – https://amzn.to/42fLECj
+          - paragraph [ref=e88]: ⸻
+          - paragraph [ref=e89]: By using the affiliate links above, I may earn a small commission if you decide to make a purchase — at no extra cost to you. Your support helps me continue creating helpful content. 🙏
+          - paragraph [ref=e90]: ⸻
+          - paragraph [ref=e91]: I’m Rob the Maritimer, and I make videos and host live streams to help people over 40 succeed on YouTube. I share everything I’ve learned — from software to storytelling — to make your creator journey easier.
+          - paragraph [ref=e92]: ⚓ Subscribe for weekly videos and live streams!
+          - paragraph [ref=e93]: Talk soon, Rob
+          - paragraph [ref=e94]: "🌍 Website: https://www.robthemaritimer.com 📸 Instagram: https://www.instagram.com/rob_themaritimer"
+          - paragraph [ref=e95]
+      - generic [ref=e96]:
+        - heading "Chapters" [level=3] [ref=e97]
+        - generic [ref=e98]:
+          - generic [ref=e99]:
+            - generic [ref=e100]: 0:00
+            - generic [ref=e101]: Intro
+          - generic [ref=e102]:
+            - generic [ref=e103]: 0:48
+            - generic [ref=e104]: Locate the video
+          - generic [ref=e105]:
+            - generic [ref=e106]: 1:10
+            - generic [ref=e107]: Add chapters
+          - generic [ref=e108]:
+            - generic [ref=e109]: 2:55
+            - generic [ref=e110]: Tips
+          - generic [ref=e111]:
+            - generic [ref=e112]: 4:07
+            - generic [ref=e113]: Outro
+      - generic [ref=e114]:
+        - button "View full transcript" [ref=e115] [cursor=pointer]:
+          - generic [ref=e116]: View full transcript
+          - img [ref=e117]
+        - generic [ref=e120]:
+          - generic [ref=e121]:
+            - generic [ref=e122]: 0:00
+            - generic [ref=e123]: let me show you how to add chapters to
+          - generic [ref=e124]:
+            - generic [ref=e125]: 0:01
+            - generic [ref=e126]: your YouTube videos it's super easy so
+          - generic [ref=e127]:
+            - generic [ref=e128]: 0:04
+            - generic [ref=e129]: let's get into
+          - generic [ref=e130]:
+            - generic [ref=e131]: 0:07
+            - generic [ref=e132]: it so the first thing you need to do is
+          - generic [ref=e133]:
+            - generic [ref=e134]: 0:09
+            - generic [ref=e135]: log into your YouTube studio uh you
+          - generic [ref=e136]:
+            - generic [ref=e137]: 0:12
+            - generic [ref=e138]: typically do that by going to
+          - generic [ref=e139]:
+            - generic [ref=e140]: 0:14
+            - generic [ref=e141]: studio.com or from youtube.com you can
+          - generic [ref=e142]:
+            - generic [ref=e143]: 0:18
+            - generic [ref=e144]: simply go up to your account icon here
+          - generic [ref=e145]:
+            - generic [ref=e146]: 0:20
+            - generic [ref=e147]: in the top right and click on YouTube
+          - generic [ref=e148]:
+            - generic [ref=e149]: 0:23
+            - generic [ref=e150]: Studio here and that'll open up your
+          - generic [ref=e151]:
+            - generic [ref=e152]: 0:25
+            - generic [ref=e153]: YouTube studio so the next thing you
+          - generic [ref=e154]:
+            - generic [ref=e155]: 0:28
+            - generic [ref=e156]: need to do is locate the video you want
+          - generic [ref=e157]:
+            - generic [ref=e158]: 0:30
+            - generic [ref=e159]: to add chapters to uh I'm assuming
+          - generic [ref=e160]:
+            - generic [ref=e161]: 0:33
+            - generic [ref=e162]: you've already uploaded this video If
+          - generic [ref=e163]:
+            - generic [ref=e164]: 0:36
+            - generic [ref=e165]: you haven't and you are uploading a
+          - generic [ref=e166]:
+            - generic [ref=e167]: 0:38
+            - generic [ref=e168]: video you can also add chapters as you
+          - generic [ref=e169]:
+            - generic [ref=e170]: 0:41
+            - generic [ref=e171]: upload it and I can show you that as
+          - generic [ref=e172]:
+            - generic [ref=e173]: 0:43
+            - generic [ref=e174]: well but in this video I'm going to show
+          - generic [ref=e175]:
+            - generic [ref=e176]: 0:46
+            - generic [ref=e177]: you how to do it to a video you've
+          - generic [ref=e178]:
+            - generic [ref=e179]: 0:47
+            - generic [ref=e180]: already uploaded so to locate the video
+          - generic [ref=e181]:
+            - generic [ref=e182]: 0:49
+            - generic [ref=e183]: go over to content
+          - generic [ref=e184]:
+            - generic [ref=e185]: 0:51
+            - generic [ref=e186]: here and then scroll down until you find
+          - generic [ref=e187]:
+            - generic [ref=e188]: 0:55
+            - generic [ref=e189]: the video that you want to add chapters
+          - generic [ref=e190]:
+            - generic [ref=e191]: 0:57
+            - generic [ref=e192]: to uh let's do it to this one here and
+          - generic [ref=e193]:
+            - generic [ref=e194]: 1:00
+            - generic [ref=e195]: then you're going to either click you
+          - generic [ref=e196]:
+            - generic [ref=e197]: 1:01
+            - generic [ref=e198]: can click the icon of the video here or
+          - generic [ref=e199]:
+            - generic [ref=e200]: 1:04
+            - generic [ref=e201]: click the details icon here either one
+          - generic [ref=e202]:
+            - generic [ref=e203]: 1:06
+            - generic [ref=e204]: will take you to the same place so here
+          - generic [ref=e205]:
+            - generic [ref=e206]: 1:08
+            - generic [ref=e207]: are the video details now what you need
+          - generic [ref=e208]:
+            - generic [ref=e209]: 1:11
+            - generic [ref=e210]: to do is go to the description box and
+          - generic [ref=e211]:
+            - generic [ref=e212]: 1:14
+            - generic [ref=e213]: anywhere in the description box it
+          - generic [ref=e214]:
+            - generic [ref=e215]: 1:16
+            - generic [ref=e216]: really doesn't matter where um you're
+          - generic [ref=e217]:
+            - generic [ref=e218]: 1:19
+            - generic [ref=e219]: going to just give yourself some space
+          - generic [ref=e220]:
+            - generic [ref=e221]: 1:22
+            - generic [ref=e222]: and what I like to do is just put a
+          - generic [ref=e223]:
+            - generic [ref=e224]: 1:24
+            - generic [ref=e225]: couple of uh
+          - generic [ref=e226]:
+            - generic [ref=e227]: 1:26
+            - generic [ref=e228]: dividers like this above and below where
+          - generic [ref=e229]:
+            - generic [ref=e230]: 1:30
+            - generic [ref=e231]: I'm going to put them and then right in
+          - generic [ref=e232]:
+            - generic [ref=e233]: 1:33
+            - generic [ref=e234]: here what I'm going to do is I'm going
+          - generic [ref=e235]:
+            - generic [ref=e236]: 1:35
+            - generic [ref=e237]: to type in my YouTube chapter names okay
+          - generic [ref=e238]:
+            - generic [ref=e239]: 1:38
+            - generic [ref=e240]: but not just the names I need to type in
+          - generic [ref=e241]:
+            - generic [ref=e242]: 1:40
+            - generic [ref=e243]: the time code first what I've already
+          - generic [ref=e244]:
+            - generic [ref=e245]: 1:42
+            - generic [ref=e246]: done is I've gone through this video and
+          - generic [ref=e247]:
+            - generic [ref=e248]: 1:45
+            - generic [ref=e249]: I've identified the time codes of where
+          - generic [ref=e250]:
+            - generic [ref=e251]: 1:47
+            - generic [ref=e252]: I want my chapters to start you always
+          - generic [ref=e253]:
+            - generic [ref=e254]: 1:49
+            - generic [ref=e255]: have to start with 0 colon 0 0 uh at the
+          - generic [ref=e256]:
+            - generic [ref=e257]: 1:54
+            - generic [ref=e258]: beginning of the video and then you type
+          - generic [ref=e259]:
+            - generic [ref=e260]: 1:56
+            - generic [ref=e261]: a space and then you type what name you
+          - generic [ref=e262]:
+            - generic [ref=e263]: 1:59
+            - generic [ref=e264]: want that chap to be so in my case I'm
+          - generic [ref=e265]:
+            - generic [ref=e266]: 2:01
+            - generic [ref=e267]: going to go intro at 0 0 you can type in
+          - generic [ref=e268]:
+            - generic [ref=e269]: 2:05
+            - generic [ref=e270]: introduction you can add quotes if you
+          - generic [ref=e271]:
+            - generic [ref=e272]: 2:07
+            - generic [ref=e273]: want to it really doesn't matter you can
+          - generic [ref=e274]:
+            - generic [ref=e275]: 2:09
+            - generic [ref=e276]: also put a a title above it and
+          - generic [ref=e277]:
+            - generic [ref=e278]: 2:11
+            - generic [ref=e279]: say something like chapters something
+          - generic [ref=e280]:
+            - generic [ref=e281]: 2:14
+            - generic [ref=e282]: like that that doesn't matter either
+          - generic [ref=e283]:
+            - generic [ref=e284]: 2:16
+            - generic [ref=e285]: what YouTube is going to look for is
+          - generic [ref=e286]:
+            - generic [ref=e287]: 2:18
+            - generic [ref=e288]: this time code and then the text after
+          - generic [ref=e289]:
+            - generic [ref=e290]: 2:21
+            - generic [ref=e291]: it okay so you want to continue doing
+          - generic [ref=e292]:
+            - generic [ref=e293]: 2:24
+            - generic [ref=e294]: this for each chapter you want to add so
+          - generic [ref=e295]:
+            - generic [ref=e296]: 2:26
+            - generic [ref=e297]: in this case I'm going to have the intro
+          - generic [ref=e298]:
+            - generic [ref=e299]: 2:28
+            - generic [ref=e300]: start at Z Z time and then let's say at
+          - generic [ref=e301]:
+            - generic [ref=e302]: 2:33
+            - generic [ref=e303]: 37 seconds in I'm going to type
+          - generic [ref=e304]:
+            - generic [ref=e305]: 2:38
+            - generic [ref=e306]: in Camtasia rev pop up and then just
+          - generic [ref=e307]:
+            - generic [ref=e308]: 2:43
+            - generic [ref=e309]: continue that way until you've added all
+          - generic [ref=e310]:
+            - generic [ref=e311]: 2:45
+            - generic [ref=e312]: of the chapters that you want to add uh
+          - generic [ref=e313]:
+            - generic [ref=e314]: 2:47
+            - generic [ref=e315]: or in my case what I'm going to do is
+          - generic [ref=e316]:
+            - generic [ref=e317]: 2:49
+            - generic [ref=e318]: just copy them I've already pre-typed
+          - generic [ref=e319]:
+            - generic [ref=e320]: 2:50
+            - generic [ref=e321]: them out and then paste them in here so
+          - generic [ref=e322]:
+            - generic [ref=e323]: 2:53
+            - generic [ref=e324]: that's what it looks like the chapters
+          - generic [ref=e325]:
+            - generic [ref=e326]: 2:55
+            - generic [ref=e327]: all listed you can have as many as you
+          - generic [ref=e328]:
+            - generic [ref=e329]: 2:57
+            - generic [ref=e330]: want a tip though make sure there that
+          - generic [ref=e331]:
+            - generic [ref=e332]: 3:00
+            - generic [ref=e333]: each chapter is at least 10 seconds long
+          - generic [ref=e334]:
+            - generic [ref=e335]: 3:02
+            - generic [ref=e336]: the chapter has to be 10 seconds long or
+          - generic [ref=e337]:
+            - generic [ref=e338]: 3:04
+            - generic [ref=e339]: it won't get recognized okay so once
+          - generic [ref=e340]:
+            - generic [ref=e341]: 3:06
+            - generic [ref=e342]: you've added that into your description
+          - generic [ref=e343]:
+            - generic [ref=e344]: 3:09
+            - generic [ref=e345]: again it doesn't matter where it could
+          - generic [ref=e346]:
+            - generic [ref=e347]: 3:10
+            - generic [ref=e348]: be at the beginning it could be at the
+          - generic [ref=e349]:
+            - generic [ref=e350]: 3:11
+            - generic [ref=e351]: end it's totally up to you uh then
+          - generic [ref=e352]:
+            - generic [ref=e353]: 3:14
+            - generic [ref=e354]: you're just going to go up here and
+          - generic [ref=e355]:
+            - generic [ref=e356]: 3:16
+            - generic [ref=e357]: save the video description and then
+          - generic [ref=e358]:
+            - generic [ref=e359]: 3:19
+            - generic [ref=e360]: that's it that's all there is to it and
+          - generic [ref=e361]:
+            - generic [ref=e362]: 3:21
+            - generic [ref=e363]: we can already check it if we come over
+          - generic [ref=e364]:
+            - generic [ref=e365]: 3:23
+            - generic [ref=e366]: here and just click on this icon here
+          - generic [ref=e367]:
+            - generic [ref=e368]: 3:26
+            - generic [ref=e369]: view on YouTube that'll open up the
+          - generic [ref=e370]:
+            - generic [ref=e371]: 3:28
+            - generic [ref=e372]: video okay and I'll just pause it here
+          - generic [ref=e373]:
+            - generic [ref=e374]: 3:31
+            - generic [ref=e375]: and then you can see if you hover over
+          - generic [ref=e376]:
+            - generic [ref=e377]: 3:34
+            - generic [ref=e378]: these uh the the Playbar at the bottom
+          - generic [ref=e379]:
+            - generic [ref=e380]: 3:36
+            - generic [ref=e381]: you can see the chapter
+          - generic [ref=e382]:
+            - generic [ref=e383]: 3:40
+            - generic [ref=e384]: names see that and you can see the
+          - generic [ref=e385]:
+            - generic [ref=e386]: 3:42
+            - generic [ref=e387]: brakes they've already been applied it's
+          - generic [ref=e388]:
+            - generic [ref=e389]: 3:46
+            - generic [ref=e390]: it's in real time so it's that fast now
+          - generic [ref=e391]:
+            - generic [ref=e392]: 3:49
+            - generic [ref=e393]: if you at the same time if you wanted to
+          - generic [ref=e394]:
+            - generic [ref=e395]: 3:51
+            - generic [ref=e396]: remove them simply delete them or
+          - generic [ref=e397]:
+            - generic [ref=e398]: 3:54
+            - generic [ref=e399]: highlight them like this delete them
+          - generic [ref=e400]:
+            - generic [ref=e401]: 3:57
+            - generic [ref=e402]: click
+          - generic [ref=e403]:
+            - generic [ref=e404]: 3:58
+            - generic [ref=e405]: save now if you want to go back and view
+          - generic [ref=e406]:
+            - generic [ref=e407]: 4:01
+            - generic [ref=e408]: the video again we'll do that here and
+          - generic [ref=e409]:
+            - generic [ref=e410]: 4:05
+            - generic [ref=e411]: the chapters are
+          - generic [ref=e412]:
+            - generic [ref=e413]: 4:06
+            - generic [ref=e414]: gone it's that simple if you found this
+          - generic [ref=e415]:
+            - generic [ref=e416]: 4:09
+            - generic [ref=e417]: helpful hit the like And subscribe
+          - generic [ref=e418]:
+            - generic [ref=e419]: 4:10
+            - generic [ref=e420]: buttons below I help people with YouTube
+          - generic [ref=e421]:
+            - generic [ref=e422]: 4:12
+            - generic [ref=e423]: video editing and content Creation with
+          - generic [ref=e424]:
+            - generic [ref=e425]: 4:14
+            - generic [ref=e426]: videos like this and in my weekly live
+          - generic [ref=e427]:
+            - generic [ref=e428]: 4:17
+            - generic [ref=e429]: stream I go live on this channel every
+          - generic [ref=e430]:
+            - generic [ref=e431]: 4:18
+            - generic [ref=e432]: Tuesday where I do live how-to tutorials
+          - generic [ref=e433]:
+            - generic [ref=e434]: 4:21
+            - generic [ref=e435]: and answer your questions live so if
+          - generic [ref=e436]:
+            - generic [ref=e437]: 4:23
+            - generic [ref=e438]: there's anything else you'd like to
+          - generic [ref=e439]:
+            - generic [ref=e440]: 4:24
+            - generic [ref=e441]: learn about YouTube or content creation
+          - generic [ref=e442]:
+            - generic [ref=e443]: 4:26
+            - generic [ref=e444]: subscribe to this Channel and join me in
+          - generic [ref=e445]:
+            - generic [ref=e446]: 4:28
+            - generic [ref=e447]: my next live stream I'm Rob and I'll see
+          - generic [ref=e448]:
+            - generic [ref=e449]: 4:30
+            - generic [ref=e450]: you in the next video or in a live
+          - generic [ref=e451]:
+            - generic [ref=e452]: 4:32
+            - generic [ref=e453]: stream see you
+          - generic [ref=e454]:
+            - generic [ref=e455]: 4:36
+            - generic [ref=e456]: "[Music]"
+          - generic [ref=e457]:
+            - generic [ref=e458]: 4:40
+            - generic [ref=e459]: soon
+      - generic [ref=e460]:
+        - heading "About the Creator" [level=3] [ref=e461]
+        - generic [ref=e462]:
+          - generic [ref=e464]: T
+          - generic [ref=e465]:
+            - heading "test" [level=4] [ref=e466]
+            - link "View profile →" [ref=e467] [cursor=pointer]:
+              - /url: /author/user-38ec6058
+  - contentinfo [ref=e468]:
+    - generic [ref=e469]:
+      - generic [ref=e470]:
+        - generic [ref=e471]:
+          - heading "UNTOLD" [level=4] [ref=e472]
+          - paragraph [ref=e473]: Exploring ideas that transform the future.
+        - generic [ref=e474]:
+          - paragraph [ref=e475]: Content
+          - list [ref=e476]:
+            - listitem [ref=e477]:
+              - link "Articles" [ref=e478] [cursor=pointer]:
+                - /url: /articles
+            - listitem [ref=e479]:
+              - link "Videos" [ref=e480] [cursor=pointer]:
+                - /url: /videos
+            - listitem [ref=e481]:
+              - link "Podcasts" [ref=e482] [cursor=pointer]:
+                - /url: /podcasts
+            - listitem [ref=e483]:
+              - link "Pills" [ref=e484] [cursor=pointer]:
+                - /url: /pills
+            - listitem [ref=e485]:
+              - link "Courses" [ref=e486] [cursor=pointer]:
+                - /url: /courses
+        - generic [ref=e487]:
+          - paragraph [ref=e488]: Topics
+          - list [ref=e489]:
+            - listitem [ref=e490]:
+              - link "Decoloniality" [ref=e491] [cursor=pointer]:
+                - /url: /tag/decoloniality
+            - listitem [ref=e492]:
+              - link "Sustainability" [ref=e493] [cursor=pointer]:
+                - /url: /tag/sustainability
+            - listitem [ref=e494]:
+              - link "Technology" [ref=e495] [cursor=pointer]:
+                - /url: /tag/technology
+            - listitem [ref=e496]:
+              - link "Education" [ref=e497] [cursor=pointer]:
+                - /url: /tag/education
+            - listitem [ref=e498]:
+              - link "Responsible AI" [ref=e499] [cursor=pointer]:
+                - /url: /tag/responsible-ai
+        - generic [ref=e500]:
+          - paragraph [ref=e501]: Connect
+          - list [ref=e502]:
+            - listitem [ref=e503]:
+              - link "About" [ref=e504] [cursor=pointer]:
+                - /url: /about
+            - listitem [ref=e505]:
+              - link "Contact" [ref=e506] [cursor=pointer]:
+                - /url: /contact
+            - listitem [ref=e507]:
+              - link "Newsletter" [ref=e508] [cursor=pointer]:
+                - /url: /newsletter
+            - listitem [ref=e509]:
+              - link "Become a Creator" [ref=e510] [cursor=pointer]:
+                - /url: /become-creator
+      - generic [ref=e511]: © 2026 UNTOLD. All rights reserved. A Sur Global publication.
+  - button "Open Next.js Dev Tools" [ref=e517] [cursor=pointer]:
+    - img [ref=e518]
+  - alert [ref=e521]

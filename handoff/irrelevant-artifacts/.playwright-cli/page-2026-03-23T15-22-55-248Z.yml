@@ -1,0 +1,416 @@
+- generic [active] [ref=e1]:
+  - banner [ref=e2]:
+    - generic [ref=e3]:
+      - link "UNTOLD" [ref=e4] [cursor=pointer]:
+        - /url: /
+      - navigation [ref=e5]:
+        - link "Articles" [ref=e6] [cursor=pointer]:
+          - /url: /articles
+        - link "Videos" [ref=e7] [cursor=pointer]:
+          - /url: /videos
+        - link "Podcasts" [ref=e8] [cursor=pointer]:
+          - /url: /podcasts
+        - link "Knowledge Pills" [ref=e9] [cursor=pointer]:
+          - /url: /pills
+        - link "Courses" [ref=e10] [cursor=pointer]:
+          - /url: /courses
+      - generic [ref=e11]:
+        - link "Search" [ref=e12] [cursor=pointer]:
+          - /url: /search
+          - img [ref=e13]
+        - button "EN" [ref=e16] [cursor=pointer]:
+          - img [ref=e17]
+          - generic [ref=e21]: EN
+        - generic [ref=e22]: "|"
+        - link "Log in" [ref=e23] [cursor=pointer]:
+          - /url: /auth/login
+  - main [ref=e24]:
+    - generic [ref=e26]:
+      - generic [ref=e27]:
+        - heading "ARTICLES" [level=1] [ref=e28]
+        - paragraph [ref=e29]: In-depth analysis, research and reflections on responsible technology, accessibility and decolonial thinking.
+      - generic [ref=e30]:
+        - generic [ref=e32]:
+          - img
+          - searchbox "Search articles..." [ref=e33]
+        - generic [ref=e34]:
+          - button "All" [ref=e35] [cursor=pointer]
+          - button "Featured" [ref=e36] [cursor=pointer]
+          - button "Trending" [ref=e37] [cursor=pointer]
+          - button "Recent" [ref=e38] [cursor=pointer]
+        - generic [ref=e39]:
+          - button "add chapters to youtube" [ref=e40] [cursor=pointer]
+          - button "add chapters to youtube video" [ref=e41] [cursor=pointer]
+          - button "add chapters to youtube video 2024" [ref=e42] [cursor=pointer]
+          - button "AI Governance" [ref=e43] [cursor=pointer]
+          - button "Artificial Intelligence" [ref=e44] [cursor=pointer]
+          - button "Climate Justice" [ref=e45] [cursor=pointer]
+          - button "content creator" [ref=e46] [cursor=pointer]
+          - button "Data Sovereignty" [ref=e47] [cursor=pointer]
+          - button "Decoloniality" [ref=e48] [cursor=pointer]
+          - button "Deforestation" [ref=e49] [cursor=pointer]
+          - button "Digital Rights" [ref=e50] [cursor=pointer]
+          - button "Education" [ref=e51] [cursor=pointer]
+          - button "Feminism" [ref=e52] [cursor=pointer]
+          - button "How to add chapters to YouTube video" [ref=e53] [cursor=pointer]
+          - button "How to add timestamp in YouTube video" [ref=e54] [cursor=pointer]
+          - button "Indigenous Rights" [ref=e55] [cursor=pointer]
+          - button "Media Freedom" [ref=e56] [cursor=pointer]
+          - button "Police" [ref=e57] [cursor=pointer]
+          - button "Surveillance" [ref=e58] [cursor=pointer]
+          - button "Urban Planning" [ref=e59] [cursor=pointer]
+          - button "youtube" [ref=e60] [cursor=pointer]
+          - button "youtube chapters" [ref=e61] [cursor=pointer]
+    - generic [ref=e62]:
+      - generic [ref=e63]:
+        - article [ref=e64]:
+          - generic [ref=e65]:
+            - link "How Police Surveillance Tech Is Targeting Black Communities" [ref=e66] [cursor=pointer]:
+              - /url: /articles/how-police-surveillance-tech-is-targeting-black-communities
+              - img "How Police Surveillance Tech Is Targeting Black Communities" [ref=e67]
+            - link "Surveillance" [ref=e69] [cursor=pointer]:
+              - /url: /tag/surveillance
+            - generic "Featured" [ref=e70]: ★
+          - generic [ref=e71]:
+            - heading "How Police Surveillance Tech Is Targeting Black Communities" [level=3] [ref=e72]:
+              - link "How Police Surveillance Tech Is Targeting Black Communities" [ref=e73] [cursor=pointer]:
+                - /url: /articles/how-police-surveillance-tech-is-targeting-black-communities
+            - paragraph [ref=e74]: Facial recognition systems deployed across Lagos, Nairobi and Cape Town raise urgent questions about consent and the right to be…
+          - generic [ref=e75]:
+            - generic [ref=e77]:
+              - img "Fatima Al-Hassan" [ref=e78]
+              - link "Fatima Al-Hassan" [ref=e80] [cursor=pointer]:
+                - /url: /author/fatima-al-hassan
+            - generic [ref=e81]:
+              - generic [ref=e82]:
+                - img [ref=e83]
+                - text: "47"
+              - button "Sign in to bookmark" [disabled] [ref=e85]:
+                - img [ref=e86]
+        - article [ref=e88]:
+          - generic [ref=e89]:
+            - 'link "The AI Colonialism Problem: Who Builds, Who Benefits" [ref=e90] [cursor=pointer]':
+              - /url: /articles/the-ai-colonialism-problem-who-builds-who-benefits
+              - 'img "The AI Colonialism Problem: Who Builds, Who Benefits" [ref=e91]'
+            - link "Artificial Intelligence" [ref=e93] [cursor=pointer]:
+              - /url: /tag/artificial-intelligence
+            - generic "Featured" [ref=e94]: ★
+          - generic [ref=e95]:
+            - 'heading "The AI Colonialism Problem: Who Builds, Who Benefits" [level=3] [ref=e96]':
+              - 'link "The AI Colonialism Problem: Who Builds, Who Benefits" [ref=e97] [cursor=pointer]':
+                - /url: /articles/the-ai-colonialism-problem-who-builds-who-benefits
+            - paragraph [ref=e98]: "As AI reshapes global knowledge, researchers from India, Brazil and Nigeria ask: whose reality gets encoded into these systems?"
+          - generic [ref=e99]:
+            - generic [ref=e101]:
+              - img "Priya Sharma" [ref=e102]
+              - link "Priya Sharma" [ref=e104] [cursor=pointer]:
+                - /url: /author/priya-sharma
+            - generic [ref=e105]:
+              - generic [ref=e106]:
+                - img [ref=e107]
+                - text: "83"
+              - button "Sign in to bookmark" [disabled] [ref=e109]:
+                - img [ref=e110]
+        - article [ref=e112]:
+          - generic [ref=e113]:
+            - 'link "Indigenous Data Sovereignty: Reclaiming the Narrative" [ref=e114] [cursor=pointer]':
+              - /url: /articles/indigenous-data-sovereignty-reclaiming-the-narrative
+              - 'img "Indigenous Data Sovereignty: Reclaiming the Narrative" [ref=e115]'
+            - link "Indigenous Rights" [ref=e117] [cursor=pointer]:
+              - /url: /tag/indigenous-rights
+            - generic "Featured" [ref=e118]: ★
+          - generic [ref=e119]:
+            - 'heading "Indigenous Data Sovereignty: Reclaiming the Narrative" [level=3] [ref=e120]':
+              - 'link "Indigenous Data Sovereignty: Reclaiming the Narrative" [ref=e121] [cursor=pointer]':
+                - /url: /articles/indigenous-data-sovereignty-reclaiming-the-narrative
+            - paragraph [ref=e122]: Indigenous communities worldwide are building data governance frameworks to keep knowledge about their lands and peoples under t…
+          - generic [ref=e123]:
+            - generic [ref=e125]:
+              - generic [ref=e126]: T
+              - link "test" [ref=e128] [cursor=pointer]:
+                - /url: /author/user-38ec6058
+            - generic [ref=e129]:
+              - generic [ref=e130]:
+                - img [ref=e131]
+                - text: "63"
+              - button "Sign in to bookmark" [disabled] [ref=e133]:
+                - img [ref=e134]
+        - article [ref=e136]:
+          - generic [ref=e137]:
+            - link "Mother Tongue Matters" [ref=e138] [cursor=pointer]:
+              - /url: /articles/mother-tongue-matters
+              - img "Mother Tongue Matters" [ref=e139]
+            - link "Education" [ref=e141] [cursor=pointer]:
+              - /url: /tag/education
+            - generic "Featured" [ref=e142]: ★
+          - generic [ref=e143]:
+            - heading "Mother Tongue Matters" [level=3] [ref=e144]:
+              - link "Mother Tongue Matters" [ref=e145] [cursor=pointer]:
+                - /url: /articles/mother-tongue-matters
+            - paragraph [ref=e146]: Research consistently shows that children learn better in their first language. Yet most African education systems still use Eur…
+          - generic [ref=e147]:
+            - generic [ref=e149]:
+              - img "Nkechi Osei" [ref=e150]
+              - link "Nkechi Osei" [ref=e152] [cursor=pointer]:
+                - /url: /author/nkechi-osei
+            - generic [ref=e153]:
+              - generic [ref=e154]:
+                - img [ref=e155]
+                - text: "267"
+              - button "Sign in to bookmark" [disabled] [ref=e157]:
+                - img [ref=e158]
+        - article [ref=e160]:
+          - generic [ref=e161]:
+            - link "AI Governance Without the South" [ref=e162] [cursor=pointer]:
+              - /url: /articles/ai-governance-without-the-south
+              - img "AI Governance Without the South" [ref=e163]
+            - link "AI Governance" [ref=e165] [cursor=pointer]:
+              - /url: /tag/ai-governance
+            - generic "Featured" [ref=e166]: ★
+          - generic [ref=e167]:
+            - heading "AI Governance Without the South" [level=3] [ref=e168]:
+              - link "AI Governance Without the South" [ref=e169] [cursor=pointer]:
+                - /url: /articles/ai-governance-without-the-south
+            - paragraph [ref=e170]: The EU AI Act, the US Executive Order, the G7 AI Code of Conduct. Major AI governance frameworks are being written without the v…
+          - generic [ref=e171]:
+            - generic [ref=e173]:
+              - img "Siddharth Rao" [ref=e174]
+              - link "Siddharth Rao" [ref=e176] [cursor=pointer]:
+                - /url: /author/siddharth-rao
+            - generic [ref=e177]:
+              - generic [ref=e178]:
+                - img [ref=e179]
+                - text: "621"
+              - button "Sign in to bookmark" [disabled] [ref=e181]:
+                - img [ref=e182]
+        - article [ref=e184]:
+          - generic [ref=e185]:
+            - link "The Amazon Is Not Empty" [ref=e186] [cursor=pointer]:
+              - /url: /articles/the-amazon-is-not-empty
+              - img "The Amazon Is Not Empty" [ref=e187]
+            - link "Climate Justice" [ref=e189] [cursor=pointer]:
+              - /url: /tag/climate-justice
+            - generic "Featured" [ref=e190]: ★
+          - generic [ref=e191]:
+            - heading "The Amazon Is Not Empty" [level=3] [ref=e192]:
+              - link "The Amazon Is Not Empty" [ref=e193] [cursor=pointer]:
+                - /url: /articles/the-amazon-is-not-empty
+            - paragraph [ref=e194]: The fiction of terra nullius — empty land ripe for development — is alive and well in contemporary environmental policy. Indigen…
+          - generic [ref=e195]:
+            - generic [ref=e197]:
+              - img "Valentina Morales" [ref=e198]
+              - link "Valentina Morales" [ref=e200] [cursor=pointer]:
+                - /url: /author/valentina-morales
+            - generic [ref=e201]:
+              - generic [ref=e202]:
+                - img [ref=e203]
+                - text: "512"
+              - button "Sign in to bookmark" [disabled] [ref=e205]:
+                - img [ref=e206]
+        - article [ref=e208]:
+          - generic [ref=e209]:
+            - link [ref=e210] [cursor=pointer]:
+              - /url: /articles/ohoh-mn3avq3j
+            - generic [ref=e213]: Article
+          - heading "ohoh" [level=3] [ref=e215]:
+            - link "ohoh" [ref=e216] [cursor=pointer]:
+              - /url: /articles/ohoh-mn3avq3j
+          - generic [ref=e217]:
+            - generic [ref=e218]:
+              - generic [ref=e219]:
+                - generic [ref=e220]: "N"
+                - link "Noah Laux" [ref=e222] [cursor=pointer]:
+                  - /url: /author/noah-laux
+              - generic [ref=e223]:
+                - img [ref=e224]
+                - generic [ref=e227]: 1 min read
+            - generic [ref=e228]:
+              - generic [ref=e229]:
+                - img [ref=e230]
+                - text: "0"
+              - button "Sign in to bookmark" [disabled] [ref=e232]:
+                - img [ref=e233]
+        - article [ref=e235]:
+          - generic [ref=e236]:
+            - link "90 days, still no tomatoes" [ref=e237] [cursor=pointer]:
+              - /url: /articles/sdfsdfsdf-mn1w7w9a
+              - img "90 days, still no tomatoes" [ref=e238]
+            - generic [ref=e240]: Article
+          - generic [ref=e241]:
+            - heading "90 days, still no tomatoes" [level=3] [ref=e242]:
+              - link "90 days, still no tomatoes" [ref=e243] [cursor=pointer]:
+                - /url: /articles/sdfsdfsdf-mn1w7w9a
+            - paragraph [ref=e244]: Waiting for an eternity
+          - generic [ref=e245]:
+            - generic [ref=e246]:
+              - generic [ref=e247]:
+                - generic [ref=e248]: "N"
+                - link "Noah Laux" [ref=e250] [cursor=pointer]:
+                  - /url: /author/noah-laux
+              - generic [ref=e251]:
+                - img [ref=e252]
+                - generic [ref=e255]: 1 min read
+            - generic [ref=e256]:
+              - generic [ref=e257]:
+                - img [ref=e258]
+                - text: "0"
+              - button "Sign in to bookmark" [disabled] [ref=e260]:
+                - img [ref=e261]
+        - article [ref=e263]:
+          - generic [ref=e264]:
+            - link "Marilyn for ever" [ref=e265] [cursor=pointer]:
+              - /url: /articles/my-title-mn1mfh35
+              - img "Marilyn for ever" [ref=e266]
+            - generic [ref=e268]: Article
+          - generic [ref=e269]:
+            - heading "Marilyn for ever" [level=3] [ref=e270]:
+              - link "Marilyn for ever" [ref=e271] [cursor=pointer]:
+                - /url: /articles/my-title-mn1mfh35
+            - paragraph [ref=e272]: In grammar, an article is any of a small set of words or affixes (such as a, an, and the in English) used with nouns to limit or…
+          - generic [ref=e273]:
+            - generic [ref=e274]:
+              - generic [ref=e275]:
+                - generic [ref=e276]: "N"
+                - link "Noah Laux" [ref=e278] [cursor=pointer]:
+                  - /url: /author/noah-laux
+              - generic [ref=e279]:
+                - img [ref=e280]
+                - generic [ref=e283]: 1 min read
+            - generic [ref=e284]:
+              - generic [ref=e285]:
+                - img [ref=e286]
+                - text: "1"
+              - button "Sign in to bookmark" [disabled] [ref=e288]:
+                - img [ref=e289]
+        - article [ref=e291]:
+          - generic [ref=e292]:
+            - 'link "Climate Migration: The Untold Stories from the Sahel" [ref=e293] [cursor=pointer]':
+              - /url: /articles/climate-migration-the-untold-stories-from-the-sahel
+              - 'img "Climate Migration: The Untold Stories from the Sahel" [ref=e294]'
+            - link "Climate Justice" [ref=e296] [cursor=pointer]:
+              - /url: /tag/climate-justice
+          - generic [ref=e297]:
+            - 'heading "Climate Migration: The Untold Stories from the Sahel" [level=3] [ref=e298]':
+              - 'link "Climate Migration: The Untold Stories from the Sahel" [ref=e299] [cursor=pointer]':
+                - /url: /articles/climate-migration-the-untold-stories-from-the-sahel
+            - paragraph [ref=e300]: "Millions in Niger, Mali and Chad face an impossible choice: stay on land that can no longer sustain them, or make the perilous j…"
+          - generic [ref=e301]:
+            - generic [ref=e303]:
+              - img "Amara Diallo" [ref=e304]
+              - link "Amara Diallo" [ref=e306] [cursor=pointer]:
+                - /url: /author/amara-diallo
+            - generic [ref=e307]:
+              - generic [ref=e308]:
+                - img [ref=e309]
+                - text: "29"
+              - button "Sign in to bookmark" [disabled] [ref=e311]:
+                - img [ref=e312]
+        - article [ref=e314]:
+          - generic [ref=e315]:
+            - 'link "Amazonia at the Tipping Point: Deforestation and Resistance" [ref=e316] [cursor=pointer]':
+              - /url: /articles/amazonia-at-the-tipping-point-deforestation-and-resistance
+              - 'img "Amazonia at the Tipping Point: Deforestation and Resistance" [ref=e317]'
+            - link "Deforestation" [ref=e319] [cursor=pointer]:
+              - /url: /tag/deforestation
+          - generic [ref=e320]:
+            - 'heading "Amazonia at the Tipping Point: Deforestation and Resistance" [level=3] [ref=e321]':
+              - 'link "Amazonia at the Tipping Point: Deforestation and Resistance" [ref=e322] [cursor=pointer]':
+                - /url: /articles/amazonia-at-the-tipping-point-deforestation-and-resistance
+            - paragraph [ref=e323]: Scientists warn the Amazon is near a point of no return. On the ground, Indigenous monitors and forest defenders are the last li…
+          - generic [ref=e324]:
+            - generic [ref=e326]:
+              - img "Diego Vargas" [ref=e327]
+              - link "Diego Vargas" [ref=e329] [cursor=pointer]:
+                - /url: /author/diego-vargas
+            - generic [ref=e330]:
+              - generic [ref=e331]:
+                - img [ref=e332]
+                - text: "55"
+              - button "Sign in to bookmark" [disabled] [ref=e334]:
+                - img [ref=e335]
+        - article [ref=e337]:
+          - generic [ref=e338]:
+            - link "The Surveillance State Comes for the Press" [ref=e339] [cursor=pointer]:
+              - /url: /articles/the-surveillance-state-comes-for-the-press
+              - img "The Surveillance State Comes for the Press" [ref=e340]
+            - link "Media Freedom" [ref=e342] [cursor=pointer]:
+              - /url: /tag/media-freedom
+          - generic [ref=e343]:
+            - heading "The Surveillance State Comes for the Press" [level=3] [ref=e344]:
+              - link "The Surveillance State Comes for the Press" [ref=e345] [cursor=pointer]:
+                - /url: /articles/the-surveillance-state-comes-for-the-press
+            - paragraph [ref=e346]: In country after country, anti-terrorism laws and cybercrime legislation are being used not against terrorists or criminals — bu…
+          - generic [ref=e347]:
+            - generic [ref=e349]:
+              - img "Leila Hassan" [ref=e350]
+              - link "Leila Hassan" [ref=e352] [cursor=pointer]:
+                - /url: /author/leila-hassan
+            - generic [ref=e353]:
+              - generic [ref=e354]:
+                - img [ref=e355]
+                - text: "892"
+              - button "Sign in to bookmark" [disabled] [ref=e357]:
+                - img [ref=e358]
+      - link "Load more articles" [ref=e361] [cursor=pointer]:
+        - /url: "?limit=24"
+  - contentinfo [ref=e362]:
+    - generic [ref=e363]:
+      - generic [ref=e364]:
+        - generic [ref=e365]:
+          - heading "UNTOLD" [level=4] [ref=e366]
+          - paragraph [ref=e367]: Exploring ideas that transform the future.
+        - generic [ref=e368]:
+          - paragraph [ref=e369]: Content
+          - list [ref=e370]:
+            - listitem [ref=e371]:
+              - link "Articles" [ref=e372] [cursor=pointer]:
+                - /url: /articles
+            - listitem [ref=e373]:
+              - link "Videos" [ref=e374] [cursor=pointer]:
+                - /url: /videos
+            - listitem [ref=e375]:
+              - link "Podcasts" [ref=e376] [cursor=pointer]:
+                - /url: /podcasts
+            - listitem [ref=e377]:
+              - link "Pills" [ref=e378] [cursor=pointer]:
+                - /url: /pills
+            - listitem [ref=e379]:
+              - link "Courses" [ref=e380] [cursor=pointer]:
+                - /url: /courses
+        - generic [ref=e381]:
+          - paragraph [ref=e382]: Topics
+          - list [ref=e383]:
+            - listitem [ref=e384]:
+              - link "Decoloniality" [ref=e385] [cursor=pointer]:
+                - /url: /tag/decoloniality
+            - listitem [ref=e386]:
+              - link "Sustainability" [ref=e387] [cursor=pointer]:
+                - /url: /tag/sustainability
+            - listitem [ref=e388]:
+              - link "Technology" [ref=e389] [cursor=pointer]:
+                - /url: /tag/technology
+            - listitem [ref=e390]:
+              - link "Education" [ref=e391] [cursor=pointer]:
+                - /url: /tag/education
+            - listitem [ref=e392]:
+              - link "Responsible AI" [ref=e393] [cursor=pointer]:
+                - /url: /tag/responsible-ai
+        - generic [ref=e394]:
+          - paragraph [ref=e395]: Connect
+          - list [ref=e396]:
+            - listitem [ref=e397]:
+              - link "About" [ref=e398] [cursor=pointer]:
+                - /url: /about
+            - listitem [ref=e399]:
+              - link "Contact" [ref=e400] [cursor=pointer]:
+                - /url: /contact
+            - listitem [ref=e401]:
+              - link "Newsletter" [ref=e402] [cursor=pointer]:
+                - /url: /newsletter
+            - listitem [ref=e403]:
+              - link "Become a Creator" [ref=e404] [cursor=pointer]:
+                - /url: /become-creator
+      - generic [ref=e405]: © 2026 UNTOLD. All rights reserved. A Sur Global publication.
+  - button "Open Next.js Dev Tools" [ref=e411] [cursor=pointer]:
+    - img [ref=e412]
+  - alert [ref=e415]

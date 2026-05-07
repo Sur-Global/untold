@@ -1,5 +1,11 @@
 import { describe, it, expect } from "vitest";
-import { slugify, readTime, cn, getEditPath } from "@/lib/utils";
+import {
+  slugify,
+  readTime,
+  cn,
+  getEditPath,
+  getPublicContentPath,
+} from "@/lib/utils";
 
 describe("slugify", () => {
   it("converts title to kebab-case slug", () => {
@@ -52,5 +58,17 @@ describe("getEditPath", () => {
   });
   it("returns course edit path", () => {
     expect(getEditPath("course", "abc")).toBe("/dashboard/courses/abc/edit");
+  });
+});
+
+describe("getPublicContentPath", () => {
+  it("returns public path by type", () => {
+    expect(getPublicContentPath("article", "my-post")).toBe(
+      "/articles/my-post",
+    );
+    expect(getPublicContentPath("video", "v1")).toBe("/videos/v1");
+    expect(getPublicContentPath("podcast", "p1")).toBe("/podcasts/p1");
+    expect(getPublicContentPath("pill", "pill1")).toBe("/pills/pill1");
+    expect(getPublicContentPath("course", "c1")).toBe("/courses/c1");
   });
 });

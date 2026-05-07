@@ -31,3 +31,8 @@ const TYPE_SEGMENT: Record<ContentType, string> = {
 export function getEditPath(type: ContentType, id: string): string {
   return `/dashboard/${TYPE_SEGMENT[type]}/${id}/edit`;
 }
+
+/** Public URL path segment for a content item (locale prefix added by next-intl `Link`). */
+export function getPublicContentPath(type: ContentType, slug: string): string {
+  return `/${TYPE_SEGMENT[type]}/${slug}`;
+}

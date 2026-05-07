@@ -1,0 +1,148 @@
+- generic [active] [ref=e1]:
+  - banner [ref=e2]:
+    - generic [ref=e3]:
+      - link "UNTOLD" [ref=e4] [cursor=pointer]:
+        - /url: /
+      - navigation [ref=e5]:
+        - link "Articles" [ref=e6] [cursor=pointer]:
+          - /url: /articles
+        - link "Videos" [ref=e7] [cursor=pointer]:
+          - /url: /videos
+        - link "Podcasts" [ref=e8] [cursor=pointer]:
+          - /url: /podcasts
+        - link "Knowledge Pills" [ref=e9] [cursor=pointer]:
+          - /url: /pills
+        - link "Courses" [ref=e10] [cursor=pointer]:
+          - /url: /courses
+      - generic [ref=e11]:
+        - link "Search" [ref=e12] [cursor=pointer]:
+          - /url: /search
+          - img [ref=e13]
+        - button "EN" [ref=e16] [cursor=pointer]:
+          - img [ref=e17]
+          - generic [ref=e21]: EN
+        - generic [ref=e22]:
+          - generic [ref=e23]: "|"
+          - link "Dashboard" [ref=e24] [cursor=pointer]:
+            - /url: /dashboard
+          - generic [ref=e25]: "|"
+          - link "Create" [ref=e26] [cursor=pointer]:
+            - /url: /create
+          - generic [ref=e27]: "|"
+          - button "Log out" [ref=e29] [cursor=pointer]
+  - main [ref=e30]:
+    - generic [ref=e31]:
+      - heading "My Articles" [level=1] [ref=e32]
+      - link "New Article" [ref=e33] [cursor=pointer]:
+        - /url: /create
+    - list [ref=e34]:
+      - listitem [ref=e35]:
+        - generic [ref=e36]:
+          - paragraph [ref=e37]: "Indigenous Data Sovereignty: Reclaiming the Narrative"
+          - paragraph [ref=e38]: Mar 22, 2026
+        - generic [ref=e39]: published
+        - generic [ref=e40]:
+          - link "Edit article" [ref=e41] [cursor=pointer]:
+            - /url: /dashboard/articles/c2000001-0000-0000-0000-000000000003/edit
+          - button "Unpublish" [ref=e43] [cursor=pointer]
+          - button "Delete article" [ref=e44] [cursor=pointer]
+      - listitem [ref=e45]:
+        - generic [ref=e46]:
+          - paragraph [ref=e47]: Test Article from Playwright
+          - paragraph [ref=e48]: Mar 22, 2026
+        - generic [ref=e49]: draft
+        - generic [ref=e50]:
+          - link "Edit article" [ref=e51] [cursor=pointer]:
+            - /url: /dashboard/articles/780d6938-fd18-48ce-a55f-25181f24de9a/edit
+          - button "Publish" [ref=e53] [cursor=pointer]
+          - button "Delete article" [ref=e54] [cursor=pointer]
+      - listitem [ref=e55]:
+        - generic [ref=e56]:
+          - paragraph [ref=e57]: (Untitled)
+          - paragraph [ref=e58]: Mar 22, 2026
+        - generic [ref=e59]: draft
+        - generic [ref=e60]:
+          - link "Edit article" [ref=e61] [cursor=pointer]:
+            - /url: /dashboard/articles/01c05785-360a-4b1a-8957-d3c840ed2e09/edit
+          - button "Publish" [ref=e63] [cursor=pointer]
+          - button "Delete article" [ref=e64] [cursor=pointer]
+      - listitem [ref=e65]:
+        - generic [ref=e66]:
+          - paragraph [ref=e67]: (Untitled)
+          - paragraph [ref=e68]: Mar 22, 2026
+        - generic [ref=e69]: draft
+        - generic [ref=e70]:
+          - link "Edit article" [ref=e71] [cursor=pointer]:
+            - /url: /dashboard/articles/09165af3-d173-43b8-8c2c-bcc003f46c34/edit
+          - button "Publish" [ref=e73] [cursor=pointer]
+          - button "Delete article" [ref=e74] [cursor=pointer]
+      - listitem [ref=e75]:
+        - generic [ref=e76]:
+          - paragraph [ref=e77]: Test Article from Playwright
+          - paragraph [ref=e78]: Mar 22, 2026
+        - generic [ref=e79]: draft
+        - generic [ref=e80]:
+          - link "Edit article" [ref=e81] [cursor=pointer]:
+            - /url: /dashboard/articles/e974b313-ca5e-488d-b948-cdd4fe10a8d5/edit
+          - button "Publish" [ref=e83] [cursor=pointer]
+          - button "Delete article" [ref=e84] [cursor=pointer]
+  - contentinfo [ref=e85]:
+    - generic [ref=e86]:
+      - generic [ref=e87]:
+        - generic [ref=e88]:
+          - heading "UNTOLD" [level=4] [ref=e89]
+          - paragraph [ref=e90]: Exploring ideas that transform the future.
+        - generic [ref=e91]:
+          - paragraph [ref=e92]: Content
+          - list [ref=e93]:
+            - listitem [ref=e94]:
+              - link "Articles" [ref=e95] [cursor=pointer]:
+                - /url: /articles
+            - listitem [ref=e96]:
+              - link "Videos" [ref=e97] [cursor=pointer]:
+                - /url: /videos
+            - listitem [ref=e98]:
+              - link "Podcasts" [ref=e99] [cursor=pointer]:
+                - /url: /podcasts
+            - listitem [ref=e100]:
+              - link "Pills" [ref=e101] [cursor=pointer]:
+                - /url: /pills
+            - listitem [ref=e102]:
+              - link "Courses" [ref=e103] [cursor=pointer]:
+                - /url: /courses
+        - generic [ref=e104]:
+          - paragraph [ref=e105]: Topics
+          - list [ref=e106]:
+            - listitem [ref=e107]:
+              - link "Decoloniality" [ref=e108] [cursor=pointer]:
+                - /url: /tag/decoloniality
+            - listitem [ref=e109]:
+              - link "Sustainability" [ref=e110] [cursor=pointer]:
+                - /url: /tag/sustainability
+            - listitem [ref=e111]:
+              - link "Technology" [ref=e112] [cursor=pointer]:
+                - /url: /tag/technology
+            - listitem [ref=e113]:
+              - link "Education" [ref=e114] [cursor=pointer]:
+                - /url: /tag/education
+            - listitem [ref=e115]:
+              - link "Responsible AI" [ref=e116] [cursor=pointer]:
+                - /url: /tag/responsible-ai
+        - generic [ref=e117]:
+          - paragraph [ref=e118]: Connect
+          - list [ref=e119]:
+            - listitem [ref=e120]:
+              - link "About" [ref=e121] [cursor=pointer]:
+                - /url: /about
+            - listitem [ref=e122]:
+              - link "Contact" [ref=e123] [cursor=pointer]:
+                - /url: /contact
+            - listitem [ref=e124]:
+              - link "Newsletter" [ref=e125] [cursor=pointer]:
+                - /url: /newsletter
+            - listitem [ref=e126]:
+              - link "Become a Creator" [ref=e127] [cursor=pointer]:
+                - /url: /become-creator
+      - generic [ref=e128]: © 2026 UNTOLD. All rights reserved. A Sur Global publication.
+  - button "Open Next.js Dev Tools" [ref=e134] [cursor=pointer]:
+    - img [ref=e135]

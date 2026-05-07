@@ -1,0 +1,215 @@
+- generic [active] [ref=e1]:
+  - banner [ref=e2]:
+    - generic [ref=e3]:
+      - link "UNTOLD" [ref=e4] [cursor=pointer]:
+        - /url: /
+      - navigation [ref=e5]:
+        - link "Articles" [ref=e6] [cursor=pointer]:
+          - /url: /articles
+        - link "Videos" [ref=e7] [cursor=pointer]:
+          - /url: /videos
+        - link "Podcasts" [ref=e8] [cursor=pointer]:
+          - /url: /podcasts
+        - link "Knowledge Pills" [ref=e9] [cursor=pointer]:
+          - /url: /pills
+        - link "Courses" [ref=e10] [cursor=pointer]:
+          - /url: /courses
+    - generic [ref=e11]:
+      - button "EN" [ref=e12]
+      - link "Log in" [ref=e13] [cursor=pointer]:
+        - /url: /auth/login
+      - link "Sign up" [ref=e14] [cursor=pointer]:
+        - /url: /auth/signup
+  - main [ref=e15]:
+    - generic [ref=e17]:
+      - generic [ref=e18]:
+        - paragraph [ref=e19]: Views from the Global South
+        - heading "UNTOLD" [level=1] [ref=e20]
+        - paragraph [ref=e21]: Stories that don't make the front page.
+        - generic [ref=e22]:
+          - link "Start Reading" [ref=e23] [cursor=pointer]:
+            - /url: /articles
+          - link "Explore Content" [ref=e24] [cursor=pointer]:
+            - /url: /articles
+      - link "Marilyn for ever ★ Featured Marilyn for ever Noah Laux" [ref=e25] [cursor=pointer]:
+        - /url: /articles/my-title-mn1mfh35
+        - img "Marilyn for ever" [ref=e26]
+        - generic [ref=e27]:
+          - paragraph [ref=e28]: ★ Featured
+          - heading "Marilyn for ever" [level=3] [ref=e29]
+          - paragraph [ref=e30]: Noah Laux
+    - generic [ref=e31]:
+      - generic [ref=e32]:
+        - generic [ref=e33]:
+          - heading "Featured Articles" [level=2] [ref=e34]
+          - link "View all →" [ref=e35] [cursor=pointer]:
+            - /url: /articles
+        - generic [ref=e36]:
+          - article [ref=e37]:
+            - generic [ref=e38]:
+              - link "90 days, still no tomatoes" [ref=e39] [cursor=pointer]:
+                - /url: /articles/sdfsdfsdf-mn1w7w9a
+                - img "90 days, still no tomatoes" [ref=e40]
+              - generic [ref=e41]: Article
+            - generic [ref=e42]:
+              - heading "90 days, still no tomatoes" [level=3] [ref=e43]:
+                - link "90 days, still no tomatoes" [ref=e44] [cursor=pointer]:
+                  - /url: /articles/sdfsdfsdf-mn1w7w9a
+              - paragraph [ref=e45]: Waiting for an eternity
+              - generic [ref=e46]:
+                - generic [ref=e47]: "N"
+                - link "Noah Laux" [ref=e48] [cursor=pointer]:
+                  - /url: /author/noah-laux
+                - generic [ref=e49]: 1 min read
+              - generic [ref=e50]:
+                - generic [ref=e51]: ♥ 0
+                - button "Save" [disabled] [ref=e52]:
+                  - img [ref=e53]
+                  - generic [ref=e55]: Save
+          - article [ref=e56]:
+            - generic [ref=e57]:
+              - link "Mother Tongue Matters" [ref=e58] [cursor=pointer]:
+                - /url: /articles/mother-tongue-matters
+                - img "Mother Tongue Matters" [ref=e59]
+              - generic [ref=e60]: Article
+              - generic [ref=e61]: Education
+            - generic [ref=e62]:
+              - heading "Mother Tongue Matters" [level=3] [ref=e63]:
+                - link "Mother Tongue Matters" [ref=e64] [cursor=pointer]:
+                  - /url: /articles/mother-tongue-matters
+              - paragraph [ref=e65]: Research consistently shows that children learn better in their first language. Yet most African education systems still use European languages as primary media of instruction.
+              - generic [ref=e66]:
+                - img "Nkechi Osei" [ref=e67]
+                - link "Nkechi Osei" [ref=e68] [cursor=pointer]:
+                  - /url: /author/nkechi-osei
+              - generic [ref=e69]:
+                - generic [ref=e70]: ♥ 267
+                - button "Save" [disabled] [ref=e71]:
+                  - img [ref=e72]
+                  - generic [ref=e74]: Save
+          - article [ref=e75]:
+            - generic [ref=e76]:
+              - link "The Surveillance State Comes for the Press" [ref=e77] [cursor=pointer]:
+                - /url: /articles/the-surveillance-state-comes-for-the-press
+                - img "The Surveillance State Comes for the Press" [ref=e78]
+              - generic [ref=e79]: Article
+              - generic [ref=e80]: Media Freedom
+            - generic [ref=e81]:
+              - heading "The Surveillance State Comes for the Press" [level=3] [ref=e82]:
+                - link "The Surveillance State Comes for the Press" [ref=e83] [cursor=pointer]:
+                  - /url: /articles/the-surveillance-state-comes-for-the-press
+              - paragraph [ref=e84]: In country after country, anti-terrorism laws and cybercrime legislation are being used not against terrorists or criminals — but against journalists.
+              - generic [ref=e85]:
+                - img "Leila Hassan" [ref=e86]
+                - link "Leila Hassan" [ref=e87] [cursor=pointer]:
+                  - /url: /author/leila-hassan
+              - generic [ref=e88]:
+                - generic [ref=e89]: ♥ 892
+                - button "Save" [disabled] [ref=e90]:
+                  - img [ref=e91]
+                  - generic [ref=e93]: Save
+      - generic [ref=e94]:
+        - generic [ref=e95]:
+          - heading "Videos" [level=2] [ref=e96]
+          - link "View all →" [ref=e97] [cursor=pointer]:
+            - /url: /videos
+        - article [ref=e99]:
+          - generic [ref=e100]:
+            - generic "Featured" [ref=e102]: ★
+            - generic [ref=e103]: Video
+          - generic [ref=e104]:
+            - heading "Marylin" [level=3] [ref=e105]:
+              - link "Marylin" [ref=e106] [cursor=pointer]:
+                - /url: /videos/marylin-mn1w9hk4
+            - generic [ref=e107]:
+              - generic [ref=e108]: "N"
+              - link "Noah Laux" [ref=e109] [cursor=pointer]:
+                - /url: /author/noah-laux
+            - generic [ref=e110]:
+              - generic [ref=e111]: ♥ 0
+              - button "Save" [disabled] [ref=e112]:
+                - img [ref=e113]
+                - generic [ref=e115]: Save
+      - generic [ref=e116]:
+        - generic [ref=e117]:
+          - heading "Podcasts" [level=2] [ref=e118]
+          - link "View all →" [ref=e119] [cursor=pointer]:
+            - /url: /podcasts
+        - article [ref=e121]:
+          - generic [ref=e122]:
+            - generic "Featured" [ref=e124]: ★
+            - generic [ref=e125]: Podcast
+          - generic [ref=e126]:
+            - heading "Test Podcast Episode" [level=3] [ref=e127]:
+              - link "Test Podcast Episode" [ref=e128] [cursor=pointer]:
+                - /url: /podcasts/test-podcast-episode-mn1msf7o
+            - generic [ref=e129]:
+              - generic [ref=e130]: T
+              - link "test" [ref=e131] [cursor=pointer]:
+                - /url: /author/user-38ec6058
+            - generic [ref=e132]:
+              - generic [ref=e133]: ♥ 0
+              - button "Save" [disabled] [ref=e134]:
+                - img [ref=e135]
+                - generic [ref=e137]: Save
+  - contentinfo [ref=e138]:
+    - generic [ref=e139]:
+      - generic [ref=e140]:
+        - generic [ref=e141]:
+          - heading "UNTOLD" [level=4] [ref=e142]
+          - paragraph [ref=e143]: Exploring ideas that transform the future.
+        - generic [ref=e144]:
+          - paragraph [ref=e145]: Content
+          - list [ref=e146]:
+            - listitem [ref=e147]:
+              - link "Articles" [ref=e148] [cursor=pointer]:
+                - /url: /articles
+            - listitem [ref=e149]:
+              - link "Videos" [ref=e150] [cursor=pointer]:
+                - /url: /videos
+            - listitem [ref=e151]:
+              - link "Podcasts" [ref=e152] [cursor=pointer]:
+                - /url: /podcasts
+            - listitem [ref=e153]:
+              - link "Pills" [ref=e154] [cursor=pointer]:
+                - /url: /pills
+            - listitem [ref=e155]:
+              - link "Courses" [ref=e156] [cursor=pointer]:
+                - /url: /courses
+        - generic [ref=e157]:
+          - paragraph [ref=e158]: Topics
+          - list [ref=e159]:
+            - listitem [ref=e160]:
+              - link "Decoloniality" [ref=e161] [cursor=pointer]:
+                - /url: /tag/decoloniality
+            - listitem [ref=e162]:
+              - link "Sustainability" [ref=e163] [cursor=pointer]:
+                - /url: /tag/sustainability
+            - listitem [ref=e164]:
+              - link "Technology" [ref=e165] [cursor=pointer]:
+                - /url: /tag/technology
+            - listitem [ref=e166]:
+              - link "Education" [ref=e167] [cursor=pointer]:
+                - /url: /tag/education
+            - listitem [ref=e168]:
+              - link "Responsible AI" [ref=e169] [cursor=pointer]:
+                - /url: /tag/responsible-ai
+        - generic [ref=e170]:
+          - paragraph [ref=e171]: Connect
+          - list [ref=e172]:
+            - listitem [ref=e173]:
+              - link "About" [ref=e174] [cursor=pointer]:
+                - /url: /about
+            - listitem [ref=e175]:
+              - link "Contact" [ref=e176] [cursor=pointer]:
+                - /url: /contact
+            - listitem [ref=e177]:
+              - link "Newsletter" [ref=e178] [cursor=pointer]:
+                - /url: /newsletter
+            - listitem [ref=e179]:
+              - link "Become a Creator" [ref=e180] [cursor=pointer]:
+                - /url: /become-creator
+      - generic [ref=e181]: © 2026 UNTOLD. All rights reserved. A Sur Global publication.
+  - button "Open Next.js Dev Tools" [ref=e187] [cursor=pointer]:
+    - img [ref=e188]
+  - alert [ref=e191]

@@ -1,0 +1,129 @@
+- generic [active] [ref=e1]:
+  - button "Open Next.js Dev Tools" [ref=e101] [cursor=pointer]:
+    - img [ref=e102]
+  - alert [ref=e105]
+  - banner [ref=e106]:
+    - generic [ref=e107]:
+      - link "UNTOLD" [ref=e108] [cursor=pointer]:
+        - /url: /
+      - navigation [ref=e109]:
+        - link "Articles" [ref=e110] [cursor=pointer]:
+          - /url: /articles
+        - link "Videos" [ref=e111] [cursor=pointer]:
+          - /url: /videos
+        - link "Podcasts" [ref=e112] [cursor=pointer]:
+          - /url: /podcasts
+        - link "Knowledge Pills" [ref=e113] [cursor=pointer]:
+          - /url: /pills
+        - link "Courses" [ref=e114] [cursor=pointer]:
+          - /url: /courses
+      - generic [ref=e115]:
+        - button "EN" [ref=e116]
+        - generic [ref=e117]:
+          - link "Dashboard" [ref=e118] [cursor=pointer]:
+            - /url: /dashboard
+          - link "Create" [ref=e119] [cursor=pointer]:
+            - /url: /create
+  - main [ref=e120]:
+    - link "← Create" [ref=e121] [cursor=pointer]:
+      - /url: /create
+    - heading "New article" [level=1] [ref=e122]
+    - generic [ref=e123]:
+      - generic [ref=e124]:
+        - generic [ref=e125]: Title *
+        - textbox "Title *" [ref=e126]:
+          - /placeholder: Title
+      - generic [ref=e127]:
+        - generic [ref=e128]: Excerpt
+        - textbox "Excerpt" [ref=e129]:
+          - /placeholder: Short summary shown in listings (optional)
+      - generic [ref=e130]:
+        - generic [ref=e131]: Cover image URL
+        - textbox "Cover image URL" [ref=e132]:
+          - /placeholder: Cover image URL (optional)
+      - generic [ref=e133]:
+        - generic [ref=e134]: Body
+        - generic [ref=e135]:
+          - generic [ref=e136]:
+            - generic [ref=e137]:
+              - button "B" [ref=e138]
+              - button "I" [ref=e139]
+              - button "U" [ref=e140]
+              - button "S" [ref=e141]
+              - generic [ref=e142]: "|"
+            - generic [ref=e143]:
+              - button "H1" [ref=e144]
+              - button "H2" [ref=e145]
+              - button "H3" [ref=e146]
+              - generic [ref=e147]: "|"
+            - generic [ref=e148]:
+              - button "❝" [ref=e149]
+              - 'button "`" [ref=e150]'
+              - 'button "{ }" [ref=e151]'
+              - generic [ref=e152]: "|"
+            - generic [ref=e153]:
+              - button "•" [ref=e154]
+              - button "1." [ref=e155]
+            - generic [ref=e156]: "|"
+            - button "Link" [ref=e157]
+          - textbox [ref=e159]:
+            - paragraph [ref=e160]
+      - button "Save as draft" [ref=e161]
+  - contentinfo [ref=e162]:
+    - generic [ref=e163]:
+      - generic [ref=e164]:
+        - generic [ref=e165]:
+          - heading "UNTOLD" [level=4] [ref=e166]
+          - paragraph [ref=e167]: Exploring ideas that transform the future.
+        - generic [ref=e168]:
+          - paragraph [ref=e169]: Content
+          - list [ref=e170]:
+            - listitem [ref=e171]:
+              - link "Articles" [ref=e172] [cursor=pointer]:
+                - /url: /articles
+            - listitem [ref=e173]:
+              - link "Videos" [ref=e174] [cursor=pointer]:
+                - /url: /videos
+            - listitem [ref=e175]:
+              - link "Podcasts" [ref=e176] [cursor=pointer]:
+                - /url: /podcasts
+            - listitem [ref=e177]:
+              - link "Pills" [ref=e178] [cursor=pointer]:
+                - /url: /pills
+            - listitem [ref=e179]:
+              - link "Courses" [ref=e180] [cursor=pointer]:
+                - /url: /courses
+        - generic [ref=e181]:
+          - paragraph [ref=e182]: Topics
+          - list [ref=e183]:
+            - listitem [ref=e184]:
+              - link "Decoloniality" [ref=e185] [cursor=pointer]:
+                - /url: /tag/decoloniality
+            - listitem [ref=e186]:
+              - link "Sustainability" [ref=e187] [cursor=pointer]:
+                - /url: /tag/sustainability
+            - listitem [ref=e188]:
+              - link "Technology" [ref=e189] [cursor=pointer]:
+                - /url: /tag/technology
+            - listitem [ref=e190]:
+              - link "Education" [ref=e191] [cursor=pointer]:
+                - /url: /tag/education
+            - listitem [ref=e192]:
+              - link "Responsible AI" [ref=e193] [cursor=pointer]:
+                - /url: /tag/responsible-ai
+        - generic [ref=e194]:
+          - paragraph [ref=e195]: Connect
+          - list [ref=e196]:
+            - listitem [ref=e197]:
+              - link "About" [ref=e198] [cursor=pointer]:
+                - /url: /about
+            - listitem [ref=e199]:
+              - link "Contact" [ref=e200] [cursor=pointer]:
+                - /url: /contact
+            - listitem [ref=e201]:
+              - link "Newsletter" [ref=e202] [cursor=pointer]:
+                - /url: /newsletter
+            - listitem [ref=e203]:
+              - link "Become a Creator" [ref=e204] [cursor=pointer]:
+                - /url: /become-creator
+      - generic [ref=e205]: © 2026 UNTOLD. All rights reserved. A Sur Global publication.

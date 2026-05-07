@@ -1,0 +1,93 @@
+- generic [active] [ref=e1]:
+  - button "Open Next.js Dev Tools" [ref=e30] [cursor=pointer]:
+    - img [ref=e31]
+  - alert [ref=e34]
+  - banner [ref=e35]:
+    - generic [ref=e36]:
+      - link "UNTOLD" [ref=e37] [cursor=pointer]:
+        - /url: /
+      - navigation [ref=e38]:
+        - link "Articles" [ref=e39] [cursor=pointer]:
+          - /url: /articles
+        - link "Videos" [ref=e40] [cursor=pointer]:
+          - /url: /videos
+        - link "Podcasts" [ref=e41] [cursor=pointer]:
+          - /url: /podcasts
+        - link "Knowledge Pills" [ref=e42] [cursor=pointer]:
+          - /url: /pills
+        - link "Courses" [ref=e43] [cursor=pointer]:
+          - /url: /courses
+      - generic [ref=e44]:
+        - button "EN" [ref=e45]
+        - generic [ref=e46]:
+          - link "Dashboard" [ref=e47] [cursor=pointer]:
+            - /url: /dashboard
+          - link "Create" [ref=e48] [cursor=pointer]:
+            - /url: /create
+  - main [ref=e49]:
+    - generic [ref=e50]:
+      - heading "UNTOLD" [level=1] [ref=e51]
+      - paragraph [ref=e52]: Views from the Global South
+    - generic [ref=e53]:
+      - generic [ref=e55]:
+        - heading "Featured Articles" [level=2] [ref=e56]
+        - paragraph [ref=e57]: The latest stories
+      - paragraph [ref=e58]: No articles yet.
+  - contentinfo [ref=e59]:
+    - generic [ref=e60]:
+      - generic [ref=e61]:
+        - generic [ref=e62]:
+          - heading "UNTOLD" [level=4] [ref=e63]
+          - paragraph [ref=e64]: Exploring ideas that transform the future.
+        - generic [ref=e65]:
+          - paragraph [ref=e66]: Content
+          - list [ref=e67]:
+            - listitem [ref=e68]:
+              - link "Articles" [ref=e69] [cursor=pointer]:
+                - /url: /articles
+            - listitem [ref=e70]:
+              - link "Videos" [ref=e71] [cursor=pointer]:
+                - /url: /videos
+            - listitem [ref=e72]:
+              - link "Podcasts" [ref=e73] [cursor=pointer]:
+                - /url: /podcasts
+            - listitem [ref=e74]:
+              - link "Pills" [ref=e75] [cursor=pointer]:
+                - /url: /pills
+            - listitem [ref=e76]:
+              - link "Courses" [ref=e77] [cursor=pointer]:
+                - /url: /courses
+        - generic [ref=e78]:
+          - paragraph [ref=e79]: Topics
+          - list [ref=e80]:
+            - listitem [ref=e81]:
+              - link "Decoloniality" [ref=e82] [cursor=pointer]:
+                - /url: /tag/decoloniality
+            - listitem [ref=e83]:
+              - link "Sustainability" [ref=e84] [cursor=pointer]:
+                - /url: /tag/sustainability
+            - listitem [ref=e85]:
+              - link "Technology" [ref=e86] [cursor=pointer]:
+                - /url: /tag/technology
+            - listitem [ref=e87]:
+              - link "Education" [ref=e88] [cursor=pointer]:
+                - /url: /tag/education
+            - listitem [ref=e89]:
+              - link "Responsible AI" [ref=e90] [cursor=pointer]:
+                - /url: /tag/responsible-ai
+        - generic [ref=e91]:
+          - paragraph [ref=e92]: Connect
+          - list [ref=e93]:
+            - listitem [ref=e94]:
+              - link "About" [ref=e95] [cursor=pointer]:
+                - /url: /about
+            - listitem [ref=e96]:
+              - link "Contact" [ref=e97] [cursor=pointer]:
+                - /url: /contact
+            - listitem [ref=e98]:
+              - link "Newsletter" [ref=e99] [cursor=pointer]:
+                - /url: /newsletter
+            - listitem [ref=e100]:
+              - link "Become a Creator" [ref=e101] [cursor=pointer]:
+                - /url: /become-creator
+      - generic [ref=e102]: © 2026 UNTOLD. All rights reserved. A Sur Global publication.

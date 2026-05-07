@@ -1,6 +1,12 @@
 import { createClient } from '@/lib/supabase/server'
+import { Link } from '@/i18n/navigation'
+import { getPublicContentPath } from '@/lib/utils'
+import type { ContentType } from '@/lib/supabase/types'
 import { TranslateButton } from '@/components/admin/TranslateButton'
 import { SUPPORTED_LOCALES } from '@/lib/deepl'
+import { AdminPageHeader } from '@/components/admin/AdminPageHeader'
+import { AdminPanel } from '@/components/admin/AdminPanel'
+import { adminTableHead, adminTableRow } from '@/components/admin/admin-ui'
 
 export default async function TranslationsPage() {
   const supabase = await createClient()
@@ -10,6 +16,7 @@ export default async function TranslationsPage() {
     .select(`
       id,
       type,
+      slug,
       published_at,
       content_translations (
         locale,
@@ -22,74 +29,107 @@ export default async function TranslationsPage() {
     .limit(50)
 
   return (
-    <div className="space-y-4">
-      <h1 className="font-mono text-xl uppercase tracking-wide">Translations</h1>
-      <p className="text-sm text-muted-foreground">
-        Showing up to 50 most recently published items.{' '}
-        <span className="text-green-600">✓ green</span> = auto-translated,{' '}
-        <span className="text-blue-600">✓ blue</span> = manual,{' '}
-        <span className="text-red-600">✗</span> = missing.
-      </p>
-      <div className="overflow-x-auto">
-        <table className="w-full text-sm border-collapse">
-          <thead>
-            <tr className="border-b text-left font-mono text-xs uppercase text-muted-foreground">
-              <th className="py-2 pr-4">Title</th>
-              <th className="py-2 pr-4">Published</th>
-              {['en', ...SUPPORTED_LOCALES].map((locale) => (
-                <th key={locale} className="py-2 pr-2 uppercase">{locale}</th>
-              ))}
-            </tr>
-          </thead>
-          <tbody>
-            {(items ?? []).map((item: any) => {
-              const translations: Array<{ locale: string; is_auto_translated: boolean; title?: string }> =
-                item.content_translations ?? []
-              const translationMap = new Map(
-                translations.map((t) => [t.locale, t.is_auto_translated])
-              )
-              const enRow = translations.find((t) => t.locale === 'en')
+    <div className="space-y-6">
+      <AdminPageHeader
+        title="Translations"
+        description={
+          <>
+            Up to 50 most recently published items.{' '}
+            <span className="text-secondary">Green ✓</span> = auto-translated,{' '}
+            <span className="text-blue-700 dark:text-blue-400">Blue ✓</span> = manual,{' '}
+            <span className="text-destructive">✗</span> = missing.
+          </>
+        }
+      />
 
-              return (
-                <tr key={item.id} className="border-b hover:bg-muted/30">
-                  <td className="py-2 pr-4 max-w-xs truncate font-medium">
-                    {enRow?.title ?? item.id}
-                    {' '}
-                    <span className="rounded bg-muted px-1.5 py-0.5 text-xs font-mono">
-                      {item.type}
-                    </span>
-                  </td>
-                  <td className="py-2 pr-4 text-muted-foreground">
-                    {item.published_at
-                      ? new Date(item.published_at).toLocaleDateString()
-                      : '—'}
-                  </td>
-                  {['en', ...SUPPORTED_LOCALES].map((locale) => {
-                    const isAutoTranslated = translationMap.get(locale)
-                    const exists = translationMap.has(locale)
-                    return (
-                      <td key={locale} className="py-2 pr-2">
-                        {exists ? (
-                          <span className={isAutoTranslated === false ? 'text-blue-600' : 'text-green-600'}>
-                            ✓
-                          </span>
-                        ) : locale === 'en' ? (
-                          <span className="text-muted-foreground">—</span>
-                        ) : (
-                          <TranslateButton contentId={item.id} locale={locale} />
-                        )}
-                      </td>
-                    )
-                  })}
-                </tr>
-              )
-            })}
-          </tbody>
-        </table>
-        {(!items || items.length === 0) && (
-          <p className="py-8 text-center text-muted-foreground">No published content yet.</p>
-        )}
-      </div>
+      <AdminPanel>
+        <div className="overflow-x-auto">
+          <table className="w-full min-w-[640px] border-collapse text-sm">
+            <thead>
+              <tr className={adminTableHead}>
+                <th className="py-3 pl-6 pr-4">Title</th>
+                <th className="py-3 pr-4">Published</th>
+                {['en', ...SUPPORTED_LOCALES].map((locale) => (
+                  <th key={locale} className="py-3 pr-2 text-center font-mono uppercase">
+                    {locale}
+                  </th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {(items ?? []).map((item: any) => {
+                const translations: Array<{
+                  locale: string
+                  is_auto_translated: boolean
+                  title?: string
+                }> = item.content_translations ?? []
+                const translationMap = new Map(
+                  translations.map((t) => [t.locale, t.is_auto_translated]),
+                )
+                const enRow = translations.find((t) => t.locale === 'en')
+                const titleText = enRow?.title ?? item.id
+                const publicPath =
+                  item.slug && item.type
+                    ? getPublicContentPath(item.type as ContentType, item.slug as string)
+                    : null
+
+                return (
+                  <tr key={item.id} className={adminTableRow}>
+                    <td className="max-w-xs truncate py-3 pl-6 pr-4 font-medium">
+                      {publicPath ? (
+                        <Link
+                          href={publicPath}
+                          className="text-primary underline-offset-4 hover:underline"
+                        >
+                          {titleText}
+                        </Link>
+                      ) : (
+                        titleText
+                      )}{' '}
+                      <span className="ml-1 rounded-md bg-muted px-2 py-0.5 text-xs font-mono text-muted-foreground">
+                        {item.type}
+                      </span>
+                    </td>
+                    <td className="py-3 pr-4 text-muted-foreground">
+                      {item.published_at
+                        ? new Date(item.published_at).toLocaleDateString()
+                        : '—'}
+                    </td>
+                    {['en', ...SUPPORTED_LOCALES].map((locale) => {
+                      const isAutoTranslated = translationMap.get(locale)
+                      const exists = translationMap.has(locale)
+                      return (
+                        <td key={locale} className="py-3 pr-2 text-center">
+                          {exists ? (
+                            <span
+                              className={
+                                isAutoTranslated === false
+                                  ? 'text-blue-700 dark:text-blue-400'
+                                  : 'text-secondary'
+                              }
+                            >
+                              ✓
+                            </span>
+                          ) : locale === 'en' ? (
+                            <span className="text-muted-foreground">—</span>
+                          ) : (
+                            <TranslateButton contentId={item.id} locale={locale} />
+                          )}
+                        </td>
+                      )
+                    })}
+                  </tr>
+                )
+              })}
+            </tbody>
+          </table>
+          {(!items || items.length === 0) && (
+            <p className="py-10 text-center text-sm text-muted-foreground">
+              No published content yet.
+            </p>
+          )}
+        </div>
+      </AdminPanel>
     </div>
   )
 }

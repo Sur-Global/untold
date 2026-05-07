@@ -11,10 +11,14 @@ import {
 import { LocaleSwitcher } from './LocaleSwitcher'
 import { signOut } from '@/lib/actions/auth'
 import type { UserRole } from '@/lib/supabase/types'
+import type { CmsNavLink } from '@/lib/platform-settings/types'
 
 interface NavigationProps {
   isLoggedIn: boolean
   userRole: UserRole | null
+  /** From platform settings; when empty, default type-based links + translations are used */
+  cmsNavItems?: CmsNavLink[]
+  showSearchInHeader?: boolean
 }
 
 const NAV_LINKS = [
@@ -51,9 +55,20 @@ const divider = (
   <span style={{ color: 'rgba(245,241,232,0.2)', fontSize: 12, userSelect: 'none' }}>|</span>
 )
 
-export function Navigation({ isLoggedIn, userRole }: NavigationProps) {
+export function Navigation({
+  isLoggedIn,
+  userRole,
+  cmsNavItems = [],
+  showSearchInHeader = true,
+}: NavigationProps) {
   const t = useTranslations('nav')
   const pathname = usePathname()
+  const useCmsNav = cmsNavItems.length > 0
+
+  function linkActive(href: string) {
+    if (href === '/') return pathname === '/' || pathname === ''
+    return pathname === href || pathname.startsWith(`${href}/`)
+  }
 
   return (
     <header
@@ -87,41 +102,65 @@ export function Navigation({ isLoggedIn, userRole }: NavigationProps) {
 
         {/* Desktop: nav links (centered, flex-1) */}
         <nav className="hidden md:flex items-center gap-5 flex-1 justify-center">
-          {NAV_LINKS.map(({ key, href }) => {
-            const active = pathname.startsWith(href)
-            return (
-              <Link
-                key={key}
-                href={href}
-                style={{
-                  fontFamily: 'Inter, sans-serif',
-                  fontSize: 13,
-                  color: '#fff',
-                  textDecoration: 'none',
-                  paddingBottom: 2,
-                  borderBottom: active ? '2px solid #a0522d' : '2px solid transparent',
-                  opacity: active ? 1 : 0.8,
-                  transition: 'opacity 0.15s',
-                  whiteSpace: 'nowrap',
-                }}
-              >
-                {t(key)}
-              </Link>
-            )
-          })}
+          {useCmsNav
+            ? cmsNavItems.map(({ label, href }) => {
+                const active = linkActive(href)
+                return (
+                  <Link
+                    key={`${href}-${label}`}
+                    href={href}
+                    style={{
+                      fontFamily: 'Inter, sans-serif',
+                      fontSize: 13,
+                      color: '#fff',
+                      textDecoration: 'none',
+                      paddingBottom: 2,
+                      borderBottom: active ? '2px solid #a0522d' : '2px solid transparent',
+                      opacity: active ? 1 : 0.8,
+                      transition: 'opacity 0.15s',
+                      whiteSpace: 'nowrap',
+                    }}
+                  >
+                    {label}
+                  </Link>
+                )
+              })
+            : NAV_LINKS.map(({ key, href }) => {
+                const active = pathname.startsWith(href)
+                return (
+                  <Link
+                    key={key}
+                    href={href}
+                    style={{
+                      fontFamily: 'Inter, sans-serif',
+                      fontSize: 13,
+                      color: '#fff',
+                      textDecoration: 'none',
+                      paddingBottom: 2,
+                      borderBottom: active ? '2px solid #a0522d' : '2px solid transparent',
+                      opacity: active ? 1 : 0.8,
+                      transition: 'opacity 0.15s',
+                      whiteSpace: 'nowrap',
+                    }}
+                  >
+                    {t(key)}
+                  </Link>
+                )
+              })}
         </nav>
 
         {/* Desktop: search + auth (right-aligned) */}
         <div className="hidden md:flex items-center gap-3 shrink-0">
-          {/* Search */}
-          <Link
-            href="/search"
-            aria-label={t('search')}
-            className="flex items-center justify-center rounded-lg transition-colors hover:bg-white/10"
-            style={{ width: 32, height: 32, color: 'rgba(245,241,232,0.7)' }}
-          >
-            <SearchIcon />
-          </Link>
+          {showSearchInHeader && (
+            <Link
+              href="/search"
+              aria-label={t('search')}
+              className="flex items-center justify-center rounded-lg transition-colors hover:bg-white/10"
+              style={{ width: 32, height: 32, color: 'rgba(245,241,232,0.7)' }}
+            >
+              <SearchIcon />
+            </Link>
+          )}
 
           {/* Locale + auth zone */}
           <LocaleSwitcher variant="compact" />
@@ -201,10 +240,38 @@ export function Navigation({ isLoggedIn, userRole }: NavigationProps) {
             <SheetContent side="right" style={{ background: '#2c2420', width: 288, padding: '0' }}>
               <nav className="flex flex-col h-full px-6 pt-14 pb-8" style={{ fontFamily: 'Inter, sans-serif' }}>
                 <div className="flex flex-col gap-1 flex-1">
-                  {NAV_LINKS.map(({ key, href }) => (
+                  {useCmsNav
+                    ? cmsNavItems.map(({ label, href }) => (
+                        <Link
+                          key={`${href}-${label}`}
+                          href={href}
+                          className="py-3.5 text-sm transition-opacity hover:opacity-70"
+                          style={{
+                            color: '#F5F1E8',
+                            textDecoration: 'none',
+                            borderBottom: '1px solid rgba(139,69,19,0.15)',
+                          }}
+                        >
+                          {label}
+                        </Link>
+                      ))
+                    : NAV_LINKS.map(({ key, href }) => (
+                        <Link
+                          key={key}
+                          href={href}
+                          className="py-3.5 text-sm transition-opacity hover:opacity-70"
+                          style={{
+                            color: '#F5F1E8',
+                            textDecoration: 'none',
+                            borderBottom: '1px solid rgba(139,69,19,0.15)',
+                          }}
+                        >
+                          {t(key)}
+                        </Link>
+                      ))}
+                  {showSearchInHeader && (
                     <Link
-                      key={key}
-                      href={href}
+                      href="/search"
                       className="py-3.5 text-sm transition-opacity hover:opacity-70"
                       style={{
                         color: '#F5F1E8',
@@ -212,16 +279,9 @@ export function Navigation({ isLoggedIn, userRole }: NavigationProps) {
                         borderBottom: '1px solid rgba(139,69,19,0.15)',
                       }}
                     >
-                      {t(key)}
+                      {t('search')}
                     </Link>
-                  ))}
-                  <Link
-                    href="/search"
-                    className="py-3.5 text-sm transition-opacity hover:opacity-70"
-                    style={{ color: '#F5F1E8', textDecoration: 'none', borderBottom: '1px solid rgba(139,69,19,0.15)' }}
-                  >
-                    {t('search')}
-                  </Link>
+                  )}
                 </div>
 
                 <div className="flex flex-col gap-3 pt-6">

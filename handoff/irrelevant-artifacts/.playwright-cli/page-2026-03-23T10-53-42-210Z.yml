@@ -1,0 +1,173 @@
+- generic [active] [ref=e1]:
+  - banner [ref=e2]:
+    - generic [ref=e3]:
+      - link "UNTOLD" [ref=e4] [cursor=pointer]:
+        - /url: /
+      - navigation [ref=e5]:
+        - link "Articles" [ref=e6] [cursor=pointer]:
+          - /url: /articles
+        - link "Videos" [ref=e7] [cursor=pointer]:
+          - /url: /videos
+        - link "Podcasts" [ref=e8] [cursor=pointer]:
+          - /url: /podcasts
+        - link "Knowledge Pills" [ref=e9] [cursor=pointer]:
+          - /url: /pills
+        - link "Courses" [ref=e10] [cursor=pointer]:
+          - /url: /courses
+      - generic [ref=e11]:
+        - link "Search" [ref=e12] [cursor=pointer]:
+          - /url: /search
+          - img [ref=e13]
+        - button "EN" [ref=e16] [cursor=pointer]:
+          - img [ref=e17]
+          - generic [ref=e21]: EN
+        - generic [ref=e22]:
+          - generic [ref=e23]: "|"
+          - link "Dashboard" [ref=e24] [cursor=pointer]:
+            - /url: /dashboard
+          - generic [ref=e25]: "|"
+          - link "Create" [ref=e26] [cursor=pointer]:
+            - /url: /create
+          - generic [ref=e27]: "|"
+          - button "Log out" [ref=e29] [cursor=pointer]
+  - main [ref=e30]:
+    - generic [ref=e31]:
+      - link "Back" [ref=e32] [cursor=pointer]:
+        - /url: /videos
+        - img [ref=e33]
+        - text: Back
+      - link "Indigenous Rights" [ref=e36] [cursor=pointer]:
+        - /url: /tag/indigenous-rights
+        - img [ref=e37]
+        - text: Indigenous Rights
+      - 'heading "Decolonising the Museum: Who Owns Cultural Heritage?" [level=1] [ref=e39]'
+      - generic [ref=e40]:
+        - link "T test" [ref=e41] [cursor=pointer]:
+          - /url: /author/user-38ec6058
+          - generic [ref=e43]: T
+          - paragraph [ref=e45]: test
+        - generic [ref=e46]:
+          - generic [ref=e47]:
+            - img [ref=e48]
+            - generic [ref=e51]: March 10, 2026
+          - generic [ref=e52]:
+            - img [ref=e53]
+            - generic [ref=e56]: 31:07
+      - iframe [ref=e59]:
+        - generic [active] [ref=f3e1]:
+          - generic "YouTube Video Player" [ref=f3e3]
+          - generic [ref=f3e5]:
+            - generic:
+              - generic:
+                - button "Play video" [ref=f3e10] [cursor=pointer]:
+                  - generic [ref=f3e13]:
+                    - img
+                - button "Hide player controls" [ref=f3e14] [cursor=pointer]
+                - generic [ref=f3e16]:
+                  - generic [ref=f3e21]:
+                    - generic [ref=f3e22]:
+                      - link "Rick Astley - Never Gonna Give You Up (Official Video) (4K Remaster)" [ref=f3e23] [cursor=pointer]:
+                        - /url: https://www.youtube.com/watch?v=dQw4w9WgXcQ
+                      - link "Rick Astley" [ref=f3e24] [cursor=pointer]:
+                        - /url: /channel/UCuAXFkgsw1L7xaCfnd5JJOw
+                        - generic [ref=f3e25]: Rick Astley
+                    - generic [ref=f3e26]:
+                      - button "thumbnail-image" [ref=f3e27] [cursor=pointer]:
+                        - img "thumbnail-image" [ref=f3e28]
+                      - generic [ref=f3e30]:
+                        - generic: Rick Astley
+                        - generic: 4.47M subscribers
+                  - generic [ref=f3e31]:
+                    - button "Share" [ref=f3e34] [cursor=pointer]:
+                      - generic [ref=f3e38]:
+                        - img
+                    - link "Watch on YouTube" [ref=f3e45] [cursor=pointer]:
+                      - /url: https://www.youtube.com/watch?v=dQw4w9WgXcQ
+                      - generic [ref=f3e48]:
+                        - text: Watch on
+                        - img [ref=f3e50]:
+                          - generic [ref=f3e52]:
+                            - img
+      - generic [ref=e60]:
+        - button "44" [ref=e61] [cursor=pointer]:
+          - img [ref=e62]
+          - generic [ref=e64]: "44"
+        - button "Bookmark" [ref=e65] [cursor=pointer]:
+          - img [ref=e66]
+        - button "Share article" [ref=e68] [cursor=pointer]:
+          - img [ref=e69]
+          - text: Share
+      - generic [ref=e72]:
+        - heading "Description" [level=3] [ref=e73]
+        - generic [ref=e75]:
+          - paragraph [ref=e76]: As major European museums return some African artefacts, what does real restitution look like? A conversation with curators, activists, and communities of origin.
+          - paragraph [ref=e77]
+      - generic [ref=e78]:
+        - heading "About the Creator" [level=3] [ref=e79]
+        - generic [ref=e80]:
+          - generic [ref=e82]: T
+          - generic [ref=e83]:
+            - heading "test" [level=4] [ref=e84]
+            - link "View profile →" [ref=e85] [cursor=pointer]:
+              - /url: /author/user-38ec6058
+  - contentinfo [ref=e86]:
+    - generic [ref=e87]:
+      - generic [ref=e88]:
+        - generic [ref=e89]:
+          - heading "UNTOLD" [level=4] [ref=e90]
+          - paragraph [ref=e91]: Exploring ideas that transform the future.
+        - generic [ref=e92]:
+          - paragraph [ref=e93]: Content
+          - list [ref=e94]:
+            - listitem [ref=e95]:
+              - link "Articles" [ref=e96] [cursor=pointer]:
+                - /url: /articles
+            - listitem [ref=e97]:
+              - link "Videos" [ref=e98] [cursor=pointer]:
+                - /url: /videos
+            - listitem [ref=e99]:
+              - link "Podcasts" [ref=e100] [cursor=pointer]:
+                - /url: /podcasts
+            - listitem [ref=e101]:
+              - link "Pills" [ref=e102] [cursor=pointer]:
+                - /url: /pills
+            - listitem [ref=e103]:
+              - link "Courses" [ref=e104] [cursor=pointer]:
+                - /url: /courses
+        - generic [ref=e105]:
+          - paragraph [ref=e106]: Topics
+          - list [ref=e107]:
+            - listitem [ref=e108]:
+              - link "Decoloniality" [ref=e109] [cursor=pointer]:
+                - /url: /tag/decoloniality
+            - listitem [ref=e110]:
+              - link "Sustainability" [ref=e111] [cursor=pointer]:
+                - /url: /tag/sustainability
+            - listitem [ref=e112]:
+              - link "Technology" [ref=e113] [cursor=pointer]:
+                - /url: /tag/technology
+            - listitem [ref=e114]:
+              - link "Education" [ref=e115] [cursor=pointer]:
+                - /url: /tag/education
+            - listitem [ref=e116]:
+              - link "Responsible AI" [ref=e117] [cursor=pointer]:
+                - /url: /tag/responsible-ai
+        - generic [ref=e118]:
+          - paragraph [ref=e119]: Connect
+          - list [ref=e120]:
+            - listitem [ref=e121]:
+              - link "About" [ref=e122] [cursor=pointer]:
+                - /url: /about
+            - listitem [ref=e123]:
+              - link "Contact" [ref=e124] [cursor=pointer]:
+                - /url: /contact
+            - listitem [ref=e125]:
+              - link "Newsletter" [ref=e126] [cursor=pointer]:
+                - /url: /newsletter
+            - listitem [ref=e127]:
+              - link "Become a Creator" [ref=e128] [cursor=pointer]:
+                - /url: /become-creator
+      - generic [ref=e129]: © 2026 UNTOLD. All rights reserved. A Sur Global publication.
+  - button "Open Next.js Dev Tools" [ref=e135] [cursor=pointer]:
+    - img [ref=e136]
+  - alert [ref=e139]

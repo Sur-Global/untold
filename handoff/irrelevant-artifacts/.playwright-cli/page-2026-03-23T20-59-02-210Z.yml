@@ -1,0 +1,21 @@
+- main [ref=e2]:
+  - generic [ref=e3]:
+    - generic [ref=e5]: Velkommen tilbage
+    - generic [ref=e6]:
+      - generic [ref=e7]:
+        - button "Fortsæt med Google" [ref=e9] [cursor=pointer]:
+          - img
+          - text: Fortsæt med Google
+        - generic [ref=e14]: eller
+        - generic [ref=e15]:
+          - generic [ref=e16]:
+            - generic [ref=e17]: E-mail
+            - textbox "E-mail" [ref=e18]
+          - generic [ref=e19]:
+            - generic [ref=e20]: Adgangskode
+            - textbox "Adgangskode" [ref=e21]
+          - button "Log ind" [ref=e22] [cursor=pointer]
+      - paragraph [ref=e23]:
+        - text: Har du ikke en konto?
+        - link "Tilmeld dig" [ref=e24] [cursor=pointer]:
+          - /url: /auth/signup

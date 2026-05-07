@@ -205,5 +205,18 @@
     "videoUrlExtracting": "Udtrækker…",
     "reExtractTranscript": "Genudtræk transskription",
     "reExtractingTranscript": "Udtrækker…"
+  },
+  "footer": {
+    "brandTitle": "UNTOLD",
+    "brandTagline": "Udforsker idéer, der former fremtiden.",
+    "contentHeading": "Indhold",
+    "topicsHeading": "Emner",
+    "pagesHeading": "Sider",
+    "copyright": "© {year} UNTOLD. Alle rettigheder forbeholdes. En Sur Global-publication.",
+    "topicDecoloniality": "Dekolonialitet",
+    "topicSustainability": "Bæredygtighed",
+    "topicTechnology": "Teknologi",
+    "topicEducation": "Uddannelse",
+    "topicResponsibleAI": "Ansvarlig AI"
   }
 }

@@ -1,0 +1,102 @@
+- generic [active] [ref=e1]:
+  - banner [ref=e2]:
+    - generic [ref=e3]:
+      - link "UNTOLD" [ref=e4] [cursor=pointer]:
+        - /url: /
+      - navigation [ref=e5]:
+        - link "Articles" [ref=e6] [cursor=pointer]:
+          - /url: /articles
+        - link "Videos" [ref=e7] [cursor=pointer]:
+          - /url: /videos
+        - link "Podcasts" [ref=e8] [cursor=pointer]:
+          - /url: /podcasts
+        - link "Knowledge Pills" [ref=e9] [cursor=pointer]:
+          - /url: /pills
+        - link "Courses" [ref=e10] [cursor=pointer]:
+          - /url: /courses
+      - generic [ref=e11]:
+        - button "EN" [ref=e12]
+        - generic [ref=e13]:
+          - link "Dashboard" [ref=e14] [cursor=pointer]:
+            - /url: /dashboard
+          - link "Create" [ref=e15] [cursor=pointer]:
+            - /url: /create
+  - main [ref=e16]:
+    - link "← Create" [ref=e17] [cursor=pointer]:
+      - /url: /create
+    - heading "New article" [level=1] [ref=e18]
+    - generic [ref=e19]:
+      - generic [ref=e20]:
+        - generic [ref=e21]: Title *
+        - textbox "Title *" [ref=e22]:
+          - /placeholder: Title
+      - generic [ref=e23]:
+        - generic [ref=e24]: Excerpt
+        - textbox "Excerpt" [ref=e25]:
+          - /placeholder: Short summary shown in listings (optional)
+      - generic [ref=e26]:
+        - generic [ref=e27]: Cover image URL
+        - textbox "Cover image URL" [ref=e28]:
+          - /placeholder: Cover image URL (optional)
+      - generic [ref=e30]: Body
+      - button "Save as draft" [ref=e31]
+  - contentinfo [ref=e32]:
+    - generic [ref=e33]:
+      - generic [ref=e34]:
+        - generic [ref=e35]:
+          - heading "UNTOLD" [level=4] [ref=e36]
+          - paragraph [ref=e37]: Exploring ideas that transform the future.
+        - generic [ref=e38]:
+          - paragraph [ref=e39]: Content
+          - list [ref=e40]:
+            - listitem [ref=e41]:
+              - link "Articles" [ref=e42] [cursor=pointer]:
+                - /url: /articles
+            - listitem [ref=e43]:
+              - link "Videos" [ref=e44] [cursor=pointer]:
+                - /url: /videos
+            - listitem [ref=e45]:
+              - link "Podcasts" [ref=e46] [cursor=pointer]:
+                - /url: /podcasts
+            - listitem [ref=e47]:
+              - link "Pills" [ref=e48] [cursor=pointer]:
+                - /url: /pills
+            - listitem [ref=e49]:
+              - link "Courses" [ref=e50] [cursor=pointer]:
+                - /url: /courses
+        - generic [ref=e51]:
+          - paragraph [ref=e52]: Topics
+          - list [ref=e53]:
+            - listitem [ref=e54]:
+              - link "Decoloniality" [ref=e55] [cursor=pointer]:
+                - /url: /tag/decoloniality
+            - listitem [ref=e56]:
+              - link "Sustainability" [ref=e57] [cursor=pointer]:
+                - /url: /tag/sustainability
+            - listitem [ref=e58]:
+              - link "Technology" [ref=e59] [cursor=pointer]:
+                - /url: /tag/technology
+            - listitem [ref=e60]:
+              - link "Education" [ref=e61] [cursor=pointer]:
+                - /url: /tag/education
+            - listitem [ref=e62]:
+              - link "Responsible AI" [ref=e63] [cursor=pointer]:
+                - /url: /tag/responsible-ai
+        - generic [ref=e64]:
+          - paragraph [ref=e65]: Connect
+          - list [ref=e66]:
+            - listitem [ref=e67]:
+              - link "About" [ref=e68] [cursor=pointer]:
+                - /url: /about
+            - listitem [ref=e69]:
+              - link "Contact" [ref=e70] [cursor=pointer]:
+                - /url: /contact
+            - listitem [ref=e71]:
+              - link "Newsletter" [ref=e72] [cursor=pointer]:
+                - /url: /newsletter
+            - listitem [ref=e73]:
+              - link "Become a Creator" [ref=e74] [cursor=pointer]:
+                - /url: /become-creator
+      - generic [ref=e75]: © 2026 UNTOLD. All rights reserved. A Sur Global publication.
+  - button "Open Next.js Dev Tools" [ref=e81] [cursor=pointer]:
+    - img [ref=e82]
