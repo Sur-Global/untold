@@ -9,8 +9,14 @@ export default defineConfig({
     globals: true,
     setupFiles: ['./tests/setup.ts'],
     exclude: ['**/node_modules/**', '**/tests/e2e/**'],
+    deps: {
+      inline: ['next-intl'],
+    },
   },
   resolve: {
-    alias: { '@': resolve(__dirname, '.') },
+    alias: {
+      '@': resolve(__dirname, '.'),
+      'next/navigation': resolve(__dirname, 'node_modules/next/navigation.js'),
+    },
   },
 })

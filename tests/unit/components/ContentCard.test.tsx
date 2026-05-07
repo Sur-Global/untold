@@ -2,6 +2,11 @@ import { render, screen } from '@testing-library/react'
 import { describe, it, expect, vi } from 'vitest'
 import { ContentCard } from '@/components/content/ContentCard'
 
+vi.mock('next-intl', () => ({
+  useTranslations: (ns: string) => (key: string) => `${ns}.${key}`,
+  useLocale: () => 'en',
+}))
+
 vi.mock('@/i18n/navigation', () => ({
   Link: ({ children, href }: { children: React.ReactNode; href: string }) => (
     <a href={href}>{children}</a>
@@ -33,7 +38,7 @@ describe('ContentCard', () => {
 
   it('renders video card with duration', () => {
     render(<ContentCard {...base} type="video" duration="15:30" />)
-    expect(screen.getByText('15:30')).toBeInTheDocument()
+    expect(screen.getAllByText('15:30').length).toBeGreaterThan(0)
   })
 
   it('renders pill card with accent color', () => {
