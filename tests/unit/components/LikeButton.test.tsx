@@ -30,7 +30,8 @@ describe('LikeButton', () => {
         isLoggedIn={true}
       />
     )
-    expect(screen.getByRole('button').textContent).toContain('♥')
+    const svg = screen.getByRole('button').querySelector('svg')
+    expect(svg?.getAttribute('fill')).toBe('currentColor')
   })
 
   it('is disabled when not logged in', () => {

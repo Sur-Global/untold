@@ -2,7 +2,6 @@ import { render, screen } from '@testing-library/react'
 import { describe, it, expect, vi } from 'vitest'
 import { Navigation } from '@/components/layout/Navigation'
 
-// Mock next-intl
 vi.mock('next-intl', () => ({
   useTranslations: (ns: string) => (key: string) => `${ns}.${key}`,
   useLocale: () => 'en',
@@ -10,6 +9,13 @@ vi.mock('next-intl', () => ({
 vi.mock('next/navigation', () => ({
   usePathname: () => '/',
   useRouter: () => ({ push: vi.fn() }),
+}))
+vi.mock('@/i18n/navigation', () => ({
+  usePathname: () => '/',
+  useRouter: () => ({ push: vi.fn() }),
+  Link: ({ children, href }: { children: React.ReactNode; href: string }) => (
+    <a href={href}>{children}</a>
+  ),
 }))
 // Mock next/link
 vi.mock('next/link', () => ({
@@ -24,10 +30,9 @@ describe('Navigation', () => {
     expect(screen.getByText('UNTOLD')).toBeInTheDocument()
   })
 
-  it('shows Login and Sign up when logged out', () => {
+  it('shows Login when logged out', () => {
     render(<Navigation isLoggedIn={false} userRole={null} />)
     expect(screen.getByText('nav.login')).toBeInTheDocument()
-    expect(screen.getByText('nav.signup')).toBeInTheDocument()
   })
 
   it('shows Dashboard and Create when logged in as creator', () => {
