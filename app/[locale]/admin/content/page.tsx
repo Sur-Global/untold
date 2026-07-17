@@ -33,33 +33,42 @@ export default async function AdminContentPage({ searchParams }: PageProps) {
 
   const supabase = await createClient()
 
-  const itemsQuery = (supabase as any)
-    .from('content')
-    .select(`
-      id,
-      type,
-      slug,
-      is_featured,
-      is_hero_featured,
-      published_at,
-      content_translations(title, locale),
-      profiles!content_author_id_fkey(display_name)
-    `)
-    .eq('status', 'published')
-    .order('published_at', { ascending: false })
-    .range((page - 1) * PAGE_SIZE, page * PAGE_SIZE - 1)
+  // is_hero_featured requires a migration (supabase/migrations/20260717180000_hero_featured.sql)
+  // that may not be applied to every environment yet — select it defensively so the whole
+  // page doesn't come up empty if the column isn't there.
+  function buildItemsQuery(withHeroFeatured: boolean) {
+    const q = (supabase as any)
+      .from('content')
+      .select(`
+        id,
+        type,
+        slug,
+        is_featured,
+        ${withHeroFeatured ? 'is_hero_featured,' : ''}
+        published_at,
+        content_translations(title, locale),
+        profiles!content_author_id_fkey(display_name)
+      `)
+      .eq('status', 'published')
+      .order('published_at', { ascending: false })
+      .range((page - 1) * PAGE_SIZE, page * PAGE_SIZE - 1)
+    if (typeFilter) q.eq('type', typeFilter)
+    return q
+  }
 
   const countQuery = (supabase as any)
     .from('content')
     .select('id', { count: 'exact', head: true })
     .eq('status', 'published')
+  if (typeFilter) countQuery.eq('type', typeFilter)
 
-  if (typeFilter) {
-    itemsQuery.eq('type', typeFilter)
-    countQuery.eq('type', typeFilter)
+  let [{ data: items, error: itemsError }, { count }] = await Promise.all([
+    buildItemsQuery(true),
+    countQuery,
+  ])
+  if (itemsError) {
+    ;({ data: items } = await buildItemsQuery(false))
   }
-
-  const [{ data: items }, { count }] = await Promise.all([itemsQuery, countQuery])
 
   const totalPages = Math.max(1, Math.ceil((count ?? 0) / PAGE_SIZE))
 
@@ -125,7 +134,7 @@ export default async function AdminContentPage({ searchParams }: PageProps) {
                           <HeroFeatureButton
                             contentId={item.id}
                             isFeatured={item.is_featured}
-                            isHeroFeatured={item.is_hero_featured}
+                            isHeroFeatured={item.is_hero_featured ?? false}
                           />
                         )}
                       </div>
