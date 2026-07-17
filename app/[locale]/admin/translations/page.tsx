@@ -7,12 +7,25 @@ import { TranslateAllButton } from '@/components/admin/TranslateAllButton'
 import { SUPPORTED_LOCALES } from '@/lib/deepl'
 import { AdminPageHeader } from '@/components/admin/AdminPageHeader'
 import { AdminPanel } from '@/components/admin/AdminPanel'
+import { ContentTypeFilter } from '@/components/admin/ContentTypeFilter'
+import { AdminPagination } from '@/components/admin/AdminPagination'
 import { adminTableHead, adminTableRow } from '@/components/admin/admin-ui'
 
-export default async function TranslationsPage() {
+const PAGE_SIZE = 50
+const VALID_TYPES = ['article', 'video', 'podcast', 'pill', 'course']
+
+interface PageProps {
+  searchParams: Promise<{ page?: string; type?: string }>
+}
+
+export default async function TranslationsPage({ searchParams }: PageProps) {
+  const { page: pageStr, type } = await searchParams
+  const page = Math.max(1, parseInt(pageStr ?? '1', 10) || 1)
+  const typeFilter = type && VALID_TYPES.includes(type) ? type : null
+
   const supabase = await createClient()
 
-  const { data: items } = await (supabase as any)
+  const itemsQuery = (supabase as any)
     .from('content')
     .select(`
       id,
@@ -28,7 +41,20 @@ export default async function TranslationsPage() {
     `)
     .eq('status', 'published')
     .order('published_at', { ascending: false })
-    .limit(50)
+    .range((page - 1) * PAGE_SIZE, page * PAGE_SIZE - 1)
+
+  const countQuery = (supabase as any)
+    .from('content')
+    .select('id', { count: 'exact', head: true })
+    .eq('status', 'published')
+
+  if (typeFilter) {
+    itemsQuery.eq('type', typeFilter)
+    countQuery.eq('type', typeFilter)
+  }
+
+  const [{ data: items }, { count }] = await Promise.all([itemsQuery, countQuery])
+  const totalPages = Math.max(1, Math.ceil((count ?? 0) / PAGE_SIZE))
 
   return (
     <div className="space-y-6">
@@ -36,13 +62,15 @@ export default async function TranslationsPage() {
         title="Translations"
         description={
           <>
-            Up to 50 most recently published items.{' '}
+            All published content.{' '}
             <span className="text-secondary">Green ✓</span> = auto-translated,{' '}
             <span className="text-blue-700 dark:text-blue-400">Blue ✓</span> = manual,{' '}
             <span className="text-destructive">✗</span> = missing.
           </>
         }
       />
+
+      <ContentTypeFilter />
 
       <AdminPanel>
         <div className="overflow-x-auto">
@@ -133,11 +161,13 @@ export default async function TranslationsPage() {
           </table>
           {(!items || items.length === 0) && (
             <p className="py-10 text-center text-sm text-muted-foreground">
-              No published content yet.
+              No published content{typeFilter ? ` of type "${typeFilter}"` : ''}.
             </p>
           )}
         </div>
       </AdminPanel>
+
+      <AdminPagination page={page} totalPages={totalPages} />
     </div>
   )
 }

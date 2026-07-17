@@ -7,6 +7,8 @@ import { HeroFeatureButton } from '@/components/admin/HeroFeatureButton'
 import { AdminUnpublishButton } from '@/components/admin/AdminUnpublishButton'
 import { AdminPageHeader } from '@/components/admin/AdminPageHeader'
 import { AdminPanel } from '@/components/admin/AdminPanel'
+import { ContentTypeFilter } from '@/components/admin/ContentTypeFilter'
+import { AdminPagination } from '@/components/admin/AdminPagination'
 import { adminTableHead, adminTableRow } from '@/components/admin/admin-ui'
 
 const editPath: Record<string, string> = {
@@ -17,10 +19,21 @@ const editPath: Record<string, string> = {
   course: 'courses',
 }
 
-export default async function AdminContentPage() {
+const PAGE_SIZE = 50
+const VALID_TYPES = ['article', 'video', 'podcast', 'pill', 'course']
+
+interface PageProps {
+  searchParams: Promise<{ page?: string; type?: string }>
+}
+
+export default async function AdminContentPage({ searchParams }: PageProps) {
+  const { page: pageStr, type } = await searchParams
+  const page = Math.max(1, parseInt(pageStr ?? '1', 10) || 1)
+  const typeFilter = type && VALID_TYPES.includes(type) ? type : null
+
   const supabase = await createClient()
 
-  const { data: items } = await (supabase as any)
+  const itemsQuery = (supabase as any)
     .from('content')
     .select(`
       id,
@@ -34,14 +47,30 @@ export default async function AdminContentPage() {
     `)
     .eq('status', 'published')
     .order('published_at', { ascending: false })
-    .limit(50)
+    .range((page - 1) * PAGE_SIZE, page * PAGE_SIZE - 1)
+
+  const countQuery = (supabase as any)
+    .from('content')
+    .select('id', { count: 'exact', head: true })
+    .eq('status', 'published')
+
+  if (typeFilter) {
+    itemsQuery.eq('type', typeFilter)
+    countQuery.eq('type', typeFilter)
+  }
+
+  const [{ data: items }, { count }] = await Promise.all([itemsQuery, countQuery])
+
+  const totalPages = Math.max(1, Math.ceil((count ?? 0) / PAGE_SIZE))
 
   return (
     <div className="space-y-6">
       <AdminPageHeader
         title="Content"
-        description="Fifty most recently published items across all authors. Feature, or unpublish, from here."
+        description="All published content across all authors. Feature, or unpublish, from here."
       />
+
+      <ContentTypeFilter />
 
       <AdminPanel>
         <div className="overflow-x-auto">
@@ -121,11 +150,13 @@ export default async function AdminContentPage() {
           </table>
           {(!items || items.length === 0) && (
             <p className="py-10 text-center text-sm text-muted-foreground">
-              No published content yet.
+              No published content{typeFilter ? ` of type "${typeFilter}"` : ''}.
             </p>
           )}
         </div>
       </AdminPanel>
+
+      <AdminPagination page={page} totalPages={totalPages} />
     </div>
   )
 }
