@@ -6,6 +6,7 @@ import type { EditorBlock } from '@/components/editor/RichTextEditor'
 import { updateArticle, publishArticle, unpublishArticle, deleteArticle } from '@/lib/actions/article'
 import { RichTextEditor } from '@/components/editor/RichTextEditor'
 import { CoverImageInput } from '@/components/ui/CoverImageInput'
+import { PhotoCreditInput } from '@/components/content/PhotoCreditInput'
 import { TagsInput, type Tag } from '@/components/ui/TagsInput'
 import { Link } from '@/i18n/navigation'
 
@@ -385,12 +386,11 @@ export function EditArticleForm({
             />
             <div className="space-y-2">
               <label className="block text-sm font-semibold text-foreground">Cover image credit</label>
-              <input
-                type="text"
+              <PhotoCreditInput
+                name="image_credits"
                 value={imageCredits}
-                onChange={(e) => setImageCredits(e.target.value)}
-                placeholder="e.g. Chris Lawton on Unsplash"
-                className="w-full h-[50px] px-4 rounded-[10px] border border-primary/20 bg-white text-foreground text-base outline-none focus:border-primary/50 transition-colors placeholder:text-muted-foreground"
+                onChange={setImageCredits}
+                placeholder="e.g. Chris Lawton on Unsplash, or [Chris Lawton](https://...)"
               />
             </div>
           </div>

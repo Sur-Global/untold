@@ -5,6 +5,7 @@ import { getTranslations } from 'next-intl/server'
 import { createClient } from '@/lib/supabase/server'
 import { getTranslation } from '@/lib/content'
 import { readTime } from '@/lib/utils'
+import { renderCreditHtml } from '@/lib/photo-credit'
 import { formatDate } from '@/lib/format-date'
 import { Navigation } from '@/components/layout/Navigation'
 import { Footer } from '@/components/layout/Footer'
@@ -302,7 +303,10 @@ export default async function ArticlePage({ params }: PageProps) {
                         style={{ background: 'rgba(120,113,108,0.1)' }}
                       >
                         <strong style={{ color: '#78716c', fontFamily: 'var(--font-aeonik), Aeonik, sans-serif', fontWeight: 700 }}>Credits: </strong>
-                        <span style={{ color: '#78716c', fontFamily: 'var(--font-aeonik), Aeonik, sans-serif' }}>{article.image_credits}</span>
+                        <span
+                          style={{ color: '#78716c', fontFamily: 'var(--font-aeonik), Aeonik, sans-serif' }}
+                          dangerouslySetInnerHTML={{ __html: renderCreditHtml(article.image_credits) }}
+                        />
                       </figcaption>
                     )}
                   </figure>

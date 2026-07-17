@@ -116,6 +116,7 @@ export function RichTextEditor({
   }, [editor]) // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
+    <div>
     <div
       className="rounded-lg overflow-hidden bg-white"
       style={{ border: '1px solid rgba(139,69,19,0.25)', minHeight: 320 }}
@@ -151,6 +152,10 @@ export function RichTextEditor({
           }
         />
       </BlockNoteView>
+    </div>
+    <p className="mt-1.5 text-xs text-muted-foreground">
+      Tip: to add a hyperlink to an image caption, type it as <code>[label](https://...)</code>.
+    </p>
     </div>
   )
 }
