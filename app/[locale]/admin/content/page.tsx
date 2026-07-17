@@ -3,6 +3,7 @@ import { Link } from '@/i18n/navigation'
 import { getPublicContentPath } from '@/lib/utils'
 import type { ContentType } from '@/lib/supabase/types'
 import { FeatureButton } from '@/components/admin/FeatureButton'
+import { HeroFeatureButton } from '@/components/admin/HeroFeatureButton'
 import { AdminUnpublishButton } from '@/components/admin/AdminUnpublishButton'
 import { AdminPageHeader } from '@/components/admin/AdminPageHeader'
 import { AdminPanel } from '@/components/admin/AdminPanel'
@@ -26,6 +27,7 @@ export default async function AdminContentPage() {
       type,
       slug,
       is_featured,
+      is_hero_featured,
       published_at,
       content_translations(title, locale),
       profiles!content_author_id_fkey(display_name)
@@ -88,7 +90,16 @@ export default async function AdminContentPage() {
                         : '—'}
                     </td>
                     <td className="px-6 py-3">
-                      <FeatureButton contentId={item.id} isFeatured={item.is_featured} />
+                      <div className="flex items-center gap-2">
+                        <FeatureButton contentId={item.id} isFeatured={item.is_featured} />
+                        {item.type === 'article' && (
+                          <HeroFeatureButton
+                            contentId={item.id}
+                            isFeatured={item.is_featured}
+                            isHeroFeatured={item.is_hero_featured}
+                          />
+                        )}
+                      </div>
                     </td>
                     <td className="px-6 py-3">
                       <div className="flex items-center gap-3">

@@ -39,6 +39,7 @@ export interface Database {
           source_locale: string;
           status: ContentStatus;
           is_featured: boolean;
+          is_hero_featured: boolean;
           cover_image_url: string | null;
           image_credits: string | null;
           likes_count: number;

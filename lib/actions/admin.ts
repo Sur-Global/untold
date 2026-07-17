@@ -15,12 +15,51 @@ export async function toggleFeatured(contentId: string) {
     .eq('id', contentId)
     .single()
 
+  const nowFeatured = !item?.is_featured
   await (supabase as any)
     .from('content')
-    .update({ is_featured: !item?.is_featured })
+    // Unfeaturing also clears hero placement — an article can't be in the
+    // homepage hero without also being Featured.
+    .update(nowFeatured ? { is_featured: true } : { is_featured: false, is_hero_featured: false })
     .eq('id', contentId)
 
   revalidatePath('/admin/content')
+  revalidatePath('/')
+}
+
+const MAX_HERO_FEATURED = 3
+
+export async function toggleHeroFeatured(contentId: string) {
+  await requireEditor()
+  const supabase = await createClient()
+
+  const { data: item } = await (supabase as any)
+    .from('content')
+    .select('is_featured, is_hero_featured')
+    .eq('id', contentId)
+    .single()
+
+  if (!item) throw new Error('Content not found')
+
+  if (!item.is_hero_featured) {
+    if (!item.is_featured) throw new Error('Must be Featured before it can go in the homepage hero')
+
+    const { count } = await (supabase as any)
+      .from('content')
+      .select('id', { count: 'exact', head: true })
+      .eq('is_hero_featured', true)
+    if ((count ?? 0) >= MAX_HERO_FEATURED) {
+      throw new Error(`Homepage hero is full (max ${MAX_HERO_FEATURED}) — remove one first`)
+    }
+  }
+
+  await (supabase as any)
+    .from('content')
+    .update({ is_hero_featured: !item.is_hero_featured })
+    .eq('id', contentId)
+
+  revalidatePath('/admin/content')
+  revalidatePath('/')
 }
 
 export async function adminUnpublishContent(contentId: string) {

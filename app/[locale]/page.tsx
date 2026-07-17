@@ -47,7 +47,7 @@ export default async function HomePage({ params }: PageProps) {
   const [
     { userId, ...navProps },
     { data: tagAssocs },
-    { data: featuredArticle },
+    { data: heroPicks },
     { data: articles },
     { data: videos },
     { data: podcasts },
@@ -61,7 +61,9 @@ export default async function HomePage({ params }: PageProps) {
       .select('tag_id, tags(slug, names), content!inner(status)')
       .eq('content.status', 'published')
       .limit(2000),
-    // Featured article for hero + large card
+    // Homepage hero picks (1 large + 2 small = 3 slots) — a narrower, explicitly
+    // curated subset of is_featured, so it never overlaps with the Featured
+    // Articles grid below (see is_hero_featured in admin/content).
     (supabase as any)
       .from('content')
       .select(`
@@ -72,11 +74,10 @@ export default async function HomePage({ params }: PageProps) {
       `)
       .eq('type', 'article')
       .eq('status', 'published')
-      .eq('is_featured', true)
+      .eq('is_hero_featured', true)
       .order('published_at', { ascending: false })
-      .limit(1)
-      .maybeSingle(),
-    // Featured articles only (for the Featured Articles section)
+      .limit(3),
+    // Featured articles for the Featured Articles section — excludes hero picks
     (supabase as any)
       .from('content')
       .select(`
@@ -88,6 +89,7 @@ export default async function HomePage({ params }: PageProps) {
       .eq('type', 'article')
       .eq('status', 'published')
       .eq('is_featured', true)
+      .eq('is_hero_featured', false)
       .order('published_at', { ascending: false })
       .limit(Math.max(1, Math.min(24, featuredArticleLimit))),
     // Videos
@@ -150,6 +152,7 @@ export default async function HomePage({ params }: PageProps) {
 
   // Batch bookmark resolution
   const allItems = [
+    ...(heroPicks ?? []),
     ...(articles ?? []),
     ...(videos ?? []),
     ...(podcasts ?? []),
@@ -170,11 +173,7 @@ export default async function HomePage({ params }: PageProps) {
   // Trigger background translation for untranslated listing items
   let pendingTranslations = false
   {
-    const allFetchedItems = [
-      ...(featuredArticle ? [featuredArticle] : []),
-      ...allItems,
-    ]
-    const untranslatedIds = allFetchedItems
+    const untranslatedIds = allItems
       .filter((i: any) => !(i.content_translations ?? []).some((t: any) => t.locale === locale))
       .map((i: any) => i.id)
     const uniqueIds = [...new Set(untranslatedIds)] as string[]
@@ -241,20 +240,37 @@ export default async function HomePage({ params }: PageProps) {
     }
   }
 
-  // Featured articles excluding the hero one (for smaller cards)
-  const featuredArticles = (articles ?? []).filter(
-    (a: any) => !featuredArticle || a.id !== featuredArticle.id
-  )
+  // Homepage hero: 1 large card + 2 small cards, from the is_hero_featured pool
+  // (already mutually exclusive from `articles` below, enforced by the query).
+  const heroArticle = heroPicks?.[0] ?? null
+  const heroSmallArticles = (heroPicks ?? []).slice(1, 3)
 
-  const heroTrans = featuredArticle
-    ? getTranslation(featuredArticle.content_translations ?? [], locale)
+  // Featured Articles section pool (never overlaps the hero picks above)
+  const featuredArticles = articles ?? []
+
+  const heroTrans = heroArticle
+    ? getTranslation(heroArticle.content_translations ?? [], locale)
     : null
 
-  const featuredTag = featuredArticle?.content_tags?.[0]?.tags
+  const featuredTag = heroArticle?.content_tags?.[0]?.tags
   const featuredCategoryTag = featuredTag
     ? (featuredTag.names[locale] ?? featuredTag.names['en'] ?? null)
     : null
   const featuredCategoryTagSlug = featuredTag?.slug ?? null
+
+  // The Featured Articles section's own large card comes from its own pool's
+  // first item (distinct from the hero's large card above it on the page).
+  const sectionLargeArticle = featuredArticles[0] ?? null
+  const sectionLargeTrans = sectionLargeArticle
+    ? getTranslation(sectionLargeArticle.content_translations ?? [], locale)
+    : null
+  const sectionLargeTag = sectionLargeArticle?.content_tags?.[0]?.tags
+  const sectionLargeCategoryTag = sectionLargeTag
+    ? (sectionLargeTag.names[locale] ?? sectionLargeTag.names['en'] ?? null)
+    : null
+  const sectionLargeCategoryTagSlug = sectionLargeTag?.slug ?? null
+  // Remaining section cards (after the section's own large card, which takes index 0)
+  const sectionSmallArticles = featuredArticles.slice(1)
 
   return (
     <>
@@ -404,9 +420,9 @@ export default async function HomePage({ params }: PageProps) {
               {/* RIGHT: large featured card + 2 smaller cards */}
               <div className="flex flex-col gap-3">
                 {/* Large featured card */}
-                {featuredArticle && heroTrans ? (
+                {heroArticle && heroTrans ? (
                   <Link
-                    href={`/articles/${featuredArticle.slug}`}
+                    href={`/articles/${heroArticle.slug}`}
                     style={{
                       textDecoration: 'none',
                       display: 'block',
@@ -414,14 +430,14 @@ export default async function HomePage({ params }: PageProps) {
                       overflow: 'hidden',
                       position: 'relative',
                       height: 340,
-                      background: featuredArticle.cover_image_url
+                      background: heroArticle.cover_image_url
                         ? 'transparent'
                         : 'linear-gradient(135deg, #1a1a2e 0%, #16213e 60%, #0f3460 100%)',
                     }}
                   >
-                    {featuredArticle.cover_image_url && (
+                    {heroArticle.cover_image_url && (
                       <img
-                        src={featuredArticle.cover_image_url}
+                        src={heroArticle.cover_image_url}
                         alt={heroTrans.title}
                         style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }}
                       />
@@ -480,7 +496,7 @@ export default async function HomePage({ params }: PageProps) {
                 {/* Two smaller cards */}
                 <div className="grid grid-cols-2 gap-3">
                   {[0, 1].map((i) => {
-                    const item = featuredArticles[i]
+                    const item = heroSmallArticles[i]
                     const palette = [
                       { bg: '#000', textColor: '#fff', tagColor: '#A9A8E9' },
                       { bg: '#D2FE73', textColor: '#000', tagColor: '#000' },
@@ -494,18 +510,22 @@ export default async function HomePage({ params }: PageProps) {
                       const trans = getTranslation(item.content_translations ?? [], locale)
                       const tag = item.content_tags?.[0]?.tags
                       const tagLabel = tag ? (tag.names[locale] ?? tag.names['en'] ?? null) : null
+                      const hasPhoto = !!item.cover_image_url
                       return (
                         <Link
                           key={item.id}
                           href={`/articles/${item.slug}`}
-                          style={{ textDecoration: 'none', display: 'flex', flexDirection: 'column', justifyContent: 'flex-end', borderRadius: 16, overflow: 'hidden', background: bg, position: 'relative', minHeight: 160, padding: '14px' }}
+                          style={{ textDecoration: 'none', display: 'flex', flexDirection: 'column', justifyContent: 'flex-end', borderRadius: 16, overflow: 'hidden', background: hasPhoto ? '#1a1a2e' : bg, position: 'relative', minHeight: 160, padding: '14px' }}
                         >
-                          {item.cover_image_url && (
-                            <img src={item.cover_image_url} alt={trans?.title ?? ''} style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', opacity: 0.35 }} />
+                          {hasPhoto && (
+                            <>
+                              <img src={item.cover_image_url} alt={trans?.title ?? ''} style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }} />
+                              <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to top, rgba(0,0,0,0.75) 0%, rgba(0,0,0,0.1) 60%, transparent 100%)' }} />
+                            </>
                           )}
                           <div style={{ position: 'relative' }}>
-                            {tagLabel && <span style={{ display: 'block', fontSize: 10, fontWeight: 500, color: tagColor, marginBottom: 5, fontFamily: 'var(--font-aeonik), Aeonik, sans-serif' }}>{tagLabel}</span>}
-                            <p className="line-clamp-3" style={{ fontFamily: 'var(--font-aeonik), Aeonik, sans-serif', fontWeight: 500, fontSize: 13, color: textColor, lineHeight: 1.35, margin: 0 }}>
+                            {tagLabel && <span style={{ display: 'block', fontSize: 10, fontWeight: 500, color: hasPhoto ? '#A9A8E9' : tagColor, marginBottom: 5, fontFamily: 'var(--font-aeonik), Aeonik, sans-serif' }}>{tagLabel}</span>}
+                            <p className="line-clamp-3" style={{ fontFamily: 'var(--font-aeonik), Aeonik, sans-serif', fontWeight: 500, fontSize: 13, color: hasPhoto ? '#fff' : textColor, lineHeight: 1.35, margin: 0 }}>
                               {trans?.title ?? 'Untitled'}
                             </p>
                           </div>
@@ -541,33 +561,33 @@ export default async function HomePage({ params }: PageProps) {
                 viewAllLabel={t('viewAll')}
               />
 
-              {(featuredArticle || featuredArticles.length > 0) ? (
+              {(sectionLargeArticle || sectionSmallArticles.length > 0) ? (
                 <div className={`mt-6 ${featuredLayoutClass}`}>
                   {/* Top: large card full-width on mobile, side-by-side on md+ */}
                   <div className="flex flex-col md:flex-row gap-5 md:items-stretch">
-                    {/* Large featured card */}
-                    {featuredArticle && heroTrans && (
+                    {/* Large featured card — distinct from the hero's large card above */}
+                    {sectionLargeArticle && sectionLargeTrans && (
                       <div className="w-full md:shrink-0 md:w-[55%]">
                         <LargeArticleCard
-                            slug={featuredArticle.slug}
-                            title={heroTrans.title}
-                            excerpt={heroTrans.excerpt}
-                            coverImageUrl={featuredArticle.cover_image_url}
-                            authorName={featuredArticle.profiles?.display_name}
-                            authorSlug={featuredArticle.profiles?.slug}
-                            authorAvatarUrl={featuredArticle.profiles?.avatar_url}
-                            categoryTag={featuredCategoryTag}
-                            categoryTagSlug={featuredCategoryTagSlug}
-                            readTimeMinutes={featuredArticle.read_time_minutes}
-                            likesCount={featuredArticle.likes_count}
+                            slug={sectionLargeArticle.slug}
+                            title={sectionLargeTrans.title}
+                            excerpt={sectionLargeTrans.excerpt}
+                            coverImageUrl={sectionLargeArticle.cover_image_url}
+                            authorName={sectionLargeArticle.profiles?.display_name}
+                            authorSlug={sectionLargeArticle.profiles?.slug}
+                            authorAvatarUrl={sectionLargeArticle.profiles?.avatar_url}
+                            categoryTag={sectionLargeCategoryTag}
+                            categoryTagSlug={sectionLargeCategoryTagSlug}
+                            readTimeMinutes={sectionLargeArticle.read_time_minutes}
+                            likesCount={sectionLargeArticle.likes_count}
                             isFeatured
                           />
                       </div>
                     )}
                     {/* Right: 2 stacked article cards — single column always */}
-                    {featuredArticles.length > 0 && (
+                    {sectionSmallArticles.length > 0 && (
                       <div className="w-full md:flex-1 flex flex-col gap-5">
-                        {featuredArticles.slice(0, 2).map((item: any) => (
+                        {sectionSmallArticles.slice(0, 2).map((item: any) => (
                           <ContentCard
                             key={item.id}
                             {...getItemProps(item)}
@@ -578,9 +598,9 @@ export default async function HomePage({ params }: PageProps) {
                   </div>
 
                   {/* Bottom row: 2 more cards, side-by-side only on md+ */}
-                  {featuredArticles.length > 2 && (
+                  {sectionSmallArticles.length > 2 && (
                     <div className="grid w-full min-w-0 grid-cols-1 gap-5 md:grid-cols-2">
-                      {featuredArticles.slice(2, 4).map((item: any) => (
+                      {sectionSmallArticles.slice(2, 4).map((item: any) => (
                         <ContentCard
                           key={item.id}
                           {...getItemProps(item)}
