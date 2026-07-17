@@ -81,7 +81,12 @@ export default async function AuthorPage({ params }: PageProps) {
 
   const items = (content ?? []).map((item: any) => {
     const t = getTranslation(item.content_translations ?? [], locale)
-    const tags: string[] = item.content_tags?.map((ct: any) => ct.tags?.slug).filter(Boolean) ?? []
+    const tags: Array<{ slug: string; label: string }> = (item.content_tags ?? [])
+      .map((ct: any) => ct.tags ? {
+        slug: ct.tags.slug as string,
+        label: (ct.tags.names as Record<string, string>)?.[locale] ?? (ct.tags.names as Record<string, string>)?.en ?? ct.tags.slug as string,
+      } : null)
+      .filter(Boolean)
     return {
       id: item.id,
       type: item.type,
@@ -105,7 +110,7 @@ export default async function AuthorPage({ params }: PageProps) {
 
   // Trigger background translation for untranslated content items on this author page
   let pendingTranslations = false
-  if (locale !== 'en' && (content ?? []).length > 0) {
+  if ((content ?? []).length > 0) {
     const untranslatedIds = (content as any[])
       .filter(i => !(i.content_translations ?? []).some((t: any) => t.locale === locale))
       .map((i: any) => i.id)
@@ -117,7 +122,7 @@ export default async function AuthorPage({ params }: PageProps) {
 
   const profileTrans = author.profile_translations as Record<string, { bio?: string }> | null
   const translatedBio = profileTrans?.[locale]?.bio ?? author.bio
-  const needsAuthorBio = locale !== 'en' && !!author.bio && !profileTrans?.[locale]?.bio
+  const needsAuthorBio = !!author.bio && !profileTrans?.[locale]?.bio
 
   // Trigger bio translation on first visit in this language.
   // We need a content_id from one of the author's content items to use the translate route.
@@ -159,8 +164,8 @@ export default async function AuthorPage({ params }: PageProps) {
       {/* Author profile header */}
       <div
         style={{
-          background: 'linear-gradient(160deg, #1e1410 0%, #2c2420 60%, #1a1008 100%)',
-          borderBottom: '1px solid rgba(212,165,116,0.2)',
+          background: '#000',
+          borderBottom: '1px solid rgba(255,255,255,0.07)',
         }}
       >
         <div className="max-w-[1280px] mx-auto px-4 sm:px-6 py-10 sm:py-14">
@@ -171,22 +176,22 @@ export default async function AuthorPage({ params }: PageProps) {
             <div
               className="shrink-0 overflow-hidden"
               style={{
-                width: 96,
-                height: 96,
+                width: 140,
+                height: 140,
                 borderRadius: '50%',
-                border: '2px solid rgba(184,134,11,0.7)',
-                boxShadow: '0 0 0 4px rgba(184,134,11,0.12), 0 8px 24px rgba(0,0,0,0.4)',
+                border: '2px solid rgba(255,255,255,0.2)',
+                boxShadow: '0 0 0 4px rgba(255,255,255,0.06), 0 8px 24px rgba(0,0,0,0.4)',
               }}
             >
               {author.avatar_url ? (
                 <img
                   src={author.avatar_url}
                   alt={author.display_name}
-                  className="w-full h-full object-cover"
+                  className="w-full h-full object-cover object-top"
                 />
               ) : (
-                <div className="w-full h-full bg-[#3a2f22] flex items-center justify-center">
-                  <span style={{ fontFamily: 'Audiowide, sans-serif', fontSize: 32, color: '#d4a574' }}>
+                <div className="w-full h-full bg-[#1a1a1a] flex items-center justify-center">
+                  <span style={{ fontFamily: 'var(--font-aeonik), Aeonik, sans-serif', fontSize: 48, color: 'rgba(255,255,255,0.9)' }}>
                     {author.display_name.charAt(0).toUpperCase()}
                   </span>
                 </div>
@@ -196,12 +201,12 @@ export default async function AuthorPage({ params }: PageProps) {
             {/* Info */}
             <div className="flex-1 min-w-0">
               <h1
-                className="uppercase mb-2"
+                className="mb-2"
                 style={{
-                  fontFamily: 'Audiowide, sans-serif',
+                  fontFamily: 'var(--font-aeonik), Aeonik, sans-serif',
                   fontSize: 'clamp(22px, 5vw, 36px)',
                   letterSpacing: '0.04em',
-                  color: '#F5F1E8',
+                  color: '#FFFFFF',
                   lineHeight: 1.2,
                 }}
               >
@@ -211,7 +216,7 @@ export default async function AuthorPage({ params }: PageProps) {
               {translatedBio && (
                 <p
                   className="mb-4 max-w-2xl mx-auto sm:mx-0"
-                  style={{ fontSize: 15, lineHeight: 1.65, color: 'rgba(245,241,232,0.65)' }}
+                  style={{ fontSize: 15, lineHeight: 1.65, color: 'rgba(255,255,255,0.65)' }}
                 >
                   {translatedBio}
                 </p>
@@ -220,7 +225,7 @@ export default async function AuthorPage({ params }: PageProps) {
               {/* Meta row */}
               <div
                 className="flex flex-wrap justify-center sm:justify-start items-center gap-x-4 gap-y-1 mb-4"
-                style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 12, color: 'rgba(245,241,232,0.45)' }}
+                style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 12, color: 'rgba(255,255,255,0.45)' }}
               >
                 {author.location && (
                   <span className="flex items-center gap-1">
@@ -252,13 +257,13 @@ export default async function AuthorPage({ params }: PageProps) {
               {/* Stats + follow */}
               <div className="flex flex-wrap justify-center sm:justify-start items-center gap-4">
                 <div className="flex items-center gap-4" style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 13 }}>
-                  <span style={{ color: 'rgba(245,241,232,0.55)' }}>
-                    <span style={{ color: '#d4a574', fontWeight: 600 }}>{author.followers_count ?? 0}</span>
+                  <span style={{ color: 'rgba(255,255,255,0.55)' }}>
+                    <span style={{ color: '#A9A8E9', fontWeight: 600 }}>{author.followers_count ?? 0}</span>
                     {' '}{tAuthor('followers')}
                   </span>
-                  <span style={{ color: 'rgba(245,241,232,0.3)' }}>·</span>
-                  <span style={{ color: 'rgba(245,241,232,0.55)' }}>
-                    <span style={{ color: '#d4a574', fontWeight: 600 }}>{author.following_count ?? 0}</span>
+                  <span style={{ color: 'rgba(255,255,255,0.2)' }}>·</span>
+                  <span style={{ color: 'rgba(255,255,255,0.55)' }}>
+                    <span style={{ color: '#A9A8E9', fontWeight: 600 }}>{author.following_count ?? 0}</span>
                     {' '}{tAuthor('following')}
                   </span>
                 </div>

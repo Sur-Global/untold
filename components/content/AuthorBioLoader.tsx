@@ -58,7 +58,10 @@ export function AuthorBioLoader({ initialBio, needsTranslation, contentId, autho
         </span>
       )}
       {bio && (
-        <p className="text-sm text-muted-foreground leading-relaxed mb-3">{bio}</p>
+        <p
+          className="text-sm text-muted-foreground leading-relaxed mb-3 [&_a]:text-primary [&_a]:underline [&_a]:underline-offset-2 hover:[&_a]:opacity-80"
+          dangerouslySetInnerHTML={{ __html: bio }}
+        />
       )}
     </div>
   )

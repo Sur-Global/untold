@@ -54,7 +54,7 @@ export default async function VideoPage({ params }: PageProps) {
     (supabase as any)
       .from('content')
       .select(`
-        id, slug, likes_count, published_at,
+        id, slug, source_locale, likes_count, published_at,
         profiles!author_id ( id, display_name, slug, avatar_url, bio, profile_translations, location ),
         content_translations ( title, body, description, locale ),
         content_tags ( tags ( slug, names ) ),
@@ -77,11 +77,12 @@ export default async function VideoPage({ params }: PageProps) {
   const tags = (video.content_tags ?? []).map((ct: any) => ct.tags).filter(Boolean)
   const chapters: VideoChapter[] = Array.isArray(meta?.chapters) ? meta.chapters : []
   const chapterTranslations = meta?.chapter_translations as Record<string, VideoChapter[]> | null
-  // English body for fallback display while body is being translated
-  const enTranslation = (video.content_translations ?? []).find((tr: any) => tr.locale === 'en')
-  const englishBody = enTranslation?.body as Record<string, unknown> | unknown[] | null
+  const sourceLocale: string = video.source_locale ?? 'en'
+  // Source body for fallback display while body is being translated
+  const sourceTranslation = (video.content_translations ?? []).find((tr: any) => tr.locale === sourceLocale)
+  const sourceBody = sourceTranslation?.body as Record<string, unknown> | unknown[] | null
 
-  // getTranslation falls back to English when no locale row exists — detect that case
+  // getTranslation falls back to source locale when no locale row exists — detect that case
   const usingFallback = t.locale !== locale
   const body = usingFallback ? null : (t.body as Record<string, unknown> | unknown[] | null)
   const legacyDescription = !body ? (t as any).description as string | null : null
@@ -89,13 +90,13 @@ export default async function VideoPage({ params }: PageProps) {
   // Author bio translation
   const authorProfileTrans = author?.profile_translations as Record<string, { bio?: string }> | null
   const translatedAuthorBio = authorProfileTrans?.[locale]?.bio ?? null
-  const needsAuthorBio = locale !== 'en' && !!author?.bio && !translatedAuthorBio
+  const needsAuthorBio = locale !== sourceLocale && !!author?.bio && !translatedAuthorBio
 
   // Per-section translation flags
-  const needsBody = locale !== 'en' && !!englishBody && (usingFallback || !body)
-  const needsChapters = locale !== 'en' && chapters.length > 0 && !chapterTranslations?.[locale]
+  const needsBody = locale !== sourceLocale && !!sourceBody && (usingFallback || !body)
+  const needsChapters = locale !== sourceLocale && chapters.length > 0 && !chapterTranslations?.[locale]
   const needsTranscript =
-    locale !== 'en' &&
+    locale !== sourceLocale &&
     Array.isArray(meta?.transcript) &&
     (meta.transcript as unknown[]).length > 0 &&
     !meta?.transcript_translations?.[locale]
@@ -181,7 +182,7 @@ export default async function VideoPage({ params }: PageProps) {
 
           {/* Title */}
           <h1
-            className="font-['Audiowide'] text-foreground uppercase mb-6"
+            className="font-heading text-foreground mb-6"
             style={{ fontSize: 50, lineHeight: '61.6px', letterSpacing: '-0.56px', maxWidth: 752 }}
           >
             {t.title}
@@ -193,7 +194,7 @@ export default async function VideoPage({ params }: PageProps) {
               <Link href={`/author/${author.slug}`} className="flex items-center gap-3 group">
                 <div className="w-12 h-12 rounded-full flex-shrink-0 overflow-hidden border-2 border-primary/20">
                   {author.avatar_url ? (
-                    <img src={author.avatar_url} alt={author.display_name} className="w-full h-full object-cover" />
+                    <img src={author.avatar_url} alt={author.display_name} className="w-full h-full object-cover object-top" />
                   ) : (
                     <div className="w-full h-full bg-primary/10 flex items-center justify-center text-primary font-semibold text-lg">
                       {author.display_name?.[0]?.toUpperCase() ?? '?'}
@@ -261,7 +262,7 @@ export default async function VideoPage({ params }: PageProps) {
           {/* Description, chapters, and transcript — with lazy translation + loading states */}
           <VideoTranslationLoader
             body={body}
-            englishBody={englishBody}
+            englishBody={sourceBody}
             legacyDescription={legacyDescription}
             chapters={chapters}
             translatedChapters={chapterTranslations?.[locale] ?? null}
@@ -276,39 +277,90 @@ export default async function VideoPage({ params }: PageProps) {
 
           {/* About the Creator */}
           {author && (
-            <div className="bg-card rounded-2xl p-8 border border-primary/20 shadow-[0px_4px_16px_0px_rgba(44,36,32,0.1),0px_8px_32px_0px_rgba(44,36,32,0.06)]">
-              <h3 className="font-['Audiowide'] text-2xl uppercase text-foreground mb-6">
-                {tAuthor('aboutCreator')}
-              </h3>
-              <div className="flex gap-6 items-start">
-                <div className="w-24 h-24 rounded-full flex-shrink-0 overflow-hidden border-2 border-primary/20">
+            <div
+              className="rounded-2xl"
+              style={{
+                background: '#fff',
+                border: '1px solid rgba(0,0,0,0.08)',
+                padding: '32px',
+                boxShadow: '0 2px 16px rgba(0,0,0,0.06)',
+              }}
+            >
+              {/* Author name — full-width card header */}
+              <Link href={`/author/${author.slug}`} className="hover:text-primary transition-colors inline-block mb-6">
+                <h3
+                  style={{
+                    fontFamily: 'var(--font-aeonik), Aeonik, sans-serif',
+                    fontWeight: 700,
+                    fontSize: 22,
+                    color: '#111',
+                    letterSpacing: '-0.01em',
+                    lineHeight: 1.1,
+                  }}
+                >
+                  {author.display_name}
+                </h3>
+                {author.location && (
+                  <p style={{ fontSize: 13, color: '#6b7280', fontFamily: 'var(--font-aeonik), Aeonik, sans-serif', marginTop: 4 }}>
+                    {author.location}
+                  </p>
+                )}
+              </Link>
+
+              {/* Avatar (left) + bio (right) */}
+              <div className="flex items-start gap-6">
+                {/* Large circular avatar */}
+                <div
+                  className="flex-shrink-0 overflow-hidden rounded-full"
+                  style={{ width: 160, height: 160, border: '2px solid #A9A8E9' }}
+                >
                   {author.avatar_url ? (
-                    <img src={author.avatar_url} alt={author.display_name} className="w-full h-full object-cover" />
+                    <img src={author.avatar_url} alt={author.display_name} className="w-full h-full object-cover object-top" />
                   ) : (
-                    <div className="w-full h-full bg-primary/10 flex items-center justify-center text-primary text-2xl font-semibold">
+                    <div
+                      className="w-full h-full flex items-center justify-center"
+                      style={{ background: 'rgba(169,168,233,0.1)', fontSize: 52, fontWeight: 500, color: '#A9A8E9', fontFamily: 'var(--font-aeonik), Aeonik, sans-serif' }}
+                    >
                       {author.display_name?.[0]?.toUpperCase() ?? '?'}
                     </div>
                   )}
                 </div>
+
+                {/* Bio text area */}
                 <div className="flex-1 min-w-0">
-                  <h4 className="font-['Audiowide'] text-lg uppercase text-foreground mb-1">
-                    {author.display_name}
-                  </h4>
-                  {author.location && (
-                    <p className="text-sm text-primary mb-3">{author.location}</p>
-                  )}
+                  <p
+                    style={{
+                      fontFamily: 'var(--font-aeonik), Aeonik, sans-serif',
+                      fontSize: 15,
+                      fontWeight: 500,
+                      color: '#111',
+                      marginBottom: 10,
+                    }}
+                  >
+                    {`About ${author.display_name?.split(' ')[0] ?? author.display_name}`}
+                  </p>
                   {author.bio && (
-                    <AuthorBioLoader
-                      initialBio={translatedAuthorBio ?? (needsAuthorBio ? null : author.bio)}
-                      needsTranslation={needsAuthorBio}
-                      contentId={video.id}
-                      authorId={author.id}
-                      locale={locale}
-                    />
+                    <div className="mb-5">
+                      <AuthorBioLoader
+                        initialBio={translatedAuthorBio ?? (needsAuthorBio ? null : author.bio)}
+                        needsTranslation={needsAuthorBio}
+                        contentId={video.id}
+                        authorId={author.id}
+                        locale={locale}
+                      />
+                    </div>
                   )}
                   <Link
                     href={`/author/${author.slug}`}
-                    className="text-sm text-primary hover:underline font-['JetBrains_Mono',monospace] tracking-[0.28px]"
+                    className="inline-flex items-center gap-1 hover:text-primary transition-colors"
+                    style={{
+                      fontFamily: 'var(--font-aeonik), Aeonik, sans-serif',
+                      fontSize: 13,
+                      fontWeight: 500,
+                      color: '#111',
+                      letterSpacing: '0.02em',
+                      textDecoration: 'none',
+                    }}
                   >
                     {tAuthor('viewProfile')}
                   </Link>

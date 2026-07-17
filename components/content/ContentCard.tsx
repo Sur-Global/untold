@@ -47,7 +47,7 @@ function AuthorAvatar({ name, avatarUrl }: { name?: string | null; avatarUrl?: s
       <img
         src={avatarUrl}
         alt={name ?? ''}
-        className="rounded-full object-cover shrink-0"
+        className="rounded-full object-cover object-top shrink-0"
         style={{ width: 32, height: 32, border: '1.5px solid rgba(212,165,116,0.6)' }}
       />
     )
@@ -254,9 +254,9 @@ export function ContentCard({
 
         {/* Title */}
         <h3
-          className="leading-[1.3] uppercase line-clamp-2"
+          className="leading-[1.3] line-clamp-2"
           style={{
-            fontFamily: 'Audiowide, sans-serif',
+            fontFamily: 'var(--font-aeonik), Aeonik, sans-serif',
             fontSize: 18,
             color: '#5d4e37',
             lineHeight: '23.4px',
@@ -271,7 +271,7 @@ export function ContentCard({
         {blurb && (
           <p
             className="text-sm line-clamp-2 leading-[1.7]"
-            style={{ color: '#6b5744', fontFamily: 'Inter, sans-serif' }}
+            style={{ color: '#6b5744', fontFamily: 'var(--font-aeonik), Aeonik, sans-serif' }}
           >
             {blurb}
           </p>
@@ -302,14 +302,14 @@ export function ContentCard({
                 <Link
                   href={authorSlug ? `/author/${authorSlug}` : '#'}
                   className="text-sm font-medium text-[#5d4e37] hover:text-primary truncate transition-colors"
-                  style={{ fontFamily: 'Inter, sans-serif' }}
+                  style={{ fontFamily: 'var(--font-aeonik), Aeonik, sans-serif' }}
                 >
                   {authorName}
                 </Link>
               </div>
             </div>
             {readTimeMinutes && type === 'article' && (
-              <div className="flex items-center gap-1.5 shrink-0 text-[#8b7355] text-sm" style={{ fontFamily: 'Inter, sans-serif' }}>
+              <div className="flex items-center gap-1.5 shrink-0 text-[#8b7355] text-sm" style={{ fontFamily: 'var(--font-aeonik), Aeonik, sans-serif' }}>
                 <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden>
                   <circle cx="8" cy="8" r="6" stroke="currentColor" strokeWidth="1.2" />
                   <path d="M8 5v3.5l2.5 1.5" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" />
@@ -324,7 +324,7 @@ export function ContentCard({
         <div className="flex items-center gap-3">
           <span
             className="text-xs flex items-center gap-1"
-            style={{ color: '#8b7355', fontFamily: 'Inter, sans-serif' }}
+            style={{ color: '#8b7355', fontFamily: 'var(--font-aeonik), Aeonik, sans-serif' }}
           >
             <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden>
               <path

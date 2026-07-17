@@ -11,7 +11,8 @@
     "createContent": "Create",
     "dashboard": "Dashboard",
     "logout": "Log out",
-    "search": "Maskiy"
+    "search": "Maskiy",
+    "topics": "Topics"
   },
   "home": {
     "title": "UNTOLD",
@@ -132,7 +133,7 @@
     "contentHeading": "Content",
     "topicsHeading": "Topics",
     "pagesHeading": "Pages",
-    "copyright": "© {year} UNTOLD. All rights reserved. A Sur Global publication.",
+    "copyright": "© {year} UNTOLD. All rights reserved. A SurGlobal publication.",
     "topicDecoloniality": "Decoloniality",
     "topicSustainability": "Sustainability",
     "topicTechnology": "Technology",

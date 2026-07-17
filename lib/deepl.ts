@@ -1,12 +1,17 @@
-export const SUPPORTED_LOCALES = ['es', 'pt', 'fr', 'de', 'da'] as const
+export const SUPPORTED_LOCALES = ['en', 'es', 'pt', 'fr', 'de', 'da'] as const
 export type SupportedLocale = typeof SUPPORTED_LOCALES[number]
 
-const DEEPL_LANG_MAP: Record<SupportedLocale, string> = {
+const DEEPL_TARGET_MAP: Record<SupportedLocale, string> = {
+  en: 'EN-US',
   es: 'ES',
   pt: 'PT',
   fr: 'FR',
   de: 'DE',
   da: 'DA',
+}
+
+const DEEPL_SOURCE_MAP: Record<string, string> = {
+  en: 'EN', es: 'ES', pt: 'PT', fr: 'FR', de: 'DE', da: 'DA',
 }
 
 function getDeepLBaseUrl(): string {
@@ -19,6 +24,7 @@ function getDeepLBaseUrl(): string {
 export async function translateTexts(
   texts: string[],
   targetLocale: SupportedLocale,
+  sourceLocale?: string,
 ): Promise<string[]> {
   const apiKey = process.env.DEEPL_API_KEY
   if (!apiKey) throw new Error('DEEPL_API_KEY is not set')
@@ -32,7 +38,10 @@ export async function translateTexts(
     },
     body: JSON.stringify({
       text: texts,
-      target_lang: DEEPL_LANG_MAP[targetLocale],
+      target_lang: DEEPL_TARGET_MAP[targetLocale],
+      ...(sourceLocale && DEEPL_SOURCE_MAP[sourceLocale]
+        ? { source_lang: DEEPL_SOURCE_MAP[sourceLocale] }
+        : {}),
     }),
   })
 

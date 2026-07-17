@@ -3,6 +3,7 @@ import { Link } from '@/i18n/navigation'
 import { getPublicContentPath } from '@/lib/utils'
 import type { ContentType } from '@/lib/supabase/types'
 import { TranslateButton } from '@/components/admin/TranslateButton'
+import { TranslateAllButton } from '@/components/admin/TranslateAllButton'
 import { SUPPORTED_LOCALES } from '@/lib/deepl'
 import { AdminPageHeader } from '@/components/admin/AdminPageHeader'
 import { AdminPanel } from '@/components/admin/AdminPanel'
@@ -17,6 +18,7 @@ export default async function TranslationsPage() {
       id,
       type,
       slug,
+      source_locale,
       published_at,
       content_translations (
         locale,
@@ -49,11 +51,12 @@ export default async function TranslationsPage() {
               <tr className={adminTableHead}>
                 <th className="py-3 pl-6 pr-4">Title</th>
                 <th className="py-3 pr-4">Published</th>
-                {['en', ...SUPPORTED_LOCALES].map((locale) => (
+                {SUPPORTED_LOCALES.map((locale) => (
                   <th key={locale} className="py-3 pr-2 text-center font-mono uppercase">
                     {locale}
                   </th>
                 ))}
+                <th className="py-3 pr-6">Actions</th>
               </tr>
             </thead>
             <tbody>
@@ -66,8 +69,10 @@ export default async function TranslationsPage() {
                 const translationMap = new Map(
                   translations.map((t) => [t.locale, t.is_auto_translated]),
                 )
-                const enRow = translations.find((t) => t.locale === 'en')
-                const titleText = enRow?.title ?? item.id
+                const sourceLocale: string = item.source_locale ?? 'en'
+                const sourceRow = translations.find((t) => t.locale === sourceLocale)
+                const anyTitle = translations.find((t) => t.title)?.title
+                const titleText = sourceRow?.title ?? anyTitle ?? item.id
                 const publicPath =
                   item.slug && item.type
                     ? getPublicContentPath(item.type as ContentType, item.slug as string)
@@ -95,12 +100,14 @@ export default async function TranslationsPage() {
                         ? new Date(item.published_at).toLocaleDateString()
                         : '—'}
                     </td>
-                    {['en', ...SUPPORTED_LOCALES].map((locale) => {
+                    {SUPPORTED_LOCALES.map((locale) => {
                       const isAutoTranslated = translationMap.get(locale)
                       const exists = translationMap.has(locale)
                       return (
                         <td key={locale} className="py-3 pr-2 text-center">
-                          {exists ? (
+                          {locale === sourceLocale ? (
+                            <span className="text-muted-foreground font-mono text-xs">src</span>
+                          ) : exists ? (
                             <span
                               className={
                                 isAutoTranslated === false
@@ -110,14 +117,15 @@ export default async function TranslationsPage() {
                             >
                               ✓
                             </span>
-                          ) : locale === 'en' ? (
-                            <span className="text-muted-foreground">—</span>
                           ) : (
                             <TranslateButton contentId={item.id} locale={locale} />
                           )}
                         </td>
                       )
                     })}
+                    <td className="py-3 pr-6">
+                      <TranslateAllButton contentId={item.id} />
+                    </td>
                   </tr>
                 )
               })}

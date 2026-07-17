@@ -76,10 +76,25 @@ export async function createArticle(formData: FormData) {
 }
 
 export async function updateArticle(id: string, formData: FormData) {
-  const { user } = await requireCreator()
+  const { user, profile } = await requireCreator()
   const supabase = await createClient()
 
-  const title = (formData.get('title') as string).trim()
+  const isAdmin = profile.role === 'admin'
+  const editLocale = (formData.get('edit_locale') as string) || 'en'
+
+  // Security: verify access and get source_locale from DB
+  const { data: contentMeta } = await (supabase as any)
+    .from('content')
+    .select('source_locale, author_id')
+    .eq('id', id)
+    .single()
+
+  if (!contentMeta) throw new Error('Article not found')
+  if (!isAdmin && contentMeta.author_id !== user.id) throw new Error('Unauthorized')
+
+  const sourceLocale: string = contentMeta.source_locale ?? 'en'
+
+  const title = (formData.get('title') as string)?.trim() || ''
   const excerpt = (formData.get('excerpt') as string)?.trim() || null
   const featuredSummary = (formData.get('featured_summary') as string)?.trim() || null
   const coverImageUrl = (formData.get('cover_image_url') as string)?.trim() || null
@@ -88,6 +103,7 @@ export async function updateArticle(id: string, formData: FormData) {
   const tagIdsRaw = formData.get('tag_ids') as string | null
   const featureRequested = formData.get('feature_requested') === 'true'
 
+  // Update global fields (cover image etc.) — always, not locale-specific
   await (supabase as any)
     .from('content')
     .update({
@@ -97,35 +113,36 @@ export async function updateArticle(id: string, formData: FormData) {
       updated_at: new Date().toISOString(),
     })
     .eq('id', id)
-    .eq('author_id', user.id)
 
   const bodyJson = body ? (() => { try { return JSON.parse(body) } catch { return null } })() : null
 
   // Detect changes before upserting so we can invalidate stale translations
-  const { data: currentEn } = await (supabase as any)
+  const { data: currentTr } = await (supabase as any)
     .from('content_translations')
     .select('title, excerpt, body')
     .eq('content_id', id)
-    .eq('locale', 'en')
-    .single()
+    .eq('locale', editLocale)
+    .maybeSingle()
 
-  const titleChanged = currentEn?.title !== title
-  const excerptChanged = currentEn?.excerpt !== excerpt
-  const bodyChanged = JSON.stringify(currentEn?.body ?? null) !== JSON.stringify(bodyJson)
+  const titleChanged = currentTr?.title !== title
+  const excerptChanged = currentTr?.excerpt !== excerpt
+  const bodyChanged = JSON.stringify(currentTr?.body ?? null) !== JSON.stringify(bodyJson)
 
   await (supabase as any)
     .from('content_translations')
     .upsert({
       content_id: id,
-      locale: 'en',
+      locale: editLocale,
       title,
       excerpt,
       featured_summary: featuredSummary,
       body: bodyJson,
+      // Non-source locale edits are manual — prevent auto-retranslation from overwriting
+      ...(editLocale !== sourceLocale ? { is_auto_translated: false } : {}),
     }, { onConflict: 'content_id,locale' })
 
-  // Null out stale non-English fields so they re-translate on next view
-  if (titleChanged || excerptChanged || bodyChanged) {
+  // Null out stale translations in other locales only when editing the source
+  if (editLocale === sourceLocale && (titleChanged || excerptChanged || bodyChanged)) {
     const staleFields: Record<string, null> = {}
     if (titleChanged) staleFields.title = null
     if (excerptChanged) staleFields.excerpt = null
@@ -134,19 +151,20 @@ export async function updateArticle(id: string, formData: FormData) {
       .from('content_translations')
       .update(staleFields)
       .eq('content_id', id)
-      .neq('locale', 'en')
+      .neq('locale', editLocale)
   }
 
-  const readTimeMinutes = bodyJson ? computeReadTime(bodyJson) : null
-  if (readTimeMinutes !== null) {
-    await (supabase as any)
-      .from('content')
-      .update({ read_time_minutes: readTimeMinutes })
-      .eq('id', id)
-      .eq('author_id', user.id)
+  if (bodyJson && editLocale === sourceLocale) {
+    const readTimeMinutes = computeReadTime(bodyJson)
+    if (readTimeMinutes !== null) {
+      await (supabase as any)
+        .from('content')
+        .update({ read_time_minutes: readTimeMinutes })
+        .eq('id', id)
+    }
   }
 
-  // Sync tags
+  // Sync tags (global, not per-locale)
   const tagIds = tagIdsRaw ? JSON.parse(tagIdsRaw) as string[] : []
   await (supabase as any).from('content_tags').delete().eq('content_id', id)
   if (tagIds.length > 0) {

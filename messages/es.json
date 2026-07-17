@@ -11,7 +11,8 @@
     "createContent": "Crear",
     "dashboard": "Panel",
     "logout": "Cerrar sesión",
-    "search": "Buscar"
+    "search": "Buscar",
+    "topics": "Temas"
   },
   "home": {
     "title": "UNTOLD",
@@ -212,7 +213,7 @@
     "contentHeading": "Contenido",
     "topicsHeading": "Temas",
     "pagesHeading": "Páginas",
-    "copyright": "© {year} UNTOLD. Todos los derechos reservados. Una publicación de Sur Global.",
+    "copyright": "© {year} UNTOLD. Todos los derechos reservados. Una publicación de SurGlobal.",
     "topicDecoloniality": "Descolonialidad",
     "topicSustainability": "Sostenibilidad",
     "topicTechnology": "Tecnología",

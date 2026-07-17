@@ -20,7 +20,7 @@ export default async function EditPillPage({ params }: EditPillPageProps) {
   const contentPromise = (supabase as any)
     .from('content')
     .select(`
-      id, status,
+      id, status, source_locale,
       content_translations ( title, body, locale ),
       pill_meta ( accent_color, image_url )
     `)
@@ -37,7 +37,8 @@ export default async function EditPillPage({ params }: EditPillPageProps) {
 
   if (!content) notFound()
 
-  const tr = content.content_translations?.find((r: any) => r.locale === 'en') ?? content.content_translations?.[0]
+  const sourceLocale = content.source_locale ?? 'en'
+  const tr = content.content_translations?.find((r: any) => r.locale === sourceLocale) ?? content.content_translations?.[0]
   const initialBody = Array.isArray(tr?.body) ? tr.body : null
   const meta = Array.isArray(content.pill_meta) ? content.pill_meta[0] : content.pill_meta ?? {}
 

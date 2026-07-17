@@ -35,7 +35,7 @@ export default async function DashboardArticlesPage({ params }: { params: Promis
   const articlesPromise = (supabase as any)
     .from('content')
     .select(`
-      id, slug, status, published_at, created_at,
+      id, slug, status, source_locale, published_at, created_at,
       content_translations ( title, locale )
     `)
     .eq('author_id', user.id)
@@ -49,7 +49,8 @@ export default async function DashboardArticlesPage({ params }: { params: Promis
   ])
 
   const getTitle = (article: any) => {
-    const tr = article.content_translations?.find((tr: any) => tr.locale === 'en')
+    const srcLocale = article.source_locale ?? 'en'
+    const tr = article.content_translations?.find((tr: any) => tr.locale === srcLocale)
       ?? article.content_translations?.[0]
     return tr?.title ?? '(Untitled)'
   }

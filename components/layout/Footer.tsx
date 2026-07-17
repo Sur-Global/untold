@@ -11,6 +11,16 @@ const TOPICS = [
   { msgKey: 'topicResponsibleAI' as const, slug: 'responsible-ai' },
 ]
 
+const aeonikRegular: React.CSSProperties = {
+  fontFamily: 'var(--font-aeonik), Aeonik, sans-serif',
+  fontWeight: 400,
+}
+
+const aeonikRegularBody: React.CSSProperties = {
+  fontFamily: 'var(--font-aeonik), Aeonik, sans-serif',
+  fontWeight: 400,
+}
+
 export async function Footer() {
   const [t, tNav, locale, supabase] = await Promise.all([
     getTranslations('footer'),
@@ -35,22 +45,22 @@ export async function Footer() {
   return (
     <footer
       className="mt-20 border-t py-16"
-      style={{ backgroundColor: '#0D0D0D', borderColor: 'rgba(160,82,45,0.15)' }}
+      style={{ backgroundColor: '#000', borderColor: 'rgba(255,255,255,0.1)' }}
     >
       <div className="mx-auto max-w-7xl px-4 sm:px-6">
         <div className={`mb-12 grid gap-12 ${gridCols}`}>
           <div>
-            <h4 className="mb-4" style={{ color: '#E8E6E3', fontFamily: 'Audiowide, sans-serif' }}>
-              {t('brandTitle')}
-            </h4>
-            <p className="text-sm" style={{ color: '#78716C' }}>
+            <div className="mb-4">
+              <img src="/logo-untold.png" alt="UNTOLD.ink" style={{ height: 18, width: 'auto' }} />
+            </div>
+            <p className="text-sm" style={{ ...aeonikRegularBody, color: '#78716C' }}>
               {t('brandTagline')}
             </p>
           </div>
           <div>
             <p
-              className="mb-4 font-mono text-sm uppercase tracking-wider"
-              style={{ color: '#A8A29E' }}
+              className="mb-4 text-sm"
+              style={{ ...aeonikRegular, color: '#A8A29E' }}
             >
               {t('contentHeading')}
             </p>
@@ -59,7 +69,8 @@ export async function Footer() {
                 <li key={href}>
                   <Link
                     href={href}
-                    className="transition-colors hover:text-[#A0522D]"
+                    className="transition-colors hover:text-[#A9A8E9]"
+                    style={aeonikRegularBody}
                   >
                     {label}
                   </Link>
@@ -69,8 +80,8 @@ export async function Footer() {
           </div>
           <div>
             <p
-              className="mb-4 font-mono text-sm uppercase tracking-wider"
-              style={{ color: '#A8A29E' }}
+              className="mb-4 text-sm"
+              style={{ ...aeonikRegular, color: '#A8A29E' }}
             >
               {t('topicsHeading')}
             </p>
@@ -79,7 +90,8 @@ export async function Footer() {
                 <li key={slug}>
                   <Link
                     href={`/tag/${slug}`}
-                    className="transition-colors hover:text-[#A0522D]"
+                    className="transition-colors hover:text-[#A9A8E9]"
+                    style={aeonikRegularBody}
                   >
                     {t(msgKey)}
                   </Link>
@@ -90,8 +102,8 @@ export async function Footer() {
           {footerPages.length > 0 && (
             <div>
               <p
-                className="mb-4 font-mono text-sm uppercase tracking-wider"
-                style={{ color: '#A8A29E' }}
+                className="mb-4 text-sm"
+                style={{ ...aeonikRegular, color: '#A8A29E' }}
               >
                 {t('pagesHeading')}
               </p>
@@ -100,7 +112,8 @@ export async function Footer() {
                   <li key={p.slug}>
                     <Link
                       href={`/${p.slug}`}
-                      className="transition-colors hover:text-[#A0522D]"
+                      className="transition-colors hover:text-[#A9A8E9]"
+                      style={aeonikRegularBody}
                     >
                       {p.title}
                     </Link>
@@ -112,7 +125,7 @@ export async function Footer() {
         </div>
         <div
           className="border-t pt-8 text-center text-sm"
-          style={{ color: '#78716C', borderColor: 'rgba(160,82,45,0.15)' }}
+          style={{ ...aeonikRegularBody, color: '#555', borderColor: 'rgba(255,255,255,0.1)' }}
         >
           {t('copyright', { year })}
         </div>

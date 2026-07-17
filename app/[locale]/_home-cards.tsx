@@ -10,8 +10,8 @@ function AuthorAvatar({ name, avatarUrl, size = 32 }: { name?: string | null; av
       <img
         src={avatarUrl}
         alt={name ?? ''}
-        className="rounded-full object-cover shrink-0"
-        style={{ width: size, height: size, border: '1.5px solid rgba(212,165,116,0.6)' }}
+        className="rounded-full object-cover object-top shrink-0"
+        style={{ width: size, height: size, border: '1.5px solid rgba(169,168,233,0.4)' }}
       />
     )
   }
@@ -21,8 +21,8 @@ function AuthorAvatar({ name, avatarUrl, size = 32 }: { name?: string | null; av
       style={{
         width: size,
         height: size,
-        background: '#8b4513',
-        fontFamily: 'JetBrains Mono, monospace',
+        background: '#A9A8E9',
+        fontFamily: 'var(--font-aeonik), Aeonik, sans-serif',
         fontSize: size * 0.38,
         border: '1.5px solid rgba(212,165,116,0.6)',
       }}
@@ -123,8 +123,8 @@ export function LargeArticleCard({
       style={{
         height: '100%',
         minHeight: 280,
-        background: '#2C2420',
-        border: '1px solid rgba(212,165,116,0.2)',
+        background: '#0A0A0A',
+        border: '1px solid rgba(0,0,0,0.08)',
         textDecoration: 'none',
         boxShadow: '0 4px 20px rgba(44,36,32,0.12)',
       }}
@@ -152,9 +152,9 @@ export function LargeArticleCard({
           <span
             className="flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold"
             style={{
-              background: 'rgba(245,197,24,0.92)',
-              color: '#2C2420',
-              fontFamily: 'JetBrains Mono, monospace',
+              background: '#D2FE73',
+              color: '#000',
+              fontFamily: 'var(--font-aeonik), Aeonik, sans-serif', fontWeight: 400,
               fontSize: 11,
             }}
           >
@@ -167,8 +167,8 @@ export function LargeArticleCard({
               className="ml-auto px-3 py-1 rounded-full text-xs hover:opacity-80 transition-opacity"
               style={{
                 background: 'rgba(253,252,250,0.9)',
-                color: '#5d4e37',
-                fontFamily: 'JetBrains Mono, monospace',
+                color: '#444',
+                fontFamily: 'var(--font-aeonik), Aeonik, sans-serif', fontWeight: 400,
                 fontSize: 11,
                 border: 'none',
                 cursor: 'pointer',
@@ -182,8 +182,8 @@ export function LargeArticleCard({
               className="ml-auto px-3 py-1 rounded-full text-xs"
               style={{
                 background: 'rgba(253,252,250,0.9)',
-                color: '#5d4e37',
-                fontFamily: 'JetBrains Mono, monospace',
+                color: '#444',
+                fontFamily: 'var(--font-aeonik), Aeonik, sans-serif', fontWeight: 400,
                 fontSize: 11,
               }}
             >
@@ -198,10 +198,10 @@ export function LargeArticleCard({
         <h3
           className="leading-snug line-clamp-3 mb-3"
           style={{
-            fontFamily: 'Audiowide, sans-serif',
+            fontFamily: 'var(--font-heading)',
             fontSize: 22,
             color: '#F5F1E8',
-            textTransform: 'uppercase',
+            
           }}
         >
           {title}
@@ -212,7 +212,7 @@ export function LargeArticleCard({
             className="text-sm mb-5 line-clamp-2"
             style={{
               color: 'rgba(245,241,232,0.75)',
-              fontFamily: 'Inter, sans-serif',
+              fontFamily: 'var(--font-aeonik), Aeonik, sans-serif',
               lineHeight: 1.65,
             }}
           >
@@ -231,7 +231,7 @@ export function LargeArticleCard({
               <div className="min-w-0">
                 <p
                   className="text-sm font-medium text-white truncate"
-                  style={{ fontFamily: 'Inter, sans-serif' }}
+                  style={{ fontFamily: 'var(--font-aeonik), Aeonik, sans-serif' }}
                 >
                   {authorName}
                 </p>
@@ -241,7 +241,7 @@ export function LargeArticleCard({
               {readTimeMinutes && (
                 <div
                   className="flex items-center gap-1.5 text-xs"
-                  style={{ color: 'rgba(245,241,232,0.65)', fontFamily: 'Inter, sans-serif' }}
+                  style={{ color: 'rgba(245,241,232,0.65)', fontFamily: 'var(--font-aeonik), Aeonik, sans-serif' }}
                 >
                   <ClockIcon />
                   {readTimeMinutes} min
@@ -250,7 +250,7 @@ export function LargeArticleCard({
               {likesCount != null && (
                 <div
                   className="flex items-center gap-1 text-xs"
-                  style={{ color: 'rgba(245,241,232,0.55)', fontFamily: 'Inter, sans-serif' }}
+                  style={{ color: 'rgba(245,241,232,0.55)', fontFamily: 'var(--font-aeonik), Aeonik, sans-serif' }}
                 >
                   <HeartIcon />
                   {likesCount}
@@ -310,7 +310,7 @@ export function VideoCard({
         className="relative block rounded-2xl overflow-hidden"
         style={{
           paddingBottom: '62.5%',
-          background: '#2C2420',
+          background: '#0A0A0A',
           textDecoration: 'none',
         }}
       >
@@ -339,8 +339,8 @@ export function VideoCard({
               className="absolute top-3 left-3 text-xs px-3 py-1 rounded-full hover:opacity-80 transition-opacity"
               style={{
                 background: 'rgba(253,252,250,0.92)',
-                color: '#5d4e37',
-                fontFamily: 'JetBrains Mono, monospace',
+                color: '#444',
+                fontFamily: 'var(--font-aeonik), Aeonik, sans-serif', fontWeight: 400,
                 fontSize: 11,
                 border: 'none',
                 cursor: 'pointer',
@@ -354,8 +354,8 @@ export function VideoCard({
               className="absolute top-3 left-3 text-xs px-3 py-1 rounded-full"
               style={{
                 background: 'rgba(253,252,250,0.92)',
-                color: '#5d4e37',
-                fontFamily: 'JetBrains Mono, monospace',
+                color: '#444',
+                fontFamily: 'var(--font-aeonik), Aeonik, sans-serif', fontWeight: 400,
                 fontSize: 11,
               }}
             >
@@ -370,7 +370,7 @@ export function VideoCard({
             style={{
               width: 52,
               height: 52,
-              background: 'rgba(184,115,79,0.95)',
+              background: '#A9A8E9',
               boxShadow: '0 4px 16px rgba(44,36,32,0.35)',
             }}
           >
@@ -386,7 +386,7 @@ export function VideoCard({
             style={{
               background: 'rgba(44,36,32,0.78)',
               color: '#F5F1E8',
-              fontFamily: 'JetBrains Mono, monospace',
+              fontFamily: 'var(--font-aeonik), Aeonik, sans-serif', fontWeight: 400,
               fontSize: 11,
             }}
           >
@@ -402,10 +402,10 @@ export function VideoCard({
           <h3
             className="leading-snug line-clamp-2 mb-2 hover:text-primary transition-colors"
             style={{
-              fontFamily: 'Audiowide, sans-serif',
+              fontFamily: 'var(--font-heading)',
               fontSize: 16,
               color: '#2C2420',
-              textTransform: 'uppercase',
+              
             }}
           >
             {title}
@@ -419,7 +419,7 @@ export function VideoCard({
               <Link
                 href={authorSlug ? `/author/${authorSlug}` : '#'}
                 className="text-sm font-medium text-[#5d4e37]"
-                style={{ fontFamily: 'Inter, sans-serif', textDecoration: 'none' }}
+                style={{ fontFamily: 'var(--font-aeonik), Aeonik, sans-serif', textDecoration: 'none' }}
               >
                 {authorName}
               </Link>
@@ -430,7 +430,7 @@ export function VideoCard({
         <div className="flex items-center gap-3">
           <span
             className="flex items-center gap-1 text-xs"
-            style={{ color: '#8B7355', fontFamily: 'Inter, sans-serif' }}
+            style={{ color: '#666', fontFamily: 'var(--font-aeonik), Aeonik, sans-serif' }}
           >
             <HeartIcon />
             {likesCount ?? 0}
@@ -476,8 +476,8 @@ export function PodcastCard({
       className="flex flex-col rounded-2xl overflow-hidden"
       style={{
         background: '#fff',
-        border: '1.5px solid rgba(160,82,45,0.22)',
-        boxShadow: '0 2px 8px rgba(93,78,55,0.08)',
+        border: '1.5px solid rgba(0,0,0,0.1)',
+        boxShadow: '0 2px 8px rgba(0,0,0,0.06)',
       }}
     >
       {/* Main content */}
@@ -506,7 +506,7 @@ export function PodcastCard({
           {episodeNumber && (
             <p
               className="text-xs"
-              style={{ color: '#8B7355', fontFamily: 'Inter, sans-serif' }}
+              style={{ color: '#666', fontFamily: 'var(--font-aeonik), Aeonik, sans-serif' }}
             >
               Episode {episodeNumber}
             </p>
@@ -514,10 +514,10 @@ export function PodcastCard({
           <h3
             className="leading-snug line-clamp-2"
             style={{
-              fontFamily: 'Audiowide, sans-serif',
+              fontFamily: 'var(--font-heading)',
               fontSize: 16,
               color: '#2C2420',
-              textTransform: 'uppercase',
+              
             }}
           >
             {title}
@@ -525,7 +525,7 @@ export function PodcastCard({
           {excerpt && (
             <p
               className="text-sm line-clamp-2"
-              style={{ color: '#6b5744', fontFamily: 'Inter, sans-serif', lineHeight: 1.55 }}
+              style={{ color: '#555', fontFamily: 'var(--font-aeonik), Aeonik, sans-serif', lineHeight: 1.55 }}
             >
               {excerpt}
             </p>
@@ -533,7 +533,7 @@ export function PodcastCard({
           {duration && (
             <div
               className="flex items-center gap-1.5 text-xs mt-auto pt-1"
-              style={{ color: '#8B7355', fontFamily: 'Inter, sans-serif' }}
+              style={{ color: '#666', fontFamily: 'var(--font-aeonik), Aeonik, sans-serif' }}
             >
               <ClockIcon />
               {duration}
@@ -545,14 +545,14 @@ export function PodcastCard({
       {/* Footer: author */}
       <div
         className="px-5 py-4 flex items-center gap-3"
-        style={{ borderTop: '1px solid rgba(212,165,116,0.25)' }}
+        style={{ borderTop: '1px solid rgba(0,0,0,0.08)' }}
       >
         <AuthorAvatar name={authorName} avatarUrl={authorAvatarUrl} size={30} />
         <div className="min-w-0">
           <Link
             href={authorSlug ? `/author/${authorSlug}` : '#'}
             className="text-sm font-medium text-[#5d4e37] truncate block"
-            style={{ fontFamily: 'Inter, sans-serif', textDecoration: 'none' }}
+            style={{ fontFamily: 'var(--font-aeonik), Aeonik, sans-serif', textDecoration: 'none' }}
           >
             {authorName}
           </Link>
@@ -603,8 +603,8 @@ export function HomePillCard({
     <div
       className="flex flex-col rounded-2xl overflow-hidden"
       style={{
-        background: '#fdfcfa',
-        border: '1px solid #d4a574',
+        background: '#F8F8F8',
+        border: '1px solid rgba(0,0,0,0.1)',
         boxShadow: '0 2px 8px rgba(93,78,55,0.08)',
       }}
     >
@@ -634,7 +634,7 @@ export function HomePillCard({
                   background: tagBg,
                   color: tagColor,
                   border: `1px solid ${tagBorder}`,
-                  fontFamily: 'JetBrains Mono, monospace',
+                  fontFamily: 'var(--font-aeonik), Aeonik, sans-serif', fontWeight: 400,
                   fontSize: 11,
                   textDecoration: 'none',
                 }}
@@ -648,7 +648,7 @@ export function HomePillCard({
                   background: tagBg,
                   color: tagColor,
                   border: `1px solid ${tagBorder}`,
-                  fontFamily: 'JetBrains Mono, monospace',
+                  fontFamily: 'var(--font-aeonik), Aeonik, sans-serif', fontWeight: 400,
                   fontSize: 11,
                 }}
               >
@@ -666,7 +666,7 @@ export function HomePillCard({
             />
             <button
               className="flex items-center justify-center rounded-lg transition-colors hover:bg-[#d4a574]/20"
-              style={{ width: 28, height: 28, color: '#8B7355', background: 'none', border: 'none', cursor: 'pointer' }}
+              style={{ width: 28, height: 28, color: '#666', background: 'none', border: 'none', cursor: 'pointer' }}
               aria-label="Share"
               title="Share"
             >
@@ -680,10 +680,10 @@ export function HomePillCard({
           <h3
             className="leading-snug line-clamp-3 hover:text-primary transition-colors"
             style={{
-              fontFamily: 'Audiowide, sans-serif',
+              fontFamily: 'var(--font-heading)',
               fontSize: 15,
               color: '#2C2420',
-              textTransform: 'uppercase',
+              
             }}
           >
             {title}
@@ -694,7 +694,7 @@ export function HomePillCard({
         {excerpt && (
           <p
             className="text-sm line-clamp-3 flex-1"
-            style={{ color: '#6b5744', fontFamily: 'Inter, sans-serif', lineHeight: 1.6 }}
+            style={{ color: '#555', fontFamily: 'var(--font-aeonik), Aeonik, sans-serif', lineHeight: 1.6 }}
           >
             {excerpt}
           </p>
@@ -704,14 +704,14 @@ export function HomePillCard({
         {authorName && (
           <div
             className="flex items-center gap-2 pt-3 mt-auto"
-            style={{ borderTop: '1px solid rgba(212,165,116,0.3)' }}
+            style={{ borderTop: '1px solid rgba(0,0,0,0.08)' }}
           >
             <AuthorAvatar name={authorName} avatarUrl={authorAvatarUrl} size={28} />
             <div className="min-w-0">
               <Link
                 href={authorSlug ? `/author/${authorSlug}` : '#'}
                 className="text-sm font-medium text-[#5d4e37] truncate block"
-                style={{ fontFamily: 'Inter, sans-serif', textDecoration: 'none' }}
+                style={{ fontFamily: 'var(--font-aeonik), Aeonik, sans-serif', textDecoration: 'none' }}
               >
                 {authorName}
               </Link>
@@ -769,8 +769,8 @@ export function CourseCard({
     <div
       className="flex flex-col rounded-2xl overflow-hidden"
       style={{
-        background: '#fdfcfa',
-        border: '1px solid #d4a574',
+        background: '#F8F8F8',
+        border: '1px solid rgba(0,0,0,0.1)',
         boxShadow: '0 2px 8px rgba(93,78,55,0.1)',
       }}
     >
@@ -794,8 +794,8 @@ export function CourseCard({
           <span
             className="absolute top-3 right-3 flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-white font-semibold"
             style={{
-              background: 'linear-gradient(160deg,#8b4513,#a0522d)',
-              fontFamily: 'JetBrains Mono, monospace',
+              background: '#000',
+              fontFamily: 'var(--font-aeonik), Aeonik, sans-serif', fontWeight: 400,
               fontSize: 13,
             }}
           >
@@ -810,8 +810,8 @@ export function CourseCard({
             className="absolute bottom-3 left-3 flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold"
             style={{
               background: 'rgba(245,241,232,0.96)',
-              color: '#5d4e37',
-              fontFamily: 'JetBrains Mono, monospace',
+              color: '#444',
+              fontFamily: 'var(--font-aeonik), Aeonik, sans-serif', fontWeight: 400,
               boxShadow: '0 1px 4px rgba(44,36,32,0.15)',
             }}
           >
@@ -826,10 +826,10 @@ export function CourseCard({
           <h3
             className="leading-snug line-clamp-2 hover:text-primary transition-colors"
             style={{
-              fontFamily: 'Audiowide, sans-serif',
+              fontFamily: 'var(--font-heading)',
               fontSize: 18,
               color: '#2C2420',
-              textTransform: 'uppercase',
+              
             }}
           >
             {title}
@@ -839,7 +839,7 @@ export function CourseCard({
         {excerpt && (
           <p
             className="text-sm line-clamp-2"
-            style={{ color: '#6b5744', fontFamily: 'Inter, sans-serif', lineHeight: 1.6 }}
+            style={{ color: '#555', fontFamily: 'var(--font-aeonik), Aeonik, sans-serif', lineHeight: 1.6 }}
           >
             {excerpt}
           </p>
@@ -849,7 +849,7 @@ export function CourseCard({
         {(duration || studentsCount != null) && (
           <div
             className="flex items-center gap-4 text-xs"
-            style={{ color: '#8B7355', fontFamily: 'Inter, sans-serif' }}
+            style={{ color: '#666', fontFamily: 'var(--font-aeonik), Aeonik, sans-serif' }}
           >
             {duration && (
               <span className="flex items-center gap-1.5">
@@ -870,13 +870,13 @@ export function CourseCard({
         {authorName && (
           <div
             className="flex items-center gap-2.5 pt-3 mt-auto"
-            style={{ borderTop: '1px solid rgba(212,165,116,0.3)' }}
+            style={{ borderTop: '1px solid rgba(0,0,0,0.08)' }}
           >
             <AuthorAvatar name={authorName} avatarUrl={authorAvatarUrl} size={30} />
             <div className="min-w-0">
               <p
                 className="text-sm font-medium text-[#5d4e37] truncate"
-                style={{ fontFamily: 'Inter, sans-serif' }}
+                style={{ fontFamily: 'var(--font-aeonik), Aeonik, sans-serif' }}
               >
                 {authorName}
               </p>
@@ -885,8 +885,8 @@ export function CourseCard({
                   href={`/author/${authorSlug}`}
                   className="text-xs hover:underline"
                   style={{
-                    color: '#A0522D',
-                    fontFamily: 'Inter, sans-serif',
+                    color: '#A9A8E9',
+                    fontFamily: 'var(--font-aeonik), Aeonik, sans-serif',
                     textDecoration: 'none',
                   }}
                 >

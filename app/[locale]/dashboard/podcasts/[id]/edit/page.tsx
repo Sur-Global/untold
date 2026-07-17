@@ -20,7 +20,7 @@ export default async function EditPodcastPage({ params }: PageProps) {
   const contentPromise = (supabase as any)
     .from('content')
     .select(`
-      id, status, cover_image_url,
+      id, status, source_locale, cover_image_url,
       content_translations ( title, description, locale ),
       podcast_meta ( embed_url, cover_image_url, duration, episode_number )
     `)
@@ -37,7 +37,8 @@ export default async function EditPodcastPage({ params }: PageProps) {
 
   if (!content) notFound()
 
-  const tr = content.content_translations?.find((r: any) => r.locale === 'en') ?? content.content_translations?.[0]
+  const sourceLocale = content.source_locale ?? 'en'
+  const tr = content.content_translations?.find((r: any) => r.locale === sourceLocale) ?? content.content_translations?.[0]
   const meta = Array.isArray(content.podcast_meta) ? content.podcast_meta[0] : content.podcast_meta ?? {}
 
   return (

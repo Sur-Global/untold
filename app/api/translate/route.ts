@@ -25,28 +25,37 @@ export async function POST(req: NextRequest) {
 
   const { data: content } = await (supabase as any)
     .from('content')
-    .select('type, author_id')
+    .select('type, author_id, source_locale')
     .eq('id', contentId)
     .single()
+
+  if (!content) {
+    return NextResponse.json({ error: 'Content not found' }, { status: 404 })
+  }
+
+  const sourceLocale: string = content.source_locale ?? 'en'
 
   const { data: source } = await (supabase as any)
     .from('content_translations')
     .select('title, excerpt, description, body')
     .eq('content_id', contentId)
-    .eq('locale', 'en')
+    .eq('locale', sourceLocale)
     .single()
 
-  if (!content || !source) {
-    return NextResponse.json({ error: 'Content not found' }, { status: 404 })
+  if (!source) {
+    return NextResponse.json({ error: 'Source translation not found' }, { status: 404 })
   }
 
   const locales: SupportedLocale[] = locale
     ? [locale as SupportedLocale]
-    : [...SUPPORTED_LOCALES]
+    : (SUPPORTED_LOCALES as readonly SupportedLocale[]).filter(l => l !== sourceLocale)
 
   const translated: string[] = []
 
   for (const targetLocale of locales) {
+    // Never translate into the source language
+    if (targetLocale === sourceLocale) continue
+
     try {
       // Skip manually authored translations
       const { data: existing } = await (supabase as any)
@@ -73,7 +82,7 @@ export async function POST(req: NextRequest) {
       }
 
       const translatedTexts = fieldValues.length > 0
-        ? await translateTexts(fieldValues, targetLocale)
+        ? await translateTexts(fieldValues, targetLocale, sourceLocale)
         : []
 
       const translatedFields: Record<string, string> = {}
@@ -87,7 +96,7 @@ export async function POST(req: NextRequest) {
           // BlockNote format
           const entries = extractBlockNoteTextNodes(source.body)
           if (entries.length > 0) {
-            const bodyTranslations = await translateTexts(entries.map((e) => e.text), targetLocale)
+            const bodyTranslations = await translateTexts(entries.map((e) => e.text), targetLocale, sourceLocale)
             translatedBody = injectBlockNoteTextNodes(source.body, bodyTranslations, entries)
           } else {
             translatedBody = source.body
@@ -96,7 +105,7 @@ export async function POST(req: NextRequest) {
           // Legacy Tiptap format
           const { texts, paths } = extractTextNodes(source.body)
           if (texts.length > 0) {
-            const bodyTranslations = await translateTexts(texts, targetLocale)
+            const bodyTranslations = await translateTexts(texts, targetLocale, sourceLocale)
             translatedBody = injectTextNodes(source.body, bodyTranslations, paths)
           } else {
             translatedBody = source.body
@@ -141,7 +150,7 @@ export async function POST(req: NextRequest) {
             : []
 
           if (sourceCues.length > 0) {
-            const translatedTexts = await translateTexts(sourceCues.map((c) => c.text), targetLocale)
+            const translatedTexts = await translateTexts(sourceCues.map((c) => c.text), targetLocale, sourceLocale)
             const translatedCues = sourceCues.map((c, i) => ({ start: c.start, text: translatedTexts[i] }))
             // NOTE: Read-then-merge-then-write (not atomic). Worst case: a locale gets re-triggered
             // on next visit if two concurrent writes race. Acceptable trade-off for a content site.
@@ -155,7 +164,7 @@ export async function POST(req: NextRequest) {
             : []
 
           if (sourceChapters.length > 0) {
-            const translatedTitles = await translateTexts(sourceChapters.map((c) => c.title), targetLocale)
+            const translatedTitles = await translateTexts(sourceChapters.map((c) => c.title), targetLocale, sourceLocale)
             const translatedChapters = sourceChapters.map((c, i) => ({ timestamp: c.timestamp, title: translatedTitles[i] }))
             const existingChapterTrans = (videoMeta?.chapter_translations as Record<string, unknown>) ?? {}
             updates.chapter_translations = { ...existingChapterTrans, [targetLocale]: translatedChapters }
@@ -183,7 +192,7 @@ export async function POST(req: NextRequest) {
 
           const existingProfileTrans = (author?.profile_translations as Record<string, unknown>) ?? {}
           if (author?.bio && !existingProfileTrans[targetLocale]) {
-            const [translatedBio] = await translateTexts([author.bio], targetLocale)
+            const [translatedBio] = await translateTexts([author.bio], targetLocale, sourceLocale)
             await (supabase as any)
               .from('profiles')
               .update({ profile_translations: { ...existingProfileTrans, [targetLocale]: { bio: translatedBio } } })

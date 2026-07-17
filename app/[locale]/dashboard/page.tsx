@@ -76,9 +76,14 @@ export default async function DashboardPage({ params }: { params: Promise<{ loca
       <main className="max-w-4xl mx-auto px-4 sm:px-6 py-12">
         <div className="flex items-center justify-between mb-8">
           <h1>{t('myContent')}</h1>
-          <Link href="/create" className={cn(buttonVariants(), 'gradient-rust text-white border-0')}>
-            {t('newContent')}
-          </Link>
+          <div className="flex items-center gap-3">
+            <Link href="/dashboard/profile" className={cn(buttonVariants({ variant: 'outline' }))}>
+              Edit Profile
+            </Link>
+            <Link href="/create" className={cn(buttonVariants(), 'gradient-rust text-white border-0')}>
+              {t('newContent')}
+            </Link>
+          </div>
         </div>
 
         {(!items || items.length === 0) ? (

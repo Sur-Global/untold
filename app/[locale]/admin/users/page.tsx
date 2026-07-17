@@ -6,6 +6,7 @@ import { DeleteUserButton } from '@/components/admin/DeleteUserButton'
 import { AdminPageHeader } from '@/components/admin/AdminPageHeader'
 import { AdminPanel } from '@/components/admin/AdminPanel'
 import { adminTableHead, adminTableRow } from '@/components/admin/admin-ui'
+import { Link } from '@/i18n/navigation'
 
 export default async function AdminUsersPage() {
   const supabase = await createClient()
@@ -66,6 +67,12 @@ export default async function AdminUsersPage() {
                   </td>
                   <td className="px-6 py-3">
                     <div className="flex flex-wrap items-center gap-2">
+                      <Link
+                        href={`/admin/users/${profile.id}/edit`}
+                        className="text-xs font-['JetBrains_Mono',monospace] text-primary underline-offset-4 hover:underline"
+                      >
+                        Edit
+                      </Link>
                       <SuspendButton
                         userId={profile.id}
                         isSuspended={!!profile.suspended_at}

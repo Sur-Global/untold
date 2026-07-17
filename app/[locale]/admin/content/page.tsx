@@ -8,6 +8,14 @@ import { AdminPageHeader } from '@/components/admin/AdminPageHeader'
 import { AdminPanel } from '@/components/admin/AdminPanel'
 import { adminTableHead, adminTableRow } from '@/components/admin/admin-ui'
 
+const editPath: Record<string, string> = {
+  article: 'articles',
+  video: 'videos',
+  podcast: 'podcasts',
+  pill: 'pills',
+  course: 'courses',
+}
+
 export default async function AdminContentPage() {
   const supabase = await createClient()
 
@@ -47,10 +55,9 @@ export default async function AdminContentPage() {
             </thead>
             <tbody>
               {(items ?? []).map((item: any) => {
-                const enTitle = item.content_translations?.find(
-                  (t: any) => t.locale === 'en',
-                )?.title
-                const titleText = enTitle ?? item.id
+                const enTitle = item.content_translations?.find((t: any) => t.locale === 'en')?.title
+                const anyTitle = item.content_translations?.find((t: any) => t.title)?.title
+                const titleText = enTitle ?? anyTitle ?? item.id
                 const publicPath =
                   item.slug && item.type
                     ? getPublicContentPath(item.type as ContentType, item.slug as string)
@@ -84,7 +91,17 @@ export default async function AdminContentPage() {
                       <FeatureButton contentId={item.id} isFeatured={item.is_featured} />
                     </td>
                     <td className="px-6 py-3">
-                      <AdminUnpublishButton contentId={item.id} />
+                      <div className="flex items-center gap-3">
+                        {editPath[item.type] && (
+                          <Link
+                            href={`/dashboard/${editPath[item.type]}/${item.id}/edit`}
+                            className="text-xs font-['JetBrains_Mono',monospace] text-primary underline-offset-4 hover:underline"
+                          >
+                            Edit
+                          </Link>
+                        )}
+                        <AdminUnpublishButton contentId={item.id} />
+                      </div>
                     </td>
                   </tr>
                 )

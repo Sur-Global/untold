@@ -30,7 +30,7 @@ export default async function PodcastPage({ params }: PageProps) {
   const { data: podcast } = await (supabase as any)
     .from('content')
     .select(`
-      id, slug, likes_count, published_at,
+      id, slug, source_locale, likes_count, published_at,
       profiles!author_id ( display_name, slug, avatar_url ),
       content_translations ( title, description, locale ),
       podcast_meta ( embed_url, cover_image_url, duration, episode_number )
@@ -48,12 +48,13 @@ export default async function PodcastPage({ params }: PageProps) {
   const meta = podcast.podcast_meta
   const author = podcast.profiles
 
-  const enTranslation = (podcast.content_translations ?? []).find((tr: any) => tr.locale === 'en')
-  const englishDescription = enTranslation?.description as string | null
+  const sourceLocale: string = podcast.source_locale ?? 'en'
+  const sourceTranslation = (podcast.content_translations ?? []).find((tr: any) => tr.locale === sourceLocale)
+  const sourceDescription = sourceTranslation?.description as string | null
 
   const usingFallback = t.locale !== locale
   const description = usingFallback ? null : (t.description as string | null)
-  const needsDescription = locale !== 'en' && !!englishDescription && (usingFallback || !description)
+  const needsDescription = locale !== sourceLocale && !!sourceDescription && (usingFallback || !description)
 
   if (needsDescription) {
     after(async () => {
@@ -141,7 +142,7 @@ export default async function PodcastPage({ params }: PageProps) {
           locale={locale}
           isTranslating={needsDescription}
           field="description"
-          fallback={englishDescription}
+          fallback={sourceDescription}
           initialContent={description}
           descriptionClassName="text-[#6B5F58] leading-relaxed"
         />

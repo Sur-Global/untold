@@ -19,12 +19,12 @@ interface ArticlesFilterProps {
 }
 
 const TAG_COLORS = [
-  { text: '#6b8e23', border: 'rgba(107,142,35,0.3)' },
-  { text: '#a0522d', border: 'rgba(160,82,45,0.3)' },
-  { text: '#8b4513', border: 'rgba(139,69,19,0.3)' },
-  { text: '#b8860b', border: 'rgba(184,134,11,0.3)' },
-  { text: '#8b7355', border: 'rgba(139,115,85,0.3)' },
-  { text: '#2e8b57', border: 'rgba(46,139,87,0.3)' },
+  { text: '#000', border: 'rgba(0,0,0,0.18)' },
+  { text: '#000', border: 'rgba(169,168,233,0.55)' },
+  { text: '#000', border: 'rgba(210,254,115,0.7)' },
+  { text: '#000', border: 'rgba(0,0,0,0.18)' },
+  { text: '#000', border: 'rgba(169,168,233,0.55)' },
+  { text: '#000', border: 'rgba(210,254,115,0.7)' },
 ]
 
 export function ArticlesFilter({
@@ -98,7 +98,7 @@ export function ArticlesFilter({
             height="20"
             viewBox="0 0 20 20"
             fill="none"
-            style={{ color: 'rgba(44,36,32,0.4)' }}
+            style={{ color: 'rgba(0,0,0,0.35)' }}
           >
             <circle cx="9" cy="9" r="5.5" stroke="currentColor" strokeWidth="1.5" />
             <path d="M14 14l-3-3" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
@@ -108,10 +108,10 @@ export function ArticlesFilter({
             value={inputValue}
             onChange={(e) => handleSearch(e.target.value)}
             placeholder={searchPlaceholder}
-            className="w-full h-[60px] pl-12 pr-4 rounded-[10px] bg-white text-base text-foreground placeholder:text-[rgba(44,36,32,0.4)] focus:outline-none transition-shadow"
+            className="w-full h-[60px] pl-12 pr-4 rounded-[10px] bg-white text-base text-foreground placeholder:text-[rgba(0,0,0,0.35)] focus:outline-none transition-shadow"
             style={{
-              border: '1.5px solid rgba(139,69,19,0.15)',
-              boxShadow: '0px 2px 8px rgba(44,36,32,0.08), 0px 4px 16px rgba(44,36,32,0.04)',
+              border: '1.5px solid rgba(0,0,0,0.15)',
+              boxShadow: '0px 2px 8px rgba(0,0,0,0.06), 0px 4px 16px rgba(0,0,0,0.03)',
             }}
           />
         </div>
@@ -130,18 +130,16 @@ export function ArticlesFilter({
               style={
                 isActive
                   ? {
-                      background: '#a0522d',
-                      color: 'white',
-                      border: '1.5px solid #a0522d',
-                      boxShadow: '0 2px 8px rgba(44,36,32,0.08)',
-                      fontFamily: 'JetBrains Mono, monospace',
+                      background: '#000',
+                      color: '#fff',
+                      border: '1.5px solid #000',
+                      fontFamily: 'var(--font-aeonik), Aeonik, sans-serif',
                     }
                   : {
                       background: 'white',
-                      color: '#5a4a42',
-                      border: '1.5px solid rgba(139,69,19,0.15)',
-                      boxShadow: '0 2px 8px rgba(44,36,32,0.08)',
-                      fontFamily: 'JetBrains Mono, monospace',
+                      color: '#000',
+                      border: '1.5px solid rgba(0,0,0,0.18)',
+                      fontFamily: 'var(--font-aeonik), Aeonik, sans-serif',
                     }
               }
             >
@@ -164,10 +162,10 @@ export function ArticlesFilter({
                 onClick={() => updateParams({ tag: isActive ? null : tag.slug })}
                 className="h-[38px] px-4 rounded-full text-sm transition-colors"
                 style={{
-                  color: color.text,
-                  border: `1px solid ${color.border}`,
-                  background: isActive ? color.border : 'white',
-                  fontFamily: 'Inter, sans-serif',
+                  color: '#000',
+                  border: `1.5px solid ${isActive ? '#A9A8E9' : color.border}`,
+                  background: isActive ? '#A9A8E9' : 'white',
+                  fontFamily: 'var(--font-aeonik), Aeonik, sans-serif',
                 }}
               >
                 {tag.name}

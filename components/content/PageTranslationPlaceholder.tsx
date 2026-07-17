@@ -62,7 +62,7 @@ export function PageTranslationPlaceholder({ contentId, locale, coverImageUrl }:
       <div className="bg-card border border-primary/20 rounded-2xl p-12 flex flex-col items-center gap-6 text-center">
         <span className="w-8 h-8 rounded-full border-2 border-primary border-t-transparent animate-spin" />
         <div>
-          <p className="font-['Audiowide'] text-lg uppercase text-foreground mb-2">
+          <p className="font-heading text-lg text-foreground mb-2">
             {t('heading', { language })}
           </p>
           <p className="text-sm text-muted-foreground font-['JetBrains_Mono',monospace] max-w-sm">

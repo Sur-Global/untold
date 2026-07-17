@@ -58,7 +58,7 @@ export default async function VideosPage({ params, searchParams }: PageProps) {
   const totalPages = Math.ceil((count ?? 0) / PAGE_SIZE)
 
   let pendingTranslations = false
-  if (locale !== 'en' && items && items.length > 0) {
+  if (items && items.length > 0) {
     const untranslatedIds = (items as any[])
       .filter(i => !(i.content_translations ?? []).some((t: any) => t.locale === locale))
       .map((i: any) => i.id)

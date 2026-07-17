@@ -44,7 +44,7 @@ export default async function ArticlePage({ params }: PageProps) {
   const supabase = await createClient()
 
   const { data: { user } } = await supabase.auth.getUser()
-  let navUserRole = null
+  let navUserRole: string | null = null
   if (user) {
     const { data: navProfile } = await (supabase as any)
       .from('profiles').select('role').eq('id', user.id).single()
@@ -73,18 +73,25 @@ export default async function ArticlePage({ params }: PageProps) {
   const author = article.profiles
   const tags = article.content_tags?.map((ct: any) => ct.tags) ?? []
 
-  const enTranslation = (article.content_translations ?? []).find((tr: any) => tr.locale === 'en')
-  const englishBody = enTranslation?.body as Record<string, unknown> | null
+  const sourceLocale: string = article.source_locale ?? 'en'
+  const sourceTranslation = (article.content_translations ?? []).find((tr: any) => tr.locale === sourceLocale)
+  const sourceBody = sourceTranslation?.body as Record<string, unknown> | null
 
-  // getTranslation falls back to English when no locale row exists — detect that case
+  // getTranslation falls back to source locale when no locale row exists — detect that case
   const usingFallback = t.locale !== locale
   const body = usingFallback ? null : (t.body as Record<string, unknown> | null)
-  const needsBody = locale !== 'en' && !!englishBody && (usingFallback || !body)
+  const needsBody = locale !== sourceLocale && !!sourceBody && (usingFallback || !body)
 
   // Author bio translation
-  const profileTrans = author?.profile_translations as Record<string, { bio?: string }> | null
+  const profileTrans = author?.profile_translations as Record<string, any> | null
   const translatedBio = profileTrans?.[locale]?.bio ?? null
-  const needsAuthorBio = locale !== 'en' && !!author?.bio && !translatedBio
+  const needsAuthorBio = locale !== sourceLocale && !!author?.bio && !translatedBio
+
+  // Source-language bio fields extracted from Ghost (stored by import script)
+  const sourceBioHtml = profileTrans?._source_bio_html ?? null
+  const sourceBioHeading = profileTrans?._source_bio_heading ?? null
+  const sourceBioCTAUrl = profileTrans?._source_bio_cta_url ?? null
+  const sourceBioCTALabel = profileTrans?._source_bio_cta_label ?? null
 
   if (needsBody || needsAuthorBio) {
     after(async () => {
@@ -181,7 +188,7 @@ export default async function ArticlePage({ params }: PageProps) {
                         <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden>
                           <path d="M2 4a2 2 0 012-2h4.586a1 1 0 01.707.293l4.414 4.414a1 1 0 010 1.414l-4.586 4.586a1 1 0 01-1.414 0L3.293 8.293A1 1 0 013 7.586V4z"/>
                         </svg>
-                        {tag.names?.en ?? tag.slug}
+                        {tag.names?.[locale] ?? tag.names?.en ?? tag.slug}
                       </Link>
                     ))}
                   </div>
@@ -189,7 +196,7 @@ export default async function ArticlePage({ params }: PageProps) {
 
                 {/* Title */}
                 <h1
-                  className="font-['Audiowide'] text-foreground uppercase mb-6"
+                  className="font-heading text-foreground mb-6"
                   style={{ fontSize: 50, lineHeight: '61.6px', letterSpacing: '-0.56px', maxWidth: 752 }}
                 >
                   {t.title}
@@ -206,7 +213,7 @@ export default async function ArticlePage({ params }: PageProps) {
                   <div className="flex items-center gap-3">
                     <div className="w-12 h-12 rounded-full flex-shrink-0 overflow-hidden border-2 border-primary/20">
                       {author?.avatar_url ? (
-                        <img src={author.avatar_url} alt={author.display_name} className="w-full h-full object-cover" />
+                        <img src={author.avatar_url} alt={author.display_name} className="w-full h-full object-cover object-top" />
                       ) : (
                         <div className="w-full h-full bg-primary/10 flex items-center justify-center text-primary font-semibold">
                           {author?.display_name?.[0]?.toUpperCase() ?? '?'}
@@ -266,16 +273,27 @@ export default async function ArticlePage({ params }: PageProps) {
                     className={actionButtonClass}
                   />
                   <ShareButton title={t.title} className={actionButtonClass} />
+                  {user && (navUserRole === 'admin' || user.id === author?.id) && (
+                    <Link
+                      href={`/dashboard/articles/${article.id}/edit`}
+                      className={actionButtonClass}
+                    >
+                      <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden>
+                        <path d="M9.5 1.5a1.414 1.414 0 012 2L4 11l-3 1 1-3 7.5-7.5z" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round"/>
+                      </svg>
+                      Edit
+                    </Link>
+                  )}
                 </div>
 
                 {/* Cover image */}
                 {article.cover_image_url && (
                   <figure className="mb-10">
-                    <div className="rounded-2xl overflow-hidden shadow-[0px_4px_16px_0px_rgba(44,36,32,0.1),0px_8px_32px_0px_rgba(44,36,32,0.06)]" style={{ height: 500 }}>
+                    <div className="rounded-2xl overflow-hidden shadow-[0px_4px_16px_0px_rgba(44,36,32,0.1),0px_8px_32px_0px_rgba(44,36,32,0.06)]">
                       <img
                         src={article.cover_image_url}
                         alt={t.title}
-                        className="w-full h-full object-cover"
+                        className="w-full h-auto block"
                       />
                     </div>
                     {article.image_credits && (
@@ -283,8 +301,8 @@ export default async function ArticlePage({ params }: PageProps) {
                         className="mt-3 px-4 py-4 rounded-[10px] text-sm leading-[1.43]"
                         style={{ background: 'rgba(120,113,108,0.1)' }}
                       >
-                        <strong style={{ color: '#78716c', fontFamily: 'Inter, sans-serif', fontWeight: 700 }}>Credits: </strong>
-                        <span style={{ color: '#78716c', fontFamily: 'Inter, sans-serif' }}>{article.image_credits}</span>
+                        <strong style={{ color: '#78716c', fontFamily: 'var(--font-aeonik), Aeonik, sans-serif', fontWeight: 700 }}>Credits: </strong>
+                        <span style={{ color: '#78716c', fontFamily: 'var(--font-aeonik), Aeonik, sans-serif' }}>{article.image_credits}</span>
                       </figcaption>
                     )}
                   </figure>
@@ -296,48 +314,140 @@ export default async function ArticlePage({ params }: PageProps) {
                   locale={locale}
                   isTranslating={needsBody}
                   field="body"
-                  fallback={englishBody}
+                  fallback={sourceBody}
                   initialContent={body}
                 />
 
                 {/* About the Author */}
                 {author && (
-                  <div className="mt-16 bg-card rounded-2xl p-8 border border-primary/20 shadow-[0px_4px_16px_0px_rgba(44,36,32,0.1),0px_8px_32px_0px_rgba(44,36,32,0.06)]">
-                    <h3 className="font-['Audiowide'] text-2xl uppercase text-foreground mb-6">
-                      {tAuthor('aboutAuthor')}
-                    </h3>
-                    <div className="flex gap-6 items-start">
-                      <div className="w-24 h-24 rounded-full flex-shrink-0 overflow-hidden border-2 border-primary/20">
+                  <div
+                    className="mt-16 rounded-2xl"
+                    style={{
+                      background: '#fff',
+                      border: '1px solid rgba(0,0,0,0.08)',
+                      padding: '32px',
+                      boxShadow: '0 2px 16px rgba(0,0,0,0.06)',
+                    }}
+                  >
+                    {/* Author name — full-width card header */}
+                    <Link href={`/author/${author.slug}`} className="hover:text-primary transition-colors inline-block mb-6">
+                      <h3
+                        style={{
+                          fontFamily: 'var(--font-aeonik), Aeonik, sans-serif',
+                          fontWeight: 700,
+                          fontSize: 22,
+                          color: '#111',
+                          letterSpacing: '-0.01em',
+                          lineHeight: 1.1,
+                        }}
+                      >
+                        {author.display_name}
+                      </h3>
+                      {author.location && (
+                        <p style={{ fontSize: 13, color: '#6b7280', fontFamily: 'var(--font-aeonik), Aeonik, sans-serif', marginTop: 4 }}>
+                          {author.location}
+                        </p>
+                      )}
+                    </Link>
+
+                    {/* Avatar (left) + bio (right) */}
+                    <div className="flex items-start gap-6">
+                      {/* Large circular avatar */}
+                      <div
+                        className="flex-shrink-0 overflow-hidden rounded-full"
+                        style={{ width: 160, height: 160, border: '2px solid #A9A8E9' }}
+                      >
                         {author.avatar_url ? (
-                          <img src={author.avatar_url} alt={author.display_name} className="w-full h-full object-cover" />
+                          <img src={author.avatar_url} alt={author.display_name} className="w-full h-full object-cover object-top" />
                         ) : (
-                          <div className="w-full h-full bg-primary/10 flex items-center justify-center text-primary text-2xl font-semibold">
+                          <div
+                            className="w-full h-full flex items-center justify-center"
+                            style={{ background: 'rgba(169,168,233,0.1)', fontSize: 52, fontWeight: 500, color: '#A9A8E9', fontFamily: 'var(--font-aeonik), Aeonik, sans-serif' }}
+                          >
                             {author.display_name?.[0]?.toUpperCase() ?? '?'}
                           </div>
                         )}
                       </div>
+
+                      {/* Bio text area */}
                       <div className="flex-1 min-w-0">
-                        <h4 className="font-['Audiowide'] text-lg uppercase text-foreground mb-1">
-                          {author.display_name}
-                        </h4>
-                        {author.location && (
-                          <p className="text-xs text-muted-foreground font-['JetBrains_Mono',monospace] mb-2">{author.location}</p>
-                        )}
-                        {author.bio && (
-                          <AuthorBioLoader
-                            initialBio={translatedBio ?? (needsAuthorBio ? null : author.bio)}
-                            needsTranslation={needsAuthorBio}
-                            contentId={article.id}
-                            authorId={author.id}
-                            locale={locale}
-                          />
-                        )}
-                        <Link
-                          href={`/author/${author.slug}`}
-                          className="text-sm text-primary hover:underline font-['JetBrains_Mono',monospace] tracking-[0.28px]"
+                        {/* "About [Name]" subheading */}
+                        <p
+                          style={{
+                            fontFamily: 'var(--font-aeonik), Aeonik, sans-serif',
+                            fontSize: 15,
+                            fontWeight: 500,
+                            color: '#111',
+                            marginBottom: 10,
+                          }}
                         >
-                          {tAuthor('viewProfile')}
-                        </Link>
+                          {sourceBioHeading || `About ${author.display_name?.split(' ')[0] ?? author.display_name}`}
+                        </p>
+
+                        {/* Bio — HTML with links for source locale, translated text otherwise */}
+                        {(author.bio || sourceBioHtml) && (
+                          <div className="mb-5">
+                            {sourceBioHtml && !translatedBio ? (
+                              <div
+                                className="text-sm leading-relaxed [&_a]:text-primary [&_a]:underline [&_a]:hover:opacity-70 [&_a]:transition-opacity"
+                                style={{ color: '#4b5563' }}
+                                dangerouslySetInnerHTML={{ __html: sourceBioHtml }}
+                              />
+                            ) : (
+                              <AuthorBioLoader
+                                initialBio={translatedBio ?? (needsAuthorBio ? null : author.bio)}
+                                needsTranslation={needsAuthorBio}
+                                contentId={article.id}
+                                authorId={author.id}
+                                locale={locale}
+                              />
+                            )}
+                          </div>
+                        )}
+
+                        {/* CTA button */}
+                        {sourceBioCTAUrl && sourceBioCTALabel && (
+                          <a
+                            href={sourceBioCTAUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            style={{
+                              display: 'inline-flex',
+                              alignItems: 'center',
+                              gap: 4,
+                              fontFamily: 'var(--font-aeonik), Aeonik, sans-serif',
+                              fontSize: 13,
+                              fontWeight: 500,
+                              color: '#111',
+                              textDecoration: 'none',
+                              border: '1px solid rgba(0,0,0,0.15)',
+                              borderRadius: 8,
+                              padding: '7px 14px',
+                              marginBottom: 12,
+                            }}
+                            className="hover:bg-black hover:text-white transition-colors"
+                          >
+                            {sourceBioCTALabel} ↗
+                          </a>
+                        )}
+
+                        {/* View profile link */}
+                        <div>
+                          <Link
+                            href={`/author/${author.slug}`}
+                            className="inline-flex items-center gap-1 hover:text-primary transition-colors"
+                            style={{
+                              fontFamily: 'var(--font-aeonik), Aeonik, sans-serif',
+                              fontSize: 13,
+                              fontWeight: 500,
+                              color: '#111',
+                              letterSpacing: '0.02em',
+                              textDecoration: 'none',
+                            }}
+                          >
+                            {tAuthor('viewProfile')}
+                          </Link>
+                        </div>
                       </div>
                     </div>
                   </div>

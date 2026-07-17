@@ -11,7 +11,8 @@
     "createContent": "Opret",
     "dashboard": "Kontrolpanel",
     "logout": "Log ud",
-    "search": "Søg"
+    "search": "Søg",
+    "topics": "Emner"
   },
   "home": {
     "title": "UNTOLD",
@@ -212,7 +213,7 @@
     "contentHeading": "Indhold",
     "topicsHeading": "Emner",
     "pagesHeading": "Sider",
-    "copyright": "© {year} UNTOLD. Alle rettigheder forbeholdes. En Sur Global-publication.",
+    "copyright": "© {year} UNTOLD. Alle rettigheder forbeholdes. En SurGlobal-publication.",
     "topicDecoloniality": "Dekolonialitet",
     "topicSustainability": "Bæredygtighed",
     "topicTechnology": "Teknologi",

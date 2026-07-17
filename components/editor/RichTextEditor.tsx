@@ -47,6 +47,7 @@ interface RichTextEditorProps {
   onChange: (blocks: EditorBlock[]) => void
   placeholder?: string
   locale?: string
+  initialHtml?: string | null
 }
 
 async function uploadImageToSupabase(file: File): Promise<string> {
@@ -64,8 +65,10 @@ export function RichTextEditor({
   onChange,
   placeholder = 'Start writing\u2026',
   locale = 'en',
+  initialHtml,
 }: RichTextEditorProps) {
   const initialContentRef = useRef(value ?? undefined)
+  const initialHtmlRef = useRef(initialHtml)
 
   const key = LOCALE_MAP[locale] ?? 'en'
   const dictionary = {
@@ -104,6 +107,13 @@ export function RichTextEditor({
       editor.replaceBlocks(editor.document, value as any[])
     }
   }, [editor, value])
+
+  // Convert legacy ProseMirror HTML to BlockNote blocks on first mount
+  useEffect(() => {
+    if (!editor || !initialHtmlRef.current || value) return
+    const blocks = editor.tryParseHTMLToBlocks(initialHtmlRef.current)
+    editor.replaceBlocks(editor.document, blocks as any[])
+  }, [editor]) // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <div

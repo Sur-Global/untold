@@ -28,7 +28,7 @@ export default async function PillPage({ params }: PageProps) {
   const { data: pill } = await (supabase as any)
     .from('content')
     .select(`
-      id, slug, likes_count, published_at,
+      id, slug, source_locale, likes_count, published_at,
       profiles!author_id ( display_name, slug ),
       content_translations ( title, body, locale ),
       pill_meta ( accent_color, image_url )
@@ -45,12 +45,13 @@ export default async function PillPage({ params }: PageProps) {
 
   const meta = pill.pill_meta
   const accentColor = meta?.accent_color ?? '#6B8E23'
-  const enTranslation = (pill.content_translations ?? []).find((tr: any) => tr.locale === 'en')
-  const englishBody = enTranslation?.body as Record<string, unknown> | null
+  const sourceLocale: string = pill.source_locale ?? 'en'
+  const sourceTranslation = (pill.content_translations ?? []).find((tr: any) => tr.locale === sourceLocale)
+  const sourceBody = sourceTranslation?.body as Record<string, unknown> | null
 
   const usingFallback = t.locale !== locale
   const body = usingFallback ? null : (t.body as Record<string, unknown> | null)
-  const needsBody = locale !== 'en' && !!englishBody && (usingFallback || !body)
+  const needsBody = locale !== sourceLocale && !!sourceBody && (usingFallback || !body)
 
   if (needsBody) {
     after(async () => {
@@ -125,7 +126,7 @@ export default async function PillPage({ params }: PageProps) {
           locale={locale}
           isTranslating={needsBody}
           field="body"
-          fallback={englishBody}
+          fallback={sourceBody}
           initialContent={body}
         />
       </main>

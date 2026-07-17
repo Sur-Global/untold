@@ -28,7 +28,7 @@ export default async function CoursePage({ params }: PageProps) {
   const { data: course } = await (supabase as any)
     .from('content')
     .select(`
-      id, slug, cover_image_url, likes_count, published_at,
+      id, slug, source_locale, cover_image_url, likes_count, published_at,
       profiles!author_id ( display_name, slug, avatar_url ),
       content_translations ( title, description, locale ),
       course_meta ( price, currency, duration, students_count, rating )
@@ -46,12 +46,13 @@ export default async function CoursePage({ params }: PageProps) {
   const meta = course.course_meta
   const author = course.profiles
 
-  const enTranslation = (course.content_translations ?? []).find((tr: any) => tr.locale === 'en')
-  const englishDescription = enTranslation?.description as string | null
+  const sourceLocale: string = course.source_locale ?? 'en'
+  const sourceTranslation = (course.content_translations ?? []).find((tr: any) => tr.locale === sourceLocale)
+  const sourceDescription = sourceTranslation?.description as string | null
 
   const usingFallback = t.locale !== locale
   const description = usingFallback ? null : (t.description as string | null)
-  const needsDescription = locale !== 'en' && !!englishDescription && (usingFallback || !description)
+  const needsDescription = locale !== sourceLocale && !!sourceDescription && (usingFallback || !description)
 
   if (needsDescription) {
     after(async () => {
@@ -105,7 +106,7 @@ export default async function CoursePage({ params }: PageProps) {
               locale={locale}
               isTranslating={needsDescription}
               field="description"
-              fallback={englishDescription}
+              fallback={sourceDescription}
               initialContent={description}
               descriptionClassName="text-[#6B5F58] leading-relaxed text-lg"
             />

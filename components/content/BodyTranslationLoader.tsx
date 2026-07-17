@@ -119,7 +119,7 @@ export function BodyTranslationLoader({
           <div className="flex items-center gap-3">
             <span className="w-5 h-5 rounded-full border-2 border-primary border-t-transparent animate-spin flex-shrink-0" />
             <div>
-              <p className="font-['Audiowide'] text-sm uppercase text-foreground">
+              <p className="font-heading text-sm text-foreground">
                 {t('heading', { language })}
               </p>
               <p className="text-xs text-muted-foreground font-['JetBrains_Mono',monospace] mt-1">

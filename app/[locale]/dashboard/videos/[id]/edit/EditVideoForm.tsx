@@ -236,7 +236,7 @@ export function EditVideoForm({
 
         <div className="flex items-start justify-between gap-4">
           <div>
-            <h1 className="font-['Audiowide'] text-foreground uppercase text-2xl mb-1">Edit Video</h1>
+            <h1 className="font-heading text-foreground text-2xl mb-1">Edit Video</h1>
             <p className="text-sm text-muted-foreground">Edit text, layout, and images for your video</p>
           </div>
           <div className="flex items-center gap-2 flex-shrink-0 mt-1">
@@ -445,7 +445,7 @@ export function EditVideoForm({
                       {layout.icon}
                     </div>
                     <div>
-                      <p className="font-['Audiowide'] text-foreground text-base uppercase mb-1">{label}</p>
+                      <p className="font-heading text-foreground text-base mb-1">{label}</p>
                       <p className="text-sm font-['JetBrains_Mono',monospace] text-muted-foreground tracking-[0.28px]">{desc}</p>
                     </div>
                   </button>

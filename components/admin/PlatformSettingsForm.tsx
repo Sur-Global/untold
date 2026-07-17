@@ -244,7 +244,7 @@ export function PlatformSettingsForm({
               className="flex flex-col gap-2 px-6 py-4 sm:flex-row sm:items-center sm:justify-between"
             >
               <div>
-                <p className="font-heading text-sm uppercase tracking-wide text-foreground">
+                <p className="font-heading text-sm text-foreground">
                   {p.title}
                 </p>
                 <p className="font-mono text-xs text-muted-foreground">/{p.slug}</p>

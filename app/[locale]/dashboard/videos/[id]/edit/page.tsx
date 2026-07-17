@@ -19,7 +19,7 @@ export default async function EditVideoPage({ params }: PageProps) {
   const contentPromise = (supabase as any)
     .from('content')
     .select(`
-      id, status, cover_image_url, feature_requested_at,
+      id, status, source_locale, cover_image_url, feature_requested_at,
       content_translations ( title, body, description, locale ),
       video_meta ( embed_url, thumbnail_url, duration, chapters, layout_style, transcript ),
       content_tags ( tag_id, tags ( id, slug, names ) )
@@ -36,7 +36,8 @@ export default async function EditVideoPage({ params }: PageProps) {
 
   if (!content) notFound()
 
-  const tr = content.content_translations?.find((r: any) => r.locale === 'en') ?? content.content_translations?.[0]
+  const sourceLocale = content.source_locale ?? 'en'
+  const tr = content.content_translations?.find((r: any) => r.locale === sourceLocale) ?? content.content_translations?.[0]
   const meta = Array.isArray(content.video_meta) ? content.video_meta[0] : content.video_meta ?? {}
 
   const initialTags = (content.content_tags ?? [])

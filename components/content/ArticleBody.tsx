@@ -2,6 +2,7 @@
 import dynamic from 'next/dynamic'
 import { generateHTML } from '@tiptap/html'
 import StarterKit from '@tiptap/starter-kit'
+import Link from '@tiptap/extension-link'
 import { Table, TableRow, TableCell, TableHeader } from '@tiptap/extension-table'
 import { ImageWithCredit } from '@/lib/tiptap/image-with-credit'
 
@@ -18,13 +19,13 @@ const PROSE_CLASS = `
 
   prose-p:text-foreground prose-p:text-[18px] prose-p:leading-[1.625] prose-p:mb-6
 
-  prose-h1:font-['Audiowide'] prose-h1:uppercase prose-h1:text-foreground
+  prose-h1:font-heading prose-h1:text-foreground
     prose-h1:text-[50px] prose-h1:leading-[1.232] prose-h1:tracking-[-0.56px]
     prose-h1:mt-10 prose-h1:mb-6
-  prose-h2:font-['Audiowide'] prose-h2:uppercase prose-h2:text-foreground
+  prose-h2:font-heading prose-h2:text-foreground
     prose-h2:text-[35px] prose-h2:leading-[1.371] prose-h2:tracking-[-0.4px]
     prose-h2:mt-10 prose-h2:mb-5
-  prose-h3:font-['Audiowide'] prose-h3:uppercase prose-h3:text-foreground
+  prose-h3:font-heading prose-h3:text-foreground
     prose-h3:text-[24px] prose-h3:leading-[1.3]
     prose-h3:mt-8 prose-h3:mb-4
 
@@ -48,6 +49,7 @@ const PROSE_CLASS = `
     [&_figure.article-image_figcaption]:text-[#78716c]
     [&_figure.article-image_figcaption]:leading-[1.43]
     [&_figure.article-image_figcaption]:bg-[rgba(120,113,108,0.1)]
+    [&_figure.article-image_figcaption]:text-center
 
   [&_blockquote_p:first-of-type]:before:content-none
   [&_blockquote_p:last-of-type]:after:content-none
@@ -69,6 +71,7 @@ export function ArticleBody({ json }: ArticleBodyProps) {
   try {
     html = generateHTML(json as any, [
       StarterKit.configure({ link: false }),
+      Link,
       ImageWithCredit,
       Table,
       TableRow,
@@ -78,6 +81,23 @@ export function ArticleBody({ json }: ArticleBodyProps) {
   } catch {
     html = '<p>Unable to render content.</p>'
   }
+
+  // Post-process: replace figcaptions that carry a data-credit-html attribute
+  // (set by ImageWithCredit when creditHtml is used) with their real inner HTML.
+  html = html.replace(
+    /<figcaption([^>]*)\bdata-credit-html="([^"]*)"([^>]*)><\/figcaption>/g,
+    (_match, before, encoded, after) => {
+      const decoded = encoded
+        .replace(/&lt;/g, '<')
+        .replace(/&gt;/g, '>')
+        .replace(/&quot;/g, '"')
+        .replace(/&#39;/g, "'")
+        .replace(/&amp;/g, '&')
+      // Strip the data attr from the rendered element to keep the HTML clean
+      const attrs = (before + after).replace(/\s*data-credit-html="[^"]*"/, '').trim()
+      return `<figcaption${attrs ? ' ' + attrs : ''}>${decoded}</figcaption>`
+    }
+  )
 
   return (
     <div

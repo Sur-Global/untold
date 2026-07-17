@@ -141,7 +141,7 @@ export default async function ArticlesPage({ params, searchParams }: PageProps) 
 
   // Trigger background translation for articles without a locale translation yet
   let pendingTranslations = false
-  if (locale !== 'en' && articles && articles.length > 0) {
+  if (articles && articles.length > 0) {
     const untranslatedIds = (articles as any[])
       .filter(a => !(a.content_translations ?? []).some((t: any) => t.locale === locale))
       .map((a: any) => a.id)
@@ -174,24 +174,25 @@ export default async function ArticlesPage({ params, searchParams }: PageProps) 
       <Navigation {...navProps} />
       <main className="bg-background min-h-screen">
         {/* Hero / filter section */}
-        <div style={{ borderBottom: '1px solid rgba(139,69,19,0.1)' }}>
+        <div style={{ borderBottom: '1px solid rgba(0,0,0,0.08)' }}>
           <div className="max-w-[1280px] mx-auto px-6 pt-16 pb-10">
             {/* Title + description */}
             <div className="text-center mb-10">
               <h1
-                className="uppercase text-foreground mb-4"
+                className="text-foreground mb-4"
                 style={{
-                  fontFamily: 'Audiowide, sans-serif',
+                  fontFamily: 'var(--font-aeonik), Aeonik, sans-serif',
+                  fontWeight: 500,
                   fontSize: 'clamp(36px, 6vw, 56px)',
                   lineHeight: 1.1,
-                  letterSpacing: '-0.56px',
+                  letterSpacing: '-0.03em',
                 }}
               >
-                ARTICLES
+                Articles
               </h1>
               <p
                 className="text-lg max-w-[745px] mx-auto leading-[1.56]"
-                style={{ color: '#5a4a42', fontFamily: 'Inter, sans-serif' }}
+                style={{ color: '#555', fontFamily: 'var(--font-aeonik), Aeonik, sans-serif' }}
               >
                 {tListings('articlesDesc')}
               </p>
@@ -256,11 +257,12 @@ export default async function ArticlesPage({ params, searchParams }: PageProps) 
                   <Link
                     href={buildUrl({ limit: String(nextLimit) })}
                     scroll={false}
-                    className="inline-flex items-center justify-center h-[53px] px-10 rounded-[10px] text-sm text-white tracking-[0.28px] transition-opacity hover:opacity-90"
+                    className="inline-flex items-center justify-center h-[53px] px-10 rounded-full text-sm tracking-[0.28px] transition-opacity hover:opacity-90"
                     style={{
-                      fontFamily: 'JetBrains Mono, monospace',
-                      background: 'linear-gradient(166deg, #8b4513 0%, #a0522d 100%)',
-                      boxShadow: '0 2px 8px rgba(44,36,32,0.08), 0 4px 16px rgba(44,36,32,0.04)',
+                      fontFamily: 'var(--font-aeonik), Aeonik, sans-serif',
+                      fontWeight: 500,
+                      background: '#A9A8E9',
+                      color: '#000',
                     }}
                   >
                     {tListings('loadMore')}
@@ -269,7 +271,7 @@ export default async function ArticlesPage({ params, searchParams }: PageProps) 
                   count != null && count > BASE_LIMIT && (
                     <p
                       className="text-sm"
-                      style={{ color: '#8b7355', fontFamily: 'JetBrains Mono, monospace' }}
+                      style={{ color: '#999', fontFamily: 'var(--font-aeonik), Aeonik, sans-serif' }}
                     >
                       {count} articles
                     </p>
@@ -281,7 +283,7 @@ export default async function ArticlesPage({ params, searchParams }: PageProps) 
             <div className="text-center py-24">
               <p
                 className="text-sm"
-                style={{ color: '#8b7355', fontFamily: 'JetBrains Mono, monospace' }}
+                style={{ color: '#999', fontFamily: 'var(--font-aeonik), Aeonik, sans-serif' }}
               >
                 {q || tag ? tListings('noResults') : tListings('noArticles')}
               </p>

@@ -57,7 +57,7 @@ export default async function PublicStaticPage({ params }: PageProps) {
       <main className="flex-1">
         <article className="mx-auto max-w-3xl px-4 py-16 sm:px-6">
           <h1
-            className="mb-10 font-['Audiowide'] text-4xl uppercase tracking-tight text-foreground sm:text-5xl"
+            className="mb-10 font-heading text-4xl tracking-tight text-foreground sm:text-5xl"
           >
             {page.title}
           </h1>

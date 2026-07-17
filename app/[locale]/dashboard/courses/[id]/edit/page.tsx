@@ -20,7 +20,7 @@ export default async function EditCoursePage({ params }: EditCoursePageProps) {
   const contentPromise = (supabase as any)
     .from('content')
     .select(`
-      id, status, cover_image_url,
+      id, status, source_locale, cover_image_url,
       content_translations ( title, description, locale ),
       course_meta ( price, currency, duration )
     `)
@@ -37,7 +37,8 @@ export default async function EditCoursePage({ params }: EditCoursePageProps) {
 
   if (!content) notFound()
 
-  const tr = content.content_translations?.find((r: any) => r.locale === 'en') ?? content.content_translations?.[0]
+  const sourceLocale = content.source_locale ?? 'en'
+  const tr = content.content_translations?.find((r: any) => r.locale === sourceLocale) ?? content.content_translations?.[0]
   const meta = Array.isArray(content.course_meta) ? content.course_meta[0] : content.course_meta ?? {}
 
   return (
