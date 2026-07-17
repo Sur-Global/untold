@@ -6,6 +6,7 @@ import { after } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
 import { requireCreator } from '@/lib/require-creator'
 import { requireAdmin } from '@/lib/require-admin'
+import { isEditorRole } from '@/lib/require-editor'
 import { slugify } from '@/lib/utils'
 
 export async function createCourse(formData: FormData) {
@@ -65,7 +66,7 @@ export async function createCourse(formData: FormData) {
 }
 
 export async function updateCourse(id: string, formData: FormData) {
-  const { user } = await requireCreator()
+  const { user, profile } = await requireCreator()
   const supabase = await createClient()
 
   const title = (formData.get('title') as string).trim()
@@ -75,13 +76,12 @@ export async function updateCourse(id: string, formData: FormData) {
   const currency = (formData.get('currency') as string)?.trim() || 'USD'
   const duration = (formData.get('duration') as string)?.trim() || null
 
-  const { data: owned } = await (supabase as any)
+  const updateQuery = (supabase as any)
     .from('content')
     .update({ cover_image_url: coverImageUrl, updated_at: new Date().toISOString() })
     .eq('id', id)
-    .eq('author_id', user.id)
-    .select('id')
-    .single()
+  if (!isEditorRole(profile.role)) updateQuery.eq('author_id', user.id)
+  const { data: owned } = await updateQuery.select('id').single()
 
   if (!owned) return
 

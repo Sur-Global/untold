@@ -1,9 +1,11 @@
 import { Link } from '@/i18n/navigation'
+import { requireAdmin } from '@/lib/require-admin'
 import { StaticPageForm } from '@/components/admin/StaticPageForm'
 import { AdminPageHeader } from '@/components/admin/AdminPageHeader'
 import { AdminPanel } from '@/components/admin/AdminPanel'
 
-export default function AdminNewStaticPage() {
+export default async function AdminNewStaticPage() {
+  await requireAdmin()
   return (
     <div className="space-y-6">
       <Link

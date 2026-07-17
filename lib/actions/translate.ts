@@ -1,10 +1,10 @@
 'use server'
 
-import { requireAdmin } from '@/lib/require-admin'
+import { requireEditor } from '@/lib/require-editor'
 import { SUPPORTED_LOCALES } from '@/lib/deepl'
 
 export async function retranslateAll(contentId: string): Promise<void> {
-  await requireAdmin()
+  await requireEditor()
 
   const res = await fetch(`${process.env.NEXT_PUBLIC_SITE_URL}/api/translate`, {
     method: 'POST',
@@ -25,7 +25,7 @@ export async function retranslate(contentId: string, locale: string): Promise<vo
   if (!(SUPPORTED_LOCALES as readonly string[]).includes(locale)) {
     throw new Error(`Unsupported locale: ${locale}`)
   }
-  await requireAdmin()
+  await requireEditor()
 
   const res = await fetch(`${process.env.NEXT_PUBLIC_SITE_URL}/api/translate`, {
     method: 'POST',

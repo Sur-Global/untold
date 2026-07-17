@@ -5,6 +5,7 @@ import { redirect } from 'next/navigation'
 import { after } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
 import { requireCreator } from '@/lib/require-creator'
+import { isEditorRole } from '@/lib/require-editor'
 import { slugify } from '@/lib/utils'
 
 export async function createPodcast(formData: FormData) {
@@ -64,7 +65,7 @@ export async function createPodcast(formData: FormData) {
 }
 
 export async function updatePodcast(id: string, formData: FormData) {
-  const { user } = await requireCreator()
+  const { user, profile } = await requireCreator()
   const supabase = await createClient()
 
   const title = (formData.get('title') as string).trim()
@@ -74,13 +75,12 @@ export async function updatePodcast(id: string, formData: FormData) {
   const duration = (formData.get('duration') as string)?.trim() || null
   const episodeNumber = (formData.get('episode_number') as string)?.trim() || null
 
-  const { data: owned } = await (supabase as any)
+  const updateQuery = (supabase as any)
     .from('content')
     .update({ cover_image_url: coverImageUrl, updated_at: new Date().toISOString() })
     .eq('id', id)
-    .eq('author_id', user.id)
-    .select('id')
-    .single()
+  if (!isEditorRole(profile.role)) updateQuery.eq('author_id', user.id)
+  const { data: owned } = await updateQuery.select('id').single()
 
   if (!owned) return
 

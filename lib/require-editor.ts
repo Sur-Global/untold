@@ -2,16 +2,16 @@ import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
 import type { UserRole } from '@/lib/supabase/types'
 
-export function isCreatorRole(role: UserRole | null | undefined): boolean {
-  return role === 'admin' || role === 'author' || role === 'editor'
+export function isEditorRole(role: UserRole | null | undefined): boolean {
+  return role === 'admin' || role === 'editor'
 }
 
 /**
- * Call from any server component that requires admin or author access.
+ * Call from any server component or action that requires admin or editor access.
  * Redirects to /auth/login if not authenticated, / if wrong role, /suspended if suspended.
  * Returns { user, profile } on success.
  */
-export async function requireCreator() {
+export async function requireEditor() {
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) redirect('/auth/login')
@@ -22,7 +22,7 @@ export async function requireCreator() {
     .eq('id', user.id)
     .single()
 
-  if (!isCreatorRole(profile?.role)) redirect('/')
+  if (!isEditorRole(profile?.role)) redirect('/')
   if (profile?.suspended_at) redirect('/suspended')
 
   return { user, profile }

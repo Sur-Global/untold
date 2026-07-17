@@ -1,6 +1,7 @@
 import { notFound } from 'next/navigation'
 import { getTranslations } from 'next-intl/server'
 import { requireCreator } from '@/lib/require-creator'
+import { isEditorRole } from '@/lib/require-editor'
 import { createClient } from '@/lib/supabase/server'
 import { Navigation } from '@/components/layout/Navigation'
 import { Footer } from '@/components/layout/Footer'
@@ -14,10 +15,10 @@ interface PageProps {
 
 export default async function EditPodcastPage({ params }: PageProps) {
   const { id } = await params
-  const { user } = await requireCreator()
+  const { user, profile } = await requireCreator()
   const supabase = await createClient()
 
-  const contentPromise = (supabase as any)
+  const contentQuery = (supabase as any)
     .from('content')
     .select(`
       id, status, source_locale, cover_image_url,
@@ -25,9 +26,9 @@ export default async function EditPodcastPage({ params }: PageProps) {
       podcast_meta ( embed_url, cover_image_url, duration, episode_number )
     `)
     .eq('id', id)
-    .eq('author_id', user.id)
     .eq('type', 'podcast')
-    .single()
+  if (!isEditorRole(profile.role)) contentQuery.eq('author_id', user.id)
+  const contentPromise = contentQuery.single()
 
   const [{ userId, ...navProps }, t, { data: content }] = await Promise.all([
     getNavProps(),

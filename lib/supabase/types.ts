@@ -2,7 +2,7 @@
 // Run: npx supabase gen types typescript --linked > lib/supabase/types.ts
 // after linking your Supabase project
 
-export type UserRole = "admin" | "author" | "user";
+export type UserRole = "admin" | "author" | "user" | "editor";
 export type ContentType = "article" | "video" | "podcast" | "pill" | "course";
 export type ContentStatus = "draft" | "published";
 export type ApplicationStatus = "pending" | "approved" | "rejected";

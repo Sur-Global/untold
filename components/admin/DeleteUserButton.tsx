@@ -8,9 +8,10 @@ import { Button } from '@/components/ui/button'
 interface Props {
   userId: string
   displayName: string | null
+  disabled?: boolean
 }
 
-export function DeleteUserButton({ userId, displayName }: Props) {
+export function DeleteUserButton({ userId, displayName, disabled }: Props) {
   const router = useRouter()
   const [isPending, startTransition] = useTransition()
   const [error, setError] = useState<string | null>(null)
@@ -35,7 +36,7 @@ export function DeleteUserButton({ userId, displayName }: Props) {
         variant="ghost"
         size="sm"
         onClick={handleClick}
-        disabled={isPending}
+        disabled={isPending || disabled}
         className="h-6 px-2 text-xs text-red-600 hover:text-red-700"
       >
         {isPending ? '…' : 'Delete'}

@@ -4,6 +4,7 @@ import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
 import { requireCreator } from '@/lib/require-creator'
+import { isEditorRole } from '@/lib/require-editor'
 import { slugify } from '@/lib/utils'
 
 export async function createVideo(formData: FormData) {
@@ -81,7 +82,7 @@ export async function createVideo(formData: FormData) {
 }
 
 export async function updateVideo(id: string, formData: FormData) {
-  const { user } = await requireCreator()
+  const { user, profile } = await requireCreator()
   const supabase = await createClient()
 
   const title = (formData.get('title') as string).trim()
@@ -97,7 +98,7 @@ export async function updateVideo(id: string, formData: FormData) {
   const transcriptRaw = formData.get('transcript') as string | null
   const transcript = transcriptRaw ? JSON.parse(transcriptRaw) : undefined
 
-  const { data: owned } = await (supabase as any)
+  const updateQuery = (supabase as any)
     .from('content')
     .update({
       cover_image_url: thumbnailUrl,
@@ -105,9 +106,8 @@ export async function updateVideo(id: string, formData: FormData) {
       feature_requested_at: featureRequested ? new Date().toISOString() : null,
     })
     .eq('id', id)
-    .eq('author_id', user.id)
-    .select('id')
-    .single()
+  if (!isEditorRole(profile.role)) updateQuery.eq('author_id', user.id)
+  const { data: owned } = await updateQuery.select('id').single()
 
   if (!owned) return
 

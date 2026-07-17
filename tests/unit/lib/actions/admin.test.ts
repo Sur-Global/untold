@@ -1,7 +1,7 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 
-vi.mock('@/lib/require-admin', () => ({
-  requireAdmin: vi.fn().mockResolvedValue({ user: { id: 'admin-id' } }),
+vi.mock('@/lib/require-editor', () => ({
+  requireEditor: vi.fn(),
 }))
 vi.mock('next/cache', () => ({
   revalidatePath: vi.fn(),
@@ -22,7 +22,15 @@ import {
 } from '@/lib/actions/admin'
 import { createClient } from '@/lib/supabase/server'
 import { createServiceRoleClient } from '@/lib/supabase/service-role'
+import { requireEditor } from '@/lib/require-editor'
 import { revalidatePath } from 'next/cache'
+
+function mockViewer(role: 'admin' | 'editor') {
+  vi.mocked(requireEditor).mockResolvedValue({
+    user: { id: 'viewer-id' } as any,
+    profile: { id: 'viewer-id', role } as any,
+  })
+}
 
 function makeDb(singleData: object | null = null) {
   const singleFn = vi.fn().mockResolvedValue({ data: singleData })
@@ -39,7 +47,10 @@ function makeDb(singleData: object | null = null) {
 }
 
 describe('toggleFeatured', () => {
-  beforeEach(() => vi.clearAllMocks())
+  beforeEach(() => {
+    vi.clearAllMocks()
+    mockViewer('admin')
+  })
 
   it('flips is_featured from false to true', async () => {
     const { from, chain } = makeDb({ is_featured: false })
@@ -62,7 +73,10 @@ describe('toggleFeatured', () => {
 })
 
 describe('adminUnpublishContent', () => {
-  beforeEach(() => vi.clearAllMocks())
+  beforeEach(() => {
+    vi.clearAllMocks()
+    mockViewer('admin')
+  })
 
   it('sets status draft, clears published_at and is_featured', async () => {
     const { from, chain } = makeDb()
@@ -80,7 +94,10 @@ describe('adminUnpublishContent', () => {
 })
 
 describe('setUserRole', () => {
-  beforeEach(() => vi.clearAllMocks())
+  beforeEach(() => {
+    vi.clearAllMocks()
+    mockViewer('admin')
+  })
 
   it('updates profile role', async () => {
     const { from, chain } = makeDb()
@@ -91,10 +108,39 @@ describe('setUserRole', () => {
     expect(chain.update).toHaveBeenCalledWith({ role: 'author' })
     expect(revalidatePath).toHaveBeenCalledWith('/admin/users')
   })
+
+  it('rejects an editor granting the admin role', async () => {
+    mockViewer('editor')
+    const { from } = makeDb()
+    vi.mocked(createClient).mockResolvedValue({ from } as any)
+
+    await expect(setUserRole('user-1', 'admin')).rejects.toThrow('Only admins can grant the admin role')
+  })
+
+  it('rejects an editor modifying an existing admin', async () => {
+    mockViewer('editor')
+    const { from } = makeDb({ role: 'admin' })
+    vi.mocked(createClient).mockResolvedValue({ from } as any)
+
+    await expect(setUserRole('user-1', 'author')).rejects.toThrow('Only admins can modify admin accounts')
+  })
+
+  it('allows an editor to set a non-admin role on a non-admin user', async () => {
+    mockViewer('editor')
+    const { from, chain } = makeDb({ role: 'author' })
+    vi.mocked(createClient).mockResolvedValue({ from } as any)
+
+    await setUserRole('user-1', 'editor')
+
+    expect(chain.update).toHaveBeenCalledWith({ role: 'editor' })
+  })
 })
 
 describe('toggleSuspendUser', () => {
-  beforeEach(() => vi.clearAllMocks())
+  beforeEach(() => {
+    vi.clearAllMocks()
+    mockViewer('admin')
+  })
 
   it('sets suspended_at when user is active (suspended_at is null)', async () => {
     const { from, chain } = makeDb({ suspended_at: null })
@@ -115,10 +161,32 @@ describe('toggleSuspendUser', () => {
 
     expect(chain.update).toHaveBeenCalledWith({ suspended_at: null })
   })
+
+  it('rejects an editor banning an existing admin', async () => {
+    mockViewer('editor')
+    const { from } = makeDb({ role: 'admin', suspended_at: null })
+    vi.mocked(createClient).mockResolvedValue({ from } as any)
+
+    await expect(toggleSuspendUser('user-5')).rejects.toThrow('Only admins can ban admin accounts')
+  })
+
+  it('allows an editor to ban a non-admin user', async () => {
+    mockViewer('editor')
+    const { from, chain } = makeDb({ role: 'author', suspended_at: null })
+    vi.mocked(createClient).mockResolvedValue({ from } as any)
+
+    await toggleSuspendUser('user-6')
+
+    const updateArg = vi.mocked(chain.update).mock.calls[0][0]
+    expect(updateArg.suspended_at).not.toBeNull()
+  })
 })
 
 describe('deleteUser', () => {
-  beforeEach(() => vi.clearAllMocks())
+  beforeEach(() => {
+    vi.clearAllMocks()
+    mockViewer('admin')
+  })
 
   it('calls auth.admin.deleteUser and revalidates both paths', async () => {
     const deleteUserFn = vi.fn().mockResolvedValue({ error: null })
@@ -143,5 +211,27 @@ describe('deleteUser', () => {
     } as any)
 
     await expect(deleteUser('bad-id')).rejects.toThrow('User not found')
+  })
+
+  it('rejects an editor deleting an existing admin', async () => {
+    mockViewer('editor')
+    const { from } = makeDb({ role: 'admin' })
+    vi.mocked(createClient).mockResolvedValue({ from } as any)
+
+    await expect(deleteUser('user-7')).rejects.toThrow('Only admins can delete admin accounts')
+  })
+
+  it('allows an editor to delete a non-admin user', async () => {
+    mockViewer('editor')
+    const { from } = makeDb({ role: 'author' })
+    vi.mocked(createClient).mockResolvedValue({ from } as any)
+    const deleteUserFn = vi.fn().mockResolvedValue({ error: null })
+    vi.mocked(createServiceRoleClient).mockReturnValue({
+      auth: { admin: { deleteUser: deleteUserFn } },
+    } as any)
+
+    await deleteUser('user-8')
+
+    expect(deleteUserFn).toHaveBeenCalledWith('user-8')
   })
 })

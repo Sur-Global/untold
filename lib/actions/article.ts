@@ -5,6 +5,7 @@ import { redirect } from 'next/navigation'
 import { after } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
 import { requireCreator } from '@/lib/require-creator'
+import { isEditorRole } from '@/lib/require-editor'
 import { slugify } from '@/lib/utils'
 import { computeReadTime } from '@/lib/readTime'
 
@@ -79,7 +80,7 @@ export async function updateArticle(id: string, formData: FormData) {
   const { user, profile } = await requireCreator()
   const supabase = await createClient()
 
-  const isAdmin = profile.role === 'admin'
+  const canManageAll = isEditorRole(profile.role)
   const editLocale = (formData.get('edit_locale') as string) || 'en'
 
   // Security: verify access and get source_locale from DB
@@ -90,7 +91,7 @@ export async function updateArticle(id: string, formData: FormData) {
     .single()
 
   if (!contentMeta) throw new Error('Article not found')
-  if (!isAdmin && contentMeta.author_id !== user.id) throw new Error('Unauthorized')
+  if (!canManageAll && contentMeta.author_id !== user.id) throw new Error('Unauthorized')
 
   const sourceLocale: string = contentMeta.source_locale ?? 'en'
 
@@ -177,14 +178,15 @@ export async function updateArticle(id: string, formData: FormData) {
 }
 
 export async function publishArticle(id: string, _formData: FormData) {
-  const { user } = await requireCreator()
+  const { user, profile } = await requireCreator()
   const supabase = await createClient()
 
-  await (supabase as any)
+  const query = (supabase as any)
     .from('content')
     .update({ status: 'published', published_at: new Date().toISOString() })
     .eq('id', id)
-    .eq('author_id', user.id)
+  if (!isEditorRole(profile.role)) query.eq('author_id', user.id)
+  await query
 
   revalidatePath('/dashboard/articles')
   revalidatePath(`/dashboard/articles/${id}/edit`)
@@ -209,24 +211,27 @@ export async function publishArticle(id: string, _formData: FormData) {
 }
 
 export async function unpublishArticle(id: string, _formData: FormData) {
-  const { user } = await requireCreator()
+  const { user, profile } = await requireCreator()
   const supabase = await createClient()
 
-  await (supabase as any)
+  const query = (supabase as any)
     .from('content')
     .update({ status: 'draft', published_at: null })
     .eq('id', id)
-    .eq('author_id', user.id)
+  if (!isEditorRole(profile.role)) query.eq('author_id', user.id)
+  await query
 
   revalidatePath('/dashboard/articles')
   revalidatePath(`/dashboard/articles/${id}/edit`)
 }
 
 export async function deleteArticle(id: string) {
-  const { user } = await requireCreator()
+  const { user, profile } = await requireCreator()
   const supabase = await createClient()
 
-  await (supabase as any).from('content').delete().eq('id', id).eq('author_id', user.id)
+  const query = (supabase as any).from('content').delete().eq('id', id)
+  if (!isEditorRole(profile.role)) query.eq('author_id', user.id)
+  await query
 
   revalidatePath('/dashboard/articles')
   redirect('/dashboard/articles')

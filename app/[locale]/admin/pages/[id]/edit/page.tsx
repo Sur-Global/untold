@@ -1,5 +1,6 @@
 import { Link } from '@/i18n/navigation'
 import { notFound } from 'next/navigation'
+import { requireAdmin } from '@/lib/require-admin'
 import { createClient } from '@/lib/supabase/server'
 import { StaticPageForm, type StaticPageFormInitial } from '@/components/admin/StaticPageForm'
 import { routing } from '@/i18n/routing'
@@ -15,6 +16,7 @@ export default async function AdminEditStaticPage({
   params: Promise<{ id: string }>
 }) {
   const { id } = await params
+  await requireAdmin()
   const supabase = await createClient()
 
   const { data: page } = await (supabase as any)

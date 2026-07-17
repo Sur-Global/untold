@@ -5,16 +5,18 @@ import { redirect } from 'next/navigation'
 import { after } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
 import { requireCreator } from '@/lib/require-creator'
+import { isEditorRole } from '@/lib/require-editor'
 
 export async function publishContent(id: string, _formData: FormData) {
-  const { user } = await requireCreator()
+  const { user, profile } = await requireCreator()
   const supabase = await createClient()
 
-  await (supabase as any)
+  const query = (supabase as any)
     .from('content')
     .update({ status: 'published', published_at: new Date().toISOString() })
     .eq('id', id)
-    .eq('author_id', user.id)
+  if (!isEditorRole(profile.role)) query.eq('author_id', user.id)
+  await query
 
   // 'layout' invalidates /dashboard and all nested pages (edit pages included)
   revalidatePath('/dashboard', 'layout')
@@ -56,27 +58,29 @@ export async function publishContent(id: string, _formData: FormData) {
 }
 
 export async function unpublishContent(id: string, _formData: FormData) {
-  const { user } = await requireCreator()
+  const { user, profile } = await requireCreator()
   const supabase = await createClient()
 
-  await (supabase as any)
+  const query = (supabase as any)
     .from('content')
     .update({ status: 'draft', published_at: null })
     .eq('id', id)
-    .eq('author_id', user.id)
+  if (!isEditorRole(profile.role)) query.eq('author_id', user.id)
+  await query
 
   revalidatePath('/dashboard', 'layout')
 }
 
 export async function deleteContent(id: string) {
-  const { user } = await requireCreator()
+  const { user, profile } = await requireCreator()
   const supabase = await createClient()
 
-  await (supabase as any)
+  const query = (supabase as any)
     .from('content')
     .delete()
     .eq('id', id)
-    .eq('author_id', user.id)
+  if (!isEditorRole(profile.role)) query.eq('author_id', user.id)
+  await query
 
   revalidatePath('/dashboard')
   redirect('/dashboard')

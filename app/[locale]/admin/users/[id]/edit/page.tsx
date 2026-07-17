@@ -1,5 +1,5 @@
 import { notFound } from 'next/navigation'
-import { requireAdmin } from '@/lib/require-admin'
+import { requireEditor } from '@/lib/require-editor'
 import { createClient } from '@/lib/supabase/server'
 import { Navigation } from '@/components/layout/Navigation'
 import { Footer } from '@/components/layout/Footer'
@@ -14,7 +14,7 @@ interface PageProps {
 
 export default async function AdminEditUserPage({ params }: PageProps) {
   const { id } = await params
-  await requireAdmin()
+  await requireEditor()
   const supabase = await createClient()
 
   const [{ userId, ...navProps }, { data: profile }] = await Promise.all([

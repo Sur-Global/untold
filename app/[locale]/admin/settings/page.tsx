@@ -1,3 +1,4 @@
+import { requireAdmin } from '@/lib/require-admin'
 import { createClient } from '@/lib/supabase/server'
 import { getPlatformSettings } from '@/lib/data/platform-settings'
 import {
@@ -6,6 +7,7 @@ import {
 } from '@/components/admin/PlatformSettingsForm'
 
 export default async function AdminPlatformSettingsPage() {
+  await requireAdmin()
   const [settings, supabase] = await Promise.all([
     getPlatformSettings(),
     createClient(),

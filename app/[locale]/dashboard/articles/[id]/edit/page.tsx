@@ -1,5 +1,6 @@
 import { notFound } from 'next/navigation'
 import { requireCreator } from '@/lib/require-creator'
+import { isEditorRole } from '@/lib/require-editor'
 import { createClient } from '@/lib/supabase/server'
 import { Navigation } from '@/components/layout/Navigation'
 import { Footer } from '@/components/layout/Footer'
@@ -44,7 +45,7 @@ export default async function EditArticlePage({ params }: PageProps) {
   const { user, profile } = await requireCreator()
   const supabase = await createClient()
 
-  const isAdmin = profile.role === 'admin'
+  const isAdmin = isEditorRole(profile.role)
   const articleQuery = (supabase as any)
     .from('content')
     .select(`

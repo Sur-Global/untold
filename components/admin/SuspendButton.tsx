@@ -8,9 +8,10 @@ import { Button } from '@/components/ui/button'
 interface Props {
   userId: string
   isSuspended: boolean
+  disabled?: boolean
 }
 
-export function SuspendButton({ userId, isSuspended }: Props) {
+export function SuspendButton({ userId, isSuspended, disabled }: Props) {
   const router = useRouter()
   const [isPending, startTransition] = useTransition()
   const [error, setError] = useState<string | null>(null)
@@ -33,12 +34,12 @@ export function SuspendButton({ userId, isSuspended }: Props) {
         variant="ghost"
         size="sm"
         onClick={handleClick}
-        disabled={isPending}
+        disabled={isPending || disabled}
         className={`h-6 px-2 text-xs ${
           isSuspended ? 'text-green-600' : 'text-yellow-600'
         }`}
       >
-        {isPending ? '…' : isSuspended ? 'Unsuspend' : 'Suspend'}
+        {isPending ? '…' : isSuspended ? 'Unban' : 'Ban'}
       </Button>
       {error && <span className="text-xs text-red-500">{error}</span>}
     </span>

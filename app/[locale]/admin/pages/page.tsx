@@ -1,10 +1,12 @@
 import { Link } from '@/i18n/navigation'
+import { requireAdmin } from '@/lib/require-admin'
 import { createClient } from '@/lib/supabase/server'
 import { AdminPageHeader } from '@/components/admin/AdminPageHeader'
 import { AdminPanel } from '@/components/admin/AdminPanel'
 import { adminPrimaryButton, adminTableHead, adminTableRow } from '@/components/admin/admin-ui'
 
 export default async function AdminStaticPagesPage() {
+  await requireAdmin()
   const supabase = await createClient()
 
   const { data: pages } = await (supabase as any)

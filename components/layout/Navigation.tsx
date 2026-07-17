@@ -38,7 +38,7 @@ const NAV_LINKS = [
 ]
 
 function isCreator(role: UserRole | null) {
-  return role === 'admin' || role === 'author'
+  return role === 'admin' || role === 'author' || role === 'editor'
 }
 
 function SearchIcon() {

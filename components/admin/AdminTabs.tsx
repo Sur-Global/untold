@@ -2,14 +2,15 @@
 
 import { Link, usePathname } from '@/i18n/navigation'
 import { LayoutDashboard, Globe, FileText, Users, BookOpen, Settings } from 'lucide-react'
+import type { UserRole } from '@/lib/supabase/types'
 
 const TABS = [
-  { href: '/admin', label: 'Overview', icon: LayoutDashboard, exact: true },
-  { href: '/admin/content', label: 'Content', icon: FileText, exact: false },
-  { href: '/admin/translations', label: 'Translations', icon: Globe, exact: false },
-  { href: '/admin/users', label: 'Users', icon: Users, exact: false },
-  { href: '/admin/pages', label: 'Pages', icon: BookOpen, exact: false },
-  { href: '/admin/settings', label: 'Settings', icon: Settings, exact: false },
+  { href: '/admin', label: 'Overview', icon: LayoutDashboard, exact: true, adminOnly: false },
+  { href: '/admin/content', label: 'Content', icon: FileText, exact: false, adminOnly: false },
+  { href: '/admin/translations', label: 'Translations', icon: Globe, exact: false, adminOnly: false },
+  { href: '/admin/users', label: 'Users', icon: Users, exact: false, adminOnly: false },
+  { href: '/admin/pages', label: 'Pages', icon: BookOpen, exact: false, adminOnly: true },
+  { href: '/admin/settings', label: 'Settings', icon: Settings, exact: false, adminOnly: true },
 ] as const
 
 function tabActive(pathname: string, href: string, exact: boolean) {
@@ -19,8 +20,9 @@ function tabActive(pathname: string, href: string, exact: boolean) {
   return pathname === href || pathname.startsWith(`${href}/`)
 }
 
-export function AdminTabs() {
+export function AdminTabs({ role }: { role: UserRole }) {
   const pathname = usePathname()
+  const visibleTabs = TABS.filter((tab) => !tab.adminOnly || role === 'admin')
 
   return (
     <nav
@@ -28,7 +30,7 @@ export function AdminTabs() {
       aria-label="Admin sections"
     >
       <div className="mx-auto flex max-w-7xl gap-1 overflow-x-auto px-4 sm:px-6 lg:px-8">
-        {TABS.map(({ href, label, icon: Icon, exact }) => {
+        {visibleTabs.map(({ href, label, icon: Icon, exact }) => {
           const active = tabActive(pathname, href, exact)
           return (
             <Link

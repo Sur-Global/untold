@@ -5,6 +5,7 @@ import { redirect } from 'next/navigation'
 import { after } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
 import { requireCreator } from '@/lib/require-creator'
+import { isEditorRole } from '@/lib/require-editor'
 import { slugify } from '@/lib/utils'
 
 export async function createPill(formData: FormData) {
@@ -59,7 +60,7 @@ export async function createPill(formData: FormData) {
 }
 
 export async function updatePill(id: string, formData: FormData) {
-  const { user } = await requireCreator()
+  const { user, profile } = await requireCreator()
   const supabase = await createClient()
 
   const title = (formData.get('title') as string).trim()
@@ -67,13 +68,12 @@ export async function updatePill(id: string, formData: FormData) {
   const accentColor = (formData.get('accent_color') as string)?.trim() || '#C45D3A'
   const imageUrl = (formData.get('image_url') as string)?.trim() || null
 
-  const { data: owned } = await (supabase as any)
+  const updateQuery = (supabase as any)
     .from('content')
     .update({ cover_image_url: imageUrl, updated_at: new Date().toISOString() })
     .eq('id', id)
-    .eq('author_id', user.id)
-    .select('id')
-    .single()
+  if (!isEditorRole(profile.role)) updateQuery.eq('author_id', user.id)
+  const { data: owned } = await updateQuery.select('id').single()
 
   if (!owned) return
 

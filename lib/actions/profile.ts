@@ -2,17 +2,18 @@
 
 import { revalidatePath } from 'next/cache'
 import { createClient } from '@/lib/supabase/server'
+import { isEditorRole } from '@/lib/require-editor'
 
 export async function updateProfile(userId: string, formData: FormData) {
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) throw new Error('Not authenticated')
 
-  // Must be own profile or admin
+  // Must be own profile or admin/editor
   if (user.id !== userId) {
     const { data: me } = await (supabase as any)
       .from('profiles').select('role').eq('id', user.id).single()
-    if (me?.role !== 'admin') throw new Error('Unauthorized')
+    if (!isEditorRole(me?.role)) throw new Error('Unauthorized')
   }
 
   const display_name = (formData.get('display_name') as string)?.trim()
