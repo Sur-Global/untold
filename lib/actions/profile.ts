@@ -3,6 +3,7 @@
 import { revalidatePath } from 'next/cache'
 import { createClient } from '@/lib/supabase/server'
 import { isEditorRole } from '@/lib/require-editor'
+import { sanitizeBioHtml } from '@/lib/sanitize-bio-html'
 
 export async function updateProfile(userId: string, formData: FormData) {
   const supabase = await createClient()
@@ -18,7 +19,11 @@ export async function updateProfile(userId: string, formData: FormData) {
 
   const display_name = (formData.get('display_name') as string)?.trim()
   const slug = (formData.get('slug') as string)?.trim().toLowerCase()
-  const bio = (formData.get('bio') as string)?.trim() || null
+  // Defense-in-depth: the bio editor's own schema can only ever produce a
+  // narrow set of tags, but sanitize again here in case this action is ever
+  // called directly, bypassing the client editor.
+  const bioRaw = (formData.get('bio') as string)?.trim() || null
+  const bio = bioRaw ? sanitizeBioHtml(bioRaw) : null
   const location = (formData.get('location') as string)?.trim() || null
   const website = (formData.get('website') as string)?.trim() || null
   const avatar_url = (formData.get('avatar_url') as string)?.trim() || null

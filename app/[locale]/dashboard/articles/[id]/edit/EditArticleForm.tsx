@@ -93,9 +93,10 @@ export function EditArticleForm({
   const [imageCredits, setImageCredits] = useState(initialImageCredits)
   const [tags, setTags] = useState<Tag[]>(initialTags)
   const [featureRequested, setFeatureRequested] = useState(initialFeatureRequested)
+  // Not persisted — must be re-confirmed before every publish action, not just once ever.
+  const [publishConfirmed, setPublishConfirmed] = useState(false)
 
   const [saveStatus, setSaveStatus] = useState<'saved' | 'saving' | 'unsaved'>('saved')
-  const [activeTab, setActiveTab] = useState<'text' | 'images'>('text')
   const [isPending, startTransition] = useTransition()
 
   // Ref always holds the latest state so the debounced save closure captures fresh values
@@ -177,11 +178,6 @@ export function EditArticleForm({
   availableLocalesWithData.add(sourceLocale)
   const localeTabs = availableLocales.filter(l => availableLocalesWithData.has(l))
 
-  const tabs = [
-    { id: 'text', label: 'Text' },
-    { id: 'images', label: 'Images' },
-  ] as const
-
   const activeTitle = als.title
 
   return (
@@ -258,144 +254,145 @@ export function EditArticleForm({
         </div>
       )}
 
-      {/* Content type tabs */}
-      <div className="bg-card flex gap-2 p-2 rounded-[16px] mb-6 border border-primary/10">
-        {tabs.map((tab) => (
-          <button
-            key={tab.id}
-            type="button"
-            onClick={() => setActiveTab(tab.id)}
-            className={[
-              'flex-1 h-[44px] rounded-[10px] text-sm font-["JetBrains_Mono",monospace] tracking-[0.28px] transition-colors',
-              activeTab === tab.id
-                ? 'bg-primary text-white'
-                : 'text-muted-foreground hover:bg-primary/5',
-            ].join(' ')}
-          >
-            {tab.label}
-          </button>
-        ))}
-      </div>
-
-      {/* Main form card */}
+      {/* Main form card — one continuous page, no Text/Images tab split */}
       <div className="bg-card border border-primary/20 rounded-2xl shadow-[0px_4px_16px_0px_rgba(44,36,32,0.1),0px_8px_32px_0px_rgba(44,36,32,0.06)] p-8 space-y-6">
+        {/* Article Title */}
+        <div className="space-y-2">
+          <label className="block text-sm font-semibold text-foreground">Article Title</label>
+          <input
+            type="text"
+            value={als.title}
+            onChange={(e) => setLocaleField('title', e.target.value)}
+            placeholder={t('titlePlaceholder')}
+            required
+            className="w-full h-[50px] px-4 rounded-[10px] border border-primary/20 bg-white text-foreground text-base outline-none focus:border-primary/50 transition-colors placeholder:text-muted-foreground"
+          />
+        </div>
 
-        {activeTab === 'text' && (
-          <>
-            {/* Article Title */}
-            <div className="space-y-2">
-              <label className="block text-sm font-semibold text-foreground">Article Title</label>
-              <input
-                type="text"
-                value={als.title}
-                onChange={(e) => setLocaleField('title', e.target.value)}
-                placeholder={t('titlePlaceholder')}
-                required
-                className="w-full h-[50px] px-4 rounded-[10px] border border-primary/20 bg-white text-foreground text-base outline-none focus:border-primary/50 transition-colors placeholder:text-muted-foreground"
-              />
-            </div>
+        {/* Subtitle (Excerpt) */}
+        <div className="space-y-2">
+          <label className="block text-sm font-semibold text-foreground">Subtitle</label>
+          <input
+            type="text"
+            value={als.excerpt}
+            onChange={(e) => setLocaleField('excerpt', e.target.value)}
+            placeholder="How communities are reclaiming their spaces"
+            className="w-full h-[50px] px-4 rounded-[10px] border border-primary/20 bg-white text-foreground text-base outline-none focus:border-primary/50 transition-colors placeholder:text-muted-foreground"
+          />
+        </div>
 
-            {/* Subtitle (Excerpt) */}
-            <div className="space-y-2">
-              <label className="block text-sm font-semibold text-foreground">Subtitle</label>
-              <input
-                type="text"
-                value={als.excerpt}
-                onChange={(e) => setLocaleField('excerpt', e.target.value)}
-                placeholder="How communities are reclaiming their spaces"
-                className="w-full h-[50px] px-4 rounded-[10px] border border-primary/20 bg-white text-foreground text-base outline-none focus:border-primary/50 transition-colors placeholder:text-muted-foreground"
-              />
-            </div>
-
-            {/* Topic/Category (Tags) — global, not locale-specific */}
-            {activeLocale === sourceLocale && (
-              <div className="space-y-2">
-                <label className="block text-sm font-semibold text-foreground">Topic / Category</label>
-                <TagsInput value={tags} onChange={setTags} placeholder="Urban Planning, Human Rights…" />
-              </div>
-            )}
-
-            {/* Featured Summary */}
-            <div className="space-y-2">
-              <label className="block text-sm font-semibold text-foreground">Featured Summary</label>
-              <p className="text-xs text-muted-foreground -mt-1">Shown publicly only when this article is featured</p>
-              <textarea
-                value={als.featuredSummary}
-                onChange={(e) => setLocaleField('featuredSummary', e.target.value)}
-                placeholder="Urban regeneration is not just about new buildings…"
-                rows={4}
-                className="w-full px-4 py-3 rounded-[10px] border border-primary/20 bg-white text-foreground text-base outline-none focus:border-primary/50 transition-colors resize-none placeholder:text-muted-foreground"
-              />
-            </div>
-
-            {/* Full Content — keyed by locale to force re-mount on switch */}
-            <div className="space-y-2">
-              <label className="block text-sm font-semibold text-foreground">Full Content</label>
-              <div className="rounded-[10px] border border-primary/20 overflow-hidden">
-                <RichTextEditor
-                  key={activeLocale}
-                  value={als.body}
-                  onChange={handleBodyChange}
-                  placeholder={t('bodyPlaceholder')}
-                  locale={uiLocale}
-                  initialHtml={als.bodyHtml}
-                />
-              </div>
-            </div>
-
-            {/* Author info (read-only) */}
-            <div className="space-y-2">
-              <label className="block text-sm font-semibold text-foreground">Author Name</label>
-              <div className="h-[50px] px-4 flex items-center rounded-[10px] border border-primary/10 bg-primary/5 text-foreground text-base">
-                {authorName}
-              </div>
-            </div>
-
-            {/* Feature submission — only for source locale */}
-            {activeLocale === sourceLocale && (
-              <div
-                className="rounded-[16px] p-6 border-2"
-                style={{ background: '#fff9f0', borderColor: '#b8860b', boxShadow: '0px 2px 8px 0px rgba(184,134,11,0.1)' }}
-              >
-                <label className="flex items-start gap-3 cursor-pointer">
-                  <input
-                    type="checkbox"
-                    checked={featureRequested}
-                    onChange={(e) => setFeatureRequested(e.target.checked)}
-                    className="mt-1 w-4 h-4 rounded accent-[#b8860b]"
-                  />
-                  <div>
-                    <p className="font-semibold text-[#5d4e37] mb-1">✨ Submit for featured content at UNTOLD.ink</p>
-                    <p className="text-sm text-[#6b5744] leading-relaxed">
-                      Your content will be published immediately on your personal UNTOLD page. If approved by an Editor,
-                      it could become featured content with higher visibility on the homepage and in searches.
-                    </p>
-                  </div>
-                </label>
-              </div>
-            )}
-          </>
+        {/* Topic/Category (Tags) — global, not locale-specific */}
+        {activeLocale === sourceLocale && (
+          <div className="space-y-2">
+            <label className="block text-sm font-semibold text-foreground">Topic / Category</label>
+            <TagsInput value={tags} onChange={setTags} placeholder="Urban Planning, Human Rights…" />
+          </div>
         )}
 
-        {activeTab === 'images' && (
-          <div className="space-y-6">
-            <CoverImageInput
-              name="cover_image_url"
-              defaultValue={coverImageUrl}
-              onChange={setCoverImageUrl}
+        {/* Featured Summary */}
+        <div className="space-y-2">
+          <label className="block text-sm font-semibold text-foreground">Featured Summary</label>
+          <p className="text-xs text-muted-foreground -mt-1">Shown publicly only when this article is featured</p>
+          <textarea
+            value={als.featuredSummary}
+            onChange={(e) => setLocaleField('featuredSummary', e.target.value)}
+            placeholder="Urban regeneration is not just about new buildings…"
+            rows={4}
+            className="w-full px-4 py-3 rounded-[10px] border border-primary/20 bg-white text-foreground text-base outline-none focus:border-primary/50 transition-colors resize-none placeholder:text-muted-foreground"
+          />
+        </div>
+
+        {/* Full Content — keyed by locale to force re-mount on switch */}
+        <div className="space-y-2">
+          <label className="block text-sm font-semibold text-foreground">Full Content</label>
+          <div className="rounded-[10px] border border-primary/20 overflow-hidden">
+            <RichTextEditor
+              key={activeLocale}
+              value={als.body}
+              onChange={handleBodyChange}
+              placeholder={t('bodyPlaceholder')}
+              locale={uiLocale}
+              initialHtml={als.bodyHtml}
             />
-            <div className="space-y-2">
-              <label className="block text-sm font-semibold text-foreground">Cover image credit</label>
-              <PhotoCreditInput
-                name="image_credits"
-                value={imageCredits}
-                onChange={setImageCredits}
-                placeholder="e.g. Chris Lawton on Unsplash, or [Chris Lawton](https://...)"
+          </div>
+        </div>
+
+        {/* Cover Image */}
+        <CoverImageInput
+          name="cover_image_url"
+          defaultValue={coverImageUrl}
+          onChange={setCoverImageUrl}
+        />
+        <div className="space-y-2">
+          <label className="block text-sm font-semibold text-foreground">Cover image credit</label>
+          <PhotoCreditInput
+            name="image_credits"
+            value={imageCredits}
+            onChange={setImageCredits}
+            placeholder="e.g. Chris Lawton on Unsplash, or [Chris Lawton](https://...)"
+          />
+        </div>
+        <p className="text-xs text-muted-foreground -mt-4">
+          Photos: use good resolution but keep the file size light, and prefer horizontal (landscape) orientation —
+          this keeps the site fast and looks best in the layout.
+        </p>
+
+        {/* Author info (read-only) */}
+        <div className="space-y-2">
+          <label className="block text-sm font-semibold text-foreground">Author Name</label>
+          <div className="h-[50px] px-4 flex items-center rounded-[10px] border border-primary/10 bg-primary/5 text-foreground text-base">
+            {authorName}
+          </div>
+        </div>
+
+        {/* Feature submission — only for source locale */}
+        {activeLocale === sourceLocale && (
+          <div
+            className="rounded-[16px] p-6 border-2"
+            style={{ background: '#fff9f0', borderColor: '#b8860b', boxShadow: '0px 2px 8px 0px rgba(184,134,11,0.1)' }}
+          >
+            <label className="flex items-start gap-3 cursor-pointer">
+              <input
+                type="checkbox"
+                checked={featureRequested}
+                onChange={(e) => setFeatureRequested(e.target.checked)}
+                className="mt-1 w-4 h-4 rounded accent-[#b8860b]"
               />
-            </div>
+              <div>
+                <p className="font-semibold text-[#5d4e37] mb-1">✨ Submit for featured content at UNTOLD.ink</p>
+                <p className="text-sm text-[#6b5744] leading-relaxed">
+                  Your content will be published immediately on your personal UNTOLD page. If approved by an Editor,
+                  it could become featured content with higher visibility on the homepage and in searches.
+                </p>
+              </div>
+            </label>
           </div>
         )}
       </div>
+
+      {/* Publish confirmation — required before every publish, not persisted */}
+      {status === 'draft' && (
+        <div
+          className="rounded-[16px] p-6 border-2 mt-6"
+          style={{ background: '#fdf5f5', borderColor: '#8b4513', boxShadow: '0px 2px 8px 0px rgba(139,69,19,0.1)' }}
+        >
+          <label className="flex items-start gap-3 cursor-pointer">
+            <input
+              type="checkbox"
+              checked={publishConfirmed}
+              onChange={(e) => setPublishConfirmed(e.target.checked)}
+              className="mt-1 w-4 h-4 rounded accent-[#8b4513]"
+            />
+            <p className="text-sm text-[#4b3a2a] leading-relaxed">
+              I hereby confirm that this is original content created by me, or that I hold the necessary rights to
+              publish it. I have fact-checked the sources and claims presented, and all images, quotations, and
+              bibliographic references are correctly and fully credited to their original creators or copyright
+              holders. I understand and accept that, as the author, I am responsible for the accuracy, originality,
+              and legality of this content, and that UNTOLD may unpublish it if these commitments are not met.
+            </p>
+          </label>
+        </div>
+      )}
 
       {/* Bottom action bar */}
       <div className="flex gap-4 mt-6">
@@ -413,7 +410,8 @@ export function EditArticleForm({
           <button
             type="button"
             onClick={() => startTransition(() => publishArticle(id, new FormData()))}
-            disabled={isPending}
+            disabled={isPending || !publishConfirmed}
+            title={!publishConfirmed ? 'Confirm the statement above before publishing' : undefined}
             className="h-[54px] px-6 rounded-[16px] border border-primary/30 text-sm font-['JetBrains_Mono',monospace] font-medium tracking-[0.28px] text-primary hover:bg-primary/5 transition-colors disabled:opacity-50"
           >
             {td('publish')}

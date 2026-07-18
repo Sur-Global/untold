@@ -2,9 +2,19 @@
 
 import { useRef, useState, useTransition } from 'react'
 import { useRouter } from 'next/navigation'
+import { BlockNoteSchema } from '@blocknote/core'
+import { useCreateBlockNote } from '@blocknote/react'
+import { withMultiColumn } from '@blocknote/xl-multi-column'
 import { updateProfile } from '@/lib/actions/profile'
 import { slugify } from '@/lib/utils'
 import { CoverImageInput } from '@/components/ui/CoverImageInput'
+import { RichTextEditor, type EditorBlock } from '@/components/editor/RichTextEditor'
+
+// Separate schema instance used only to convert the bio's blocks to HTML at
+// submit time (mirrors components/content/BlockNoteReader.tsx) — bio stays a
+// plain HTML string in the database, same as before, just now authored with
+// the same block editor used for article bodies instead of a raw textarea.
+const htmlConverterSchema = withMultiColumn(BlockNoteSchema.create())
 
 interface EditProfileFormProps {
   userId: string
@@ -39,11 +49,15 @@ export function EditProfileForm({
 
   const [displayName, setDisplayName] = useState(initialDisplayName)
   const [slug, setSlug] = useState(initialSlug)
-  const [bio, setBio] = useState(initialBio)
+  const [bioBlocks, setBioBlocks] = useState<EditorBlock[] | null>(null)
   const [location, setLocation] = useState(initialLocation)
   const [website, setWebsite] = useState(initialWebsite)
   const [avatarUrl, setAvatarUrl] = useState(initialAvatarUrl)
   const slugManualRef = useRef(false)
+
+  // Used only to serialize bioBlocks back to HTML on submit — bio is stored as
+  // plain HTML, same as before the block editor was wired in.
+  const htmlConverter = useCreateBlockNote({ schema: htmlConverterSchema })
 
   const handleDisplayNameChange = (val: string) => {
     setDisplayName(val)
@@ -54,10 +68,11 @@ export function EditProfileForm({
     e.preventDefault()
     setError(null)
     setSuccess(false)
+    const bioHtml = bioBlocks ? htmlConverter.blocksToHTMLLossy(bioBlocks as any) : initialBio
     const fd = new FormData()
     fd.set('display_name', displayName)
     fd.set('slug', slug)
-    fd.set('bio', bio)
+    fd.set('bio', bioHtml)
     fd.set('location', location)
     fd.set('website', website)
     fd.set('avatar_url', avatarUrl)
@@ -121,13 +136,11 @@ export function EditProfileForm({
 
       {/* Bio */}
       <div>
-        <label htmlFor="bio" className={labelClass}>Bio</label>
-        <textarea
-          id="bio"
-          className={fieldClass}
-          value={bio}
-          onChange={(e) => setBio(e.target.value)}
-          rows={4}
+        <label className={labelClass}>Bio</label>
+        <RichTextEditor
+          value={bioBlocks}
+          onChange={setBioBlocks}
+          initialHtml={initialBio}
           placeholder="A short description of who you are…"
         />
       </div>

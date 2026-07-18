@@ -6,6 +6,7 @@ import { createClient } from '@/lib/supabase/server'
 import { getTranslation } from '@/lib/content'
 import { readTime } from '@/lib/utils'
 import { renderCreditHtml } from '@/lib/photo-credit'
+import { sanitizeBioHtml } from '@/lib/sanitize-bio-html'
 import { formatDate } from '@/lib/format-date'
 import { Navigation } from '@/components/layout/Navigation'
 import { Footer } from '@/components/layout/Footer'
@@ -395,7 +396,7 @@ export default async function ArticlePage({ params }: PageProps) {
                               <div
                                 className="text-sm leading-relaxed [&_a]:text-primary [&_a]:underline [&_a]:hover:opacity-70 [&_a]:transition-opacity"
                                 style={{ color: '#4b5563' }}
-                                dangerouslySetInnerHTML={{ __html: sourceBioHtml }}
+                                dangerouslySetInnerHTML={{ __html: sanitizeBioHtml(sourceBioHtml) }}
                               />
                             ) : (
                               <AuthorBioLoader

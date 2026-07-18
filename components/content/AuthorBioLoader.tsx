@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react'
 import { useTranslations } from 'next-intl'
+import { sanitizeBioHtml } from '@/lib/sanitize-bio-html'
 
 interface AuthorBioLoaderProps {
   initialBio: string | null
@@ -60,7 +61,7 @@ export function AuthorBioLoader({ initialBio, needsTranslation, contentId, autho
       {bio && (
         <p
           className="text-sm text-muted-foreground leading-relaxed mb-3 [&_a]:text-primary [&_a]:underline [&_a]:underline-offset-2 hover:[&_a]:opacity-80"
-          dangerouslySetInnerHTML={{ __html: bio }}
+          dangerouslySetInnerHTML={{ __html: sanitizeBioHtml(bio) }}
         />
       )}
     </div>
