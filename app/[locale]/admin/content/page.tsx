@@ -130,13 +130,11 @@ export default async function AdminContentPage({ searchParams }: PageProps) {
                     <td className="px-6 py-3">
                       <div className="flex items-center gap-2">
                         <FeatureButton contentId={item.id} isFeatured={item.is_featured} />
-                        {item.type === 'article' && (
-                          <HeroFeatureButton
-                            contentId={item.id}
-                            isFeatured={item.is_featured}
-                            isHeroFeatured={item.is_hero_featured ?? false}
-                          />
-                        )}
+                        <HeroFeatureButton
+                          contentId={item.id}
+                          isFeatured={item.is_featured}
+                          isHeroFeatured={item.is_hero_featured ?? false}
+                        />
                       </div>
                     </td>
                     <td className="px-6 py-3">

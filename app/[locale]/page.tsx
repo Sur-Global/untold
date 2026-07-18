@@ -10,6 +10,7 @@ import { Footer } from '@/components/layout/Footer'
 import { ContentCard } from '@/components/content/ContentCard'
 import { TranslationRefresher } from '@/components/TranslationRefresher'
 import { Link } from '@/i18n/navigation'
+import { getPublicContentPath } from '@/lib/utils'
 import { getTranslations } from 'next-intl/server'
 import {
   LargeArticleCard,
@@ -62,17 +63,20 @@ export default async function HomePage({ params }: PageProps) {
       .eq('content.status', 'published')
       .limit(2000),
     // Homepage hero picks (1 large + 2 small = 3 slots) — a narrower, explicitly
-    // curated subset of is_featured, so it never overlaps with the Featured
-    // Articles grid below (see is_hero_featured in admin/content).
+    // curated subset of is_featured that can be ANY content type, so it never
+    // overlaps with the per-type featured sections below (see is_hero_featured
+    // in admin/content).
     (supabase as any)
       .from('content')
       .select(`
-        id, slug, cover_image_url, read_time_minutes, likes_count,
+        id, slug, type, cover_image_url, read_time_minutes, likes_count,
         profiles!author_id ( display_name, slug, avatar_url ),
         content_translations ( title, excerpt, locale ),
-        content_tags ( tags ( names, slug ) )
+        content_tags ( tags ( names, slug ) ),
+        video_meta ( thumbnail_url ),
+        podcast_meta ( cover_image_url ),
+        pill_meta ( image_url )
       `)
-      .eq('type', 'article')
       .eq('status', 'published')
       .eq('is_hero_featured', true)
       .order('published_at', { ascending: false })
@@ -104,6 +108,8 @@ export default async function HomePage({ params }: PageProps) {
       `)
       .eq('type', 'video')
       .eq('status', 'published')
+      .eq('is_featured', true)
+      .eq('is_hero_featured', false)
       .order('published_at', { ascending: false })
       .limit(3),
     // Podcasts
@@ -118,6 +124,8 @@ export default async function HomePage({ params }: PageProps) {
       `)
       .eq('type', 'podcast')
       .eq('status', 'published')
+      .eq('is_featured', true)
+      .eq('is_hero_featured', false)
       .order('published_at', { ascending: false })
       .limit(2),
     // Pills — 6 for 3×2 grid
@@ -132,6 +140,8 @@ export default async function HomePage({ params }: PageProps) {
       `)
       .eq('type', 'pill')
       .eq('status', 'published')
+      .eq('is_featured', true)
+      .eq('is_hero_featured', false)
       .order('published_at', { ascending: false })
       .limit(6),
     // Courses
@@ -146,6 +156,8 @@ export default async function HomePage({ params }: PageProps) {
       `)
       .eq('type', 'course')
       .eq('status', 'published')
+      .eq('is_featured', true)
+      .eq('is_hero_featured', false)
       .order('published_at', { ascending: false })
       .limit(3),
   ])
@@ -240,8 +252,18 @@ export default async function HomePage({ params }: PageProps) {
     }
   }
 
-  // Homepage hero: 1 large card + 2 small cards, from the is_hero_featured pool
-  // (already mutually exclusive from `articles` below, enforced by the query).
+  // Homepage hero: 1 large card + 2 small cards, from the is_hero_featured pool.
+  // Can be any content type (already mutually exclusive from the per-type
+  // featured sections below, enforced by the queries).
+  function getHeroCoverImage(item: any): string | null {
+    return (
+      item?.cover_image_url ??
+      item?.video_meta?.thumbnail_url ??
+      item?.podcast_meta?.cover_image_url ??
+      item?.pill_meta?.image_url ??
+      null
+    )
+  }
   const heroArticle = heroPicks?.[0] ?? null
   const heroSmallArticles = (heroPicks ?? []).slice(1, 3)
 
@@ -419,10 +441,10 @@ export default async function HomePage({ params }: PageProps) {
 
               {/* RIGHT: large featured card + 2 smaller cards */}
               <div className="flex flex-col gap-3">
-                {/* Large featured card */}
+                {/* Large featured card — can be any content type */}
                 {heroArticle && heroTrans ? (
                   <Link
-                    href={`/articles/${heroArticle.slug}`}
+                    href={getPublicContentPath(heroArticle.type, heroArticle.slug)}
                     style={{
                       textDecoration: 'none',
                       display: 'block',
@@ -430,14 +452,14 @@ export default async function HomePage({ params }: PageProps) {
                       overflow: 'hidden',
                       position: 'relative',
                       height: 340,
-                      background: heroArticle.cover_image_url
+                      background: getHeroCoverImage(heroArticle)
                         ? 'transparent'
                         : 'linear-gradient(135deg, #1a1a2e 0%, #16213e 60%, #0f3460 100%)',
                     }}
                   >
-                    {heroArticle.cover_image_url && (
+                    {getHeroCoverImage(heroArticle) && (
                       <img
-                        src={heroArticle.cover_image_url}
+                        src={getHeroCoverImage(heroArticle)!}
                         alt={heroTrans.title}
                         style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }}
                       />
@@ -510,16 +532,17 @@ export default async function HomePage({ params }: PageProps) {
                       const trans = getTranslation(item.content_translations ?? [], locale)
                       const tag = item.content_tags?.[0]?.tags
                       const tagLabel = tag ? (tag.names[locale] ?? tag.names['en'] ?? null) : null
-                      const hasPhoto = !!item.cover_image_url
+                      const coverImage = getHeroCoverImage(item)
+                      const hasPhoto = !!coverImage
                       return (
                         <Link
                           key={item.id}
-                          href={`/articles/${item.slug}`}
+                          href={getPublicContentPath(item.type, item.slug)}
                           style={{ textDecoration: 'none', display: 'flex', flexDirection: 'column', justifyContent: 'flex-end', borderRadius: 16, overflow: 'hidden', background: hasPhoto ? '#1a1a2e' : bg, position: 'relative', minHeight: 160, padding: '14px' }}
                         >
                           {hasPhoto && (
                             <>
-                              <img src={item.cover_image_url} alt={trans?.title ?? ''} style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }} />
+                              <img src={coverImage!} alt={trans?.title ?? ''} style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }} />
                               <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to top, rgba(0,0,0,0.75) 0%, rgba(0,0,0,0.1) 60%, transparent 100%)' }} />
                             </>
                           )}
