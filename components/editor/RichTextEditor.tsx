@@ -44,7 +44,10 @@ export type EditorBlock = Block<
 
 interface RichTextEditorProps {
   value?: EditorBlock[] | null
-  onChange: (blocks: EditorBlock[]) => void
+  // `silent` is true for programmatic updates (initial legacy-HTML conversion,
+  // external value sync) so callers can update their own state without treating
+  // it as a user edit (e.g. skip triggering an autosave).
+  onChange: (blocks: EditorBlock[], opts?: { silent?: boolean }) => void
   placeholder?: string
   locale?: string
   initialHtml?: string | null
@@ -99,11 +102,19 @@ export function RichTextEditor({
     ],
   })
 
+  // replaceBlocks() below is programmatic, not a user edit — it still fires
+  // BlockNoteView's onChange, which would otherwise mark the form "unsaved"
+  // and autosave fresh (non-deterministic) block ids on every mount for
+  // legacy content, silently invalidating other locales' translations on
+  // each page load even though nothing was actually edited.
+  const suppressNextChangeRef = useRef(false)
+
   // Sync external value changes (e.g. locale switch loads different content)
   useEffect(() => {
     if (!editor || !value) return
     const current = JSON.stringify(editor.document)
     if (current !== JSON.stringify(value)) {
+      suppressNextChangeRef.current = true
       editor.replaceBlocks(editor.document, value as any[])
     }
   }, [editor, value])
@@ -112,6 +123,7 @@ export function RichTextEditor({
   useEffect(() => {
     if (!editor || !initialHtmlRef.current || value) return
     const blocks = editor.tryParseHTMLToBlocks(initialHtmlRef.current)
+    suppressNextChangeRef.current = true
     editor.replaceBlocks(editor.document, blocks as any[])
   }, [editor]) // eslint-disable-line react-hooks/exhaustive-deps
 
@@ -127,7 +139,11 @@ export function RichTextEditor({
         style={{ fontFamily: 'Inter, sans-serif', background: '#ffffff' }}
         formattingToolbar={false}
         slashMenu={false}
-        onChange={() => onChange(editor.document as EditorBlock[])}
+        onChange={() => {
+          const silent = suppressNextChangeRef.current
+          suppressNextChangeRef.current = false
+          onChange(editor.document as EditorBlock[], { silent })
+        }}
       >
         <AIMenuController />
         <FormattingToolbarController

@@ -97,6 +97,7 @@ export function EditArticleForm({
   const [publishConfirmed, setPublishConfirmed] = useState(false)
 
   const [saveStatus, setSaveStatus] = useState<'saved' | 'saving' | 'unsaved'>('saved')
+  const [saveError, setSaveError] = useState<string | null>(null)
   const [isPending, startTransition] = useTransition()
 
   // Ref always holds the latest state so the debounced save closure captures fresh values
@@ -128,9 +129,15 @@ export function EditArticleForm({
     fd.set('feature_requested', String(fr))
     if (s.body) fd.set('body', JSON.stringify(s.body))
     setSaveStatus('saving')
+    setSaveError(null)
     startTransition(async () => {
-      await updateArticle(id, fd)
-      setSaveStatus('saved')
+      try {
+        await updateArticle(id, fd)
+        setSaveStatus('saved')
+      } catch (err) {
+        setSaveStatus('unsaved')
+        setSaveError(err instanceof Error ? err.message : 'Save failed')
+      }
     })
   }, [id])
 
@@ -149,12 +156,14 @@ export function EditArticleForm({
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => { triggerAutoSave() }, [als.title, als.excerpt, als.featuredSummary, coverImageUrl, imageCredits, tags, featureRequested])
 
-  const handleBodyChange = useCallback((blocks: EditorBlock[]) => {
+  const handleBodyChange = useCallback((blocks: EditorBlock[], opts?: { silent?: boolean }) => {
     setLocaleStates(prev => ({
       ...prev,
       [latestRef.current.activeLocale]: { ...prev[latestRef.current.activeLocale], body: blocks },
     }))
-    triggerAutoSave()
+    // Programmatic updates (initial legacy-HTML conversion, locale-switch sync)
+    // shouldn't trigger an autosave — only genuine user edits should.
+    if (!opts?.silent) triggerAutoSave()
   }, [triggerAutoSave])
 
   const setLocaleField = useCallback((field: 'title' | 'excerpt' | 'featuredSummary', value: string) => {
@@ -214,6 +223,11 @@ export function EditArticleForm({
             </span>
           </div>
         </div>
+        {saveError && (
+          <p className="mt-2 rounded-[10px] bg-destructive/10 px-4 py-2 text-sm text-destructive">
+            {saveError}
+          </p>
+        )}
       </div>
 
       {/* Language tabs — shown when there's more than one locale */}

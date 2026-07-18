@@ -6,6 +6,7 @@ import { createClient } from '@/lib/supabase/server'
 import { getTranslation } from '@/lib/content'
 import { triggerListingTranslations } from '@/lib/trigger-listing-translations'
 import { formatDate } from '@/lib/format-date'
+import { sanitizeBioHtml } from '@/lib/sanitize-bio-html'
 import { Navigation } from '@/components/layout/Navigation'
 import { Footer } from '@/components/layout/Footer'
 import { FollowButton } from '@/components/social/FollowButton'
@@ -214,12 +215,11 @@ export default async function AuthorPage({ params }: PageProps) {
               </h1>
 
               {translatedBio && (
-                <p
-                  className="mb-4 max-w-2xl mx-auto sm:mx-0"
+                <div
+                  className="mb-4 max-w-2xl mx-auto sm:mx-0 [&_a]:underline [&_a]:underline-offset-2 hover:[&_a]:opacity-80"
                   style={{ fontSize: 15, lineHeight: 1.65, color: 'rgba(255,255,255,0.65)' }}
-                >
-                  {translatedBio}
-                </p>
+                  dangerouslySetInnerHTML={{ __html: sanitizeBioHtml(translatedBio) }}
+                />
               )}
 
               {/* Meta row */}
