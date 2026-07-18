@@ -7,6 +7,7 @@ import { createClient } from '@/lib/supabase/server'
 import { requireCreator } from '@/lib/require-creator'
 import { isEditorRole } from '@/lib/require-editor'
 import { slugify } from '@/lib/utils'
+import { logActivity } from '@/lib/actions/activity-log'
 
 export async function createPill(formData: FormData) {
   const { user } = await requireCreator()
@@ -54,6 +55,8 @@ export async function createPill(formData: FormData) {
     })
 
   if (metaError) throw new Error(metaError.message ?? 'Failed to save pill metadata')
+
+  await logActivity({ entityType: 'pill', entityId: content.id, entityLabel: title, action: 'created' })
 
   revalidatePath('/dashboard')
   redirect(`/dashboard/pills/${content.id}/edit`)
@@ -113,6 +116,8 @@ export async function updatePill(id: string, formData: FormData) {
       { content_id: id, accent_color: accentColor, image_url: imageUrl },
       { onConflict: 'content_id' }
     )
+
+  await logActivity({ entityType: 'pill', entityId: id, entityLabel: title, action: 'updated' })
 
   revalidatePath(`/dashboard/pills/${id}/edit`)
   revalidatePath('/dashboard')

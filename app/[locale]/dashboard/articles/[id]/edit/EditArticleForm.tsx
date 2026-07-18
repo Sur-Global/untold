@@ -113,8 +113,18 @@ export function EditArticleForm({
 
   const autoSaveTimer = useRef<NodeJS.Timeout | null>(null)
   const skipAutoSave = useRef(false)
+  // Guards against out-of-order network responses: if a save is already in flight and
+  // another one is requested (e.g. the user kept typing), queue it instead of firing a
+  // second concurrent request — an older, slower request finishing last could otherwise
+  // overwrite newer edits.
+  const isSavingRef = useRef(false)
+  const pendingSaveRef = useRef(false)
 
   const doSave = useCallback(() => {
+    if (isSavingRef.current) {
+      pendingSaveRef.current = true
+      return
+    }
     const { activeLocale: al, localeStates: ls, coverImageUrl: cu, imageCredits: ic, tags: tg, featureRequested: fr } = latestRef.current
     const s = ls[al] ?? { title: '', excerpt: '', featuredSummary: '', body: null }
     if (!s.title.trim()) return
@@ -128,6 +138,7 @@ export function EditArticleForm({
     fd.set('tag_ids', JSON.stringify(tg.map((tag) => tag.id)))
     fd.set('feature_requested', String(fr))
     if (s.body) fd.set('body', JSON.stringify(s.body))
+    isSavingRef.current = true
     setSaveStatus('saving')
     setSaveError(null)
     startTransition(async () => {
@@ -137,6 +148,12 @@ export function EditArticleForm({
       } catch (err) {
         setSaveStatus('unsaved')
         setSaveError(err instanceof Error ? err.message : 'Save failed')
+      } finally {
+        isSavingRef.current = false
+        if (pendingSaveRef.current) {
+          pendingSaveRef.current = false
+          doSave()
+        }
       }
     })
   }, [id])
@@ -153,8 +170,16 @@ export function EditArticleForm({
 
   // Watch active locale's text fields for auto-save
   const als = localeStates[activeLocale] ?? { title: '', excerpt: '', featuredSummary: '', body: null, bodyHtml: null }
+  // useEffect always fires once after the initial mount regardless of whether these values
+  // "changed" — without this guard, simply opening the edit page schedules a save 2s later,
+  // which (for legacy Tiptap articles) captures the body mid-conversion to BlockNote format
+  // and silently rewrites/invalidates content nobody touched.
+  const hasMountedRef = useRef(false)
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  useEffect(() => { triggerAutoSave() }, [als.title, als.excerpt, als.featuredSummary, coverImageUrl, imageCredits, tags, featureRequested])
+  useEffect(() => {
+    if (!hasMountedRef.current) { hasMountedRef.current = true; return }
+    triggerAutoSave()
+  }, [als.title, als.excerpt, als.featuredSummary, coverImageUrl, imageCredits, tags, featureRequested])
 
   const handleBodyChange = useCallback((blocks: EditorBlock[], opts?: { silent?: boolean }) => {
     setLocaleStates(prev => ({
@@ -205,12 +230,12 @@ export function EditArticleForm({
 
         <div className="flex items-start justify-between gap-4">
           <div>
-            <h1 className="font-heading text-foreground text-2xl mb-1">Edit Article</h1>
-            <p className="text-sm text-muted-foreground">Edit text, layout, and images for your article</p>
+            <h1 className="font-heading text-foreground text-2xl mb-1">{t('editArticleTitle')}</h1>
+            <p className="text-sm text-muted-foreground">{t('editArticleSubtitle')}</p>
           </div>
           <div className="flex items-center gap-2 flex-shrink-0 mt-1">
             <span className="text-xs font-['JetBrains_Mono',monospace] text-muted-foreground">
-              {saveStatus === 'saving' ? 'Saving…' : saveStatus === 'unsaved' ? 'Unsaved' : '✓ Saved'}
+              {saveStatus === 'saving' ? td('saving') : saveStatus === 'unsaved' ? td('unsavedStatus') : td('savedStatus')}
             </span>
             <span
               className="text-xs font-['JetBrains_Mono',monospace] px-2.5 py-0.5 rounded-full"
@@ -272,7 +297,7 @@ export function EditArticleForm({
       <div className="bg-card border border-primary/20 rounded-2xl shadow-[0px_4px_16px_0px_rgba(44,36,32,0.1),0px_8px_32px_0px_rgba(44,36,32,0.06)] p-8 space-y-6">
         {/* Article Title */}
         <div className="space-y-2">
-          <label className="block text-sm font-semibold text-foreground">Article Title</label>
+          <label className="block text-sm font-semibold text-foreground">{t('articleTitleLabel')}</label>
           <input
             type="text"
             value={als.title}
@@ -285,12 +310,12 @@ export function EditArticleForm({
 
         {/* Subtitle (Excerpt) */}
         <div className="space-y-2">
-          <label className="block text-sm font-semibold text-foreground">Subtitle</label>
+          <label className="block text-sm font-semibold text-foreground">{t('subtitleLabel')}</label>
           <input
             type="text"
             value={als.excerpt}
             onChange={(e) => setLocaleField('excerpt', e.target.value)}
-            placeholder="How communities are reclaiming their spaces"
+            placeholder={t('subtitlePlaceholder')}
             className="w-full h-[50px] px-4 rounded-[10px] border border-primary/20 bg-white text-foreground text-base outline-none focus:border-primary/50 transition-colors placeholder:text-muted-foreground"
           />
         </div>
@@ -298,19 +323,19 @@ export function EditArticleForm({
         {/* Topic/Category (Tags) — global, not locale-specific */}
         {activeLocale === sourceLocale && (
           <div className="space-y-2">
-            <label className="block text-sm font-semibold text-foreground">Topic / Category</label>
-            <TagsInput value={tags} onChange={setTags} placeholder="Urban Planning, Human Rights…" />
+            <label className="block text-sm font-semibold text-foreground">{t('topicCategoryLabel')}</label>
+            <TagsInput value={tags} onChange={setTags} placeholder={t('topicCategoryPlaceholder')} />
           </div>
         )}
 
         {/* Featured Summary */}
         <div className="space-y-2">
-          <label className="block text-sm font-semibold text-foreground">Featured Summary</label>
-          <p className="text-xs text-muted-foreground -mt-1">Shown publicly only when this article is featured</p>
+          <label className="block text-sm font-semibold text-foreground">{t('featuredSummaryLabel')}</label>
+          <p className="text-xs text-muted-foreground -mt-1">{t('featuredSummaryHint')}</p>
           <textarea
             value={als.featuredSummary}
             onChange={(e) => setLocaleField('featuredSummary', e.target.value)}
-            placeholder="Urban regeneration is not just about new buildings…"
+            placeholder={t('featuredSummaryPlaceholder')}
             rows={4}
             className="w-full px-4 py-3 rounded-[10px] border border-primary/20 bg-white text-foreground text-base outline-none focus:border-primary/50 transition-colors resize-none placeholder:text-muted-foreground"
           />
@@ -318,7 +343,7 @@ export function EditArticleForm({
 
         {/* Full Content — keyed by locale to force re-mount on switch */}
         <div className="space-y-2">
-          <label className="block text-sm font-semibold text-foreground">Full Content</label>
+          <label className="block text-sm font-semibold text-foreground">{t('fullContentLabel')}</label>
           <div className="rounded-[10px] border border-primary/20 overflow-hidden">
             <RichTextEditor
               key={activeLocale}
@@ -338,22 +363,21 @@ export function EditArticleForm({
           onChange={setCoverImageUrl}
         />
         <div className="space-y-2">
-          <label className="block text-sm font-semibold text-foreground">Cover image credit</label>
+          <label className="block text-sm font-semibold text-foreground">{t('coverImageCreditLabel')}</label>
           <PhotoCreditInput
             name="image_credits"
             value={imageCredits}
             onChange={setImageCredits}
-            placeholder="e.g. Chris Lawton on Unsplash, or [Chris Lawton](https://...)"
+            placeholder={t('coverImageCreditPlaceholder')}
           />
         </div>
         <p className="text-xs text-muted-foreground -mt-4">
-          Photos: use good resolution but keep the file size light, and prefer horizontal (landscape) orientation —
-          this keeps the site fast and looks best in the layout.
+          {t('photoGuidelineHint')}
         </p>
 
         {/* Author info (read-only) */}
         <div className="space-y-2">
-          <label className="block text-sm font-semibold text-foreground">Author Name</label>
+          <label className="block text-sm font-semibold text-foreground">{t('authorNameLabel')}</label>
           <div className="h-[50px] px-4 flex items-center rounded-[10px] border border-primary/10 bg-primary/5 text-foreground text-base">
             {authorName}
           </div>
@@ -373,10 +397,9 @@ export function EditArticleForm({
                 className="mt-1 w-4 h-4 rounded accent-[#b8860b]"
               />
               <div>
-                <p className="font-semibold text-[#5d4e37] mb-1">✨ Submit for featured content at UNTOLD.ink</p>
+                <p className="font-semibold text-[#5d4e37] mb-1">{t('featureRequestTitle')}</p>
                 <p className="text-sm text-[#6b5744] leading-relaxed">
-                  Your content will be published immediately on your personal UNTOLD page. If approved by an Editor,
-                  it could become featured content with higher visibility on the homepage and in searches.
+                  {t('featureRequestDescription')}
                 </p>
               </div>
             </label>
@@ -398,11 +421,7 @@ export function EditArticleForm({
               className="mt-1 w-4 h-4 rounded accent-[#8b4513]"
             />
             <p className="text-sm text-[#4b3a2a] leading-relaxed">
-              I hereby confirm that this is original content created by me, or that I hold the necessary rights to
-              publish it. I have fact-checked the sources and claims presented, and all images, quotations, and
-              bibliographic references are correctly and fully credited to their original creators or copyright
-              holders. I understand and accept that, as the author, I am responsible for the accuracy, originality,
-              and legality of this content, and that UNTOLD may unpublish it if these commitments are not met.
+              {t('publishConfirmationText')}
             </p>
           </label>
         </div>
@@ -425,7 +444,7 @@ export function EditArticleForm({
             type="button"
             onClick={() => startTransition(() => publishArticle(id, new FormData()))}
             disabled={isPending || !publishConfirmed}
-            title={!publishConfirmed ? 'Confirm the statement above before publishing' : undefined}
+            title={!publishConfirmed ? t('publishConfirmTooltip') : undefined}
             className="h-[54px] px-6 rounded-[16px] border border-primary/30 text-sm font-['JetBrains_Mono',monospace] font-medium tracking-[0.28px] text-primary hover:bg-primary/5 transition-colors disabled:opacity-50"
           >
             {td('publish')}
@@ -448,7 +467,7 @@ export function EditArticleForm({
           }}
           disabled={isPending}
           className="h-[54px] px-4 rounded-[16px] text-sm font-['JetBrains_Mono',monospace] text-red-500 hover:bg-red-50 transition-colors disabled:opacity-50"
-          aria-label="Delete article"
+          aria-label={t('deleteArticleAriaLabel')}
         >
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
             <polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4h6v2"/>

@@ -24,6 +24,12 @@ interface EditProfileFormProps {
   initialLocation: string
   initialWebsite: string
   initialAvatarUrl: string
+  initialEmail?: string
+  initialSocialBluesky?: string
+  initialSocialLinkedin?: string
+  initialSocialInstagram?: string
+  initialSocialMedium?: string
+  initialSocialCustomUrl?: string
   /** When true, redirects back to /admin/users after save */
   isAdminEdit?: boolean
 }
@@ -40,6 +46,12 @@ export function EditProfileForm({
   initialLocation,
   initialWebsite,
   initialAvatarUrl,
+  initialEmail = '',
+  initialSocialBluesky = '',
+  initialSocialLinkedin = '',
+  initialSocialInstagram = '',
+  initialSocialMedium = '',
+  initialSocialCustomUrl = '',
   isAdminEdit,
 }: EditProfileFormProps) {
   const router = useRouter()
@@ -53,6 +65,12 @@ export function EditProfileForm({
   const [location, setLocation] = useState(initialLocation)
   const [website, setWebsite] = useState(initialWebsite)
   const [avatarUrl, setAvatarUrl] = useState(initialAvatarUrl)
+  const [email, setEmail] = useState(initialEmail)
+  const [socialBluesky, setSocialBluesky] = useState(initialSocialBluesky)
+  const [socialLinkedin, setSocialLinkedin] = useState(initialSocialLinkedin)
+  const [socialInstagram, setSocialInstagram] = useState(initialSocialInstagram)
+  const [socialMedium, setSocialMedium] = useState(initialSocialMedium)
+  const [socialCustomUrl, setSocialCustomUrl] = useState(initialSocialCustomUrl)
   const slugManualRef = useRef(false)
 
   // Used only to serialize bioBlocks back to HTML on submit — bio is stored as
@@ -76,6 +94,12 @@ export function EditProfileForm({
     fd.set('location', location)
     fd.set('website', website)
     fd.set('avatar_url', avatarUrl)
+    fd.set('email', email)
+    fd.set('social_bluesky', socialBluesky)
+    fd.set('social_linkedin', socialLinkedin)
+    fd.set('social_instagram', socialInstagram)
+    fd.set('social_medium', socialMedium)
+    fd.set('social_custom_url', socialCustomUrl)
 
     startTransition(async () => {
       try {
@@ -168,6 +192,82 @@ export function EditProfileForm({
           onChange={(e) => setWebsite(e.target.value)}
           placeholder="https://yoursite.com"
         />
+      </div>
+
+      {/* Email (contact/display only — not the login email) */}
+      <div>
+        <label htmlFor="email" className={labelClass}>Contact Email</label>
+        <input
+          id="email"
+          type="email"
+          className={fieldClass}
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          placeholder="name@example.com"
+        />
+        <p className="mt-1 text-xs text-muted-foreground">
+          Shown to admins/editors only — not your login email, and not published on your public page.
+        </p>
+      </div>
+
+      {/* Social links */}
+      <div className="space-y-3 rounded-[10px] border border-primary/10 bg-muted/20 p-4">
+        <p className={labelClass}>Social Links</p>
+        <div>
+          <label htmlFor="social_bluesky" className="mb-1 block text-xs text-muted-foreground">BlueSky</label>
+          <input
+            id="social_bluesky"
+            type="url"
+            className={fieldClass}
+            value={socialBluesky}
+            onChange={(e) => setSocialBluesky(e.target.value)}
+            placeholder="https://bsky.app/profile/yourname"
+          />
+        </div>
+        <div>
+          <label htmlFor="social_linkedin" className="mb-1 block text-xs text-muted-foreground">LinkedIn</label>
+          <input
+            id="social_linkedin"
+            type="url"
+            className={fieldClass}
+            value={socialLinkedin}
+            onChange={(e) => setSocialLinkedin(e.target.value)}
+            placeholder="https://linkedin.com/in/yourname"
+          />
+        </div>
+        <div>
+          <label htmlFor="social_instagram" className="mb-1 block text-xs text-muted-foreground">Instagram</label>
+          <input
+            id="social_instagram"
+            type="url"
+            className={fieldClass}
+            value={socialInstagram}
+            onChange={(e) => setSocialInstagram(e.target.value)}
+            placeholder="https://instagram.com/yourname"
+          />
+        </div>
+        <div>
+          <label htmlFor="social_medium" className="mb-1 block text-xs text-muted-foreground">Medium</label>
+          <input
+            id="social_medium"
+            type="url"
+            className={fieldClass}
+            value={socialMedium}
+            onChange={(e) => setSocialMedium(e.target.value)}
+            placeholder="https://medium.com/@yourname"
+          />
+        </div>
+        <div>
+          <label htmlFor="social_custom_url" className="mb-1 block text-xs text-muted-foreground">Custom link</label>
+          <input
+            id="social_custom_url"
+            type="url"
+            className={fieldClass}
+            value={socialCustomUrl}
+            onChange={(e) => setSocialCustomUrl(e.target.value)}
+            placeholder="https://..."
+          />
+        </div>
       </div>
 
       {error && (

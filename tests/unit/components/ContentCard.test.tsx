@@ -8,6 +8,11 @@ vi.mock('@/i18n/navigation', () => ({
   ),
 }))
 
+vi.mock('next-intl', () => ({
+  useTranslations: (ns: string) => (key: string) => `${ns}.${key}`,
+  useLocale: () => 'en',
+}))
+
 const base = {
   contentId: '1',
   slug: 'test-slug',
@@ -33,7 +38,9 @@ describe('ContentCard', () => {
 
   it('renders video card with duration', () => {
     render(<ContentCard {...base} type="video" duration="15:30" />)
-    expect(screen.getByText('15:30')).toBeInTheDocument()
+    // Duration renders twice by design: once as a badge over the thumbnail,
+    // once in the meta row below the card body.
+    expect(screen.getAllByText('15:30').length).toBeGreaterThan(0)
   })
 
   it('renders pill card with accent color', () => {

@@ -8,6 +8,7 @@ import { requireCreator } from '@/lib/require-creator'
 import { requireAdmin } from '@/lib/require-admin'
 import { isEditorRole } from '@/lib/require-editor'
 import { slugify } from '@/lib/utils'
+import { logActivity } from '@/lib/actions/activity-log'
 
 export async function createCourse(formData: FormData) {
   const { user } = await requireCreator()
@@ -61,6 +62,8 @@ export async function createCourse(formData: FormData) {
 
   if (metaError) throw new Error(metaError.message ?? 'Failed to save course metadata')
 
+  await logActivity({ entityType: 'course', entityId: content.id, entityLabel: title, action: 'created' })
+
   revalidatePath('/dashboard')
   redirect(`/dashboard/courses/${content.id}/edit`)
 }
@@ -98,6 +101,8 @@ export async function updateCourse(id: string, formData: FormData) {
       { content_id: id, price, currency, duration },
       { onConflict: 'content_id' }
     )
+
+  await logActivity({ entityType: 'course', entityId: id, entityLabel: title, action: 'updated' })
 
   revalidatePath(`/dashboard/courses/${id}/edit`)
   revalidatePath('/dashboard')

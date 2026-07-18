@@ -11,6 +11,7 @@ import { Navigation } from '@/components/layout/Navigation'
 import { Footer } from '@/components/layout/Footer'
 import { FollowButton } from '@/components/social/FollowButton'
 import { AuthorContentTabs } from '@/components/author/AuthorContentTabs'
+import { SocialLinks } from '@/components/author/SocialLinks'
 import { TranslationRefresher } from '@/components/TranslationRefresher'
 
 interface PageProps {
@@ -48,7 +49,7 @@ export default async function AuthorPage({ params }: PageProps) {
 
   const { data: author } = await (supabase as any)
     .from('profiles')
-    .select('id, display_name, slug, avatar_url, bio, profile_translations, location, website, followers_count, following_count, role, created_at')
+    .select('id, display_name, slug, avatar_url, bio, profile_translations, location, website, followers_count, following_count, role, created_at, social_bluesky, social_linkedin, social_instagram, social_medium, social_custom_url')
     .eq('slug', slug)
     .single()
 
@@ -253,6 +254,15 @@ export default async function AuthorPage({ params }: PageProps) {
                 )}
                 <span>{tAuthor('joinedDate', { date: joinedDate })}</span>
               </div>
+
+              <SocialLinks
+                bluesky={author.social_bluesky}
+                linkedin={author.social_linkedin}
+                instagram={author.social_instagram}
+                medium={author.social_medium}
+                customUrl={author.social_custom_url}
+                className="justify-center sm:justify-start mb-4"
+              />
 
               {/* Stats + follow */}
               <div className="flex flex-wrap justify-center sm:justify-start items-center gap-4">

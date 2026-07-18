@@ -77,8 +77,8 @@ describe('translateTexts', () => {
 })
 
 describe('SUPPORTED_LOCALES', () => {
-  it('contains exactly es, pt, fr, de, da', async () => {
+  it('contains exactly en, es, pt, fr, de, da', async () => {
     const { SUPPORTED_LOCALES } = await import('@/lib/deepl')
-    expect([...SUPPORTED_LOCALES].sort()).toEqual(['da', 'de', 'es', 'fr', 'pt'])
+    expect([...SUPPORTED_LOCALES].sort()).toEqual(['da', 'de', 'en', 'es', 'fr', 'pt'])
   })
 })

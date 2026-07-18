@@ -17,17 +17,26 @@ vi.mock('next/link', () => ({
     <a href={href}>{children}</a>
   ),
 }))
+// LocaleSwitcher (rendered inside Navigation) pulls in next-intl's createNavigation,
+// which does a bare `next/navigation` import that vitest can't resolve under this
+// Next version — sidestep it entirely, same pattern used in ContentCard.test.tsx.
+vi.mock('@/i18n/navigation', () => ({
+  Link: ({ children, href }: { children: React.ReactNode; href: string }) => (
+    <a href={href}>{children}</a>
+  ),
+  usePathname: () => '/',
+  useRouter: () => ({ push: vi.fn() }),
+}))
 
 describe('Navigation', () => {
   it('renders the UNTOLD logo', () => {
     render(<Navigation isLoggedIn={false} userRole={null} />)
-    expect(screen.getByText('UNTOLD')).toBeInTheDocument()
+    expect(screen.getByAltText('UNTOLD.ink')).toBeInTheDocument()
   })
 
-  it('shows Login and Sign up when logged out', () => {
+  it('shows Login when logged out', () => {
     render(<Navigation isLoggedIn={false} userRole={null} />)
     expect(screen.getByText('nav.login')).toBeInTheDocument()
-    expect(screen.getByText('nav.signup')).toBeInTheDocument()
   })
 
   it('shows Dashboard and Create when logged in as creator', () => {

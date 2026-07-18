@@ -41,7 +41,7 @@ export function EditPillForm({
   return (
     <form ref={formRef} onSubmit={handleSave} className="space-y-6">
       <div className="space-y-2">
-        <Label htmlFor="title">Title *</Label>
+        <Label htmlFor="title">{t('titleRequiredLabel')}</Label>
         <Input id="title" name="title" defaultValue={initialTitle} placeholder={t('titlePlaceholder')} required className="text-xl font-semibold" />
       </div>
 
@@ -55,14 +55,14 @@ export function EditPillForm({
             defaultValue={initialAccentColor || '#C45D3A'}
             className="w-10 h-10 rounded cursor-pointer border border-[rgba(139,69,19,0.2)]"
           />
-          <span className="text-sm text-[#6B5F58]">Pick the pill accent color</span>
+          <span className="text-sm text-[#6B5F58]">{t('pickAccentColorHint')}</span>
         </div>
       </div>
 
       <CoverImageInput name="image_url" defaultValue={initialImageUrl} />
 
       <div className="space-y-2">
-        <Label>Body</Label>
+        <Label>{t('bodyLabel')}</Label>
         <RichTextEditor value={body} onChange={setBody} placeholder={t('bodyPlaceholder')} locale={locale} />
       </div>
 

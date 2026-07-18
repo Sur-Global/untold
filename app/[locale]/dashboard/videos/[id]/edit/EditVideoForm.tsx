@@ -83,13 +83,6 @@ const LAYOUTS: { id: LayoutStyle; icon: React.ReactNode }[] = [
   },
 ]
 
-const LAYOUT_LABELS: Record<LayoutStyle, { label: string; desc: string }> = {
-  standard: { label: 'Standard', desc: 'Classic single-column layout' },
-  wide: { label: 'Wide', desc: 'Wide layout for more space' },
-  sidebar: { label: 'Sidebar', desc: 'Content with side panel' },
-  card: { label: 'Card', desc: 'Compact card-style layout' },
-}
-
 export function EditVideoForm({
   id,
   status,
@@ -107,6 +100,13 @@ export function EditVideoForm({
   const t = useTranslations('editor')
   const td = useTranslations('dashboard')
   const locale = useLocale()
+
+  const LAYOUT_LABELS: Record<LayoutStyle, { label: string; desc: string }> = {
+    standard: { label: t('layoutStandardLabel'), desc: t('layoutStandardDesc') },
+    wide: { label: t('layoutWideLabel'), desc: t('layoutWideDesc') },
+    sidebar: { label: t('layoutSidebarLabel'), desc: t('layoutSidebarDesc') },
+    card: { label: t('layoutCardLabel'), desc: t('layoutCardDesc') },
+  }
 
   const [activeTab, setActiveTab] = useState<'text' | 'layout' | 'images'>('text')
   const [embedUrl, setEmbedUrl] = useState(initialEmbedUrl)
@@ -136,7 +136,17 @@ export function EditVideoForm({
     featureRequested, layoutStyle, transcript, thumbnailUrl,
   }
 
+  // Guards against out-of-order network responses: if a save is already in flight and
+  // another one is requested, queue it instead of firing a second concurrent request —
+  // an older, slower request finishing last could otherwise overwrite newer edits.
+  const isSavingRef = useRef(false)
+  const pendingSaveRef = useRef(false)
+
   const doSave = useCallback(() => {
+    if (isSavingRef.current) {
+      pendingSaveRef.current = true
+      return
+    }
     const s = latestState.current
     if (!s.title.trim()) return
     const fd = new FormData()
@@ -150,10 +160,19 @@ export function EditVideoForm({
     fd.set('feature_requested', String(s.featureRequested))
     fd.set('layout_style', s.layoutStyle)
     if (s.transcript) fd.set('transcript', JSON.stringify(s.transcript))
+    isSavingRef.current = true
     setSaveStatus('saving')
     startTransition(async () => {
-      await updateVideo(id, fd)
-      setSaveStatus('saved')
+      try {
+        await updateVideo(id, fd)
+        setSaveStatus('saved')
+      } finally {
+        isSavingRef.current = false
+        if (pendingSaveRef.current) {
+          pendingSaveRef.current = false
+          doSave()
+        }
+      }
     })
   }, [id])
 
@@ -163,7 +182,12 @@ export function EditVideoForm({
     autoSaveTimer.current = setTimeout(doSave, 2000)
   }, [doSave])
 
+  // useEffect always fires once after the initial mount regardless of whether these values
+  // "changed" — without this guard, simply opening the edit page schedules a save 2s later
+  // even though the user hasn't touched anything.
+  const hasMountedRef = useRef(false)
   useEffect(() => {
+    if (!hasMountedRef.current) { hasMountedRef.current = true; return }
     triggerAutoSave()
   }, [title, embedUrl, duration, tags, chapters, featureRequested, layoutStyle, thumbnailUrl]) // eslint-disable-line react-hooks/exhaustive-deps
 
@@ -215,9 +239,9 @@ export function EditVideoForm({
   }
 
   const tabs = [
-    { id: 'text' as const, label: 'Text' },
-    { id: 'layout' as const, label: 'Layout' },
-    { id: 'images' as const, label: 'Images' },
+    { id: 'text' as const, label: t('textTabLabel') },
+    { id: 'layout' as const, label: t('layoutTabLabel') },
+    { id: 'images' as const, label: t('imagesTabLabel') },
   ]
 
   return (
@@ -236,12 +260,12 @@ export function EditVideoForm({
 
         <div className="flex items-start justify-between gap-4">
           <div>
-            <h1 className="font-heading text-foreground text-2xl mb-1">Edit Video</h1>
-            <p className="text-sm text-muted-foreground">Edit text, layout, and images for your video</p>
+            <h1 className="font-heading text-foreground text-2xl mb-1">{t('editVideoTitle')}</h1>
+            <p className="text-sm text-muted-foreground">{t('editVideoSubtitle')}</p>
           </div>
           <div className="flex items-center gap-2 flex-shrink-0 mt-1">
             <span className="text-xs font-['JetBrains_Mono',monospace] text-muted-foreground">
-              {saveStatus === 'saving' ? 'Saving…' : saveStatus === 'unsaved' ? 'Unsaved' : '✓ Saved'}
+              {saveStatus === 'saving' ? td('saving') : saveStatus === 'unsaved' ? td('unsavedStatus') : td('savedStatus')}
             </span>
             <span
               className="text-xs font-['JetBrains_Mono',monospace] px-2.5 py-0.5 rounded-full"
@@ -308,14 +332,14 @@ export function EditVideoForm({
             {transcript !== null && (
               <p className="text-xs font-['JetBrains_Mono',monospace] text-primary/70">
                 {transcript.length > 0
-                  ? `✓ Transcript extracted (${transcript.length} cues)`
-                  : 'No transcript available for this video'}
+                  ? t('transcriptExtractedMessage', { count: transcript.length })
+                  : t('noTranscriptMessage')}
               </p>
             )}
 
             {/* Video Title */}
             <div className="space-y-2">
-              <label className="block text-sm font-semibold text-foreground">Video Title</label>
+              <label className="block text-sm font-semibold text-foreground">{t('videoTitleLabel')}</label>
               <input
                 type="text"
                 value={title}
@@ -327,14 +351,14 @@ export function EditVideoForm({
 
             {/* Description */}
             <div className="space-y-2">
-              <label className="block text-sm font-semibold text-foreground">Description</label>
+              <label className="block text-sm font-semibold text-foreground">{t('descriptionLabel')}</label>
               <RichTextEditor value={body} onChange={handleBodyChange} locale={locale} />
             </div>
 
             {/* Duration + Topic */}
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
-                <label className="block text-sm font-semibold text-foreground">Duration</label>
+                <label className="block text-sm font-semibold text-foreground">{t('durationLabel')}</label>
                 <input
                   type="text"
                   value={duration}
@@ -344,35 +368,35 @@ export function EditVideoForm({
                 />
               </div>
               <div className="space-y-2">
-                <label className="block text-sm font-semibold text-foreground">Topic / Category</label>
-                <TagsInput value={tags} onChange={setTags} placeholder="Urban Design, Climate…" />
+                <label className="block text-sm font-semibold text-foreground">{t('topicCategoryLabel')}</label>
+                <TagsInput value={tags} onChange={setTags} placeholder={t('topicCategoryPlaceholder')} />
               </div>
             </div>
 
             {/* Video Chapters */}
             <div className="space-y-3">
-              <label className="block text-sm font-semibold text-foreground">Video Chapters</label>
+              <label className="block text-sm font-semibold text-foreground">{t('videoChaptersLabel')}</label>
               {chapters.map((ch, i) => (
                 <div key={i} className="flex gap-2 items-center">
                   <input
                     type="text"
                     value={ch.timestamp}
                     onChange={(e) => updateChapter(i, 'timestamp', e.target.value)}
-                    placeholder="0:00"
+                    placeholder={t('chapterTimestampPlaceholder')}
                     className="w-24 h-[42px] px-3 rounded-[10px] border border-primary/20 bg-white text-foreground text-base outline-none focus:border-primary/50 transition-colors placeholder:text-muted-foreground font-['JetBrains_Mono',monospace] text-sm"
                   />
                   <input
                     type="text"
                     value={ch.title}
                     onChange={(e) => updateChapter(i, 'title', e.target.value)}
-                    placeholder="Chapter title"
+                    placeholder={t('chapterTitlePlaceholder')}
                     className="flex-1 h-[42px] px-3 rounded-[10px] border border-primary/20 bg-white text-foreground text-base outline-none focus:border-primary/50 transition-colors placeholder:text-muted-foreground"
                   />
                   <button
                     type="button"
                     onClick={() => removeChapter(i)}
                     className="w-9 h-[42px] flex items-center justify-center rounded-[10px] text-muted-foreground hover:text-red-500 hover:bg-red-50 transition-colors"
-                    aria-label="Remove chapter"
+                    aria-label={t('removeChapterAriaLabel')}
                   >
                     <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden>
                       <path d="M2 4h12M5 4V2.5a.5.5 0 01.5-.5h5a.5.5 0 01.5.5V4M13 4l-.88 8.79A1 1 0 0111.13 14H4.87a1 1 0 01-.99-.88L3 4" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round"/>
@@ -388,7 +412,7 @@ export function EditVideoForm({
                 <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden>
                   <path d="M7 2v10M2 7h10" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
                 </svg>
-                Add Chapter
+                {t('addChapterButton')}
               </button>
             </div>
 
@@ -410,10 +434,10 @@ export function EditVideoForm({
                 />
                 <div>
                   <p className="font-semibold text-[#5d4e37] text-base leading-snug mb-1">
-                    ✨ Submit for featured content at UNTOLD.ink
+                    {t('featureRequestTitle')}
                   </p>
                   <p className="text-sm text-[#6b5744] leading-[1.6]">
-                    Your content will be published immediately on your personal UNTOLD page. If approved by an Editor, it could become featured content with higher visibility on the homepage and in searches.
+                    {t('featureRequestDescription')}
                   </p>
                 </div>
               </label>
@@ -424,7 +448,7 @@ export function EditVideoForm({
         {/* ── Layout tab ── */}
         {activeTab === 'layout' && (
           <>
-            <p className="text-sm text-muted-foreground">Select the layout style for this content</p>
+            <p className="text-sm text-muted-foreground">{t('layoutSelectHint')}</p>
 
             <div className="grid grid-cols-2 gap-4">
               {LAYOUTS.map((layout) => {
@@ -463,7 +487,7 @@ export function EditVideoForm({
             name="thumbnail_url"
             defaultValue={thumbnailUrl}
             onChange={setThumbnailUrl}
-            label="Video Thumbnail"
+            label={t('videoThumbnailLabel')}
           />
         )}
       </div>

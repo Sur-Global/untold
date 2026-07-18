@@ -38,12 +38,12 @@ export function EditCourseForm({
   return (
     <form ref={formRef} onSubmit={handleSave} className="space-y-6">
       <div className="space-y-2">
-        <Label htmlFor="title">Title *</Label>
+        <Label htmlFor="title">{t('titleRequiredLabel')}</Label>
         <Input id="title" name="title" defaultValue={initialTitle} placeholder={t('titlePlaceholder')} required className="text-xl font-semibold" />
       </div>
 
       <div className="space-y-2">
-        <Label htmlFor="description">Description</Label>
+        <Label htmlFor="description">{t('descriptionLabel')}</Label>
         <Input id="description" name="description" defaultValue={initialDescription} placeholder={t('descriptionPlaceholder')} />
       </div>
 
@@ -61,7 +61,7 @@ export function EditCourseForm({
       </div>
 
       <div className="space-y-2">
-        <Label htmlFor="duration">Duration</Label>
+        <Label htmlFor="duration">{t('durationLabel')}</Label>
         <Input id="duration" name="duration" defaultValue={initialDuration} placeholder={t('durationPlaceholder')} />
       </div>
 

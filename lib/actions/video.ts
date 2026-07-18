@@ -6,6 +6,7 @@ import { createClient } from '@/lib/supabase/server'
 import { requireCreator } from '@/lib/require-creator'
 import { isEditorRole } from '@/lib/require-editor'
 import { slugify } from '@/lib/utils'
+import { logActivity } from '@/lib/actions/activity-log'
 
 export async function createVideo(formData: FormData) {
   const { user } = await requireCreator()
@@ -76,6 +77,8 @@ export async function createVideo(formData: FormData) {
       .from('content_tags')
       .insert(tagIds.map((tag_id: string) => ({ content_id: content.id, tag_id })))
   }
+
+  await logActivity({ entityType: 'video', entityId: content.id, entityLabel: title, action: 'created' })
 
   revalidatePath('/dashboard')
   redirect(`/dashboard/videos/${content.id}/edit`)

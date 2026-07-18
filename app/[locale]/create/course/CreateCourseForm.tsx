@@ -23,12 +23,12 @@ export function CreateCourseForm() {
   return (
     <form ref={formRef} onSubmit={handleSubmit} className="space-y-6">
       <div className="space-y-2">
-        <Label htmlFor="title">Title *</Label>
+        <Label htmlFor="title">{t('titleRequiredLabel')}</Label>
         <Input id="title" name="title" placeholder={t('titlePlaceholder')} required className="text-xl font-semibold" />
       </div>
 
       <div className="space-y-2">
-        <Label htmlFor="description">Description</Label>
+        <Label htmlFor="description">{t('descriptionLabel')}</Label>
         <Input id="description" name="description" placeholder={t('descriptionPlaceholder')} />
       </div>
 
@@ -46,7 +46,7 @@ export function CreateCourseForm() {
       </div>
 
       <div className="space-y-2">
-        <Label htmlFor="duration">Duration</Label>
+        <Label htmlFor="duration">{t('durationLabel')}</Label>
         <Input id="duration" name="duration" placeholder={t('durationPlaceholder')} />
       </div>
 

@@ -34,7 +34,7 @@ export function CreateArticleForm() {
       {/* One continuous page — no Text/Images tab split */}
       <div className="bg-card border border-primary/20 rounded-2xl shadow-[0px_4px_16px_0px_rgba(44,36,32,0.1),0px_8px_32px_0px_rgba(44,36,32,0.06)] p-8 space-y-6">
         <div className="space-y-2">
-          <label className="block text-sm font-semibold text-foreground">Article Title</label>
+          <label className="block text-sm font-semibold text-foreground">{t('articleTitleLabel')}</label>
           <input
             type="text"
             name="title"
@@ -45,33 +45,33 @@ export function CreateArticleForm() {
         </div>
 
         <div className="space-y-2">
-          <label className="block text-sm font-semibold text-foreground">Subtitle</label>
+          <label className="block text-sm font-semibold text-foreground">{t('subtitleLabel')}</label>
           <input
             type="text"
             name="excerpt"
-            placeholder="How communities are reclaiming their spaces"
+            placeholder={t('subtitlePlaceholder')}
             className="w-full h-[50px] px-4 rounded-[10px] border border-primary/20 bg-white text-foreground text-base outline-none focus:border-primary/50 transition-colors placeholder:text-muted-foreground"
           />
         </div>
 
         <div className="space-y-2">
-          <label className="block text-sm font-semibold text-foreground">Topic / Category</label>
-          <TagsInput value={tags} onChange={setTags} placeholder="Urban Planning, Human Rights…" />
+          <label className="block text-sm font-semibold text-foreground">{t('topicCategoryLabel')}</label>
+          <TagsInput value={tags} onChange={setTags} placeholder={t('topicCategoryPlaceholder')} />
         </div>
 
         <div className="space-y-2">
-          <label className="block text-sm font-semibold text-foreground">Featured Summary</label>
-          <p className="text-xs text-muted-foreground -mt-1">Shown publicly only when this article is featured</p>
+          <label className="block text-sm font-semibold text-foreground">{t('featuredSummaryLabel')}</label>
+          <p className="text-xs text-muted-foreground -mt-1">{t('featuredSummaryHint')}</p>
           <textarea
             name="featured_summary"
-            placeholder="Urban regeneration is not just about new buildings…"
+            placeholder={t('featuredSummaryPlaceholder')}
             rows={4}
             className="w-full px-4 py-3 rounded-[10px] border border-primary/20 bg-white text-foreground text-base outline-none focus:border-primary/50 transition-colors resize-none placeholder:text-muted-foreground"
           />
         </div>
 
         <div className="space-y-2">
-          <label className="block text-sm font-semibold text-foreground">Full Content</label>
+          <label className="block text-sm font-semibold text-foreground">{t('fullContentLabel')}</label>
           <div className="rounded-[10px] border border-primary/20 overflow-hidden">
             <RichTextEditor value={body} onChange={setBody} placeholder={t('bodyPlaceholder')} locale={locale} />
           </div>
@@ -79,15 +79,14 @@ export function CreateArticleForm() {
 
         <CoverImageInput name="cover_image_url" />
         <div className="space-y-2">
-          <label className="block text-sm font-semibold text-foreground">Cover image credit</label>
+          <label className="block text-sm font-semibold text-foreground">{t('coverImageCreditLabel')}</label>
           <PhotoCreditInput
             name="image_credits"
-            placeholder="e.g. Chris Lawton on Unsplash, or [Chris Lawton](https://...)"
+            placeholder={t('coverImageCreditPlaceholder')}
           />
         </div>
         <p className="text-xs text-muted-foreground -mt-4">
-          Photos: use good resolution but keep the file size light, and prefer horizontal (landscape) orientation —
-          this keeps the site fast and looks best in the layout.
+          {t('photoGuidelineHint')}
         </p>
 
         <div
@@ -102,10 +101,9 @@ export function CreateArticleForm() {
               className="mt-1 w-4 h-4 rounded accent-[#b8860b]"
             />
             <div>
-              <p className="font-semibold text-[#5d4e37] mb-1">✨ Submit for featured content at UNTOLD.ink</p>
+              <p className="font-semibold text-[#5d4e37] mb-1">{t('featureRequestTitle')}</p>
               <p className="text-sm text-[#6b5744] leading-relaxed">
-                Your content will be published immediately on your personal UNTOLD page. If approved by an Editor,
-                it could become featured content with higher visibility on the homepage and in searches.
+                {t('featureRequestDescription')}
               </p>
             </div>
           </label>

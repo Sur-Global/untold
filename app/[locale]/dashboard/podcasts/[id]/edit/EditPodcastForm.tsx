@@ -44,7 +44,7 @@ export function EditPodcastForm({
   return (
     <form ref={formRef} onSubmit={handleSave} className="space-y-6">
       <div className="space-y-2">
-        <Label htmlFor="title">Title *</Label>
+        <Label htmlFor="title">{t('titleRequiredLabel')}</Label>
         <Input
           id="title"
           name="title"
@@ -68,7 +68,7 @@ export function EditPodcastForm({
       </div>
 
       <div className="space-y-2">
-        <Label htmlFor="description">Description</Label>
+        <Label htmlFor="description">{t('descriptionLabel')}</Label>
         <Input
           id="description"
           name="description"
@@ -80,7 +80,7 @@ export function EditPodcastForm({
       <CoverImageInput name="cover_image_url" defaultValue={initialCoverImageUrl} />
 
       <div className="space-y-2">
-        <Label htmlFor="episode_number">Episode number</Label>
+        <Label htmlFor="episode_number">{t('episodeNumberLabel')}</Label>
         <Input
           id="episode_number"
           name="episode_number"
@@ -90,7 +90,7 @@ export function EditPodcastForm({
       </div>
 
       <div className="space-y-2">
-        <Label htmlFor="duration">Duration</Label>
+        <Label htmlFor="duration">{t('durationLabel')}</Label>
         <Input
           id="duration"
           name="duration"

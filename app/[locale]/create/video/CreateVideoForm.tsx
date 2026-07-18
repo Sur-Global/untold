@@ -78,14 +78,14 @@ export function CreateVideoForm() {
           </button>
         </div>
         {extracted && (
-          <p className="text-xs text-green-600 font-['JetBrains_Mono',monospace]">✓ Info extracted — review below</p>
+          <p className="text-xs text-green-600 font-['JetBrains_Mono',monospace]">{t('infoExtractedMessage')}</p>
         )}
       </div>
 
       {/* Title */}
       <div className="space-y-2">
         <label className="block text-sm font-semibold text-foreground">
-          Video Title <span className="text-red-500">*</span>
+          {t('videoTitleLabel')} <span className="text-red-500">*</span>
         </label>
         <input
           name="title"
@@ -101,7 +101,7 @@ export function CreateVideoForm() {
       {/* Thumbnail preview (if extracted) */}
       {thumbnailUrl && (
         <div className="space-y-2">
-          <label className="block text-sm font-semibold text-foreground">Thumbnail</label>
+          <label className="block text-sm font-semibold text-foreground">{t('thumbnailLabel')}</label>
           <div className="rounded-[10px] overflow-hidden border border-primary/20 aspect-video max-w-xs bg-gray-50">
             <img src={thumbnailUrl} alt="Video thumbnail" className="w-full h-full object-cover" />
           </div>

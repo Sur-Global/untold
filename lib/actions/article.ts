@@ -8,6 +8,7 @@ import { requireCreator } from '@/lib/require-creator'
 import { isEditorRole } from '@/lib/require-editor'
 import { slugify } from '@/lib/utils'
 import { computeReadTime } from '@/lib/readTime'
+import { logActivity, getContentLogInfo } from '@/lib/actions/activity-log'
 
 export async function createArticle(formData: FormData) {
   const { user } = await requireCreator()
@@ -71,6 +72,8 @@ export async function createArticle(formData: FormData) {
       .from('content_tags')
       .insert(tagIds.map((tag_id: string) => ({ content_id: content.id, tag_id })))
   }
+
+  await logActivity({ entityType: 'article', entityId: content.id, entityLabel: title, action: 'created' })
 
   revalidatePath('/dashboard/articles')
   redirect(`/dashboard/articles/${content.id}/edit`)
@@ -188,6 +191,9 @@ export async function publishArticle(id: string, _formData: FormData) {
   if (!isEditorRole(profile.role)) query.eq('author_id', user.id)
   await query
 
+  const { label } = await getContentLogInfo(supabase, id)
+  await logActivity({ entityType: 'article', entityId: id, entityLabel: label, action: 'published' })
+
   revalidatePath('/dashboard/articles')
   revalidatePath(`/dashboard/articles/${id}/edit`)
 
@@ -221,6 +227,9 @@ export async function unpublishArticle(id: string, _formData: FormData) {
   if (!isEditorRole(profile.role)) query.eq('author_id', user.id)
   await query
 
+  const { label } = await getContentLogInfo(supabase, id)
+  await logActivity({ entityType: 'article', entityId: id, entityLabel: label, action: 'unpublished' })
+
   revalidatePath('/dashboard/articles')
   revalidatePath(`/dashboard/articles/${id}/edit`)
 }
@@ -229,9 +238,13 @@ export async function deleteArticle(id: string) {
   const { user, profile } = await requireCreator()
   const supabase = await createClient()
 
+  const { label } = await getContentLogInfo(supabase, id)
+
   const query = (supabase as any).from('content').delete().eq('id', id)
   if (!isEditorRole(profile.role)) query.eq('author_id', user.id)
   await query
+
+  await logActivity({ entityType: 'article', entityId: id, entityLabel: label, action: 'deleted' })
 
   revalidatePath('/dashboard/articles')
   redirect('/dashboard/articles')

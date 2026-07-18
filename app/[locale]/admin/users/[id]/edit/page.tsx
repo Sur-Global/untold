@@ -1,6 +1,7 @@
 import { notFound } from 'next/navigation'
 import { requireEditor } from '@/lib/require-editor'
 import { createClient } from '@/lib/supabase/server'
+import { createServiceRoleClient } from '@/lib/supabase/service-role'
 import { Navigation } from '@/components/layout/Navigation'
 import { Footer } from '@/components/layout/Footer'
 import { getNavProps } from '@/lib/nav'
@@ -21,12 +22,22 @@ export default async function AdminEditUserPage({ params }: PageProps) {
     getNavProps(),
     (supabase as any)
       .from('profiles')
-      .select('display_name, slug, bio, location, website, avatar_url, role')
+      .select('display_name, slug, bio, location, website, avatar_url, role, email, social_bluesky, social_linkedin, social_instagram, social_medium, social_custom_url')
       .eq('id', id)
       .single(),
   ])
 
   if (!profile) notFound()
+
+  // Most authors were created via bulk import with an auto-generated login
+  // email — prefill with that as a starting point so the admin can see and
+  // correct it, until `profiles.email` is explicitly set.
+  let fallbackEmail = ''
+  if (!profile.email) {
+    const serviceClient = createServiceRoleClient()
+    const { data: authUser } = await serviceClient.auth.admin.getUserById(id)
+    fallbackEmail = authUser?.user?.email ?? ''
+  }
 
   return (
     <>
@@ -46,6 +57,12 @@ export default async function AdminEditUserPage({ params }: PageProps) {
               initialLocation={profile.location ?? ''}
               initialWebsite={profile.website ?? ''}
               initialAvatarUrl={profile.avatar_url ?? ''}
+              initialEmail={profile.email ?? fallbackEmail}
+              initialSocialBluesky={profile.social_bluesky ?? ''}
+              initialSocialLinkedin={profile.social_linkedin ?? ''}
+              initialSocialInstagram={profile.social_instagram ?? ''}
+              initialSocialMedium={profile.social_medium ?? ''}
+              initialSocialCustomUrl={profile.social_custom_url ?? ''}
               isAdminEdit
             />
           </AdminPanel>

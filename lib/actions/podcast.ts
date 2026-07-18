@@ -7,6 +7,7 @@ import { createClient } from '@/lib/supabase/server'
 import { requireCreator } from '@/lib/require-creator'
 import { isEditorRole } from '@/lib/require-editor'
 import { slugify } from '@/lib/utils'
+import { logActivity } from '@/lib/actions/activity-log'
 
 export async function createPodcast(formData: FormData) {
   const { user } = await requireCreator()
@@ -60,6 +61,8 @@ export async function createPodcast(formData: FormData) {
 
   if (metaError) throw new Error(metaError.message ?? 'Failed to save podcast metadata')
 
+  await logActivity({ entityType: 'podcast', entityId: content.id, entityLabel: title, action: 'created' })
+
   revalidatePath('/dashboard')
   redirect(`/dashboard/podcasts/${content.id}/edit`)
 }
@@ -97,6 +100,8 @@ export async function updatePodcast(id: string, formData: FormData) {
       { content_id: id, embed_url: embedUrl, cover_image_url: coverImageUrl, duration, episode_number: episodeNumber },
       { onConflict: 'content_id' }
     )
+
+  await logActivity({ entityType: 'podcast', entityId: id, entityLabel: title, action: 'updated' })
 
   revalidatePath(`/dashboard/podcasts/${id}/edit`)
   revalidatePath('/dashboard')

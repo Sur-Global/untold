@@ -9,6 +9,7 @@ import {
   isValidStaticPageSlug,
   normalizeStaticPageSlug,
 } from "@/lib/static-pages/reserved-slugs";
+import { logActivity } from "@/lib/actions/activity-log";
 
 type TranslationPayload = {
   title: string;
@@ -101,6 +102,8 @@ export async function createStaticPage(formData: FormData) {
     throw new Error(trErr.message ?? "Failed to save translations");
   }
 
+  await logActivity({ entityType: "static_page", entityId: page.id, entityLabel: rows[0]?.title ?? slug, action: "created" });
+
   if (status === "published") revalidateStaticPagePaths(slug);
   redirect("/admin/pages");
 }
@@ -182,6 +185,8 @@ export async function updateStaticPage(pageId: string, formData: FormData) {
     .insert(ins);
   if (trErr) throw new Error(trErr.message ?? "Failed to save translations");
 
+  await logActivity({ entityType: "static_page", entityId: pageId, entityLabel: rows[0]?.title ?? slug, action: "updated" });
+
   revalidateStaticPagePaths(existing.slug as string);
   revalidateStaticPagePaths(slug);
   redirect("/admin/pages");
@@ -196,7 +201,7 @@ export async function deleteStaticPage(formData: FormData) {
 
   const { data: existing } = await (supabase as any)
     .from("static_pages")
-    .select("slug")
+    .select("slug, static_page_translations(title, locale)")
     .eq("id", pageId)
     .single();
 
@@ -205,6 +210,9 @@ export async function deleteStaticPage(formData: FormData) {
     .delete()
     .eq("id", pageId);
   if (error) throw new Error(error.message ?? "Failed to delete page");
+
+  const label = existing?.static_page_translations?.[0]?.title ?? existing?.slug ?? null;
+  await logActivity({ entityType: "static_page", entityId: pageId, entityLabel: label, action: "deleted" });
 
   if (existing?.slug) revalidateStaticPagePaths(existing.slug as string);
   redirect("/admin/pages");

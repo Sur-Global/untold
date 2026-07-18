@@ -7,6 +7,7 @@ import { ContentByTypeChart } from '@/components/admin/ContentByTypeChart'
 import { UsersByRoleChart } from '@/components/admin/UsersByRoleChart'
 import { AdminPageHeader } from '@/components/admin/AdminPageHeader'
 import { AdminPanel } from '@/components/admin/AdminPanel'
+import { RecentActivityLog } from '@/components/admin/RecentActivityLog'
 import { adminTableHead, adminTableRow } from '@/components/admin/admin-ui'
 
 export default async function AdminOverviewPage() {
@@ -160,6 +161,8 @@ export default async function AdminOverviewPage() {
           )}
         </div>
       </AdminPanel>
+
+      <RecentActivityLog />
     </div>
   )
 }
