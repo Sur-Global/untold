@@ -8,9 +8,14 @@ import { Button } from '@/components/ui/button'
 interface Props {
   contentId: string
   isFeatured: boolean
+  contentType: string
 }
 
-export function FeatureButton({ contentId, isFeatured }: Props) {
+function capitalize(s: string): string {
+  return s ? s.charAt(0).toUpperCase() + s.slice(1) : s
+}
+
+export function FeatureButton({ contentId, isFeatured, contentType }: Props) {
   const router = useRouter()
   const [isPending, startTransition] = useTransition()
   const [error, setError] = useState<string | null>(null)
@@ -34,11 +39,11 @@ export function FeatureButton({ contentId, isFeatured }: Props) {
         size="sm"
         onClick={handleClick}
         disabled={isPending}
-        className={`h-6 px-2 text-sm ${
+        className={`h-6 px-2 text-sm whitespace-nowrap ${
           isFeatured ? 'text-green-600' : 'text-muted-foreground'
         }`}
       >
-        {isPending ? '…' : isFeatured ? '★' : '☆'}
+        {isPending ? '…' : isFeatured ? `★ ${capitalize(contentType)}` : '☆'}
       </Button>
       {error && <span className="text-xs text-red-500">{error}</span>}
     </span>

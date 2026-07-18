@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createServiceRoleClient } from '@/lib/supabase/service-role'
-import { translateTexts, SUPPORTED_LOCALES, type SupportedLocale } from '@/lib/deepl'
+import { translateTexts, SUPPORTED_LOCALES, DeepLQuotaExceededError, type SupportedLocale } from '@/lib/deepl'
 import { extractTextNodes, injectTextNodes } from '@/lib/tiptap-translate'
 import { extractBlockNoteTextNodes, injectBlockNoteTextNodes } from '@/lib/blocknote-translate'
 
@@ -51,6 +51,8 @@ export async function POST(req: NextRequest) {
     : (SUPPORTED_LOCALES as readonly SupportedLocale[]).filter(l => l !== sourceLocale)
 
   const translated: string[] = []
+  const failed: string[] = []
+  let quotaExceeded = false
 
   for (const targetLocale of locales) {
     // Never translate into the source language
@@ -203,9 +205,15 @@ export async function POST(req: NextRequest) {
         }
       }
     } catch (err) {
+      failed.push(targetLocale)
+      if (err instanceof DeepLQuotaExceededError) {
+        quotaExceeded = true
+        console.error(`Translation quota exceeded — stopping batch at locale ${targetLocale}`)
+        break // account-wide limit — remaining locales would fail the same way
+      }
       console.error(`Translation failed for locale ${targetLocale}:`, err)
     }
   }
 
-  return NextResponse.json({ ok: true, translated })
+  return NextResponse.json({ ok: failed.length === 0, translated, failed, quotaExceeded })
 }

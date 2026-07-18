@@ -129,7 +129,7 @@ export default async function AdminContentPage({ searchParams }: PageProps) {
                     </td>
                     <td className="px-6 py-3">
                       <div className="flex items-center gap-2">
-                        <FeatureButton contentId={item.id} isFeatured={item.is_featured} />
+                        <FeatureButton contentId={item.id} isFeatured={item.is_featured} contentType={item.type} />
                         <HeroFeatureButton
                           contentId={item.id}
                           isFeatured={item.is_featured}

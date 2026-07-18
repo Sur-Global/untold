@@ -1,3 +1,13 @@
+// DeepL returns HTTP 456 specifically when the account's character quota is
+// exhausted (as opposed to auth/network/other failures) — a distinct error
+// class lets callers tell quota-exceeded apart from a generic failure.
+export class DeepLQuotaExceededError extends Error {
+  constructor() {
+    super('DeepL quota exceeded')
+    this.name = 'DeepLQuotaExceededError'
+  }
+}
+
 export const SUPPORTED_LOCALES = ['en', 'es', 'pt', 'fr', 'de', 'da'] as const
 export type SupportedLocale = typeof SUPPORTED_LOCALES[number]
 
@@ -45,6 +55,9 @@ export async function translateTexts(
     }),
   })
 
+  if (res.status === 456) {
+    throw new DeepLQuotaExceededError()
+  }
   if (!res.ok) {
     throw new Error(`DeepL error: ${res.status} ${res.statusText}`)
   }
