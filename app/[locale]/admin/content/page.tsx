@@ -43,6 +43,7 @@ export default async function AdminContentPage({ searchParams }: PageProps) {
         id,
         type,
         slug,
+        source_locale,
         is_featured,
         ${withHeroFeatured ? 'is_hero_featured,' : ''}
         published_at,
@@ -95,9 +96,10 @@ export default async function AdminContentPage({ searchParams }: PageProps) {
             </thead>
             <tbody>
               {(items ?? []).map((item: any) => {
-                const enTitle = item.content_translations?.find((t: any) => t.locale === 'en')?.title
+                const sourceLocale = item.source_locale ?? 'en'
+                const sourceTitle = item.content_translations?.find((t: any) => t.locale === sourceLocale)?.title
                 const anyTitle = item.content_translations?.find((t: any) => t.title)?.title
-                const titleText = enTitle ?? anyTitle ?? item.id
+                const titleText = sourceTitle ?? anyTitle ?? item.id
                 const publicPath =
                   item.slug && item.type
                     ? getPublicContentPath(item.type as ContentType, item.slug as string)
