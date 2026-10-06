@@ -273,7 +273,9 @@
     "authorEmailLabel": "Kontakt-e-mail (kun admins/redaktører)",
     "authorLinksLabel": "Sociale medier",
     "authorCustomLinkLabel": "Brugerdefineret link",
-    "authorCancelButton": "Annuller"
+    "authorCancelButton": "Annuller",
+    "contentLanguageLabel": "Sprog, det er skrevet på",
+    "contentLanguageHint": "Originalsproget. Andre sprog oversættes fra det."
   },
   "footer": {
     "brandTitle": "UNTOLD",

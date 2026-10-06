@@ -273,7 +273,9 @@
     "authorEmailLabel": "Kontakt-E-Mail (nur Admins/Redakteure)",
     "authorLinksLabel": "Soziale Netzwerke",
     "authorCustomLinkLabel": "Eigener Link",
-    "authorCancelButton": "Abbrechen"
+    "authorCancelButton": "Abbrechen",
+    "contentLanguageLabel": "Sprache, in der es geschrieben ist",
+    "contentLanguageHint": "Die Originalsprache. Andere Sprachen werden daraus übersetzt."
   },
   "footer": {
     "brandTitle": "UNTOLD",

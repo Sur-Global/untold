@@ -7,6 +7,7 @@ import { createClient } from '@/lib/supabase/server'
 import { requireCreator } from '@/lib/require-creator'
 import { isEditorRole } from '@/lib/require-editor'
 import { slugify } from '@/lib/utils'
+import { resolveSourceLocale } from '@/lib/resolve-source-locale'
 import { publishNewContent } from '@/lib/publish-new-content'
 import { resolveAuthorId, requestedAuthorId } from '@/lib/resolve-author'
 import { logActivity } from '@/lib/actions/activity-log'
@@ -14,6 +15,7 @@ import { logActivity } from '@/lib/actions/activity-log'
 export async function createPodcast(formData: FormData) {
   const { user, profile } = await requireCreator()
   const supabase = await createClient()
+  const sourceLocale = resolveSourceLocale(formData)
   const authorId = await resolveAuthorId(supabase, formData, user, profile.role)
 
   const title = (formData.get('title') as string).trim()
@@ -31,7 +33,7 @@ export async function createPodcast(formData: FormData) {
       type: 'podcast',
       author_id: authorId,
       slug,
-      source_locale: 'en',
+      source_locale: sourceLocale,
       status: 'draft',
       cover_image_url: coverImageUrl,
     })
@@ -44,7 +46,7 @@ export async function createPodcast(formData: FormData) {
     .from('content_translations')
     .insert({
       content_id: content.id,
-      locale: 'en',
+      locale: sourceLocale,
       title,
       description,
       body: null,
@@ -95,14 +97,15 @@ export async function updatePodcast(id: string, formData: FormData) {
       ...(newAuthorId ? { author_id: newAuthorId } : {}), cover_image_url: coverImageUrl, updated_at: new Date().toISOString() })
     .eq('id', id)
   if (!isEditorRole(profile.role)) updateQuery.eq('author_id', user.id)
-  const { data: owned } = await updateQuery.select('id').single()
+  const { data: owned } = await updateQuery.select('id, source_locale').single()
 
   if (!owned) return
+  const sourceLocale: string = owned.source_locale ?? 'en'
 
   await (supabase as any)
     .from('content_translations')
     .upsert(
-      { content_id: id, locale: 'en', title, description, body: null },
+      { content_id: id, locale: sourceLocale, title, description, body: null },
       { onConflict: 'content_id,locale' }
     )
 

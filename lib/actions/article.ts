@@ -8,6 +8,7 @@ import { requireCreator } from '@/lib/require-creator'
 import { isEditorRole } from '@/lib/require-editor'
 import { slugify } from '@/lib/utils'
 import { computeReadTime } from '@/lib/readTime'
+import { resolveSourceLocale } from '@/lib/resolve-source-locale'
 import { publishNewContent } from '@/lib/publish-new-content'
 import { resolveAuthorId, requestedAuthorId } from '@/lib/resolve-author'
 import { logActivity, getContentLogInfo } from '@/lib/actions/activity-log'
@@ -15,6 +16,7 @@ import { logActivity, getContentLogInfo } from '@/lib/actions/activity-log'
 export async function createArticle(formData: FormData) {
   const { user, profile } = await requireCreator()
   const supabase = await createClient()
+  const sourceLocale = resolveSourceLocale(formData)
   const authorId = await resolveAuthorId(supabase, formData, user, profile.role)
 
   const title = (formData.get('title') as string).trim()
@@ -35,7 +37,7 @@ export async function createArticle(formData: FormData) {
       type: 'article',
       author_id: authorId,
       slug,
-      source_locale: 'en',
+      source_locale: sourceLocale,
       status: 'draft',
       cover_image_url: coverImageUrl,
       image_credits: imageCredits,
@@ -50,7 +52,7 @@ export async function createArticle(formData: FormData) {
 
   const { error: translationError } = await (supabase as any).from('content_translations').insert({
     content_id: content.id,
-    locale: 'en',
+    locale: sourceLocale,
     title,
     excerpt,
     featured_summary: featuredSummary,

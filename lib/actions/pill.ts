@@ -7,6 +7,7 @@ import { createClient } from '@/lib/supabase/server'
 import { requireCreator } from '@/lib/require-creator'
 import { isEditorRole } from '@/lib/require-editor'
 import { slugify } from '@/lib/utils'
+import { resolveSourceLocale } from '@/lib/resolve-source-locale'
 import { publishNewContent } from '@/lib/publish-new-content'
 import { resolveAuthorId, requestedAuthorId } from '@/lib/resolve-author'
 import { logActivity } from '@/lib/actions/activity-log'
@@ -14,6 +15,7 @@ import { logActivity } from '@/lib/actions/activity-log'
 export async function createPill(formData: FormData) {
   const { user, profile } = await requireCreator()
   const supabase = await createClient()
+  const sourceLocale = resolveSourceLocale(formData)
   const authorId = await resolveAuthorId(supabase, formData, user, profile.role)
 
   const title = (formData.get('title') as string).trim()
@@ -29,7 +31,7 @@ export async function createPill(formData: FormData) {
       type: 'pill',
       author_id: authorId,
       slug,
-      source_locale: 'en',
+      source_locale: sourceLocale,
       status: 'draft',
       cover_image_url: imageUrl,
     })
@@ -42,7 +44,7 @@ export async function createPill(formData: FormData) {
     .from('content_translations')
     .insert({
       content_id: content.id,
-      locale: 'en',
+      locale: sourceLocale,
       title,
       body: body ? (() => { try { return JSON.parse(body) } catch { return null } })() : null,
     })
@@ -88,9 +90,10 @@ export async function updatePill(id: string, formData: FormData) {
       ...(newAuthorId ? { author_id: newAuthorId } : {}), cover_image_url: imageUrl, updated_at: new Date().toISOString() })
     .eq('id', id)
   if (!isEditorRole(profile.role)) updateQuery.eq('author_id', user.id)
-  const { data: owned } = await updateQuery.select('id').single()
+  const { data: owned } = await updateQuery.select('id, source_locale').single()
 
   if (!owned) return
+  const sourceLocale: string = owned.source_locale ?? 'en'
 
   const bodyJson = body ? (() => { try { return JSON.parse(body) } catch { return null } })() : null
 
@@ -98,7 +101,7 @@ export async function updatePill(id: string, formData: FormData) {
     .from('content_translations')
     .select('title, body')
     .eq('content_id', id)
-    .eq('locale', 'en')
+    .eq('locale', sourceLocale)
     .single()
 
   const titleChanged = currentEn?.title !== title
@@ -107,7 +110,7 @@ export async function updatePill(id: string, formData: FormData) {
   await (supabase as any)
     .from('content_translations')
     .upsert(
-      { content_id: id, locale: 'en', title, body: bodyJson },
+      { content_id: id, locale: sourceLocale, title, body: bodyJson },
       { onConflict: 'content_id,locale' }
     )
 
@@ -119,7 +122,7 @@ export async function updatePill(id: string, formData: FormData) {
       .from('content_translations')
       .update(staleFields)
       .eq('content_id', id)
-      .neq('locale', 'en')
+      .neq('locale', sourceLocale)
   }
 
   await (supabase as any)

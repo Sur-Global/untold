@@ -9,6 +9,7 @@ import { CoverImageInput } from '@/components/ui/CoverImageInput'
 import { PhotoCreditInput } from '@/components/content/PhotoCreditInput'
 import { TagsInput, type Tag } from '@/components/ui/TagsInput'
 import { AuthorPicker } from '@/components/content/AuthorPicker'
+import { ContentLanguageSelect } from '@/components/content/ContentLanguageSelect'
 
 export function CreateArticleForm() {
   const t = useTranslations('editor')
@@ -39,6 +40,7 @@ export function CreateArticleForm() {
       {/* One continuous page — no Text/Images tab split */}
       <div className="bg-card border border-primary/20 rounded-2xl shadow-[0px_4px_16px_0px_rgba(44,36,32,0.1),0px_8px_32px_0px_rgba(44,36,32,0.06)] p-8 space-y-6">
         <AuthorPicker />
+      <ContentLanguageSelect />
 
         <div className="space-y-2">
           <label className="block text-sm font-semibold text-foreground">{t('articleTitleLabel')}</label>

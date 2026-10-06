@@ -6,6 +6,7 @@ import { createClient } from '@/lib/supabase/server'
 import { requireCreator } from '@/lib/require-creator'
 import { isEditorRole } from '@/lib/require-editor'
 import { slugify } from '@/lib/utils'
+import { resolveSourceLocale } from '@/lib/resolve-source-locale'
 import { publishNewContent } from '@/lib/publish-new-content'
 import { resolveAuthorId, requestedAuthorId } from '@/lib/resolve-author'
 import { logActivity } from '@/lib/actions/activity-log'
@@ -13,6 +14,7 @@ import { logActivity } from '@/lib/actions/activity-log'
 export async function createVideo(formData: FormData) {
   const { user, profile } = await requireCreator()
   const supabase = await createClient()
+  const sourceLocale = resolveSourceLocale(formData)
   const authorId = await resolveAuthorId(supabase, formData, user, profile.role)
 
   const title = (formData.get('title') as string).trim()
@@ -36,7 +38,7 @@ export async function createVideo(formData: FormData) {
       type: 'video',
       author_id: authorId,
       slug,
-      source_locale: 'en',
+      source_locale: sourceLocale,
       status: 'draft',
       cover_image_url: thumbnailUrl,
       feature_requested_at: featureRequested ? new Date().toISOString() : null,
@@ -50,7 +52,7 @@ export async function createVideo(formData: FormData) {
     .from('content_translations')
     .insert({
       content_id: content.id,
-      locale: 'en',
+      locale: sourceLocale,
       title,
       body,
     })
@@ -122,14 +124,15 @@ export async function updateVideo(id: string, formData: FormData) {
     })
     .eq('id', id)
   if (!isEditorRole(profile.role)) updateQuery.eq('author_id', user.id)
-  const { data: owned } = await updateQuery.select('id').single()
+  const { data: owned } = await updateQuery.select('id, source_locale').single()
 
   if (!owned) return
+  const sourceLocale: string = owned.source_locale ?? 'en'
 
   await (supabase as any)
     .from('content_translations')
     .upsert(
-      { content_id: id, locale: 'en', title, body },
+      { content_id: id, locale: sourceLocale, title, body },
       { onConflict: 'content_id,locale' }
     )
 
