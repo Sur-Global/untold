@@ -188,6 +188,13 @@ export default async function VideoPage({ params }: PageProps) {
             {t.title}
           </h1>
 
+          {/* Video embed */}
+          {meta?.embed_url && (
+            <div className="mb-8 rounded-2xl overflow-hidden shadow-[0px_4px_16px_0px_rgba(44,36,32,0.1),0px_8px_32px_0px_rgba(44,36,32,0.06)]">
+              <EmbedPlayer url={meta.embed_url} title={t.title} />
+            </div>
+          )}
+
           {/* Author + meta row */}
           <div className="flex items-center gap-6 mb-8 flex-wrap">
             {author && (
@@ -233,13 +240,6 @@ export default async function VideoPage({ params }: PageProps) {
               )}
             </div>
           </div>
-
-          {/* Video embed */}
-          {meta?.embed_url && (
-            <div className="mb-6 rounded-2xl overflow-hidden shadow-[0px_4px_16px_0px_rgba(44,36,32,0.1),0px_8px_32px_0px_rgba(44,36,32,0.06)]">
-              <EmbedPlayer url={meta.embed_url} title={t.title} />
-            </div>
-          )}
 
           {/* Action bar */}
           <div className="flex items-center gap-3 mb-6">

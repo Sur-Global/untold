@@ -12,7 +12,8 @@
     "dashboard": "Kontrolpanel",
     "logout": "Log ud",
     "search": "Søg",
-    "topics": "Emner"
+    "topics": "Emner",
+    "adminDashboard": "Admin-dashboard"
   },
   "home": {
     "title": "UNTOLD",
@@ -148,7 +149,8 @@
     "saveAsDraft": "Gem som kladde",
     "savedOn": "Gemt {date}",
     "unsavedStatus": "Ikke gemt",
-    "savedStatus": "✓ Gemt"
+    "savedStatus": "✓ Gemt",
+    "adminDashboard": "Admin-dashboard"
   },
   "translating": {
     "heading": "Oversætter til {language}",

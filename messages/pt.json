@@ -12,7 +12,8 @@
     "dashboard": "Painel",
     "logout": "Sair",
     "search": "Pesquisar",
-    "topics": "Tópicos"
+    "topics": "Tópicos",
+    "adminDashboard": "Painel de administração"
   },
   "home": {
     "title": "UNTOLD",
@@ -148,7 +149,8 @@
     "saveAsDraft": "Salvar como rascunho",
     "savedOn": "Salvo em {date}",
     "unsavedStatus": "Não salvo",
-    "savedStatus": "✓ Salvo"
+    "savedStatus": "✓ Salvo",
+    "adminDashboard": "Painel de administração"
   },
   "translating": {
     "heading": "Traduzindo para {language}",

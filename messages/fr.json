@@ -12,7 +12,8 @@
     "dashboard": "Tableau de bord",
     "logout": "Se déconnecter",
     "search": "Rechercher",
-    "topics": "Sujets"
+    "topics": "Sujets",
+    "adminDashboard": "Tableau de bord admin"
   },
   "home": {
     "title": "UNTOLD",
@@ -148,7 +149,8 @@
     "saveAsDraft": "Enregistrer comme brouillon",
     "savedOn": "Enregistré le {date}",
     "unsavedStatus": "Non enregistré",
-    "savedStatus": "✓ Enregistré"
+    "savedStatus": "✓ Enregistré",
+    "adminDashboard": "Tableau de bord admin"
   },
   "translating": {
     "heading": "Traduction en {language}",

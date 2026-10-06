@@ -1,5 +1,6 @@
 import { getTranslations } from 'next-intl/server'
 import { requireCreator } from '@/lib/require-creator'
+import { isEditorRole } from '@/lib/require-editor'
 import { createClient } from '@/lib/supabase/server'
 import { formatDate } from '@/lib/format-date'
 import { Navigation } from '@/components/layout/Navigation'
@@ -46,7 +47,7 @@ function TypeBadge({ type }: { type: ContentType }) {
 
 export default async function DashboardPage({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params
-  const { user } = await requireCreator()
+  const { user, profile } = await requireCreator()
   const supabase = await createClient()
 
   const itemsPromise = (supabase as any)
@@ -77,6 +78,11 @@ export default async function DashboardPage({ params }: { params: Promise<{ loca
         <div className="flex items-center justify-between mb-8">
           <h1>{t('myContent')}</h1>
           <div className="flex items-center gap-3">
+            {isEditorRole(profile.role) && (
+              <Link href="/admin" className={cn(buttonVariants({ variant: 'outline' }))}>
+                {t('adminDashboard')}
+              </Link>
+            )}
             <Link href="/dashboard/profile" className={cn(buttonVariants({ variant: 'outline' }))}>
               Edit Profile
             </Link>

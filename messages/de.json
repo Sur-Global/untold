@@ -12,7 +12,8 @@
     "dashboard": "Dashboard",
     "logout": "Abmelden",
     "search": "Suchen",
-    "topics": "Themen"
+    "topics": "Themen",
+    "adminDashboard": "Admin-Dashboard"
   },
   "home": {
     "title": "UNTOLD",
@@ -148,7 +149,8 @@
     "saveAsDraft": "Als Entwurf speichern",
     "savedOn": "Gespeichert am {date}",
     "unsavedStatus": "Nicht gespeichert",
-    "savedStatus": "✓ Gespeichert"
+    "savedStatus": "✓ Gespeichert",
+    "adminDashboard": "Admin-Dashboard"
   },
   "translating": {
     "heading": "Übersetzung ins {language}",

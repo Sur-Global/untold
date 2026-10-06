@@ -37,6 +37,10 @@ const NAV_LINKS = [
   { key: 'courses' as const, href: '/courses' },
 ]
 
+function isEditorOrAdmin(role: UserRole | null) {
+  return role === 'admin' || role === 'editor'
+}
+
 function isCreator(role: UserRole | null) {
   return role === 'admin' || role === 'author' || role === 'editor'
 }
@@ -242,6 +246,12 @@ export function Navigation({
             <div className="flex items-center gap-2.5">
               {divider}
               <Link href="/dashboard" style={ghostLink}>{t('dashboard')}</Link>
+              {isEditorOrAdmin(userRole) && (
+                <>
+                  {divider}
+                  <Link href="/admin" style={ghostLink}>{t('adminDashboard')}</Link>
+                </>
+              )}
               {divider}
               <Link
                 href="/create"
@@ -386,6 +396,11 @@ export function Navigation({
                       <Link href="/dashboard" style={{ color: '#FFFFFF', fontFamily: 'var(--font-aeonik), Aeonik, sans-serif', fontSize: 13 }}>
                         {t('dashboard')}
                       </Link>
+                      {isEditorOrAdmin(userRole) && (
+                        <Link href="/admin" style={{ color: '#FFFFFF', fontFamily: 'var(--font-aeonik), Aeonik, sans-serif', fontSize: 13 }}>
+                          {t('adminDashboard')}
+                        </Link>
+                      )}
                       <Link
                         href="/create"
                         className="inline-flex items-center justify-center h-[42px] rounded-full text-sm"

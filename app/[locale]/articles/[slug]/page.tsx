@@ -209,6 +209,31 @@ export default async function ArticlePage({ params }: PageProps) {
                   <p className="text-2xl text-muted-foreground leading-tight mb-8">{t.excerpt}</p>
                 )}
 
+                {/* Cover image */}
+                {article.cover_image_url && (
+                  <figure className="mb-8">
+                    <div className="rounded-2xl overflow-hidden shadow-[0px_4px_16px_0px_rgba(44,36,32,0.1),0px_8px_32px_0px_rgba(44,36,32,0.06)]">
+                      <img
+                        src={article.cover_image_url}
+                        alt={t.title}
+                        className="w-full h-auto block"
+                      />
+                    </div>
+                    {article.image_credits && (
+                      <figcaption
+                        className="mt-3 px-4 py-4 rounded-[10px] text-sm leading-[1.43]"
+                        style={{ background: 'rgba(120,113,108,0.1)' }}
+                      >
+                        <strong style={{ color: '#78716c', fontFamily: 'var(--font-aeonik), Aeonik, sans-serif', fontWeight: 700 }}>Credits: </strong>
+                        <span
+                          style={{ color: '#78716c', fontFamily: 'var(--font-aeonik), Aeonik, sans-serif' }}
+                          dangerouslySetInnerHTML={{ __html: renderCreditHtml(article.image_credits) }}
+                        />
+                      </figcaption>
+                    )}
+                  </figure>
+                )}
+
                 {/* Author + meta bar */}
                 <div className="flex items-center justify-between py-5 mb-6 border-b border-border">
                   {/* Author */}
@@ -287,31 +312,6 @@ export default async function ArticlePage({ params }: PageProps) {
                     </Link>
                   )}
                 </div>
-
-                {/* Cover image */}
-                {article.cover_image_url && (
-                  <figure className="mb-10">
-                    <div className="rounded-2xl overflow-hidden shadow-[0px_4px_16px_0px_rgba(44,36,32,0.1),0px_8px_32px_0px_rgba(44,36,32,0.06)]">
-                      <img
-                        src={article.cover_image_url}
-                        alt={t.title}
-                        className="w-full h-auto block"
-                      />
-                    </div>
-                    {article.image_credits && (
-                      <figcaption
-                        className="mt-3 px-4 py-4 rounded-[10px] text-sm leading-[1.43]"
-                        style={{ background: 'rgba(120,113,108,0.1)' }}
-                      >
-                        <strong style={{ color: '#78716c', fontFamily: 'var(--font-aeonik), Aeonik, sans-serif', fontWeight: 700 }}>Credits: </strong>
-                        <span
-                          style={{ color: '#78716c', fontFamily: 'var(--font-aeonik), Aeonik, sans-serif' }}
-                          dangerouslySetInnerHTML={{ __html: renderCreditHtml(article.image_credits) }}
-                        />
-                      </figcaption>
-                    )}
-                  </figure>
-                )}
 
                 {/* Body */}
                 <BodyTranslationLoader

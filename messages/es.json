@@ -12,7 +12,8 @@
     "dashboard": "Panel",
     "logout": "Cerrar sesión",
     "search": "Buscar",
-    "topics": "Temas"
+    "topics": "Temas",
+    "adminDashboard": "Panel de administración"
   },
   "home": {
     "title": "UNTOLD",
@@ -148,7 +149,8 @@
     "saveAsDraft": "Guardar como borrador",
     "savedOn": "Guardado el {date}",
     "unsavedStatus": "Sin guardar",
-    "savedStatus": "✓ Guardado"
+    "savedStatus": "✓ Guardado",
+    "adminDashboard": "Panel de administración"
   },
   "translating": {
     "heading": "Traduciendo al {language}",
