@@ -21,6 +21,8 @@ export function CreateVideoForm() {
   const td = useTranslations('dashboard')
   const formRef = useRef<HTMLFormElement>(null)
   const [isPending, startTransition] = useTransition()
+  // Which submit button was pressed (draft vs publish)
+  const publishRef = useRef(false)
 
   const [embedUrl, setEmbedUrl] = useState('')
   const [title, setTitle] = useState('')
@@ -49,6 +51,7 @@ export function CreateVideoForm() {
     fd.set('embed_url', embedUrl)
     fd.set('thumbnail_url', thumbnailUrl)
     fd.set('duration', duration)
+    fd.set('publish', String(publishRef.current))
     startTransition(() => createVideo(fd))
   }
 
@@ -111,13 +114,24 @@ export function CreateVideoForm() {
         </div>
       )}
 
-      <button
-        type="submit"
-        disabled={isPending || !embedUrl.trim() || !title.trim()}
-        className="w-full h-[54px] rounded-[16px] gradient-rust text-white text-sm font-['JetBrains_Mono',monospace] font-medium tracking-[0.28px] transition-opacity disabled:opacity-60"
-      >
-        {isPending ? td('saving') : td('saveAsDraft')}
-      </button>
+      <div className="flex gap-4">
+        <button
+          type="submit"
+          disabled={isPending || !embedUrl.trim() || !title.trim()}
+          onClick={() => { publishRef.current = false }}
+          className="flex-1 h-[54px] rounded-[16px] border border-primary/30 text-primary text-sm font-['JetBrains_Mono',monospace] font-medium tracking-[0.28px] hover:bg-primary/5 transition-colors disabled:opacity-60"
+        >
+          {isPending && !publishRef.current ? td('saving') : td('saveAsDraft')}
+        </button>
+        <button
+          type="submit"
+          disabled={isPending || !embedUrl.trim() || !title.trim()}
+          onClick={() => { publishRef.current = true }}
+          className="flex-1 h-[54px] rounded-[16px] gradient-rust text-white text-sm font-['JetBrains_Mono',monospace] font-medium tracking-[0.28px] transition-opacity disabled:opacity-60"
+        >
+          {isPending && publishRef.current ? td('saving') : td('publish')}
+        </button>
+      </div>
     </form>
   )
 }

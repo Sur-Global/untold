@@ -7,6 +7,7 @@ import { createClient } from '@/lib/supabase/server'
 import { requireCreator } from '@/lib/require-creator'
 import { isEditorRole } from '@/lib/require-editor'
 import { slugify } from '@/lib/utils'
+import { publishNewContent } from '@/lib/publish-new-content'
 import { resolveAuthorId, requestedAuthorId } from '@/lib/resolve-author'
 import { logActivity } from '@/lib/actions/activity-log'
 
@@ -64,6 +65,12 @@ export async function createPodcast(formData: FormData) {
   if (metaError) throw new Error(metaError.message ?? 'Failed to save podcast metadata')
 
   await logActivity({ entityType: 'podcast', entityId: content.id, entityLabel: title, action: authorId === user.id ? 'created' : 'created_on_behalf' })
+
+  // "Publish" button on the create form: publish right away instead of saving a draft
+  if (formData.get('publish') === 'true') {
+    await publishNewContent(supabase, content.id, 'podcast')
+    await logActivity({ entityType: 'podcast', entityId: content.id, entityLabel: title, action: 'published' })
+  }
 
   revalidatePath('/dashboard')
   redirect(`/dashboard/podcasts/${content.id}/edit`)

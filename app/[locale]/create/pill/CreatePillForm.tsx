@@ -18,12 +18,15 @@ export function CreatePillForm() {
   const formRef = useRef<HTMLFormElement>(null)
   const [body, setBody] = useState<EditorBlock[] | null>(null)
   const [isPending, startTransition] = useTransition()
+  // Which submit button was pressed (draft vs publish)
+  const publishRef = useRef(false)
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     if (!formRef.current) return
     const fd = new FormData(formRef.current)
     if (body) fd.set('body', JSON.stringify(body))
+    fd.set('publish', String(publishRef.current))
     startTransition(() => createPill(fd))
   }
 
@@ -57,9 +60,24 @@ export function CreatePillForm() {
         <RichTextEditor value={body} onChange={setBody} placeholder={t('bodyPlaceholder')} locale={locale} />
       </div>
 
-      <Button type="submit" disabled={isPending} className="gradient-rust text-white border-0">
-        {isPending ? td('saving') : td('saveAsDraft')}
-      </Button>
+      <div className="flex items-center gap-3">
+        <Button
+          type="submit"
+          variant="outline"
+          disabled={isPending}
+          onClick={() => { publishRef.current = false }}
+        >
+          {isPending && !publishRef.current ? td('saving') : td('saveAsDraft')}
+        </Button>
+        <Button
+          type="submit"
+          disabled={isPending}
+          onClick={() => { publishRef.current = true }}
+          className="gradient-rust text-white border-0"
+        >
+          {isPending && publishRef.current ? td('saving') : td('publish')}
+        </Button>
+      </div>
     </form>
   )
 }

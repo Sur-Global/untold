@@ -6,6 +6,7 @@ import { createClient } from '@/lib/supabase/server'
 import { requireCreator } from '@/lib/require-creator'
 import { isEditorRole } from '@/lib/require-editor'
 import { slugify } from '@/lib/utils'
+import { publishNewContent } from '@/lib/publish-new-content'
 import { resolveAuthorId, requestedAuthorId } from '@/lib/resolve-author'
 import { logActivity } from '@/lib/actions/activity-log'
 
@@ -81,6 +82,12 @@ export async function createVideo(formData: FormData) {
   }
 
   await logActivity({ entityType: 'video', entityId: content.id, entityLabel: title, action: authorId === user.id ? 'created' : 'created_on_behalf' })
+
+  // "Publish" button on the create form: publish right away instead of saving a draft
+  if (formData.get('publish') === 'true') {
+    await publishNewContent(supabase, content.id, 'video')
+    await logActivity({ entityType: 'video', entityId: content.id, entityLabel: title, action: 'published' })
+  }
 
   revalidatePath('/dashboard')
   redirect(`/dashboard/videos/${content.id}/edit`)

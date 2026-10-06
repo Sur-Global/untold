@@ -19,6 +19,9 @@ export function CreateArticleForm() {
   const [tags, setTags] = useState<Tag[]>([])
   const [featureRequested, setFeatureRequested] = useState(false)
   const [isPending, startTransition] = useTransition()
+  const [publishConfirmed, setPublishConfirmed] = useState(false)
+  // Which submit button was pressed (draft vs publish)
+  const publishRef = useRef(false)
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
@@ -27,6 +30,7 @@ export function CreateArticleForm() {
     if (body) fd.set('body', JSON.stringify(body))
     fd.set('tag_ids', JSON.stringify(tags.map((t) => t.id)))
     fd.set('feature_requested', String(featureRequested))
+    fd.set('publish', String(publishRef.current))
     startTransition(() => createArticle(fd))
   }
 
@@ -113,14 +117,43 @@ export function CreateArticleForm() {
         </div>
       </div>
 
-      <div className="mt-6">
+      {/* Same confirmation as the edit screen — required before publishing */}
+      <div
+        className="rounded-[16px] p-6 border-2 mt-6"
+        style={{ background: '#fdf5f5', borderColor: '#8b4513', boxShadow: '0px 2px 8px 0px rgba(139,69,19,0.1)' }}
+      >
+        <label className="flex items-start gap-3 cursor-pointer">
+          <input
+            type="checkbox"
+            checked={publishConfirmed}
+            onChange={(e) => setPublishConfirmed(e.target.checked)}
+            className="mt-1 w-4 h-4 rounded accent-[#8b4513]"
+          />
+          <p className="text-sm text-[#4b3a2a] leading-relaxed">{t('publishConfirmationText')}</p>
+        </label>
+      </div>
+      {!publishConfirmed && (
+        <p className="mt-3 text-sm text-muted-foreground">{t('publishConfirmTooltip')}</p>
+      )}
+
+      <div className="mt-6 flex gap-4">
         <button
           type="submit"
           disabled={isPending}
-          className="w-full h-[54px] rounded-[16px] text-sm font-['JetBrains_Mono',monospace] font-medium tracking-[0.28px] text-white transition-opacity disabled:opacity-50"
+          onClick={() => { publishRef.current = false }}
+          className="flex-1 h-[54px] rounded-[16px] border border-primary/30 text-sm font-['JetBrains_Mono',monospace] font-medium tracking-[0.28px] text-primary hover:bg-primary/5 transition-colors disabled:opacity-50"
+        >
+          {isPending && !publishRef.current ? td('saving') : td('saveAsDraft')}
+        </button>
+        <button
+          type="submit"
+          disabled={isPending || !publishConfirmed}
+          onClick={() => { publishRef.current = true }}
+          title={!publishConfirmed ? t('publishConfirmTooltip') : undefined}
+          className="flex-1 h-[54px] rounded-[16px] text-sm font-['JetBrains_Mono',monospace] font-medium tracking-[0.28px] text-white transition-opacity disabled:opacity-50"
           style={{ background: 'linear-gradient(175.88deg, #8b4513 0%, #a0522d 100%)' }}
         >
-          {isPending ? td('saving') : td('saveAsDraft')}
+          {isPending && publishRef.current ? td('saving') : td('publish')}
         </button>
       </div>
     </form>

@@ -14,11 +14,15 @@ export function CreateCourseForm() {
   const td = useTranslations('dashboard')
   const formRef = useRef<HTMLFormElement>(null)
   const [isPending, startTransition] = useTransition()
+  // Which submit button was pressed (draft vs publish)
+  const publishRef = useRef(false)
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     if (!formRef.current) return
-    startTransition(() => createCourse(new FormData(formRef.current!)))
+    const fd = new FormData(formRef.current)
+    fd.set('publish', String(publishRef.current))
+    startTransition(() => createCourse(fd))
   }
 
   return (
@@ -53,9 +57,24 @@ export function CreateCourseForm() {
         <Input id="duration" name="duration" placeholder={t('durationPlaceholder')} />
       </div>
 
-      <Button type="submit" disabled={isPending} className="gradient-rust text-white border-0">
-        {isPending ? td('saving') : td('saveAsDraft')}
-      </Button>
+      <div className="flex items-center gap-3">
+        <Button
+          type="submit"
+          variant="outline"
+          disabled={isPending}
+          onClick={() => { publishRef.current = false }}
+        >
+          {isPending && !publishRef.current ? td('saving') : td('saveAsDraft')}
+        </Button>
+        <Button
+          type="submit"
+          disabled={isPending}
+          onClick={() => { publishRef.current = true }}
+          className="gradient-rust text-white border-0"
+        >
+          {isPending && publishRef.current ? td('saving') : td('publish')}
+        </Button>
+      </div>
     </form>
   )
 }
