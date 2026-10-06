@@ -70,7 +70,7 @@ export default async function AuthorPage({ params }: PageProps) {
     .from('content')
     .select(`
       id, type, slug, is_featured, cover_image_url, likes_count, published_at,
-      content_translations ( title, excerpt, description, locale ),
+      content_translations ( title, excerpt, featured_summary, description, locale ),
       content_tags ( tags ( slug, names ) ),
       video_meta ( thumbnail_url, duration ),
       podcast_meta ( cover_image_url, duration, episode_number ),
@@ -98,7 +98,7 @@ export default async function AuthorPage({ params }: PageProps) {
       likesCount: item.likes_count ?? 0,
       publishedAt: item.published_at ?? null,
       title: t?.title ?? '(Untitled)',
-      excerpt: t?.excerpt ?? null,
+      excerpt: t?.excerpt || t?.featured_summary || null,
       description: t?.description ?? null,
       tags,
       thumbnailUrl: item.video_meta?.thumbnail_url ?? null,

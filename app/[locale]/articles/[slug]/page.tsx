@@ -28,7 +28,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const supabase = await createClient()
   const { data } = await (supabase as any)
     .from('content')
-    .select('content_translations ( title, excerpt, locale )')
+    .select('content_translations ( title, excerpt, featured_summary, locale )')
     .eq('slug', slug)
     .eq('type', 'article')
     .eq('status', 'published')
@@ -37,7 +37,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const t = getTranslation(data?.content_translations ?? [], locale)
   return {
     title: t?.title ? `${t.title} — UNTOLD` : 'UNTOLD',
-    description: t?.excerpt ?? undefined,
+    description: t?.excerpt || t?.featured_summary || undefined,
   }
 }
 
@@ -59,7 +59,7 @@ export default async function ArticlePage({ params }: PageProps) {
     .select(`
       id, slug, likes_count, published_at, cover_image_url, image_credits, source_locale,
       profiles!author_id ( id, display_name, slug, avatar_url, bio, profile_translations, location, followers_count, role ),
-      content_translations ( title, excerpt, body, locale ),
+      content_translations ( title, excerpt, featured_summary, body, locale ),
       content_tags ( tags ( slug, names ) )
     `)
     .eq('slug', slug)
@@ -205,8 +205,8 @@ export default async function ArticlePage({ params }: PageProps) {
                 </h1>
 
                 {/* Excerpt */}
-                {t.excerpt && (
-                  <p className="text-2xl text-muted-foreground leading-tight mb-8">{t.excerpt}</p>
+                {(t.excerpt || t.featured_summary) && (
+                  <p className="text-2xl text-muted-foreground leading-tight mb-8">{t.excerpt || t.featured_summary}</p>
                 )}
 
                 {/* Cover image */}

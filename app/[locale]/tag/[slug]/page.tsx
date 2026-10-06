@@ -33,7 +33,7 @@ export default async function TagPage({ params }: PageProps) {
       content (
         id, slug, type, is_featured, likes_count, published_at, cover_image_url, status,
         profiles!author_id ( display_name, slug, role ),
-        content_translations ( title, excerpt, description, locale ),
+        content_translations ( title, excerpt, featured_summary, description, locale ),
         video_meta ( duration ),
         podcast_meta ( duration, episode_number ),
         pill_meta ( accent_color ),
@@ -85,7 +85,7 @@ export default async function TagPage({ params }: PageProps) {
                   type={item.type}
                   slug={item.slug}
                   title={t?.title ?? 'Untitled'}
-                  excerpt={t?.excerpt}
+                  excerpt={t?.excerpt || t?.featured_summary}
                   description={t?.description}
                   coverImageUrl={item.cover_image_url}
                   publishedAt={item.published_at}

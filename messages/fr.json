@@ -217,7 +217,7 @@
     "topicCategoryLabel": "Sujet / Catégorie",
     "topicCategoryPlaceholder": "Urbanisme, Droits humains…",
     "featuredSummaryLabel": "Résumé mis en avant",
-    "featuredSummaryHint": "Affiché publiquement uniquement lorsque cet article est mis en avant",
+    "featuredSummaryHint": "Utilisé comme aperçu de l'article lorsqu'il n'y a pas de sous-titre.",
     "featuredSummaryPlaceholder": "La régénération urbaine ne concerne pas seulement de nouveaux bâtiments…",
     "fullContentLabel": "Contenu complet",
     "coverImageCreditLabel": "Crédit de l'image de couverture",

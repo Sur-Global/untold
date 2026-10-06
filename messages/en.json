@@ -217,7 +217,7 @@
     "topicCategoryLabel": "Topic / Category",
     "topicCategoryPlaceholder": "Urban Planning, Human Rights…",
     "featuredSummaryLabel": "Featured Summary",
-    "featuredSummaryHint": "Shown publicly only when this article is featured",
+    "featuredSummaryHint": "Used as the article's preview when there is no subtitle.",
     "featuredSummaryPlaceholder": "Urban regeneration is not just about new buildings…",
     "fullContentLabel": "Full Content",
     "coverImageCreditLabel": "Cover image credit",

@@ -94,7 +94,7 @@ export default async function ArticlesPage({ params, searchParams }: PageProps) 
         `
         id, slug, type, is_featured, likes_count, published_at, cover_image_url, read_time_minutes,
         profiles!author_id ( display_name, slug, role, avatar_url ),
-        content_translations ( title, excerpt, locale ),
+        content_translations ( title, excerpt, featured_summary, locale ),
         content_tags ( tags ( names, slug ) )
       `,
         { count: 'exact' }
@@ -232,7 +232,7 @@ export default async function ArticlesPage({ params, searchParams }: PageProps) 
                       type="article"
                       slug={article.slug}
                       title={t?.title ?? 'Untitled'}
-                      excerpt={t?.excerpt}
+                      excerpt={t?.excerpt || t?.featured_summary}
                       coverImageUrl={article.cover_image_url}
                       publishedAt={article.published_at}
                       likesCount={article.likes_count}

@@ -2,6 +2,7 @@ export interface Translation {
   locale: string
   title: string
   excerpt: string | null
+  featured_summary?: string | null
   description: string | null
   body: Record<string, unknown> | null
 }

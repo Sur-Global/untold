@@ -71,7 +71,7 @@ export default async function HomePage({ params }: PageProps) {
       .select(`
         id, slug, type, cover_image_url, read_time_minutes, likes_count,
         profiles!author_id ( display_name, slug, avatar_url ),
-        content_translations ( title, excerpt, locale ),
+        content_translations ( title, excerpt, featured_summary, locale ),
         content_tags ( tags ( names, slug ) ),
         video_meta ( thumbnail_url ),
         podcast_meta ( cover_image_url ),
@@ -87,7 +87,7 @@ export default async function HomePage({ params }: PageProps) {
       .select(`
         id, slug, type, is_featured, likes_count, published_at, cover_image_url, read_time_minutes,
         profiles!author_id ( display_name, slug, avatar_url ),
-        content_translations ( title, excerpt, locale ),
+        content_translations ( title, excerpt, featured_summary, locale ),
         content_tags ( tags ( names, slug ) )
       `)
       .eq('type', 'article')
@@ -102,7 +102,7 @@ export default async function HomePage({ params }: PageProps) {
       .select(`
         id, slug, type, is_featured, likes_count, published_at, cover_image_url,
         profiles!author_id ( display_name, slug, avatar_url ),
-        content_translations ( title, excerpt, locale ),
+        content_translations ( title, excerpt, featured_summary, locale ),
         content_tags ( tags ( names, slug ) ),
         video_meta ( thumbnail_url, duration )
       `)
@@ -118,7 +118,7 @@ export default async function HomePage({ params }: PageProps) {
       .select(`
         id, slug, type, is_featured, likes_count, published_at,
         profiles!author_id ( display_name, slug, avatar_url ),
-        content_translations ( title, excerpt, locale ),
+        content_translations ( title, excerpt, featured_summary, locale ),
         content_tags ( tags ( names, slug ) ),
         podcast_meta ( cover_image_url, duration, episode_number )
       `)
@@ -134,7 +134,7 @@ export default async function HomePage({ params }: PageProps) {
       .select(`
         id, slug, type, is_featured, likes_count, published_at, cover_image_url,
         profiles!author_id ( display_name, slug, avatar_url ),
-        content_translations ( title, excerpt, locale ),
+        content_translations ( title, excerpt, featured_summary, locale ),
         content_tags ( tags ( names, slug ) ),
         pill_meta ( accent_color, image_url )
       `)
@@ -150,7 +150,7 @@ export default async function HomePage({ params }: PageProps) {
       .select(`
         id, slug, type, is_featured, likes_count, published_at, cover_image_url,
         profiles!author_id ( display_name, slug, avatar_url ),
-        content_translations ( title, excerpt, locale ),
+        content_translations ( title, excerpt, featured_summary, locale ),
         content_tags ( tags ( names, slug ) ),
         course_meta ( price, currency, duration, students_count, rating )
       `)
@@ -228,7 +228,7 @@ export default async function HomePage({ params }: PageProps) {
       type: item.type,
       slug: item.slug,
       title: trans?.title ?? 'Untitled',
-      excerpt: trans?.excerpt,
+      excerpt: trans?.excerpt || trans?.featured_summary,
       coverImageUrl: item.cover_image_url ?? plm?.image_url,
       thumbnailUrl: vm?.thumbnail_url ?? pm?.cover_image_url,
       publishedAt: item.published_at,
@@ -594,7 +594,7 @@ export default async function HomePage({ params }: PageProps) {
                         <LargeArticleCard
                             slug={sectionLargeArticle.slug}
                             title={sectionLargeTrans.title}
-                            excerpt={sectionLargeTrans.excerpt}
+                            excerpt={sectionLargeTrans.excerpt || sectionLargeTrans.featured_summary}
                             coverImageUrl={sectionLargeArticle.cover_image_url}
                             authorName={sectionLargeArticle.profiles?.display_name}
                             authorSlug={sectionLargeArticle.profiles?.slug}
