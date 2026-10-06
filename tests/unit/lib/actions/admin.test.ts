@@ -98,16 +98,20 @@ describe('toggleHeroFeatured', () => {
     const { from } = makeHeroFrom({ is_featured: false, is_hero_featured: false }, 0)
     vi.mocked(createClient).mockResolvedValue({ from } as any)
 
-    await expect(toggleHeroFeatured('content-1')).rejects.toThrow(
-      'Must be Featured before it can go in the homepage hero'
-    )
+    // Returned (not thrown) so the message survives production builds
+    expect(await toggleHeroFeatured('content-1')).toEqual({
+      ok: false,
+      error: 'Must be Featured before it can go in the homepage hero',
+    })
   })
 
   it('rejects turning on hero placement when already at the cap of 3', async () => {
     const { from } = makeHeroFrom({ is_featured: true, is_hero_featured: false }, 3)
     vi.mocked(createClient).mockResolvedValue({ from } as any)
 
-    await expect(toggleHeroFeatured('content-1')).rejects.toThrow('Homepage hero is full')
+    const result = await toggleHeroFeatured('content-1')
+    expect(result.ok).toBe(false)
+    expect(!result.ok && result.error).toContain('The homepage hero is full')
   })
 
   it('turns on hero placement when Featured and under the cap', async () => {
