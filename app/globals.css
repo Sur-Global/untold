@@ -357,3 +357,31 @@ article:hover .card-image-shine {
     flex-direction: column !important;
   }
 }
+
+
+/* ========== Toggle blocks in published articles ========== */
+details.bn-toggle {
+  margin-bottom: 1.5rem;
+}
+details.bn-toggle > summary {
+  display: flex;
+  align-items: baseline;
+  gap: 0.6rem;
+  cursor: pointer;
+  list-style: none;
+}
+details.bn-toggle > summary::-webkit-details-marker { display: none; }
+details.bn-toggle > summary::before {
+  content: '▸';
+  color: hsl(var(--primary));
+  flex-shrink: 0;
+  transition: transform 0.15s ease;
+}
+details.bn-toggle[open] > summary::before { transform: rotate(90deg); }
+/* Paragraph/heading inside the summary shouldn't add its own spacing */
+details.bn-toggle > summary > * { margin: 0 !important; }
+details.bn-toggle > .bn-toggle-body {
+  margin-top: 0.9rem;
+  padding-left: 1.4rem;
+  border-left: 2px solid hsl(var(--primary) / 0.2);
+}
