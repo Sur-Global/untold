@@ -41,6 +41,8 @@ export function NewAuthorForm({ onCreated, onCancel }: Props) {
   const [instagram, setInstagram] = useState('')
   const [medium, setMedium] = useState('')
   const [customUrl, setCustomUrl] = useState('')
+  const [ctaLabel, setCtaLabel] = useState('')
+  const [ctaUrl, setCtaUrl] = useState('')
 
   const htmlConverter = useCreateBlockNote({ schema: htmlConverterSchema })
 
@@ -51,7 +53,7 @@ export function NewAuthorForm({ onCreated, onCancel }: Props) {
         const bioHtml = bioBlocks ? htmlConverter.blocksToHTMLLossy(bioBlocks as any) : ''
         const author = await createAuthor({
           displayName: name, bioHtml, avatarUrl, location, website, email,
-          bluesky, linkedin, instagram, medium, customUrl,
+          bluesky, linkedin, instagram, medium, customUrl, ctaLabel, ctaUrl,
         })
         onCreated(author)
       } catch (err) {
@@ -111,6 +113,15 @@ export function NewAuthorForm({ onCreated, onCancel }: Props) {
           {text('Medium', medium, setMedium, 'https://medium.com/@…', 'url')}
         </div>
         {text(t('authorCustomLinkLabel'), customUrl, setCustomUrl, 'https://…', 'url')}
+      </div>
+
+      <div className="space-y-3">
+        <p className={labelClass}>{t('authorCtaTitle')}</p>
+        <div className="grid gap-3 sm:grid-cols-2">
+          {text(t('authorCtaLabel'), ctaLabel, setCtaLabel, '')}
+          {text(t('authorCtaUrl'), ctaUrl, setCtaUrl, 'https://…')}
+        </div>
+        <p className="text-xs text-muted-foreground">{t('authorCtaHint')}</p>
       </div>
 
       {error && <p className="text-sm text-destructive">{error}</p>}

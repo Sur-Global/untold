@@ -187,7 +187,11 @@
     "tabAuto": "manual",
     "noteOriginal": "This is the original version. The other languages are translated from it: when you change it, automatic translations refresh. Versions edited by hand are never overwritten.",
     "noteAuto": "Automatic translation of the original. If you edit it, it becomes this language's manual version and automatic translation will no longer overwrite it.",
-    "noteManual": "Manual version. It was edited by hand, so it stays as you wrote it and automatic translation will not overwrite it."
+    "noteManual": "Manual version. It was edited by hand, so it stays as you wrote it and automatic translation will not overwrite it.",
+    "ctaTitle": "Call-to-action button (optional)",
+    "ctaLabel": "Button text",
+    "ctaUrl": "Button link",
+    "ctaHint": "Shown on your author page only. The text is translated automatically into the other languages."
   },
   "translating": {
     "heading": "Translating into {language}",
@@ -317,7 +321,11 @@
     "authorCustomLinkLabel": "Custom link",
     "authorCancelButton": "Cancel",
     "contentLanguageLabel": "Language this is written in",
-    "contentLanguageHint": "The original language. Other languages are translated from it."
+    "contentLanguageHint": "The original language. Other languages are translated from it.",
+    "authorCtaTitle": "Call-to-action button (optional)",
+    "authorCtaLabel": "Button text",
+    "authorCtaUrl": "Button link",
+    "authorCtaHint": "Shown on your author page only. The text is translated automatically into the other languages."
   },
   "footer": {
     "brandTitle": "UNTOLD",

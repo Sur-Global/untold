@@ -187,7 +187,11 @@
     "tabAuto": "manuel",
     "noteOriginal": "Dette er originalversionen. De andre sprog oversættes fra den: når du ændrer den, opdateres de automatiske oversættelser. Versioner redigeret i hånden overskrives aldrig.",
     "noteAuto": "Automatisk oversættelse af originalen. Hvis du redigerer den, bliver den sprogets manuelle version, og automatisk oversættelse overskriver den ikke længere.",
-    "noteManual": "Manuel version. Den er redigeret i hånden, så den forbliver som du skrev den, og automatisk oversættelse overskriver den ikke."
+    "noteManual": "Manuel version. Den er redigeret i hånden, så den forbliver som du skrev den, og automatisk oversættelse overskriver den ikke.",
+    "ctaTitle": "Handlingsknap (valgfri)",
+    "ctaLabel": "Knaptekst",
+    "ctaUrl": "Knaplink",
+    "ctaHint": "Vises kun på din forfattersiden. Teksten oversættes automatisk til de andre sprog."
   },
   "translating": {
     "heading": "Oversætter til {language}",
@@ -317,7 +321,11 @@
     "authorCustomLinkLabel": "Brugerdefineret link",
     "authorCancelButton": "Annuller",
     "contentLanguageLabel": "Sprog, det er skrevet på",
-    "contentLanguageHint": "Originalsproget. Andre sprog oversættes fra det."
+    "contentLanguageHint": "Originalsproget. Andre sprog oversættes fra det.",
+    "authorCtaTitle": "Handlingsknap (valgfri)",
+    "authorCtaLabel": "Knaptekst",
+    "authorCtaUrl": "Knaplink",
+    "authorCtaHint": "Vises kun på din forfattersiden. Teksten oversættes automatisk til de andre sprog."
   },
   "footer": {
     "brandTitle": "UNTOLD",

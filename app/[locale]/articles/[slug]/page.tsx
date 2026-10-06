@@ -93,8 +93,6 @@ export default async function ArticlePage({ params }: PageProps) {
   // Source-language bio fields extracted from Ghost (stored by import script)
   const sourceBioHtml = profileTrans?._source_bio_html ?? null
   const sourceBioHeading = profileTrans?._source_bio_heading ?? null
-  const sourceBioCTAUrl = profileTrans?._source_bio_cta_url ?? null
-  const sourceBioCTALabel = profileTrans?._source_bio_cta_label ?? null
 
   if (needsBody || needsAuthorBio) {
     after(async () => {
@@ -409,32 +407,6 @@ export default async function ArticlePage({ params }: PageProps) {
                               />
                             )}
                           </div>
-                        )}
-
-                        {/* CTA button */}
-                        {sourceBioCTAUrl && sourceBioCTALabel && (
-                          <a
-                            href={sourceBioCTAUrl}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            style={{
-                              display: 'inline-flex',
-                              alignItems: 'center',
-                              gap: 4,
-                              fontFamily: 'var(--font-aeonik), Aeonik, sans-serif',
-                              fontSize: 13,
-                              fontWeight: 500,
-                              color: '#111',
-                              textDecoration: 'none',
-                              border: '1px solid rgba(0,0,0,0.15)',
-                              borderRadius: 8,
-                              padding: '7px 14px',
-                              marginBottom: 12,
-                            }}
-                            className="hover:bg-black hover:text-white transition-colors"
-                          >
-                            {sourceBioCTALabel} ↗
-                          </a>
                         )}
 
                         {/* Social links — open in a new tab */}

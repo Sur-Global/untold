@@ -16,7 +16,7 @@ export default async function EditProfilePage() {
     getNavProps(),
     (supabase as any)
       .from('profiles')
-      .select('display_name, slug, bio, location, website, avatar_url, email, social_bluesky, social_linkedin, social_instagram, social_medium, social_custom_url')
+      .select('display_name, slug, bio, location, website, avatar_url, email, social_bluesky, social_linkedin, social_instagram, social_medium, social_custom_url, bio_cta_label, bio_cta_url')
       .eq('id', user.id)
       .single(),
   ])
@@ -43,6 +43,8 @@ export default async function EditProfilePage() {
             initialSocialInstagram={profile.social_instagram ?? ''}
             initialSocialMedium={profile.social_medium ?? ''}
             initialSocialCustomUrl={profile.social_custom_url ?? ''}
+            initialCtaLabel={profile.bio_cta_label ?? ''}
+            initialCtaUrl={profile.bio_cta_url ?? ''}
           />
         </AdminPanel>
       </main>

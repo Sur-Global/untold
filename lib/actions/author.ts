@@ -8,7 +8,7 @@ import { requireCreator } from '@/lib/require-creator'
 import { slugify } from '@/lib/utils'
 import { logActivity } from '@/lib/actions/activity-log'
 import { sanitizeBioHtml } from '@/lib/sanitize-bio-html'
-import { urlOrNull, emailOrNull } from '@/lib/profile-fields'
+import { urlOrNull, emailOrNull, linkOrMailtoOrNull } from '@/lib/profile-fields'
 
 export interface AuthorOption {
   id: string
@@ -55,6 +55,8 @@ export interface NewAuthorInput {
   instagram?: string
   medium?: string
   customUrl?: string
+  ctaLabel?: string
+  ctaUrl?: string
 }
 
 /** Creates a new author profile (editor/admin only) so content can be attributed to them right away. */
@@ -74,6 +76,8 @@ export async function createAuthor(input: NewAuthorInput): Promise<AuthorOption>
     social_instagram: urlOrNull(input.instagram, 'Instagram link'),
     social_medium: urlOrNull(input.medium, 'Medium link'),
     social_custom_url: urlOrNull(input.customUrl, 'Custom link'),
+    bio_cta_label: input.ctaLabel?.trim() || null,
+    bio_cta_url: linkOrMailtoOrNull(input.ctaUrl, 'Button link'),
   }
 
   const name = input.displayName.trim()

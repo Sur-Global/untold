@@ -31,6 +31,8 @@ interface EditProfileFormProps {
   initialSocialInstagram?: string
   initialSocialMedium?: string
   initialSocialCustomUrl?: string
+  initialCtaLabel?: string
+  initialCtaUrl?: string
   /** When true, redirects back to /admin/users after save */
   isAdminEdit?: boolean
 }
@@ -53,6 +55,8 @@ export function EditProfileForm({
   initialSocialInstagram = '',
   initialSocialMedium = '',
   initialSocialCustomUrl = '',
+  initialCtaLabel = '',
+  initialCtaUrl = '',
   isAdminEdit,
 }: EditProfileFormProps) {
   const router = useRouter()
@@ -73,6 +77,8 @@ export function EditProfileForm({
   const [socialInstagram, setSocialInstagram] = useState(initialSocialInstagram)
   const [socialMedium, setSocialMedium] = useState(initialSocialMedium)
   const [socialCustomUrl, setSocialCustomUrl] = useState(initialSocialCustomUrl)
+  const [ctaLabel, setCtaLabel] = useState(initialCtaLabel)
+  const [ctaUrl, setCtaUrl] = useState(initialCtaUrl)
   const slugManualRef = useRef(false)
 
   // Used only to serialize bioBlocks back to HTML on submit — bio is stored as
@@ -102,6 +108,8 @@ export function EditProfileForm({
     fd.set('social_instagram', socialInstagram)
     fd.set('social_medium', socialMedium)
     fd.set('social_custom_url', socialCustomUrl)
+    fd.set('bio_cta_label', ctaLabel)
+    fd.set('bio_cta_url', ctaUrl)
 
     startTransition(async () => {
       try {
@@ -270,6 +278,20 @@ export function EditProfileForm({
             placeholder="https://..."
           />
         </div>
+      </div>
+
+      {/* Call-to-action button shown on the author page (label is auto-translated) */}
+      <div className="space-y-3 rounded-[10px] border border-primary/10 bg-muted/20 p-4">
+        <p className={labelClass}>{t('ctaTitle')}</p>
+        <div>
+          <label htmlFor="bio_cta_label" className="mb-1 block text-xs text-muted-foreground">{t('ctaLabel')}</label>
+          <input id="bio_cta_label" className={fieldClass} value={ctaLabel} onChange={(e) => setCtaLabel(e.target.value)} />
+        </div>
+        <div>
+          <label htmlFor="bio_cta_url" className="mb-1 block text-xs text-muted-foreground">{t('ctaUrl')}</label>
+          <input id="bio_cta_url" className={fieldClass} value={ctaUrl} onChange={(e) => setCtaUrl(e.target.value)} placeholder="https://…" />
+        </div>
+        <p className="text-xs text-muted-foreground">{t('ctaHint')}</p>
       </div>
 
       {error && (

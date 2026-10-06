@@ -187,7 +187,11 @@
     "tabAuto": "manuell",
     "noteOriginal": "Dies ist die Originalversion. Die anderen Sprachen werden daraus übersetzt: Wenn du sie änderst, werden die automatischen Übersetzungen aktualisiert. Von Hand bearbeitete Versionen werden nie überschrieben.",
     "noteAuto": "Automatische Übersetzung des Originals. Wenn du sie bearbeitest, wird sie zur manuellen Version dieser Sprache und die automatische Übersetzung überschreibt sie nicht mehr.",
-    "noteManual": "Manuelle Version. Sie wurde von Hand bearbeitet, bleibt also wie von dir geschrieben und wird nicht automatisch überschrieben."
+    "noteManual": "Manuelle Version. Sie wurde von Hand bearbeitet, bleibt also wie von dir geschrieben und wird nicht automatisch überschrieben.",
+    "ctaTitle": "Aktions-Button (optional)",
+    "ctaLabel": "Button-Text",
+    "ctaUrl": "Button-Link",
+    "ctaHint": "Wird nur auf deiner Autorenseite angezeigt. Der Text wird automatisch in die anderen Sprachen übersetzt."
   },
   "translating": {
     "heading": "Übersetzung ins {language}",
@@ -317,7 +321,11 @@
     "authorCustomLinkLabel": "Eigener Link",
     "authorCancelButton": "Abbrechen",
     "contentLanguageLabel": "Sprache, in der es geschrieben ist",
-    "contentLanguageHint": "Die Originalsprache. Andere Sprachen werden daraus übersetzt."
+    "contentLanguageHint": "Die Originalsprache. Andere Sprachen werden daraus übersetzt.",
+    "authorCtaTitle": "Aktions-Button (optional)",
+    "authorCtaLabel": "Button-Text",
+    "authorCtaUrl": "Button-Link",
+    "authorCtaHint": "Wird nur auf deiner Autorenseite angezeigt. Der Text wird automatisch in die anderen Sprachen übersetzt."
   },
   "footer": {
     "brandTitle": "UNTOLD",

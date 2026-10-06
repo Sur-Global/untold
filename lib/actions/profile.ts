@@ -5,7 +5,7 @@ import { createClient } from '@/lib/supabase/server'
 import { isEditorRole } from '@/lib/require-editor'
 import { sanitizeBioHtml } from '@/lib/sanitize-bio-html'
 import { logActivity } from '@/lib/actions/activity-log'
-import { urlOrNull, emailOrNull } from '@/lib/profile-fields'
+import { urlOrNull, emailOrNull, linkOrMailtoOrNull } from '@/lib/profile-fields'
 
 export async function updateProfile(userId: string, formData: FormData) {
   const supabase = await createClient()
@@ -38,12 +38,41 @@ export async function updateProfile(userId: string, formData: FormData) {
   const social_medium = urlOrNull(formData.get('social_medium') as string | null, 'Medium link')
   const social_custom_url = urlOrNull(formData.get('social_custom_url') as string | null, 'Custom link')
 
+  const bio_cta_label = (formData.get('bio_cta_label') as string)?.trim() || null
+  const bio_cta_url = linkOrMailtoOrNull(formData.get('bio_cta_url') as string | null, 'Button link')
+
   if (!display_name) throw new Error('Display name is required')
   if (!slug || !/^[a-z0-9-]+$/.test(slug)) throw new Error('Slug must be lowercase letters, numbers and hyphens only')
+
+  // Translated copies of the bio / button text are only valid for the text they were made
+  // from — drop them when the original changes so they get re-translated.
+  const { data: current } = await (supabase as any)
+    .from('profiles')
+    .select('bio, bio_cta_label, profile_translations')
+    .eq('id', userId)
+    .single()
+  let profile_translations = current?.profile_translations as Record<string, any> | null
+  if (profile_translations) {
+    const dropKeys: string[] = []
+    if ((current?.bio ?? null) !== bio) dropKeys.push('bio')
+    if ((current?.bio_cta_label ?? null) !== bio_cta_label) dropKeys.push('cta_label')
+    if (dropKeys.length) {
+      profile_translations = Object.fromEntries(
+        Object.entries(profile_translations).map(([key, value]) => {
+          if (key.startsWith('_') || !value || typeof value !== 'object') return [key, value]
+          const copy = { ...(value as Record<string, unknown>) }
+          for (const k of dropKeys) delete copy[k]
+          return [key, copy]
+        }),
+      )
+    }
+  }
 
   const { error } = await (supabase as any)
     .from('profiles')
     .update({
+      ...(profile_translations ? { profile_translations } : {}),
+      bio_cta_label, bio_cta_url,
       display_name, slug, bio, location, website, avatar_url,
       email, social_bluesky, social_linkedin, social_instagram, social_medium, social_custom_url,
     })

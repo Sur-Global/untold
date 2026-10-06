@@ -187,7 +187,11 @@
     "tabAuto": "manual",
     "noteOriginal": "Esta es la versión original. Los demás idiomas se traducen a partir de ella: cuando la cambias, las traducciones automáticas se actualizan. Las versiones editadas a mano nunca se sobrescriben.",
     "noteAuto": "Traducción automática del original. Si la editas, pasa a ser la versión manual de este idioma y la traducción automática ya no la sobrescribirá.",
-    "noteManual": "Versión manual. Se editó a mano, así que se queda como la escribiste y la traducción automática no la sobrescribirá."
+    "noteManual": "Versión manual. Se editó a mano, así que se queda como la escribiste y la traducción automática no la sobrescribirá.",
+    "ctaTitle": "Botón de acción (opcional)",
+    "ctaLabel": "Texto del botón",
+    "ctaUrl": "Enlace del botón",
+    "ctaHint": "Se muestra solo en tu página de autor. El texto se traduce automáticamente a los demás idiomas."
   },
   "translating": {
     "heading": "Traduciendo al {language}",
@@ -317,7 +321,11 @@
     "authorCustomLinkLabel": "Enlace personalizado",
     "authorCancelButton": "Cancelar",
     "contentLanguageLabel": "Idioma en el que está escrito",
-    "contentLanguageHint": "El idioma original. Los demás idiomas se traducen a partir de él."
+    "contentLanguageHint": "El idioma original. Los demás idiomas se traducen a partir de él.",
+    "authorCtaTitle": "Botón de acción (opcional)",
+    "authorCtaLabel": "Texto del botón",
+    "authorCtaUrl": "Enlace del botón",
+    "authorCtaHint": "Se muestra solo en tu página de autor. El texto se traduce automáticamente a los demás idiomas."
   },
   "footer": {
     "brandTitle": "UNTOLD",

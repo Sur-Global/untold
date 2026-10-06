@@ -49,7 +49,7 @@ export default async function AuthorPage({ params }: PageProps) {
 
   const { data: author } = await (supabase as any)
     .from('profiles')
-    .select('id, display_name, slug, avatar_url, bio, profile_translations, location, website, followers_count, following_count, role, created_at, social_bluesky, social_linkedin, social_instagram, social_medium, social_custom_url')
+    .select('id, display_name, slug, avatar_url, bio, profile_translations, location, website, followers_count, following_count, role, created_at, social_bluesky, social_linkedin, social_instagram, social_medium, social_custom_url, bio_cta_label, bio_cta_url')
     .eq('slug', slug)
     .single()
 
@@ -123,9 +123,13 @@ export default async function AuthorPage({ params }: PageProps) {
     }
   }
 
-  const profileTrans = author.profile_translations as Record<string, { bio?: string }> | null
+  const profileTrans = author.profile_translations as Record<string, { bio?: string; cta_label?: string }> | null
   const translatedBio = profileTrans?.[locale]?.bio ?? author.bio
-  const needsAuthorBio = !!author.bio && !profileTrans?.[locale]?.bio
+  // Button text falls back to the original while its translation is pending
+  const ctaLabel: string | null = profileTrans?.[locale]?.cta_label ?? author.bio_cta_label ?? null
+  const needsAuthorBio =
+    (!!author.bio && !profileTrans?.[locale]?.bio) ||
+    (!!author.bio_cta_label && !profileTrans?.[locale]?.cta_label)
 
   // Trigger bio translation on first visit in this language.
   // We need a content_id from one of the author's content items to use the translate route.
@@ -222,6 +226,18 @@ export default async function AuthorPage({ params }: PageProps) {
                   style={{ fontSize: 15, lineHeight: 1.65, color: 'rgba(255,255,255,0.65)' }}
                   dangerouslySetInnerHTML={{ __html: sanitizeBioHtml(translatedBio) }}
                 />
+              )}
+
+              {ctaLabel && author.bio_cta_url && (
+                <a
+                  href={author.bio_cta_url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="mb-4 inline-flex items-center gap-1.5 rounded-lg border border-white/35 px-4 py-2 text-[13px] font-medium text-white transition-colors hover:bg-white hover:text-black"
+                  style={{ fontFamily: 'var(--font-aeonik), Aeonik, sans-serif', textDecoration: 'none' }}
+                >
+                  {ctaLabel} <span aria-hidden>↗</span>
+                </a>
               )}
 
               {/* Meta row */}

@@ -188,16 +188,28 @@ export async function POST(req: NextRequest) {
         try {
           const { data: author } = await (supabase as any)
             .from('profiles')
-            .select('bio, profile_translations')
+            .select('bio, bio_cta_label, profile_translations')
             .eq('id', content.author_id)
             .maybeSingle()
 
           const existingProfileTrans = (author?.profile_translations as Record<string, unknown>) ?? {}
-          if (author?.bio && !existingProfileTrans[targetLocale]) {
-            const [translatedBio] = await translateTexts([author.bio], targetLocale, sourceLocale)
+          const entry = (existingProfileTrans[targetLocale] ?? {}) as { bio?: string; cta_label?: string }
+          const needBio = !!author?.bio && !entry.bio
+          const needCta = !!author?.bio_cta_label && !entry.cta_label
+          if (needBio || needCta) {
+            const next = { ...entry }
+            if (needBio) {
+              const [translatedBio] = await translateTexts([author.bio], targetLocale, sourceLocale)
+              next.bio = translatedBio
+            }
+            if (needCta) {
+              // The button text can be in any language (it's typed by hand), so let DeepL detect it
+              const [translatedLabel] = await translateTexts([author.bio_cta_label], targetLocale)
+              next.cta_label = translatedLabel
+            }
             await (supabase as any)
               .from('profiles')
-              .update({ profile_translations: { ...existingProfileTrans, [targetLocale]: { bio: translatedBio } } })
+              .update({ profile_translations: { ...existingProfileTrans, [targetLocale]: next } })
               .eq('id', content.author_id)
           }
         } catch (err) {
