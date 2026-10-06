@@ -5,6 +5,8 @@ import { createServiceRoleClient } from '@/lib/supabase/service-role'
 import { requireEditor, isEditorRole } from '@/lib/require-editor'
 import { slugify } from '@/lib/utils'
 import { logActivity } from '@/lib/actions/activity-log'
+import { sanitizeBioHtml } from '@/lib/sanitize-bio-html'
+import { urlOrNull, emailOrNull } from '@/lib/profile-fields'
 
 export interface AuthorOption {
   id: string
@@ -39,11 +41,40 @@ export async function listAuthors(includeId?: string): Promise<{ canPick: boolea
   return { canPick: true, me: user.id, authors: (data ?? []) as AuthorOption[] }
 }
 
+export interface NewAuthorInput {
+  displayName: string
+  bioHtml?: string
+  avatarUrl?: string
+  location?: string
+  website?: string
+  email?: string
+  bluesky?: string
+  linkedin?: string
+  instagram?: string
+  medium?: string
+  customUrl?: string
+}
+
 /** Creates a new author profile (editor/admin only) so content can be attributed to them right away. */
-export async function createAuthor(displayName: string): Promise<AuthorOption> {
+export async function createAuthor(input: NewAuthorInput): Promise<AuthorOption> {
   await requireEditor()
 
-  const name = displayName.trim()
+  // Validate everything up front, before creating any account
+  const bioRaw = input.bioHtml?.trim() || null
+  const details = {
+    bio: bioRaw ? sanitizeBioHtml(bioRaw) : null,
+    avatar_url: input.avatarUrl?.trim() || null,
+    location: input.location?.trim() || null,
+    website: urlOrNull(input.website, 'Website'),
+    email: emailOrNull(input.email),
+    social_bluesky: urlOrNull(input.bluesky, 'BlueSky link'),
+    social_linkedin: urlOrNull(input.linkedin, 'LinkedIn link'),
+    social_instagram: urlOrNull(input.instagram, 'Instagram link'),
+    social_medium: urlOrNull(input.medium, 'Medium link'),
+    social_custom_url: urlOrNull(input.customUrl, 'Custom link'),
+  }
+
+  const name = input.displayName.trim()
   if (!name) throw new Error('Author name is required')
   if (name.length > 120) throw new Error('Author name is too long')
 
@@ -69,7 +100,7 @@ export async function createAuthor(displayName: string): Promise<AuthorOption> {
   // The on-signup trigger already created a bare profile row — fill it in.
   const { error: profileError } = await (service as any)
     .from('profiles')
-    .upsert({ id: created.user.id, slug, display_name: name, role: 'author' }, { onConflict: 'id' })
+    .upsert({ id: created.user.id, slug, display_name: name, role: 'author', ...details }, { onConflict: 'id' })
   if (profileError) throw new Error(profileError.message)
 
   await logActivity({

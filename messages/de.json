@@ -264,7 +264,16 @@
     "authorNewButton": "+ Neue/r Autor/in",
     "authorNewPlaceholder": "Vollständiger Name des/der Autor/in",
     "authorCreateButton": "Autor/in anlegen",
-    "authorCreating": "Wird angelegt…"
+    "authorCreating": "Wird angelegt…",
+    "authorPhotoLabel": "Foto",
+    "authorBioLabel": "Biografie",
+    "authorBioPlaceholder": "Eine kurze Beschreibung, wer die Person ist…",
+    "authorLocationLabel": "Ort",
+    "authorWebsiteLabel": "Webseite",
+    "authorEmailLabel": "Kontakt-E-Mail (nur Admins/Redakteure)",
+    "authorLinksLabel": "Soziale Netzwerke",
+    "authorCustomLinkLabel": "Eigener Link",
+    "authorCancelButton": "Abbrechen"
   },
   "footer": {
     "brandTitle": "UNTOLD",

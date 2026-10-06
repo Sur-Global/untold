@@ -5,13 +5,7 @@ import { createClient } from '@/lib/supabase/server'
 import { isEditorRole } from '@/lib/require-editor'
 import { sanitizeBioHtml } from '@/lib/sanitize-bio-html'
 import { logActivity } from '@/lib/actions/activity-log'
-
-function urlOrNull(raw: string | null, fieldLabel: string): string | null {
-  const value = raw?.trim() || null
-  if (!value) return null
-  if (!/^https?:\/\//i.test(value)) throw new Error(`${fieldLabel} must start with http:// or https://`)
-  return value
-}
+import { urlOrNull, emailOrNull } from '@/lib/profile-fields'
 
 export async function updateProfile(userId: string, formData: FormData) {
   const supabase = await createClient()
@@ -36,9 +30,7 @@ export async function updateProfile(userId: string, formData: FormData) {
   const website = urlOrNull(formData.get('website') as string | null, 'Website')
   const avatar_url = (formData.get('avatar_url') as string)?.trim() || null
 
-  const emailRaw = (formData.get('email') as string)?.trim() || null
-  if (emailRaw && !/^\S+@\S+\.\S+$/.test(emailRaw)) throw new Error('Contact email looks invalid')
-  const email = emailRaw
+  const email = emailOrNull(formData.get('email') as string | null)
 
   const social_bluesky = urlOrNull(formData.get('social_bluesky') as string | null, 'BlueSky link')
   const social_linkedin = urlOrNull(formData.get('social_linkedin') as string | null, 'LinkedIn link')

@@ -264,7 +264,16 @@
     "authorNewButton": "+ New author",
     "authorNewPlaceholder": "Author's full name",
     "authorCreateButton": "Create author",
-    "authorCreating": "Creating…"
+    "authorCreating": "Creating…",
+    "authorPhotoLabel": "Photo",
+    "authorBioLabel": "Biography",
+    "authorBioPlaceholder": "A short description of who they are…",
+    "authorLocationLabel": "Location",
+    "authorWebsiteLabel": "Website",
+    "authorEmailLabel": "Contact email (admins/editors only)",
+    "authorLinksLabel": "Social links",
+    "authorCustomLinkLabel": "Custom link",
+    "authorCancelButton": "Cancel"
   },
   "footer": {
     "brandTitle": "UNTOLD",

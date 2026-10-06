@@ -264,7 +264,16 @@
     "authorNewButton": "+ Ny forfatter",
     "authorNewPlaceholder": "Forfatterens fulde navn",
     "authorCreateButton": "Opret forfatter",
-    "authorCreating": "Opretter…"
+    "authorCreating": "Opretter…",
+    "authorPhotoLabel": "Foto",
+    "authorBioLabel": "Biografi",
+    "authorBioPlaceholder": "En kort beskrivelse af, hvem de er…",
+    "authorLocationLabel": "Sted",
+    "authorWebsiteLabel": "Hjemmeside",
+    "authorEmailLabel": "Kontakt-e-mail (kun admins/redaktører)",
+    "authorLinksLabel": "Sociale medier",
+    "authorCustomLinkLabel": "Brugerdefineret link",
+    "authorCancelButton": "Annuller"
   },
   "footer": {
     "brandTitle": "UNTOLD",

@@ -1,8 +1,9 @@
 'use client'
 
-import { useEffect, useState, useTransition } from 'react'
+import { useEffect, useState } from 'react'
 import { useTranslations } from 'next-intl'
-import { listAuthors, createAuthor, type AuthorOption } from '@/lib/actions/author'
+import { listAuthors, type AuthorOption } from '@/lib/actions/author'
+import { NewAuthorForm } from '@/components/content/NewAuthorForm'
 
 interface AuthorPickerProps {
   /** Current author id (edit forms). Leave empty on create forms to default to "me". */
@@ -24,9 +25,6 @@ export function AuthorPicker({ defaultValue = '', onChange }: AuthorPickerProps)
   const [authors, setAuthors] = useState<AuthorOption[]>([])
   const [value, setValue] = useState(defaultValue)
   const [creating, setCreating] = useState(false)
-  const [newName, setNewName] = useState('')
-  const [error, setError] = useState<string | null>(null)
-  const [isPending, startTransition] = useTransition()
 
   useEffect(() => {
     let cancelled = false
@@ -45,23 +43,6 @@ export function AuthorPicker({ defaultValue = '', onChange }: AuthorPickerProps)
 
   if (!canPick) return null
 
-  const handleCreate = () => {
-    setError(null)
-    startTransition(async () => {
-      try {
-        const author = await createAuthor(newName)
-        setAuthors((prev) =>
-          [...prev, author].sort((a, b) => a.display_name.localeCompare(b.display_name)),
-        )
-        setValue(author.id)
-        setNewName('')
-        setCreating(false)
-      } catch (err) {
-        setError(err instanceof Error ? err.message : 'Could not create author')
-      }
-    })
-  }
-
   return (
     <div className="space-y-2">
       <label className="block text-sm font-semibold text-foreground">{t('authorPickerLabel')}</label>
@@ -78,32 +59,16 @@ export function AuthorPicker({ defaultValue = '', onChange }: AuthorPickerProps)
       </select>
 
       {creating ? (
-        <div className="flex gap-2">
-          <input
-            type="text"
-            value={newName}
-            onChange={(e) => setNewName(e.target.value)}
-            onKeyDown={(e) => { if (e.key === 'Enter') { e.preventDefault(); handleCreate() } }}
-            placeholder={t('authorNewPlaceholder')}
-            className={fieldClass}
-            autoFocus
-          />
-          <button
-            type="button"
-            onClick={handleCreate}
-            disabled={isPending || !newName.trim()}
-            className="h-[50px] px-4 rounded-[10px] border border-primary/20 text-sm text-primary hover:bg-primary/5 transition-colors disabled:opacity-50 whitespace-nowrap"
-          >
-            {isPending ? t('authorCreating') : t('authorCreateButton')}
-          </button>
-          <button
-            type="button"
-            onClick={() => { setCreating(false); setError(null) }}
-            className="h-[50px] px-3 rounded-[10px] text-sm text-muted-foreground hover:bg-primary/5"
-          >
-            ✕
-          </button>
-        </div>
+        <NewAuthorForm
+          onCreated={(author) => {
+            setAuthors((prev) =>
+              [...prev, author].sort((x, y) => x.display_name.localeCompare(y.display_name)),
+            )
+            setValue(author.id)
+            setCreating(false)
+          }}
+          onCancel={() => setCreating(false)}
+        />
       ) : (
         <button
           type="button"
@@ -113,7 +78,6 @@ export function AuthorPicker({ defaultValue = '', onChange }: AuthorPickerProps)
           {t('authorNewButton')}
         </button>
       )}
-      {error && <p className="text-sm text-destructive">{error}</p>}
     </div>
   )
 }
