@@ -12,6 +12,8 @@ const BlockNoteReader = dynamic(() => import('./BlockNoteReader').then(m => m.Bl
 
 interface ArticleBodyProps {
   json: Record<string, unknown> | unknown[]
+  /** 'static' = standalone pages (About…): photo grids are shown as clean round portraits */
+  variant?: 'article' | 'static'
 }
 
 const PROSE_CLASS = `
@@ -60,10 +62,11 @@ const PROSE_CLASS = `
   prose-strong:text-foreground prose-strong:font-semibold
 `
 
-export function ArticleBody({ json }: ArticleBodyProps) {
+export function ArticleBody({ json, variant = 'article' }: ArticleBodyProps) {
+  const proseClass = variant === 'static' ? `${PROSE_CLASS} static-page-body` : PROSE_CLASS
   // BlockNote format — convert to HTML via blocksToHTMLLossy, render with prose styles
   if (Array.isArray(json)) {
-    return <BlockNoteReader blocks={json} className={PROSE_CLASS} />
+    return <BlockNoteReader blocks={json} className={proseClass} />
   }
 
   // Legacy Tiptap/ProseMirror format
@@ -101,7 +104,7 @@ export function ArticleBody({ json }: ArticleBodyProps) {
 
   return (
     <div
-      className={PROSE_CLASS}
+      className={proseClass}
       dangerouslySetInnerHTML={{ __html: html }}
     />
   )

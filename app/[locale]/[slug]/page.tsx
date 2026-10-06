@@ -62,7 +62,7 @@ export default async function PublicStaticPage({ params }: PageProps) {
             {page.title}
           </h1>
           {showBody && (
-            <ArticleBody json={page.body as Record<string, unknown> | unknown[]} />
+            <ArticleBody variant="static" json={page.body as Record<string, unknown> | unknown[]} />
           )}
         </article>
       </main>
