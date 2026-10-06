@@ -257,7 +257,7 @@
     "topicCategoryLabel": "Thema / Kategorie",
     "topicCategoryPlaceholder": "Stadtplanung, Menschenrechte…",
     "featuredSummaryLabel": "Hervorgehobene Zusammenfassung",
-    "featuredSummaryHint": "Wird als Vorschau des Artikels verwendet, wenn es keinen Untertitel gibt.",
+    "featuredSummaryHint": "Wird nur als Vorschau auf Karten und in Suchergebnissen verwendet, wenn es keinen Untertitel gibt. Wird nicht im Artikel angezeigt.",
     "featuredSummaryPlaceholder": "Bei der Stadterneuerung geht es nicht nur um neue Gebäude…",
     "fullContentLabel": "Vollständiger Inhalt",
     "coverImageCreditLabel": "Bildnachweis für das Titelbild",

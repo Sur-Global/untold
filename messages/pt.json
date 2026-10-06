@@ -257,7 +257,7 @@
     "topicCategoryLabel": "Tema / Categoria",
     "topicCategoryPlaceholder": "Planejamento Urbano, Direitos Humanos…",
     "featuredSummaryLabel": "Resumo em destaque",
-    "featuredSummaryHint": "Usado como pré-visualização do artigo quando não há subtítulo.",
+    "featuredSummaryHint": "Usado apenas como pré-visualização nos cartões e nas buscas quando não há subtítulo. Não aparece dentro do artigo.",
     "featuredSummaryPlaceholder": "A regeneração urbana não é apenas sobre novos edifícios…",
     "fullContentLabel": "Conteúdo completo",
     "coverImageCreditLabel": "Crédito da imagem de capa",

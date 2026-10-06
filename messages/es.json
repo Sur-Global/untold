@@ -257,7 +257,7 @@
     "topicCategoryLabel": "Tema / Categoría",
     "topicCategoryPlaceholder": "Urbanismo, Derechos Humanos…",
     "featuredSummaryLabel": "Resumen destacado",
-    "featuredSummaryHint": "Se usa como vista previa del artículo cuando no hay subtítulo.",
+    "featuredSummaryHint": "Se usa solo como vista previa en las tarjetas y buscadores cuando no hay subtítulo. No se muestra dentro del artículo.",
     "featuredSummaryPlaceholder": "La regeneración urbana no se trata solo de edificios nuevos…",
     "fullContentLabel": "Contenido completo",
     "coverImageCreditLabel": "Crédito de la imagen de portada",

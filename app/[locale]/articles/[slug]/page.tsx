@@ -206,8 +206,8 @@ export default async function ArticlePage({ params }: PageProps) {
                 </h1>
 
                 {/* Excerpt */}
-                {(t.excerpt || t.featured_summary) && (
-                  <p className="text-2xl text-muted-foreground leading-tight mb-8">{t.excerpt || t.featured_summary}</p>
+                {t.excerpt && (
+                  <p className="text-2xl text-muted-foreground leading-tight mb-8">{t.excerpt}</p>
                 )}
 
                 {/* Cover image */}

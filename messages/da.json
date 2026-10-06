@@ -257,7 +257,7 @@
     "topicCategoryLabel": "Emne / Kategori",
     "topicCategoryPlaceholder": "Byplanlægning, Menneskerettigheder…",
     "featuredSummaryLabel": "Fremhævet resumé",
-    "featuredSummaryHint": "Bruges som artiklens forhåndsvisning, når der ikke er nogen undertitel.",
+    "featuredSummaryHint": "Bruges kun som forhåndsvisning på kort og i søgning, når der ikke er nogen undertitel. Vises ikke i selve artiklen.",
     "featuredSummaryPlaceholder": "Byfornyelse handler ikke kun om nye bygninger…",
     "fullContentLabel": "Fuldt indhold",
     "coverImageCreditLabel": "Kreditering af forsidebillede",
