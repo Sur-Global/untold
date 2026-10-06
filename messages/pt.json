@@ -13,7 +13,8 @@
     "logout": "Sair",
     "search": "Pesquisar",
     "topics": "Tópicos",
-    "adminDashboard": "Painel de administração"
+    "adminDashboard": "Painel de administração",
+    "home": "Início"
   },
   "home": {
     "title": "UNTOLD",
@@ -96,7 +97,12 @@
     "price": "Preço",
     "students": "alunos",
     "rating": "Avaliação",
-    "freeLabel": "Grátis"
+    "freeLabel": "Grátis",
+    "back": "Voltar",
+    "credits": "Créditos: ",
+    "edit": "Editar",
+    "aboutName": "Sobre {name}",
+    "comingSoon": "Em breve"
   },
   "search": {
     "placeholder": "Pesquisar artigos, vídeos, podcasts...",

@@ -48,6 +48,7 @@ export default async function VideoPage({ params }: PageProps) {
   const supabase = await createClient()
 
   const tAuthor = await getTranslations({ locale, namespace: 'author' })
+  const tContent = await getTranslations({ locale, namespace: 'content' })
 
   const [{ userId, ...navProps }, { data: video }] = await Promise.all([
     getNavProps(),
@@ -159,7 +160,7 @@ export default async function VideoPage({ params }: PageProps) {
             <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden>
               <path d="M10 3L5 8L10 13" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
             </svg>
-            Back
+            {tContent('back')}
           </Link>
 
           {/* Tag badges */}
@@ -337,7 +338,7 @@ export default async function VideoPage({ params }: PageProps) {
                       marginBottom: 10,
                     }}
                   >
-                    {`About ${author.display_name?.split(' ')[0] ?? author.display_name}`}
+                    {tContent('aboutName', { name: author.display_name?.split(' ')[0] ?? author.display_name })}
                   </p>
                   {author.bio && (
                     <div className="mb-5">

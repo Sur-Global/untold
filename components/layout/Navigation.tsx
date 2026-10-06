@@ -37,6 +37,19 @@ const NAV_LINKS = [
   { key: 'courses' as const, href: '/courses' },
 ]
 
+// Menu items saved in Platform Settings carry English labels. For the built-in
+// sections, show the translated label for the current language unless an admin
+// renamed the item (any label that isn't the stock English name is kept as is).
+const BUILTIN_NAV: Record<string, { key: 'home' | 'articles' | 'videos' | 'podcasts' | 'pills' | 'courses' | 'about'; stock: string[] }> = {
+  '/': { key: 'home', stock: ['home'] },
+  '/articles': { key: 'articles', stock: ['articles'] },
+  '/videos': { key: 'videos', stock: ['videos'] },
+  '/podcasts': { key: 'podcasts', stock: ['podcasts'] },
+  '/pills': { key: 'pills', stock: ['pills', 'knowledge pills'] },
+  '/courses': { key: 'courses', stock: ['courses'] },
+  '/about': { key: 'about', stock: ['about', 'about untold'] },
+}
+
 function isEditorOrAdmin(role: UserRole | null) {
   return role === 'admin' || role === 'editor'
 }
@@ -82,6 +95,10 @@ export function Navigation({
   const tFooter = useTranslations('footer')
   const pathname = usePathname()
   const useCmsNav = cmsNavItems.length > 0
+  const navLabel = (label: string, href: string) => {
+    const builtin = BUILTIN_NAV[href.replace(/\/+$/, '') || '/']
+    return builtin && builtin.stock.includes(label.trim().toLowerCase()) ? t(builtin.key) : label
+  }
 
   const topicLinks = FEATURED_TOPIC_SLUGS.map((slug) => {
     const key = slug === 'decoloniality' ? 'topicDecoloniality'
@@ -141,7 +158,7 @@ export function Navigation({
                       whiteSpace: 'nowrap',
                     }}
                   >
-                    {label}
+                    {navLabel(label, href)}
                   </Link>
                 )
               })
@@ -335,7 +352,7 @@ export function Navigation({
                             borderBottom: '1px solid rgba(255,255,255,0.08)',
                           }}
                         >
-                          {label}
+                          {navLabel(label, href)}
                         </Link>
                       ))
                     : NAV_LINKS.map(({ key, href }) => (

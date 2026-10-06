@@ -29,6 +29,7 @@ export default async function HomePage({ params }: PageProps) {
   const supabase = await createClient()
   const t = await getTranslations('home')
   const tListings = await getTranslations('listings')
+  const tContentHome = await getTranslations('content')
   const platform = await getPlatformSettings()
   const featuredArticleLimit = platform.featuredContent.count
   const toSentenceCase = (s: string) =>
@@ -633,7 +634,7 @@ export default async function HomePage({ params }: PageProps) {
                   )}
                 </div>
               ) : (
-                <SectionPlaceholder count={3} layout="articles" />
+                <SectionPlaceholder count={3} layout="articles" label={tContentHome('comingSoon')} />
               )}
             </section>
           )}
@@ -673,7 +674,7 @@ export default async function HomePage({ params }: PageProps) {
                   })}
                 </div>
               ) : (
-                <SectionPlaceholder count={3} layout="videos" />
+                <SectionPlaceholder count={3} layout="videos" label={tContentHome('comingSoon')} />
               )}
             </section>
           )}
@@ -709,7 +710,7 @@ export default async function HomePage({ params }: PageProps) {
                   })}
                 </div>
               ) : (
-                <SectionPlaceholder count={2} layout="podcasts" />
+                <SectionPlaceholder count={2} layout="podcasts" label={tContentHome('comingSoon')} />
               )}
             </section>
           )}
@@ -748,7 +749,7 @@ export default async function HomePage({ params }: PageProps) {
                   })}
                 </div>
               ) : (
-                <SectionPlaceholder count={6} layout="pills" />
+                <SectionPlaceholder count={6} layout="pills" label={tContentHome('comingSoon')} />
               )}
             </section>
           )}
@@ -787,7 +788,7 @@ export default async function HomePage({ params }: PageProps) {
                   })}
                 </div>
               ) : (
-                <SectionPlaceholder count={3} layout="courses" />
+                <SectionPlaceholder count={3} layout="courses" label={tContentHome('comingSoon')} />
               )}
             </section>
           )}
@@ -830,7 +831,7 @@ function SectionHeader({
 
 type PlaceholderLayout = 'articles' | 'videos' | 'podcasts' | 'pills' | 'courses'
 
-function SectionPlaceholder({ count = 3, layout }: { count?: number; layout: PlaceholderLayout }) {
+function SectionPlaceholder({ count = 3, layout, label }: { count?: number; layout: PlaceholderLayout; label: string }) {
   const gridClass =
     layout === 'podcasts'
       ? 'grid-cols-1 sm:grid-cols-2'
@@ -878,7 +879,7 @@ function SectionPlaceholder({ count = 3, layout }: { count?: number; layout: Pla
               fontFamily: 'var(--font-aeonik), Aeonik, sans-serif',
             }}
           >
-            Coming soon
+            {label}
           </span>
         </div>
       ))}

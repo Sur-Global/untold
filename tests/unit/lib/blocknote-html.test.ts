@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest'
 import { BlockNoteSchema, BlockNoteEditor } from '@blocknote/core'
 import { withMultiColumn } from '@blocknote/xl-multi-column'
-import { blocksToReaderHtml } from '@/lib/blocknote-html'
+import { blocksToReaderHtml, normalizeBlockColors } from '@/lib/blocknote-html'
 
 const editor = BlockNoteEditor.create({ schema: withMultiColumn(BlockNoteSchema.create()) })
 const text = (t: string) => [{ type: 'text', text: t, styles: {} }]
@@ -49,5 +49,29 @@ describe('blocksToReaderHtml', () => {
   it('leaves content without toggles untouched', () => {
     const blocks = [{ id: 'a', type: 'paragraph', props: {}, content: text('Hola'), children: [] }] as any
     expect(blocksToReaderHtml(editor, blocks)).toBe(editor.blocksToHTMLLossy(blocks))
+  })
+})
+
+describe('color normalization', () => {
+  it('drops raw (pasted) colors but keeps named palette colors', () => {
+    const blocks = [
+      { id: 'a', type: 'paragraph', props: { backgroundColor: 'rgb(0, 0, 0)', textColor: 'rgb(255, 255, 255)' },
+        content: [{ type: 'text', text: 'Hola', styles: { textColor: 'rgb(17, 85, 204)', backgroundColor: 'transparent', bold: true } },
+                  { type: 'text', text: 'Rojo', styles: { textColor: 'red' } }],
+        children: [{ id: 'b', type: 'paragraph', props: { backgroundColor: 'blue' }, content: [], children: [] }] },
+    ] as any
+    const [b] = normalizeBlockColors(blocks) as any
+    expect(b.props).toEqual({ backgroundColor: 'default', textColor: 'default' })
+    expect(b.content[0].styles).toEqual({ bold: true })
+    expect(b.content[1].styles).toEqual({ textColor: 'red' })
+    expect(b.children[0].props.backgroundColor).toBe('blue')
+  })
+
+  it('published HTML no longer carries the black highlight', () => {
+    const html = blocksToReaderHtml(editor, [
+      { id: 'a', type: 'paragraph', props: { backgroundColor: 'rgb(0, 0, 0)', textColor: 'rgb(255, 255, 255)' }, content: text('Texto'), children: [] },
+    ] as any)
+    expect(html).not.toContain('rgb(0, 0, 0)')
+    expect(html).toContain('Texto')
   })
 })

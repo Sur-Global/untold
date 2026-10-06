@@ -13,7 +13,8 @@
     "logout": "Log ud",
     "search": "Søg",
     "topics": "Emner",
-    "adminDashboard": "Admin-dashboard"
+    "adminDashboard": "Admin-dashboard",
+    "home": "Forside"
   },
   "home": {
     "title": "UNTOLD",
@@ -96,7 +97,12 @@
     "price": "Pris",
     "students": "studerende",
     "rating": "Vurdering",
-    "freeLabel": "Gratis"
+    "freeLabel": "Gratis",
+    "back": "Tilbage",
+    "credits": "Kreditering: ",
+    "edit": "Rediger",
+    "aboutName": "Om {name}",
+    "comingSoon": "Kommer snart"
   },
   "search": {
     "placeholder": "Søg artikler, videoer, podcasts...",

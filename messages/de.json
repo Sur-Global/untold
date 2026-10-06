@@ -13,7 +13,8 @@
     "logout": "Abmelden",
     "search": "Suchen",
     "topics": "Themen",
-    "adminDashboard": "Admin-Dashboard"
+    "adminDashboard": "Admin-Dashboard",
+    "home": "Startseite"
   },
   "home": {
     "title": "UNTOLD",
@@ -96,7 +97,12 @@
     "price": "Preis",
     "students": "Teilnehmer",
     "rating": "Bewertung",
-    "freeLabel": "Kostenlos"
+    "freeLabel": "Kostenlos",
+    "back": "Zurück",
+    "credits": "Bildnachweis: ",
+    "edit": "Bearbeiten",
+    "aboutName": "Über {name}",
+    "comingSoon": "Demnächst"
   },
   "search": {
     "placeholder": "Artikel, Videos, Podcasts suchen...",

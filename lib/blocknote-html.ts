@@ -16,7 +16,45 @@ function isToggle(block: any): boolean {
   return block?.type === 'toggleListItem' || (block?.type === 'heading' && block?.props?.isToggleable === true)
 }
 
+// Colors BlockNote's editor knows how to display (and reset with "Default").
+const PALETTE = new Set(['default', 'gray', 'brown', 'red', 'orange', 'yellow', 'green', 'blue', 'purple', 'pink'])
+const COLOR_KEYS = ['backgroundColor', 'textColor']
+
+/**
+ * Pasted content (Google Docs, web pages…) carries raw colors such as
+ * rgb(0, 0, 0) on blocks and text. The editor can't render or reset those, so
+ * authors never see them — but the published page applies them, producing
+ * black highlights. Anything outside BlockNote's palette is treated as "default".
+ */
+export function normalizeBlockColors<T>(node: T): T {
+  if (Array.isArray(node)) return node.map(normalizeBlockColors) as unknown as T
+  if (node && typeof node === 'object') {
+    const out: any = {}
+    for (const [key, value] of Object.entries(node as Record<string, unknown>)) {
+      if ((key === 'props' || key === 'styles') && value && typeof value === 'object' && !Array.isArray(value)) {
+        const cleaned: any = {}
+        for (const [k, v] of Object.entries(value as Record<string, unknown>)) {
+          if (COLOR_KEYS.includes(k) && (typeof v !== 'string' || !PALETTE.has(v))) {
+            if (key === 'props') cleaned[k] = 'default' // block props must keep a value
+            continue // inline styles: drop the color entirely
+          }
+          cleaned[k] = v
+        }
+        out[key] = cleaned
+      } else {
+        out[key] = normalizeBlockColors(value)
+      }
+    }
+    return out
+  }
+  return node
+}
+
 export function blocksToReaderHtml(editor: HtmlConverter, blocks: any[]): string {
+  return renderBlocks(editor, normalizeBlockColors(blocks))
+}
+
+function renderBlocks(editor: HtmlConverter, blocks: any[]): string {
   let html = ''
   let batch: any[] = []
 
@@ -42,7 +80,7 @@ export function blocksToReaderHtml(editor: HtmlConverter, blocks: any[]): string
       html += editor.blocksToHTMLLossy([block])
       continue
     }
-    html += `<details class="bn-toggle">${summary}<div class="bn-toggle-body">${blocksToReaderHtml(editor, children)}</div></details>`
+    html += `<details class="bn-toggle">${summary}<div class="bn-toggle-body">${renderBlocks(editor, children)}</div></details>`
   }
 
   flush()

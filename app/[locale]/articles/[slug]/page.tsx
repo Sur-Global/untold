@@ -165,7 +165,7 @@ export default async function ArticlePage({ params }: PageProps) {
             <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden>
               <path d="M10 3L5 8L10 13" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
             </svg>
-            Back
+            {tContent('back')}
           </Link>
 
           <article>
@@ -224,7 +224,7 @@ export default async function ArticlePage({ params }: PageProps) {
                         className="mt-3 px-4 py-4 rounded-[10px] text-sm leading-[1.43]"
                         style={{ background: 'rgba(120,113,108,0.1)' }}
                       >
-                        <strong style={{ color: '#78716c', fontFamily: 'var(--font-aeonik), Aeonik, sans-serif', fontWeight: 700 }}>Credits: </strong>
+                        <strong style={{ color: '#78716c', fontFamily: 'var(--font-aeonik), Aeonik, sans-serif', fontWeight: 700 }}>{tContent('credits')}</strong>
                         <span
                           style={{ color: '#78716c', fontFamily: 'var(--font-aeonik), Aeonik, sans-serif' }}
                           dangerouslySetInnerHTML={{ __html: renderCreditHtml(article.image_credits) }}
@@ -308,7 +308,7 @@ export default async function ArticlePage({ params }: PageProps) {
                       <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden>
                         <path d="M9.5 1.5a1.414 1.414 0 012 2L4 11l-3 1 1-3 7.5-7.5z" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round"/>
                       </svg>
-                      Edit
+                      {tContent('edit')}
                     </Link>
                   )}
                 </div>
@@ -386,7 +386,7 @@ export default async function ArticlePage({ params }: PageProps) {
                             marginBottom: 10,
                           }}
                         >
-                          {sourceBioHeading || `About ${author.display_name?.split(' ')[0] ?? author.display_name}`}
+                          {sourceBioHeading || tContent('aboutName', { name: author.display_name?.split(' ')[0] ?? author.display_name })}
                         </p>
 
                         {/* Bio — HTML with links for source locale, translated text otherwise */}

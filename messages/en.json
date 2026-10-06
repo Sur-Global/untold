@@ -13,7 +13,8 @@
     "logout": "Log out",
     "search": "Search",
     "topics": "Topics",
-    "adminDashboard": "Admin dashboard"
+    "adminDashboard": "Admin dashboard",
+    "home": "Home"
   },
   "home": {
     "title": "UNTOLD",
@@ -96,7 +97,12 @@
     "price": "Price",
     "students": "students",
     "rating": "Rating",
-    "freeLabel": "Free"
+    "freeLabel": "Free",
+    "back": "Back",
+    "credits": "Credits: ",
+    "edit": "Edit",
+    "aboutName": "About {name}",
+    "comingSoon": "Coming soon"
   },
   "search": {
     "placeholder": "Search articles, videos, podcasts...",
