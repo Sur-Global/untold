@@ -7,6 +7,8 @@ interface SocialLinksProps {
   medium?: string | null
   customUrl?: string | null
   className?: string
+  /** 'dark' = for dark backgrounds (author page header); 'light' = for white cards */
+  tone?: 'dark' | 'light'
 }
 
 const iconLinkClass = 'flex items-center justify-center transition-opacity hover:opacity-70'
@@ -27,7 +29,7 @@ function MediumIcon() {
   )
 }
 
-export function SocialLinks({ bluesky, linkedin, instagram, medium, customUrl, className }: SocialLinksProps) {
+export function SocialLinks({ bluesky, linkedin, instagram, medium, customUrl, className, tone = 'dark' }: SocialLinksProps) {
   const links = [
     bluesky && { href: bluesky, label: 'BlueSky', icon: <BlueskyIcon /> },
     linkedin && { href: linkedin, label: 'LinkedIn', icon: <Linkedin size={16} /> },
@@ -49,7 +51,7 @@ export function SocialLinks({ bluesky, linkedin, instagram, medium, customUrl, c
           aria-label={link.label}
           title={link.label}
           className={iconLinkClass}
-          style={{ color: 'rgba(255,255,255,0.65)' }}
+          style={{ color: tone === 'dark' ? 'rgba(255,255,255,0.65)' : '#4b5563' }}
         >
           {link.icon}
         </a>

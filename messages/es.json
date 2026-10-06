@@ -185,7 +185,10 @@
     "authorBadge": "Autor",
     "episode": "Episodio {number}",
     "moreFrom": "Más de {name}",
-    "noContent": "Aún no hay contenido publicado."
+    "noContent": "Aún no hay contenido publicado.",
+    "featuredSection": "Destacado",
+    "starAdd": "Destacar en el perfil",
+    "starRemove": "Quitar de destacados"
   },
   "editor": {
     "titlePlaceholder": "Título",

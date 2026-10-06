@@ -185,7 +185,10 @@
     "authorBadge": "Forfatter",
     "episode": "Episode {number}",
     "moreFrom": "Mere fra {name}",
-    "noContent": "Intet publiceret indhold endnu."
+    "noContent": "Intet publiceret indhold endnu.",
+    "featuredSection": "Fremhævet",
+    "starAdd": "Fremhæv på profilen",
+    "starRemove": "Fjern fra fremhævede"
   },
   "editor": {
     "titlePlaceholder": "Titel",

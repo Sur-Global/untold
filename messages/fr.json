@@ -185,7 +185,10 @@
     "authorBadge": "Auteur",
     "episode": "Épisode {number}",
     "moreFrom": "Plus de {name}",
-    "noContent": "Aucun contenu publié pour l'instant."
+    "noContent": "Aucun contenu publié pour l'instant.",
+    "featuredSection": "À la une",
+    "starAdd": "Mettre en avant sur le profil",
+    "starRemove": "Retirer de la une"
   },
   "editor": {
     "titlePlaceholder": "Titre",

@@ -16,6 +16,7 @@ import { BookmarkButton } from '@/components/social/BookmarkButton'
 import { ShareButton } from '@/components/social/ShareButton'
 import type { TranscriptCue } from '@/lib/transcript'
 import Link from 'next/link'
+import { SocialLinks } from '@/components/author/SocialLinks'
 
 interface VideoChapter {
   timestamp: string
@@ -56,7 +57,7 @@ export default async function VideoPage({ params }: PageProps) {
       .from('content')
       .select(`
         id, slug, source_locale, likes_count, published_at,
-        profiles!author_id ( id, display_name, slug, avatar_url, bio, profile_translations, location ),
+        profiles!author_id ( id, display_name, slug, avatar_url, bio, profile_translations, location, social_bluesky, social_linkedin, social_instagram, social_medium, social_custom_url ),
         content_translations ( title, body, description, locale ),
         content_tags ( tags ( slug, names ) ),
         video_meta ( embed_url, thumbnail_url, duration, chapters, chapter_translations, transcript, transcript_translations )
@@ -350,6 +351,18 @@ export default async function VideoPage({ params }: PageProps) {
                         locale={locale}
                       />
                     </div>
+                  )}
+                  {/* Social links — open in a new tab */}
+                  {(author.social_bluesky || author.social_linkedin || author.social_instagram || author.social_medium || author.social_custom_url) && (
+                    <SocialLinks
+                      tone="light"
+                      bluesky={author.social_bluesky}
+                      linkedin={author.social_linkedin}
+                      instagram={author.social_instagram}
+                      medium={author.social_medium}
+                      customUrl={author.social_custom_url}
+                      className="mb-4"
+                    />
                   )}
                   <Link
                     href={`/author/${author.slug}`}

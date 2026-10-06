@@ -2,7 +2,9 @@
 
 import { createClient } from '@/lib/supabase/server'
 import { createServiceRoleClient } from '@/lib/supabase/service-role'
+import { revalidatePath } from 'next/cache'
 import { requireEditor, isEditorRole } from '@/lib/require-editor'
+import { requireCreator } from '@/lib/require-creator'
 import { slugify } from '@/lib/utils'
 import { logActivity } from '@/lib/actions/activity-log'
 import { sanitizeBioHtml } from '@/lib/sanitize-bio-html'
@@ -111,4 +113,32 @@ export async function createAuthor(input: NewAuthorInput): Promise<AuthorOption>
   })
 
   return { id: created.user.id, display_name: name }
+}
+
+/**
+ * Star / un-star one of your own items so it's featured first on your author
+ * page (editors and admins can do it for anyone). Ownership is checked here, then
+ * the write uses the service client: the author-update RLS policy rejects any
+ * update to content that is site-featured, which shouldn't block this.
+ */
+export async function toggleAuthorFeatured(contentId: string): Promise<boolean> {
+  const { user, profile } = await requireCreator()
+  const service = createServiceRoleClient()
+
+  const { data: item } = await (service as any)
+    .from('content')
+    .select('author_id, is_author_featured, profiles!content_author_id_fkey(slug)')
+    .eq('id', contentId)
+    .single()
+  if (!item) throw new Error('Content not found')
+  if (item.author_id !== user.id && !isEditorRole(profile.role)) throw new Error('Unauthorized')
+
+  const next = !item.is_author_featured
+  const { error } = await (service as any)
+    .from('content').update({ is_author_featured: next }).eq('id', contentId)
+  if (error) throw new Error(error.message)
+
+  const slug = Array.isArray(item.profiles) ? item.profiles[0]?.slug : item.profiles?.slug
+  if (slug) revalidatePath(`/author/${slug}`)
+  return next
 }

@@ -18,6 +18,7 @@ import { LikeButton } from '@/components/social/LikeButton'
 import { BookmarkButton } from '@/components/social/BookmarkButton'
 import { ShareButton } from '@/components/social/ShareButton'
 import Link from 'next/link'
+import { SocialLinks } from '@/components/author/SocialLinks'
 
 interface PageProps {
   params: Promise<{ locale: string; slug: string }>
@@ -58,7 +59,7 @@ export default async function ArticlePage({ params }: PageProps) {
     .from('content')
     .select(`
       id, slug, likes_count, published_at, cover_image_url, image_credits, source_locale,
-      profiles!author_id ( id, display_name, slug, avatar_url, bio, profile_translations, location, followers_count, role ),
+      profiles!author_id ( id, display_name, slug, avatar_url, bio, profile_translations, location, followers_count, role, social_bluesky, social_linkedin, social_instagram, social_medium, social_custom_url ),
       content_translations ( title, excerpt, featured_summary, body, locale ),
       content_tags ( tags ( slug, names ) )
     `)
@@ -434,6 +435,19 @@ export default async function ArticlePage({ params }: PageProps) {
                           >
                             {sourceBioCTALabel} ↗
                           </a>
+                        )}
+
+                        {/* Social links — open in a new tab */}
+                        {(author.social_bluesky || author.social_linkedin || author.social_instagram || author.social_medium || author.social_custom_url) && (
+                          <SocialLinks
+                            tone="light"
+                            bluesky={author.social_bluesky}
+                            linkedin={author.social_linkedin}
+                            instagram={author.social_instagram}
+                            medium={author.social_medium}
+                            customUrl={author.social_custom_url}
+                            className="mb-4"
+                          />
                         )}
 
                         {/* View profile link */}

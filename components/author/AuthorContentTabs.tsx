@@ -1,10 +1,11 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useTransition } from 'react'
 import Link from 'next/link'
 import { useTranslations } from 'next-intl'
 import { LikeButton } from '@/components/social/LikeButton'
 import { BookmarkButton } from '@/components/social/BookmarkButton'
+import { toggleAuthorFeatured } from '@/lib/actions/author'
 
 type Tab = 'all' | 'article' | 'video' | 'podcast' | 'pill'
 
@@ -13,6 +14,7 @@ interface ContentItem {
   type: string
   slug: string
   isFeatured: boolean
+  isAuthorFeatured?: boolean
   coverImageUrl: string | null
   likesCount: number
   publishedAt: string | null
@@ -34,6 +36,8 @@ interface Props {
   authorSlug: string
   authorAvatarUrl: string | null
   isLoggedIn: boolean
+  /** The author themselves, or an editor/admin: can star items to feature them first */
+  canManage?: boolean
 }
 
 function AuthorAvatar({ name, avatarUrl, size = 32 }: { name: string; avatarUrl: string | null; size?: number }) {
@@ -391,10 +395,85 @@ function PillCard({ item, authorName, authorSlug, authorAvatarUrl, isLoggedIn, t
   )
 }
 
-export function AuthorContentTabs({ items, authorName, authorSlug, authorAvatarUrl, isLoggedIn }: Props) {
+
+const TYPE_PATH: Record<string, string> = { article: 'articles', video: 'videos', podcast: 'podcasts', pill: 'pills' }
+
+function itemImage(item: ContentItem): string | null {
+  return item.coverImageUrl ?? item.thumbnailUrl ?? item.podcastCoverUrl ?? item.pillImageUrl ?? null
+}
+
+/** Star toggle shown to the author (and editors) to feature an item first on the profile. */
+function StarButton({ item, t }: { item: ContentItem; t: ReturnType<typeof useTranslations> }) {
+  const [starred, setStarred] = useState(!!item.isAuthorFeatured)
+  const [pending, startTransition] = useTransition()
+  return (
+    <button
+      type="button"
+      disabled={pending}
+      title={starred ? t('starRemove') : t('starAdd')}
+      aria-label={starred ? t('starRemove') : t('starAdd')}
+      onClick={() => {
+        setStarred((v) => !v)
+        startTransition(async () => {
+          try { setStarred(await toggleAuthorFeatured(item.id)) } catch { setStarred((v) => !v) }
+        })
+      }}
+      className="absolute top-3 right-3 z-10 flex size-9 items-center justify-center rounded-full transition-transform hover:scale-110 disabled:opacity-60"
+      style={{ background: 'rgba(0,0,0,0.65)', border: '1px solid rgba(255,255,255,0.3)' }}
+    >
+      <svg width="18" height="18" viewBox="0 0 16 16" fill={starred ? '#F5C518' : 'none'} stroke={starred ? '#F5C518' : '#fff'} strokeWidth="1.2" strokeLinejoin="round">
+        <path d="M8 1l1.8 3.6 4 .6-2.9 2.8.7 4L8 10l-3.6 2 .7-4L2.2 5.2l4-.6z" />
+      </svg>
+    </button>
+  )
+}
+
+/** Compact, type-agnostic tile used for featured items and for authors with little content. */
+function ContentTile({ item, large, canManage, t }: {
+  item: ContentItem
+  large?: boolean
+  canManage?: boolean
+  t: ReturnType<typeof useTranslations>
+}) {
+  const image = itemImage(item)
+  return (
+    <div className={`relative ${large ? 'sm:col-span-2 sm:row-span-2' : ''}`}>
+      <Link
+        href={`/${TYPE_PATH[item.type] ?? 'articles'}/${item.slug}`}
+        className="group relative block h-full overflow-hidden rounded-[16px]"
+        style={{ border: '1px solid rgba(0,0,0,0.1)', boxShadow: '0 4px 14px rgba(0,0,0,0.08)' }}
+      >
+        <div className={`relative ${large ? 'aspect-[16/10] sm:aspect-auto sm:h-full sm:min-h-[320px]' : 'aspect-[16/10]'} bg-[#111]`}>
+          {image && (
+            <img src={image} alt={item.title} className="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.04]" />
+          )}
+          <div className="absolute inset-0" style={{ background: 'linear-gradient(to top, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.3) 55%, rgba(0,0,0,0.05) 100%)' }} />
+          {item.isAuthorFeatured && (
+            <span className="absolute top-3 left-3 flex items-center gap-1.5 rounded-[8px] px-2.5 py-1 text-[11px] uppercase tracking-wide text-white" style={{ background: 'rgba(0,0,0,0.65)', border: '1px solid rgba(255,255,255,0.25)' }}>
+              <svg width="11" height="11" viewBox="0 0 16 16" fill="#F5C518"><path d="M8 1l1.8 3.6 4 .6-2.9 2.8.7 4L8 10l-3.6 2 .7-4L2.2 5.2l4-.6z" /></svg>
+              {t('featuredBadge')}
+            </span>
+          )}
+          <div className="absolute inset-x-0 bottom-0 p-4 sm:p-5">
+            <span className="mb-1.5 inline-block text-[11px] uppercase tracking-wider text-white/70">
+              {item.tags[0]?.label ?? item.type}
+            </span>
+            <h3 className={`text-white leading-[1.25] ${large ? 'text-[24px] sm:text-[28px]' : 'text-[17px]'} line-clamp-3`}>
+              {item.title}
+            </h3>
+          </div>
+        </div>
+      </Link>
+      {canManage && <StarButton item={item} t={t} />}
+    </div>
+  )
+}
+
+export function AuthorContentTabs({ items, authorName, authorSlug, authorAvatarUrl, isLoggedIn, canManage }: Props) {
   const t = useTranslations('author')
   const [activeTab, setActiveTab] = useState<Tab>('all')
 
+  const starred = items.filter((i) => i.isAuthorFeatured)
   const articles = items.filter(i => i.type === 'article')
   const videos = items.filter(i => i.type === 'video')
   const podcasts = items.filter(i => i.type === 'podcast')
@@ -415,10 +494,47 @@ export function AuthorContentTabs({ items, authorName, authorSlug, authorAvatarU
   const showPills = activeTab === 'all' || activeTab === 'pill'
 
   // Always feature the most recently published article (DB is ordered by published_at DESC)
-  const featuredArticle = articles[0] ?? null
-  const otherArticles = articles.slice(1)
+  const featuredArticle = starred.length > 0 ? null : (articles[0] ?? null)
+  const otherArticles = starred.length > 0
+    ? articles.filter((a) => !(activeTab === 'all' && a.isAuthorFeatured))
+    : articles.slice(1)
 
   const cardProps = { authorName, authorSlug, authorAvatarUrl, isLoggedIn, t }
+
+  // Authors with little content get a compact, contained layout instead of a
+  // full-width hero card and a stack of mostly empty sections.
+  const compact = items.length <= 4
+
+  if (compact && items.length > 0) {
+    const rest = items.filter((i) => !i.isAuthorFeatured)
+    return (
+      <div className="max-w-[1000px] mx-auto px-6 py-12 flex flex-col gap-10">
+        {starred.length > 0 && (
+          <section>
+            <h2 className="text-[24px] leading-[1.3] text-foreground mb-5">{t('featuredSection')}</h2>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+              {starred.map((item, i) => (
+                <ContentTile key={item.id} item={item} large={i === 0 && starred.length > 1} canManage={canManage} t={t} />
+              ))}
+            </div>
+          </section>
+        )}
+        {rest.length > 0 && (
+          <section>
+            {starred.length > 0 && <h2 className="text-[24px] leading-[1.3] text-foreground mb-5">{t('tabAll')}</h2>}
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+              {rest.map((item) => (
+                <ContentTile key={item.id} item={item} canManage={canManage} t={t} />
+              ))}
+            </div>
+          </section>
+        )}
+      </div>
+    )
+  }
+
+  // Larger catalogues: starred items lead on the "all" tab (homepage-style), the rest follows
+  const showStarredLead = activeTab === 'all' && starred.length > 0
 
   return (
     <>
@@ -457,6 +573,17 @@ export function AuthorContentTabs({ items, authorName, authorSlug, authorAvatarU
 
       {/* Content sections */}
       <div className="max-w-[1280px] mx-auto px-6 py-12 flex flex-col gap-16">
+
+        {showStarredLead && (
+          <section>
+            <h2 className="text-[28px] leading-[1.3] text-foreground mb-6">{t('featuredSection')}</h2>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+              {starred.map((item, i) => (
+                <ContentTile key={item.id} item={item} large={i === 0 && starred.length > 2} canManage={canManage} t={t} />
+              ))}
+            </div>
+          </section>
+        )}
 
         {/* Articles */}
         {showArticles && articles.length > 0 && (

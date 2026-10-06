@@ -69,7 +69,7 @@ export default async function AuthorPage({ params }: PageProps) {
   const { data: content } = await (supabase as any)
     .from('content')
     .select(`
-      id, type, slug, is_featured, cover_image_url, likes_count, published_at,
+      id, type, slug, is_featured, is_author_featured, cover_image_url, likes_count, published_at,
       content_translations ( title, excerpt, featured_summary, description, locale ),
       content_tags ( tags ( slug, names ) ),
       video_meta ( thumbnail_url, duration ),
@@ -94,6 +94,7 @@ export default async function AuthorPage({ params }: PageProps) {
       type: item.type,
       slug: item.slug,
       isFeatured: item.is_featured ?? false,
+      isAuthorFeatured: item.is_author_featured ?? false,
       coverImageUrl: item.cover_image_url ?? null,
       likesCount: item.likes_count ?? 0,
       publishedAt: item.published_at ?? null,
@@ -298,6 +299,7 @@ export default async function AuthorPage({ params }: PageProps) {
         authorSlug={author.slug}
         authorAvatarUrl={author.avatar_url}
         isLoggedIn={!!user}
+        canManage={!!user && (user.id === author.id || navUserRole === 'admin' || navUserRole === 'editor')}
       />
 
       <Footer />

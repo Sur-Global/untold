@@ -185,7 +185,10 @@
     "authorBadge": "Author",
     "episode": "Episode {number}",
     "moreFrom": "More from {name}",
-    "noContent": "No published content yet."
+    "noContent": "No published content yet.",
+    "featuredSection": "Featured",
+    "starAdd": "Feature on my profile",
+    "starRemove": "Remove from featured"
   },
   "editor": {
     "titlePlaceholder": "Title",
