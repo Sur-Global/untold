@@ -110,8 +110,8 @@ export function StaticPageForm({
               defaultValue={statusDefault}
               className={`${fieldClass} w-auto min-w-[8rem]`}
             >
-              <option value="draft">Draft</option>
-              <option value="published">Published</option>
+              <option value="draft">Hidden (draft — not public)</option>
+              <option value="published">Visible (published)</option>
             </select>
           </div>
           <div className="flex items-end gap-2 pb-2">

@@ -84,9 +84,9 @@ export default async function AdminUsersPage({ searchParams }: PageProps) {
                   </td>
                   <td className="px-6 py-3">
                     {profile.suspended_at ? (
-                      <span className="text-xs font-semibold text-destructive">Banned</span>
+                      <span className="text-xs font-semibold text-[#991b1b]">Banned</span>
                     ) : (
-                      <span className="text-xs font-semibold text-secondary">Active</span>
+                      <span className="text-xs font-semibold text-[#14532d]">Active</span>
                     )}
                   </td>
                   <td className="px-6 py-3">

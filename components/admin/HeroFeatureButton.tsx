@@ -37,7 +37,7 @@ export function HeroFeatureButton({ contentId, isFeatured, isHeroFeatured }: Pro
         disabled={isPending || !isFeatured}
         title={!isFeatured ? 'Must be Featured before it can go in the homepage hero' : 'Toggle homepage hero placement'}
         className={`h-6 px-2 text-sm whitespace-nowrap ${
-          isHeroFeatured ? 'text-green-600' : 'text-muted-foreground'
+          isHeroFeatured ? 'text-green-800' : 'text-muted-foreground'
         } ${!isFeatured ? 'opacity-40' : ''}`}
       >
         {isPending ? '…' : isHeroFeatured ? '⌂ Hero' : '⌂'}

@@ -3,6 +3,7 @@ import { requireAdmin } from '@/lib/require-admin'
 import { createClient } from '@/lib/supabase/server'
 import { AdminPageHeader } from '@/components/admin/AdminPageHeader'
 import { AdminPanel } from '@/components/admin/AdminPanel'
+import { StaticPageVisibilityButton } from '@/components/admin/StaticPageVisibilityButton'
 import { adminPrimaryButton, adminTableHead, adminTableRow } from '@/components/admin/admin-ui'
 
 export default async function AdminStaticPagesPage() {
@@ -28,7 +29,7 @@ export default async function AdminStaticPagesPage() {
     <div className="space-y-6">
       <AdminPageHeader
         title="Static pages"
-        description='Public URLs such as /about. Enable "Show in footer" when editing a page to surface it in the site footer.'
+        description='Public URLs such as /about. Use "Hide page" to take a page offline without deleting it (you can show it again any time). Enable "Show in footer" when editing a page to surface it in the footer.'
       >
         <Link href="/admin/pages/new" className={adminPrimaryButton}>
           + New page
@@ -58,23 +59,26 @@ export default async function AdminStaticPagesPage() {
                       <span
                         className={
                           p.status === 'published'
-                            ? 'rounded-md bg-secondary/15 px-2 py-0.5 text-xs font-semibold text-secondary'
-                            : 'rounded-md bg-muted px-2 py-0.5 text-xs font-medium text-muted-foreground'
+                            ? 'rounded-md bg-[#dcfce7] px-2 py-0.5 text-xs font-semibold text-[#14532d]'
+                            : 'rounded-md bg-[#ffedd5] px-2 py-0.5 text-xs font-semibold text-[#7c2d12]'
                         }
                       >
-                        {p.status}
+                        {p.status === 'published' ? 'Visible' : 'Hidden'}
                       </span>
                     </td>
                     <td className="px-6 py-3 text-muted-foreground">
                       {p.show_in_footer ? `Yes (${p.footer_sort_order})` : '—'}
                     </td>
                     <td className="px-6 py-3">
-                      <Link
-                        href={`/admin/pages/${p.id}/edit`}
-                        className="text-sm font-medium text-primary underline-offset-4 hover:underline"
-                      >
-                        Edit
-                      </Link>
+                      <div className="flex items-center gap-4">
+                        <Link
+                          href={`/admin/pages/${p.id}/edit`}
+                          className="text-sm font-medium text-primary underline-offset-4 hover:underline"
+                        >
+                          Edit
+                        </Link>
+                        <StaticPageVisibilityButton pageId={p.id} status={p.status} />
+                      </div>
                     </td>
                   </tr>
                 )

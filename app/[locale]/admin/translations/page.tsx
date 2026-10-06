@@ -63,7 +63,7 @@ export default async function TranslationsPage({ searchParams }: PageProps) {
         description={
           <>
             All published content.{' '}
-            <span className="text-secondary">Green ✓</span> = auto-translated,{' '}
+            <span className="text-[#14532d] font-semibold">Green ✓</span> = auto-translated,{' '}
             <span className="text-blue-700 dark:text-blue-400">Blue ✓</span> = manual,{' '}
             <span className="text-destructive">✗</span> = missing.
           </>
@@ -140,7 +140,7 @@ export default async function TranslationsPage({ searchParams }: PageProps) {
                               className={
                                 isAutoTranslated === false
                                   ? 'text-blue-700 dark:text-blue-400'
-                                  : 'text-secondary'
+                                  : 'text-[#14532d]'
                               }
                             >
                               ✓

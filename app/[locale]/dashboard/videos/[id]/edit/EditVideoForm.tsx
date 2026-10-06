@@ -276,8 +276,8 @@ export function EditVideoForm({
             <span
               className="text-xs font-['JetBrains_Mono',monospace] px-2.5 py-0.5 rounded-full"
               style={{
-                background: status === 'published' ? 'rgba(34,197,94,0.1)' : 'rgba(160,82,45,0.1)',
-                color: status === 'published' ? '#16a34a' : '#A0522D',
+                background: status === 'published' ? '#dcfce7' : '#ffedd5',
+                color: status === 'published' ? '#14532d' : '#7c2d12',
               }}
             >
               {status}

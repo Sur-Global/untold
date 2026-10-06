@@ -40,7 +40,7 @@ export function FeatureButton({ contentId, isFeatured, contentType }: Props) {
         onClick={handleClick}
         disabled={isPending}
         className={`h-6 px-2 text-sm whitespace-nowrap ${
-          isFeatured ? 'text-green-600' : 'text-muted-foreground'
+          isFeatured ? 'text-green-800' : 'text-muted-foreground'
         }`}
       >
         {isPending ? '…' : isFeatured ? `★ ${capitalize(contentType)}` : '☆'}

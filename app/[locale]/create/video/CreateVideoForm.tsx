@@ -86,7 +86,7 @@ export function CreateVideoForm() {
           </button>
         </div>
         {extracted && (
-          <p className="text-xs text-green-600 font-['JetBrains_Mono',monospace]">{t('infoExtractedMessage')}</p>
+          <p className="text-xs text-green-800 font-['JetBrains_Mono',monospace]">{t('infoExtractedMessage')}</p>
         )}
       </div>
 

@@ -24,7 +24,15 @@ async function getNavPropsUncached(): Promise<{
     settings,
   ] = await Promise.all([supabase.auth.getUser(), getPlatformSettings()]);
 
-  const cmsNavItems = toCmsNavLinks(settings);
+  // A page that has been hidden (draft) must not keep a dead link in the menu
+  const { data: hiddenPages } = await (supabase as any)
+    .from("static_pages")
+    .select("slug")
+    .eq("status", "draft");
+  const hiddenPaths = new Set<string>(
+    ((hiddenPages ?? []) as Array<{ slug: string }>).map((p) => `/${p.slug}`),
+  );
+  const cmsNavItems = toCmsNavLinks(settings).filter((l) => !hiddenPaths.has(l.href));
   const showSearchInHeader = settings.searchBar.position !== "hidden";
 
   if (authError || !user) {

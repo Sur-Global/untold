@@ -36,7 +36,7 @@ export function SuspendButton({ userId, isSuspended, disabled }: Props) {
         onClick={handleClick}
         disabled={isPending || disabled}
         className={`h-6 px-2 text-xs ${
-          isSuspended ? 'text-green-600' : 'text-yellow-600'
+          isSuspended ? 'text-green-800' : 'text-amber-800'
         }`}
       >
         {isPending ? '…' : isSuspended ? 'Unban' : 'Ban'}

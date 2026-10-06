@@ -29,8 +29,8 @@ function StatusBadge({ status, label }: { status: string; label: string }) {
     <span
       className="text-xs font-mono px-2 py-0.5 rounded-full"
       style={{
-        background: isPublished ? 'rgba(34,197,94,0.1)' : 'rgba(160,82,45,0.1)',
-        color: isPublished ? '#16a34a' : '#A0522D',
+        background: isPublished ? '#dcfce7' : '#ffedd5',
+        color: isPublished ? '#14532d' : '#7c2d12',
       }}
     >
       {label}
@@ -40,7 +40,7 @@ function StatusBadge({ status, label }: { status: string; label: string }) {
 
 function TypeBadge({ label }: { label: string }) {
   return (
-    <span className="text-xs font-mono px-2 py-0.5 rounded-full bg-[rgba(196,93,58,0.1)] text-[#C45D3A]">
+    <span className="text-xs font-mono px-2 py-0.5 rounded-full bg-[#ffe4d6] text-[#8a2f0d]">
       {label}
     </span>
   )

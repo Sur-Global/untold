@@ -217,3 +217,40 @@ export async function deleteStaticPage(formData: FormData) {
   if (existing?.slug) revalidateStaticPagePaths(existing.slug as string);
   redirect("/admin/pages");
 }
+
+/** Hide a page from the public site without deleting it (draft), or show it again (published). */
+export async function setStaticPageStatus(pageId: string, status: "draft" | "published") {
+  await requireAdmin();
+  const supabase = await createClient();
+
+  const { data: existing } = await (supabase as any)
+    .from("static_pages")
+    .select("slug, published_at, static_page_translations(title, locale)")
+    .eq("id", pageId)
+    .single();
+  if (!existing) throw new Error("Page not found");
+
+  const { error } = await (supabase as any)
+    .from("static_pages")
+    .update({
+      status,
+      published_at:
+        status === "published"
+          ? ((existing.published_at as string | null) ?? new Date().toISOString())
+          : existing.published_at,
+    })
+    .eq("id", pageId);
+  if (error) throw new Error(error.message ?? "Failed to update page");
+
+  const label = existing.static_page_translations?.[0]?.title ?? existing.slug;
+  await logActivity({
+    entityType: "static_page",
+    entityId: pageId,
+    entityLabel: label,
+    action: status === "published" ? "published" : "unpublished",
+  });
+
+  revalidateStaticPagePaths(existing.slug as string);
+  revalidatePath("/admin/pages");
+  revalidatePath("/admin/settings");
+}

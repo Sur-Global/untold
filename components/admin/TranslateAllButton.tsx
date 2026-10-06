@@ -24,7 +24,7 @@ export function TranslateAllButton({ contentId }: { contentId: string }) {
     })
   }
 
-  if (done) return <span className="text-xs text-secondary font-['JetBrains_Mono',monospace]">queued ✓</span>
+  if (done) return <span className="text-xs text-green-800 font-['JetBrains_Mono',monospace]">queued ✓</span>
 
   return (
     <span className="inline-flex flex-col items-start gap-0.5">

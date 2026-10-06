@@ -248,7 +248,7 @@ export function PlatformSettingsForm({
                   {p.title}
                 </p>
                 <p className="font-mono text-xs text-muted-foreground">/{p.slug}</p>
-                <p className="mt-1 text-xs text-secondary">{p.status}</p>
+                <p className={`mt-1 text-xs font-semibold ${p.status === 'published' ? 'text-[#14532d]' : 'text-[#7c2d12]'}`}>{p.status === 'published' ? 'Visible' : 'Hidden'}</p>
               </div>
               <Link
                 href={`/admin/pages/${p.id}/edit`}
