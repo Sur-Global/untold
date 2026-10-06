@@ -12,6 +12,7 @@ import { buttonVariants } from '@/components/ui/button-variants'
 import { cn, getEditPath } from '@/lib/utils'
 import { publishContent, unpublishContent } from '@/lib/actions/content'
 import { DeleteContentButton } from './DeleteContentButton'
+import { AuthorStarToggle } from './AuthorStarToggle'
 import type { ContentType } from '@/lib/supabase/types'
 
 const TYPE_LABEL: Record<ContentType, string> = {
@@ -53,7 +54,7 @@ export default async function DashboardPage({ params }: { params: Promise<{ loca
   const itemsPromise = (supabase as any)
     .from('content')
     .select(`
-      id, type, status, created_at,
+      id, type, status, created_at, source_locale, is_author_featured,
       content_translations ( title, locale )
     `)
     .eq('author_id', user.id)
@@ -66,7 +67,8 @@ export default async function DashboardPage({ params }: { params: Promise<{ loca
   ])
 
   const getTitle = (item: any) => {
-    const tr = item.content_translations?.find((tr: any) => tr.locale === 'en')
+    // Show the title in the language it was written in
+    const tr = item.content_translations?.find((tr: any) => tr.locale === (item.source_locale ?? 'en'))
       ?? item.content_translations?.[0]
     return tr?.title ?? '(Untitled)'
   }
@@ -113,6 +115,9 @@ export default async function DashboardPage({ params }: { params: Promise<{ loca
                 <StatusBadge status={item.status} />
 
                 <div className="flex items-center gap-2">
+                  {item.status === 'published' && (
+                    <AuthorStarToggle contentId={item.id} initialStarred={!!item.is_author_featured} />
+                  )}
                   <Link
                     href={getEditPath(item.type, item.id)}
                     className={cn(buttonVariants({ variant: 'ghost', size: 'sm' }))}
