@@ -443,6 +443,13 @@ export function EditArticleForm({
         </div>
       )}
 
+      {status === 'draft' && !publishConfirmed && (
+        <p className="mt-3 text-sm text-muted-foreground">{t('publishConfirmTooltip')}</p>
+      )}
+      {saveError && (
+        <p className="mt-3 rounded-[10px] bg-destructive/10 px-4 py-2 text-sm text-destructive">{saveError}</p>
+      )}
+
       {/* Bottom action bar */}
       <div className="flex gap-4 mt-6">
         <button
@@ -458,7 +465,14 @@ export function EditArticleForm({
         {status === 'draft' ? (
           <button
             type="button"
-            onClick={() => startTransition(() => publishArticle(id, new FormData()))}
+            onClick={() => startTransition(async () => {
+              setSaveError(null)
+              try {
+                await publishArticle(id, new FormData())
+              } catch (err) {
+                setSaveError(err instanceof Error ? err.message : 'Publish failed')
+              }
+            })}
             disabled={isPending || !publishConfirmed}
             title={!publishConfirmed ? t('publishConfirmTooltip') : undefined}
             className="h-[54px] px-6 rounded-[16px] border border-primary/30 text-sm font-['JetBrains_Mono',monospace] font-medium tracking-[0.28px] text-primary hover:bg-primary/5 transition-colors disabled:opacity-50"

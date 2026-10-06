@@ -8,6 +8,7 @@ import { AdminUnpublishButton } from '@/components/admin/AdminUnpublishButton'
 import { AdminPageHeader } from '@/components/admin/AdminPageHeader'
 import { AdminPanel } from '@/components/admin/AdminPanel'
 import { ContentTypeFilter } from '@/components/admin/ContentTypeFilter'
+import { ContentStatusFilter } from '@/components/admin/ContentStatusFilter'
 import { AdminPagination } from '@/components/admin/AdminPagination'
 import { adminTableHead, adminTableRow } from '@/components/admin/admin-ui'
 
@@ -23,11 +24,13 @@ const PAGE_SIZE = 50
 const VALID_TYPES = ['article', 'video', 'podcast', 'pill', 'course']
 
 interface PageProps {
-  searchParams: Promise<{ page?: string; type?: string }>
+  searchParams: Promise<{ page?: string; type?: string; status?: string }>
 }
 
 export default async function AdminContentPage({ searchParams }: PageProps) {
-  const { page: pageStr, type } = await searchParams
+  const { page: pageStr, type, status } = await searchParams
+  // Default stays 'published'; drafts (incl. ones created on behalf of others) are one click away
+  const statusFilter = status === 'draft' || status === 'all' ? status : 'published'
   const page = Math.max(1, parseInt(pageStr ?? '1', 10) || 1)
   const typeFilter = type && VALID_TYPES.includes(type) ? type : null
 
@@ -44,15 +47,17 @@ export default async function AdminContentPage({ searchParams }: PageProps) {
         type,
         slug,
         source_locale,
+        status,
+        created_at,
         is_featured,
         ${withHeroFeatured ? 'is_hero_featured,' : ''}
         published_at,
         content_translations(title, locale),
         profiles!content_author_id_fkey(display_name)
       `)
-      .eq('status', 'published')
-      .order('published_at', { ascending: false })
+      .order(statusFilter === 'published' ? 'published_at' : 'created_at', { ascending: false })
       .range((page - 1) * PAGE_SIZE, page * PAGE_SIZE - 1)
+    if (statusFilter !== 'all') q.eq('status', statusFilter)
     if (typeFilter) q.eq('type', typeFilter)
     return q
   }
@@ -60,7 +65,7 @@ export default async function AdminContentPage({ searchParams }: PageProps) {
   const countQuery = (supabase as any)
     .from('content')
     .select('id', { count: 'exact', head: true })
-    .eq('status', 'published')
+  if (statusFilter !== 'all') countQuery.eq('status', statusFilter)
   if (typeFilter) countQuery.eq('type', typeFilter)
 
   let [{ data: items, error: itemsError }, { count }] = await Promise.all([
@@ -77,9 +82,10 @@ export default async function AdminContentPage({ searchParams }: PageProps) {
     <div className="space-y-6">
       <AdminPageHeader
         title="Content"
-        description="All published content across all authors. Feature, or unpublish, from here."
+        description="Content across all authors — published and drafts. Feature or unpublish published items, or open a draft to edit and publish it."
       />
 
+      <ContentStatusFilter />
       <ContentTypeFilter />
 
       <AdminPanel>
@@ -100,14 +106,23 @@ export default async function AdminContentPage({ searchParams }: PageProps) {
                 const sourceTitle = item.content_translations?.find((t: any) => t.locale === sourceLocale)?.title
                 const anyTitle = item.content_translations?.find((t: any) => t.title)?.title
                 const titleText = sourceTitle ?? anyTitle ?? item.id
+                const isDraft = item.status === 'draft'
+                // Drafts have no public page yet — the title opens the editor instead
                 const publicPath =
-                  item.slug && item.type
+                  !isDraft && item.slug && item.type
                     ? getPublicContentPath(item.type as ContentType, item.slug as string)
                     : null
                 return (
                   <tr key={item.id} className={adminTableRow}>
                     <td className="max-w-xs truncate px-6 py-3 font-medium">
-                      {publicPath ? (
+                      {isDraft && editPath[item.type] ? (
+                        <Link
+                          href={`/dashboard/${editPath[item.type]}/${item.id}/edit`}
+                          className="text-primary underline-offset-4 hover:underline"
+                        >
+                          {titleText}
+                        </Link>
+                      ) : publicPath ? (
                         <Link
                           href={publicPath}
                           className="text-primary underline-offset-4 hover:underline"
@@ -120,6 +135,11 @@ export default async function AdminContentPage({ searchParams }: PageProps) {
                       <span className="ml-1 rounded-md bg-muted px-2 py-0.5 text-xs font-mono text-muted-foreground">
                         {item.type}
                       </span>
+                      {item.status === 'draft' && (
+                        <span className="ml-1 rounded-md bg-amber-100 px-2 py-0.5 text-xs font-mono text-amber-800">
+                          draft
+                        </span>
+                      )}
                     </td>
                     <td className="px-6 py-3 text-muted-foreground">
                       {item.profiles?.display_name ?? '—'}
@@ -127,16 +147,20 @@ export default async function AdminContentPage({ searchParams }: PageProps) {
                     <td className="px-6 py-3 text-muted-foreground">
                       {item.published_at
                         ? new Date(item.published_at).toLocaleDateString()
-                        : '—'}
+                        : item.created_at
+                          ? `${new Date(item.created_at).toLocaleDateString()} (created)`
+                          : '—'}
                     </td>
                     <td className="px-6 py-3">
                       <div className="flex items-center gap-2">
+                        {isDraft ? <span className="text-xs text-muted-foreground">—</span> : (<>
                         <FeatureButton contentId={item.id} isFeatured={item.is_featured} contentType={item.type} />
                         <HeroFeatureButton
                           contentId={item.id}
                           isFeatured={item.is_featured}
                           isHeroFeatured={item.is_hero_featured ?? false}
                         />
+                        </>)}
                       </div>
                     </td>
                     <td className="px-6 py-3">
@@ -149,7 +173,7 @@ export default async function AdminContentPage({ searchParams }: PageProps) {
                             Edit
                           </Link>
                         )}
-                        <AdminUnpublishButton contentId={item.id} />
+                        {!isDraft && <AdminUnpublishButton contentId={item.id} />}
                       </div>
                     </td>
                   </tr>
@@ -159,7 +183,7 @@ export default async function AdminContentPage({ searchParams }: PageProps) {
           </table>
           {(!items || items.length === 0) && (
             <p className="py-10 text-center text-sm text-muted-foreground">
-              No published content{typeFilter ? ` of type "${typeFilter}"` : ''}.
+              No {statusFilter === 'all' ? '' : `${statusFilter === 'draft' ? 'draft' : 'published'} `}content{typeFilter ? ` of type "${typeFilter}"` : ''}.
             </p>
           )}
         </div>
