@@ -128,7 +128,7 @@ export default async function HomePage({ params }: PageProps) {
       .eq('is_featured', true)
       .eq('is_hero_featured', false)
       .order('published_at', { ascending: false })
-      .limit(2),
+      .limit(4),
     // Pills — 6 for 3×2 grid
     (supabase as any)
       .from('content')

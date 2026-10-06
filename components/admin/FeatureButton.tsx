@@ -45,7 +45,7 @@ export function FeatureButton({ contentId, isFeatured, contentType }: Props) {
       >
         {isPending ? '…' : isFeatured ? `★ ${capitalize(contentType)}` : '☆'}
       </Button>
-      {error && <span className="text-xs text-red-500">{error}</span>}
+      {error && <span className="text-xs font-medium text-[#991b1b]">{error}</span>}
     </span>
   )
 }

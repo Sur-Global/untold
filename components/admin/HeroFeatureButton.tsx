@@ -20,8 +20,9 @@ export function HeroFeatureButton({ contentId, isFeatured, isHeroFeatured }: Pro
     setError(null)
     startTransition(async () => {
       try {
-        await toggleHeroFeatured(contentId)
-        router.refresh()
+        const result = await toggleHeroFeatured(contentId)
+        if (!result.ok) setError(result.error)
+        else router.refresh()
       } catch (err) {
         setError(err instanceof Error ? err.message : 'Failed')
       }
@@ -42,7 +43,7 @@ export function HeroFeatureButton({ contentId, isFeatured, isHeroFeatured }: Pro
       >
         {isPending ? '…' : isHeroFeatured ? '⌂ Hero' : '⌂'}
       </Button>
-      {error && <span className="text-xs text-red-500">{error}</span>}
+      {error && <span className="max-w-[16rem] text-xs font-medium text-[#991b1b]">{error}</span>}
     </span>
   )
 }

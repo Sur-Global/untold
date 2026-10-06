@@ -78,12 +78,47 @@ export default async function AdminContentPage({ searchParams }: PageProps) {
 
   const totalPages = Math.max(1, Math.ceil((count ?? 0) / PAGE_SIZE))
 
+  // Who currently holds the (max 3) homepage hero slots
+  const { data: heroRows } = await (supabase as any)
+    .from('content')
+    .select('id, type, source_locale, content_translations(title, locale)')
+    .eq('is_hero_featured', true)
+    .eq('status', 'published')
+  const heroItems: Array<{ id: string; type: string; title: string }> = (heroRows ?? []).map((r: any) => ({
+    id: r.id,
+    type: r.type,
+    title:
+      r.content_translations?.find((t: any) => t.locale === (r.source_locale ?? 'en'))?.title ??
+      r.content_translations?.[0]?.title ??
+      r.id,
+  }))
+
   return (
     <div className="space-y-6">
       <AdminPageHeader
         title="Content"
         description="Content across all authors — published and drafts. Feature or unpublish published items, or open a draft to edit and publish it."
       />
+
+      <div className="rounded-xl border border-primary/15 bg-card px-5 py-4 text-sm">
+        <p className="font-semibold text-foreground">
+          Homepage hero: {heroItems.length} of 3 slots used{heroItems.length >= 3 ? ' (full)' : ''}
+        </p>
+        <p className="mt-0.5 text-xs text-muted-foreground">
+          The ⌂ button puts an item in the big banner at the top of the homepage — only 3 fit. Featured items
+          (★) already appear in their own section further down (Articles, Videos, Podcasts…).
+        </p>
+        {heroItems.length > 0 && (
+          <ul className="mt-2 space-y-0.5 text-xs text-foreground">
+            {heroItems.map((h) => (
+              <li key={h.id}>
+                <span className="rounded bg-muted px-1.5 py-0.5 font-mono text-[11px] text-muted-foreground">{h.type}</span>{' '}
+                {h.title}
+              </li>
+            ))}
+          </ul>
+        )}
+      </div>
 
       <ContentStatusFilter />
       <ContentTypeFilter />

@@ -33,7 +33,11 @@ export async function toggleFeatured(contentId: string) {
 
 const MAX_HERO_FEATURED = 3
 
-export async function toggleHeroFeatured(contentId: string) {
+export type ActionResult = { ok: true } | { ok: false; error: string }
+
+// Expected problems ("hero is full") are returned, not thrown: in production Next.js
+// replaces the message of a thrown server-action error with a generic one.
+export async function toggleHeroFeatured(contentId: string): Promise<ActionResult> {
   await requireEditor()
   const supabase = await createClient()
 
@@ -43,17 +47,20 @@ export async function toggleHeroFeatured(contentId: string) {
     .eq('id', contentId)
     .single()
 
-  if (!item) throw new Error('Content not found')
+  if (!item) return { ok: false, error: 'Content not found' }
 
   if (!item.is_hero_featured) {
-    if (!item.is_featured) throw new Error('Must be Featured before it can go in the homepage hero')
+    if (!item.is_featured) return { ok: false, error: 'Must be Featured before it can go in the homepage hero' }
 
     const { count } = await (supabase as any)
       .from('content')
       .select('id', { count: 'exact', head: true })
       .eq('is_hero_featured', true)
     if ((count ?? 0) >= MAX_HERO_FEATURED) {
-      throw new Error(`Homepage hero is full (max ${MAX_HERO_FEATURED}) — remove one first`)
+      return {
+        ok: false,
+        error: `The homepage hero is full (${MAX_HERO_FEATURED} of ${MAX_HERO_FEATURED}). Remove one first — see "Homepage hero" above the table.`,
+      }
     }
   }
 
@@ -68,6 +75,7 @@ export async function toggleHeroFeatured(contentId: string) {
 
   revalidatePath('/admin/content')
   revalidatePath('/')
+  return { ok: true }
 }
 
 export async function adminUnpublishContent(contentId: string) {
