@@ -4,6 +4,8 @@ import { adminTableHead, adminTableRow } from '@/components/admin/admin-ui'
 
 const ACTION_LABELS: Record<string, string> = {
   created: 'created',
+  created_on_behalf: 'created on behalf of another author',
+  author_created: 'created author profile',
   updated: 'updated',
   published: 'published',
   unpublished: 'unpublished',

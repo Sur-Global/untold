@@ -12,7 +12,7 @@ import Link from '@tiptap/extension-link'
 import { Table, TableRow, TableCell, TableHeader } from '@tiptap/extension-table'
 import { ImageWithCredit } from '@/lib/tiptap/image-with-credit'
 import { SUPPORTED_LOCALES } from '@/lib/deepl'
-import type { EditorBlock } from '@/components/editor/RichTextEditor'
+import type { EditorBlock } from '@/components/editor/RichTextEditorLazy'
 
 interface PageProps {
   params: Promise<{ locale: string; id: string }>
@@ -49,7 +49,7 @@ export default async function EditArticlePage({ params }: PageProps) {
   const articleQuery = (supabase as any)
     .from('content')
     .select(`
-      id, status, source_locale, cover_image_url, image_credits, feature_requested_at,
+      id, author_id, status, source_locale, cover_image_url, image_credits, feature_requested_at,
       profiles!author_id ( display_name, bio ),
       content_translations ( title, excerpt, featured_summary, body, locale, is_auto_translated ),
       content_tags ( tag_id, tags ( id, slug, names ) )
@@ -101,6 +101,7 @@ export default async function EditArticlePage({ params }: PageProps) {
       <EditArticleForm
         id={id}
         status={article.status}
+        initialAuthorId={article.author_id}
         sourceLocale={sourceLocale}
         translations={translations}
         availableLocales={SUPPORTED_LOCALES as unknown as string[]}

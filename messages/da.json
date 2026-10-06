@@ -258,7 +258,13 @@
     "layoutCardLabel": "Kort",
     "layoutCardDesc": "Kompakt kort-layout",
     "pickAccentColorHint": "Vælg pillens accentfarve",
-    "episodeNumberLabel": "Episodenummer"
+    "episodeNumberLabel": "Episodenummer",
+    "authorPickerLabel": "Forfatter",
+    "authorPickerHint": "Udgiv på vegne af en anden forfatter, eller vælg dig selv.",
+    "authorNewButton": "+ Ny forfatter",
+    "authorNewPlaceholder": "Forfatterens fulde navn",
+    "authorCreateButton": "Opret forfatter",
+    "authorCreating": "Opretter…"
   },
   "footer": {
     "brandTitle": "UNTOLD",

@@ -258,7 +258,13 @@
     "layoutCardLabel": "Card",
     "layoutCardDesc": "Compact card-style layout",
     "pickAccentColorHint": "Pick the pill accent color",
-    "episodeNumberLabel": "Episode number"
+    "episodeNumberLabel": "Episode number",
+    "authorPickerLabel": "Author",
+    "authorPickerHint": "Publish this on behalf of another author, or pick yourself.",
+    "authorNewButton": "+ New author",
+    "authorNewPlaceholder": "Author's full name",
+    "authorCreateButton": "Create author",
+    "authorCreating": "Creating…"
   },
   "footer": {
     "brandTitle": "UNTOLD",

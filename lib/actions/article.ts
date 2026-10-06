@@ -8,11 +8,13 @@ import { requireCreator } from '@/lib/require-creator'
 import { isEditorRole } from '@/lib/require-editor'
 import { slugify } from '@/lib/utils'
 import { computeReadTime } from '@/lib/readTime'
+import { resolveAuthorId, requestedAuthorId } from '@/lib/resolve-author'
 import { logActivity, getContentLogInfo } from '@/lib/actions/activity-log'
 
 export async function createArticle(formData: FormData) {
-  const { user } = await requireCreator()
+  const { user, profile } = await requireCreator()
   const supabase = await createClient()
+  const authorId = await resolveAuthorId(supabase, formData, user, profile.role)
 
   const title = (formData.get('title') as string).trim()
   const excerpt = (formData.get('excerpt') as string)?.trim() || null
@@ -30,7 +32,7 @@ export async function createArticle(formData: FormData) {
     .from('content')
     .insert({
       type: 'article',
-      author_id: user.id,
+      author_id: authorId,
       slug,
       source_locale: 'en',
       status: 'draft',
@@ -62,7 +64,7 @@ export async function createArticle(formData: FormData) {
       .from('content')
       .update({ read_time_minutes: readTimeMinutes })
       .eq('id', content.id)
-      .eq('author_id', user.id)
+      .eq('author_id', authorId)
   }
 
   // Sync tags
@@ -73,7 +75,7 @@ export async function createArticle(formData: FormData) {
       .insert(tagIds.map((tag_id: string) => ({ content_id: content.id, tag_id })))
   }
 
-  await logActivity({ entityType: 'article', entityId: content.id, entityLabel: title, action: 'created' })
+  await logActivity({ entityType: 'article', entityId: content.id, entityLabel: title, action: authorId === user.id ? 'created' : 'created_on_behalf' })
 
   revalidatePath('/dashboard/articles')
   redirect(`/dashboard/articles/${content.id}/edit`)
@@ -107,10 +109,13 @@ export async function updateArticle(id: string, formData: FormData) {
   const tagIdsRaw = formData.get('tag_ids') as string | null
   const featureRequested = formData.get('feature_requested') === 'true'
 
+  const newAuthorId = await requestedAuthorId(supabase, formData, profile.role)
+
   // Update global fields (cover image etc.) — always, not locale-specific
   await (supabase as any)
     .from('content')
     .update({
+      ...(newAuthorId ? { author_id: newAuthorId } : {}),
       cover_image_url: coverImageUrl,
       image_credits: imageCredits,
       feature_requested_at: featureRequested ? new Date().toISOString() : null,

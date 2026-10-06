@@ -6,11 +6,13 @@ import { createClient } from '@/lib/supabase/server'
 import { requireCreator } from '@/lib/require-creator'
 import { isEditorRole } from '@/lib/require-editor'
 import { slugify } from '@/lib/utils'
+import { resolveAuthorId, requestedAuthorId } from '@/lib/resolve-author'
 import { logActivity } from '@/lib/actions/activity-log'
 
 export async function createVideo(formData: FormData) {
-  const { user } = await requireCreator()
+  const { user, profile } = await requireCreator()
   const supabase = await createClient()
+  const authorId = await resolveAuthorId(supabase, formData, user, profile.role)
 
   const title = (formData.get('title') as string).trim()
   const bodyRaw = formData.get('body') as string | null
@@ -31,7 +33,7 @@ export async function createVideo(formData: FormData) {
     .from('content')
     .insert({
       type: 'video',
-      author_id: user.id,
+      author_id: authorId,
       slug,
       source_locale: 'en',
       status: 'draft',
@@ -78,7 +80,7 @@ export async function createVideo(formData: FormData) {
       .insert(tagIds.map((tag_id: string) => ({ content_id: content.id, tag_id })))
   }
 
-  await logActivity({ entityType: 'video', entityId: content.id, entityLabel: title, action: 'created' })
+  await logActivity({ entityType: 'video', entityId: content.id, entityLabel: title, action: authorId === user.id ? 'created' : 'created_on_behalf' })
 
   revalidatePath('/dashboard')
   redirect(`/dashboard/videos/${content.id}/edit`)
@@ -101,9 +103,12 @@ export async function updateVideo(id: string, formData: FormData) {
   const transcriptRaw = formData.get('transcript') as string | null
   const transcript = transcriptRaw ? JSON.parse(transcriptRaw) : undefined
 
+  const newAuthorId = await requestedAuthorId(supabase, formData, profile.role)
+
   const updateQuery = (supabase as any)
     .from('content')
     .update({
+      ...(newAuthorId ? { author_id: newAuthorId } : {}),
       cover_image_url: thumbnailUrl,
       updated_at: new Date().toISOString(),
       feature_requested_at: featureRequested ? new Date().toISOString() : null,

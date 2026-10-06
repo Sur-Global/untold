@@ -7,11 +7,13 @@ import { createClient } from '@/lib/supabase/server'
 import { requireCreator } from '@/lib/require-creator'
 import { isEditorRole } from '@/lib/require-editor'
 import { slugify } from '@/lib/utils'
+import { resolveAuthorId, requestedAuthorId } from '@/lib/resolve-author'
 import { logActivity } from '@/lib/actions/activity-log'
 
 export async function createPill(formData: FormData) {
-  const { user } = await requireCreator()
+  const { user, profile } = await requireCreator()
   const supabase = await createClient()
+  const authorId = await resolveAuthorId(supabase, formData, user, profile.role)
 
   const title = (formData.get('title') as string).trim()
   const body = formData.get('body') as string | null
@@ -24,7 +26,7 @@ export async function createPill(formData: FormData) {
     .from('content')
     .insert({
       type: 'pill',
-      author_id: user.id,
+      author_id: authorId,
       slug,
       source_locale: 'en',
       status: 'draft',
@@ -56,7 +58,7 @@ export async function createPill(formData: FormData) {
 
   if (metaError) throw new Error(metaError.message ?? 'Failed to save pill metadata')
 
-  await logActivity({ entityType: 'pill', entityId: content.id, entityLabel: title, action: 'created' })
+  await logActivity({ entityType: 'pill', entityId: content.id, entityLabel: title, action: authorId === user.id ? 'created' : 'created_on_behalf' })
 
   revalidatePath('/dashboard')
   redirect(`/dashboard/pills/${content.id}/edit`)
@@ -71,9 +73,12 @@ export async function updatePill(id: string, formData: FormData) {
   const accentColor = (formData.get('accent_color') as string)?.trim() || '#C45D3A'
   const imageUrl = (formData.get('image_url') as string)?.trim() || null
 
+  const newAuthorId = await requestedAuthorId(supabase, formData, profile.role)
+
   const updateQuery = (supabase as any)
     .from('content')
-    .update({ cover_image_url: imageUrl, updated_at: new Date().toISOString() })
+    .update({
+      ...(newAuthorId ? { author_id: newAuthorId } : {}), cover_image_url: imageUrl, updated_at: new Date().toISOString() })
     .eq('id', id)
   if (!isEditorRole(profile.role)) updateQuery.eq('author_id', user.id)
   const { data: owned } = await updateQuery.select('id').single()

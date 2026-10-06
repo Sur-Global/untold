@@ -258,7 +258,13 @@
     "layoutCardLabel": "Karte",
     "layoutCardDesc": "Kompaktes Karten-Layout",
     "pickAccentColorHint": "Wähle die Akzentfarbe der Pill",
-    "episodeNumberLabel": "Episodennummer"
+    "episodeNumberLabel": "Episodennummer",
+    "authorPickerLabel": "Autor/in",
+    "authorPickerHint": "Im Namen einer anderen Person veröffentlichen oder sich selbst wählen.",
+    "authorNewButton": "+ Neue/r Autor/in",
+    "authorNewPlaceholder": "Vollständiger Name des/der Autor/in",
+    "authorCreateButton": "Autor/in anlegen",
+    "authorCreating": "Wird angelegt…"
   },
   "footer": {
     "brandTitle": "UNTOLD",

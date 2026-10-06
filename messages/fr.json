@@ -258,7 +258,13 @@
     "layoutCardLabel": "Carte",
     "layoutCardDesc": "Mise en page compacte façon carte",
     "pickAccentColorHint": "Choisissez la couleur d'accent de la pilule",
-    "episodeNumberLabel": "Numéro d'épisode"
+    "episodeNumberLabel": "Numéro d'épisode",
+    "authorPickerLabel": "Auteur·e",
+    "authorPickerHint": "Publiez au nom d'une autre personne, ou choisissez-vous.",
+    "authorNewButton": "+ Nouvel·le auteur·e",
+    "authorNewPlaceholder": "Nom complet de l'auteur·e",
+    "authorCreateButton": "Créer l'auteur·e",
+    "authorCreating": "Création…"
   },
   "footer": {
     "brandTitle": "UNTOLD",

@@ -258,7 +258,13 @@
     "layoutCardLabel": "Cartão",
     "layoutCardDesc": "Layout compacto em estilo cartão",
     "pickAccentColorHint": "Escolha a cor de destaque da pill",
-    "episodeNumberLabel": "Número do episódio"
+    "episodeNumberLabel": "Número do episódio",
+    "authorPickerLabel": "Autor(a)",
+    "authorPickerHint": "Publique em nome de outra pessoa, ou escolha você mesmo(a).",
+    "authorNewButton": "+ Novo(a) autor(a)",
+    "authorNewPlaceholder": "Nome completo do(a) autor(a)",
+    "authorCreateButton": "Criar autor(a)",
+    "authorCreating": "Criando…"
   },
   "footer": {
     "brandTitle": "UNTOLD",

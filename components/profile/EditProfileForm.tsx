@@ -8,7 +8,7 @@ import { withMultiColumn } from '@blocknote/xl-multi-column'
 import { updateProfile } from '@/lib/actions/profile'
 import { slugify } from '@/lib/utils'
 import { CoverImageInput } from '@/components/ui/CoverImageInput'
-import { RichTextEditor, type EditorBlock } from '@/components/editor/RichTextEditor'
+import { RichTextEditor, type EditorBlock } from '@/components/editor/RichTextEditorLazy'
 
 // Separate schema instance used only to convert the bio's blocks to HTML at
 // submit time (mirrors components/content/BlockNoteReader.tsx) — bio stays a

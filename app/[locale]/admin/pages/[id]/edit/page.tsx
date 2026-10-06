@@ -4,7 +4,7 @@ import { requireAdmin } from '@/lib/require-admin'
 import { createClient } from '@/lib/supabase/server'
 import { StaticPageForm, type StaticPageFormInitial } from '@/components/admin/StaticPageForm'
 import { routing } from '@/i18n/routing'
-import type { EditorBlock } from '@/components/editor/RichTextEditor'
+import type { EditorBlock } from '@/components/editor/RichTextEditorLazy'
 import { AdminPageHeader } from '@/components/admin/AdminPageHeader'
 import { AdminPanel } from '@/components/admin/AdminPanel'
 

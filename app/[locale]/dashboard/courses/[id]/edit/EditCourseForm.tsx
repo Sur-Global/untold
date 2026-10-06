@@ -8,10 +8,12 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { CoverImageInput } from '@/components/ui/CoverImageInput'
+import { AuthorPicker } from '@/components/content/AuthorPicker'
 
 interface EditCourseFormProps {
   id: string
   status: string
+  initialAuthorId: string
   initialTitle: string
   initialDescription: string
   initialCoverImageUrl: string
@@ -21,7 +23,7 @@ interface EditCourseFormProps {
 }
 
 export function EditCourseForm({
-  id, status, initialTitle, initialDescription, initialCoverImageUrl,
+  id, status, initialAuthorId, initialTitle, initialDescription, initialCoverImageUrl,
   initialPrice, initialCurrency, initialDuration,
 }: EditCourseFormProps) {
   const t = useTranslations('editor')
@@ -37,6 +39,8 @@ export function EditCourseForm({
 
   return (
     <form ref={formRef} onSubmit={handleSave} className="space-y-6">
+      <AuthorPicker defaultValue={initialAuthorId} />
+
       <div className="space-y-2">
         <Label htmlFor="title">{t('titleRequiredLabel')}</Label>
         <Input id="title" name="title" defaultValue={initialTitle} placeholder={t('titlePlaceholder')} required className="text-xl font-semibold" />

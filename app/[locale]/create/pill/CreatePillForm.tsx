@@ -3,12 +3,13 @@
 import { useRef, useState, useTransition } from 'react'
 import { useTranslations, useLocale } from 'next-intl'
 import { createPill } from '@/lib/actions/pill'
-import { RichTextEditor } from '@/components/editor/RichTextEditor'
-import type { EditorBlock } from '@/components/editor/RichTextEditor'
+import { RichTextEditor } from '@/components/editor/RichTextEditorLazy'
+import type { EditorBlock } from '@/components/editor/RichTextEditorLazy'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { CoverImageInput } from '@/components/ui/CoverImageInput'
+import { AuthorPicker } from '@/components/content/AuthorPicker'
 
 export function CreatePillForm() {
   const t = useTranslations('editor')
@@ -28,6 +29,8 @@ export function CreatePillForm() {
 
   return (
     <form ref={formRef} onSubmit={handleSubmit} className="space-y-6">
+      <AuthorPicker />
+
       <div className="space-y-2">
         <Label htmlFor="title">{t('titleRequiredLabel')}</Label>
         <Input id="title" name="title" placeholder={t('titlePlaceholder')} required className="text-xl font-semibold" />

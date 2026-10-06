@@ -4,6 +4,7 @@ import { useRef, useState, useTransition } from 'react'
 import { useTranslations } from 'next-intl'
 import { createVideo } from '@/lib/actions/video'
 import type { VideoMetadata } from '@/app/api/video-metadata/route'
+import { AuthorPicker } from '@/components/content/AuthorPicker'
 
 async function fetchVideoMetadata(url: string): Promise<VideoMetadata | null> {
   try {
@@ -53,6 +54,8 @@ export function CreateVideoForm() {
 
   return (
     <form ref={formRef} onSubmit={handleSubmit} className="space-y-6">
+      <AuthorPicker />
+
       {/* Step 1: Paste video URL */}
       <div className="space-y-2">
         <label className="block text-sm font-semibold text-foreground">

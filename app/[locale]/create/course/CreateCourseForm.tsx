@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { CoverImageInput } from '@/components/ui/CoverImageInput'
+import { AuthorPicker } from '@/components/content/AuthorPicker'
 
 export function CreateCourseForm() {
   const t = useTranslations('editor')
@@ -22,6 +23,8 @@ export function CreateCourseForm() {
 
   return (
     <form ref={formRef} onSubmit={handleSubmit} className="space-y-6">
+      <AuthorPicker />
+
       <div className="space-y-2">
         <Label htmlFor="title">{t('titleRequiredLabel')}</Label>
         <Input id="title" name="title" placeholder={t('titlePlaceholder')} required className="text-xl font-semibold" />

@@ -258,7 +258,13 @@
     "layoutCardLabel": "Tarjeta",
     "layoutCardDesc": "Diseño compacto tipo tarjeta",
     "pickAccentColorHint": "Elige el color de acento de la píldora",
-    "episodeNumberLabel": "Número de episodio"
+    "episodeNumberLabel": "Número de episodio",
+    "authorPickerLabel": "Autor/a",
+    "authorPickerHint": "Publica esto a nombre de otra persona, o elígete a ti.",
+    "authorNewButton": "+ Nuevo autor/a",
+    "authorNewPlaceholder": "Nombre completo del autor/a",
+    "authorCreateButton": "Crear autor/a",
+    "authorCreating": "Creando…"
   },
   "footer": {
     "brandTitle": "UNTOLD",

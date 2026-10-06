@@ -21,7 +21,7 @@ export default async function EditCoursePage({ params }: EditCoursePageProps) {
   const contentQuery = (supabase as any)
     .from('content')
     .select(`
-      id, status, source_locale, cover_image_url,
+      id, author_id, status, source_locale, cover_image_url,
       content_translations ( title, description, locale ),
       course_meta ( price, currency, duration )
     `)
@@ -53,6 +53,7 @@ export default async function EditCoursePage({ params }: EditCoursePageProps) {
         <EditCourseForm
           id={id}
           status={content.status}
+          initialAuthorId={content.author_id}
           initialTitle={tr?.title ?? ''}
           initialDescription={tr?.description ?? ''}
           initialCoverImageUrl={content.cover_image_url ?? ''}

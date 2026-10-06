@@ -3,20 +3,22 @@
 import { useRef, useState, useTransition, useCallback, useEffect } from 'react'
 import { useTranslations } from 'next-intl'
 import { useLocale } from 'next-intl'
-import type { EditorBlock } from '@/components/editor/RichTextEditor'
+import type { EditorBlock } from '@/components/editor/RichTextEditorLazy'
 import { updateVideo } from '@/lib/actions/video'
 import { publishContent, unpublishContent, deleteContent } from '@/lib/actions/content'
-import { RichTextEditor } from '@/components/editor/RichTextEditor'
+import { RichTextEditor } from '@/components/editor/RichTextEditorLazy'
 import { CoverImageInput } from '@/components/ui/CoverImageInput'
 import { TagsInput, type Tag } from '@/components/ui/TagsInput'
 import { Link } from '@/i18n/navigation'
 import type { VideoMetadata, VideoChapter as Chapter } from '@/app/api/video-metadata/route'
 import type { TranscriptCue } from '@/lib/transcript'
+import { AuthorPicker } from '@/components/content/AuthorPicker'
 type LayoutStyle = 'standard' | 'wide' | 'sidebar' | 'card'
 
 interface EditVideoFormProps {
   id: string
   status: string
+  initialAuthorId: string
   initialTitle: string
   initialBody: EditorBlock[] | null
   initialEmbedUrl: string
@@ -86,6 +88,7 @@ const LAYOUTS: { id: LayoutStyle; icon: React.ReactNode }[] = [
 export function EditVideoForm({
   id,
   status,
+  initialAuthorId,
   initialTitle,
   initialBody,
   initialEmbedUrl,
@@ -140,6 +143,8 @@ export function EditVideoForm({
   // another one is requested, queue it instead of firing a second concurrent request —
   // an older, slower request finishing last could otherwise overwrite newer edits.
   const isSavingRef = useRef(false)
+  // Admin/editor-only: who the video is attributed to (sent with every save)
+  const authorIdRef = useRef(initialAuthorId)
   const pendingSaveRef = useRef(false)
 
   const doSave = useCallback(() => {
@@ -159,6 +164,7 @@ export function EditVideoForm({
     fd.set('chapters', JSON.stringify(s.chapters.filter((c) => c.timestamp || c.title)))
     fd.set('feature_requested', String(s.featureRequested))
     fd.set('layout_style', s.layoutStyle)
+    fd.set('author_id', authorIdRef.current)
     if (s.transcript) fd.set('transcript', JSON.stringify(s.transcript))
     isSavingRef.current = true
     setSaveStatus('saving')
@@ -305,6 +311,16 @@ export function EditVideoForm({
         {/* ── Text tab ── */}
         {activeTab === 'text' && (
           <>
+            <AuthorPicker
+              defaultValue={initialAuthorId}
+              onChange={(authorId) => {
+                if (authorId !== authorIdRef.current) {
+                  authorIdRef.current = authorId
+                  triggerAutoSave()
+                }
+              }}
+            />
+
             {/* Video URL */}
             <div className="space-y-2">
               <label className="block text-sm font-semibold text-foreground">{t('videoUrlLabel')}</label>

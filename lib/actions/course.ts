@@ -8,11 +8,13 @@ import { requireCreator } from '@/lib/require-creator'
 import { requireAdmin } from '@/lib/require-admin'
 import { isEditorRole } from '@/lib/require-editor'
 import { slugify } from '@/lib/utils'
+import { resolveAuthorId, requestedAuthorId } from '@/lib/resolve-author'
 import { logActivity } from '@/lib/actions/activity-log'
 
 export async function createCourse(formData: FormData) {
-  const { user } = await requireCreator()
+  const { user, profile } = await requireCreator()
   const supabase = await createClient()
+  const authorId = await resolveAuthorId(supabase, formData, user, profile.role)
 
   const title = (formData.get('title') as string).trim()
   const description = (formData.get('description') as string)?.trim() || null
@@ -27,7 +29,7 @@ export async function createCourse(formData: FormData) {
     .from('content')
     .insert({
       type: 'course',
-      author_id: user.id,
+      author_id: authorId,
       slug,
       source_locale: 'en',
       status: 'draft',
@@ -62,7 +64,7 @@ export async function createCourse(formData: FormData) {
 
   if (metaError) throw new Error(metaError.message ?? 'Failed to save course metadata')
 
-  await logActivity({ entityType: 'course', entityId: content.id, entityLabel: title, action: 'created' })
+  await logActivity({ entityType: 'course', entityId: content.id, entityLabel: title, action: authorId === user.id ? 'created' : 'created_on_behalf' })
 
   revalidatePath('/dashboard')
   redirect(`/dashboard/courses/${content.id}/edit`)
@@ -79,9 +81,12 @@ export async function updateCourse(id: string, formData: FormData) {
   const currency = (formData.get('currency') as string)?.trim() || 'USD'
   const duration = (formData.get('duration') as string)?.trim() || null
 
+  const newAuthorId = await requestedAuthorId(supabase, formData, profile.role)
+
   const updateQuery = (supabase as any)
     .from('content')
-    .update({ cover_image_url: coverImageUrl, updated_at: new Date().toISOString() })
+    .update({
+      ...(newAuthorId ? { author_id: newAuthorId } : {}), cover_image_url: coverImageUrl, updated_at: new Date().toISOString() })
     .eq('id', id)
   if (!isEditorRole(profile.role)) updateQuery.eq('author_id', user.id)
   const { data: owned } = await updateQuery.select('id').single()

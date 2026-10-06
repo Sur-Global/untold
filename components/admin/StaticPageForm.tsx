@@ -2,7 +2,7 @@
 
 import { useState, useTransition } from 'react'
 import { routing } from '@/i18n/routing'
-import { RichTextEditor, type EditorBlock } from '@/components/editor/RichTextEditor'
+import { RichTextEditor, type EditorBlock } from '@/components/editor/RichTextEditorLazy'
 import { createStaticPage, updateStaticPage, deleteStaticPage } from '@/lib/actions/static-page'
 import { adminPrimaryButton } from '@/components/admin/admin-ui'
 

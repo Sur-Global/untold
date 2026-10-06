@@ -21,7 +21,7 @@ export default async function EditPillPage({ params }: EditPillPageProps) {
   const contentQuery = (supabase as any)
     .from('content')
     .select(`
-      id, status, source_locale,
+      id, author_id, status, source_locale,
       content_translations ( title, body, locale ),
       pill_meta ( accent_color, image_url )
     `)
@@ -54,6 +54,7 @@ export default async function EditPillPage({ params }: EditPillPageProps) {
         <EditPillForm
           id={id}
           status={content.status}
+          initialAuthorId={content.author_id}
           initialTitle={tr?.title ?? ''}
           initialBody={initialBody}
           initialAccentColor={meta?.accent_color ?? '#C45D3A'}

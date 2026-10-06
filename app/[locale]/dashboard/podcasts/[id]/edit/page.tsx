@@ -21,7 +21,7 @@ export default async function EditPodcastPage({ params }: PageProps) {
   const contentQuery = (supabase as any)
     .from('content')
     .select(`
-      id, status, source_locale, cover_image_url,
+      id, author_id, status, source_locale, cover_image_url,
       content_translations ( title, description, locale ),
       podcast_meta ( embed_url, cover_image_url, duration, episode_number )
     `)
@@ -64,6 +64,7 @@ export default async function EditPodcastPage({ params }: PageProps) {
         <EditPodcastForm
           id={id}
           status={content.status}
+          initialAuthorId={content.author_id}
           initialTitle={tr?.title ?? ''}
           initialDescription={tr?.description ?? ''}
           initialEmbedUrl={meta?.embed_url ?? ''}

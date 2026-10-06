@@ -2,13 +2,14 @@
 
 import { useRef, useState, useTransition, useCallback, useEffect } from 'react'
 import { useTranslations, useLocale } from 'next-intl'
-import type { EditorBlock } from '@/components/editor/RichTextEditor'
+import type { EditorBlock } from '@/components/editor/RichTextEditorLazy'
 import { updateArticle, publishArticle, unpublishArticle, deleteArticle } from '@/lib/actions/article'
-import { RichTextEditor } from '@/components/editor/RichTextEditor'
+import { RichTextEditor } from '@/components/editor/RichTextEditorLazy'
 import { CoverImageInput } from '@/components/ui/CoverImageInput'
 import { PhotoCreditInput } from '@/components/content/PhotoCreditInput'
 import { TagsInput, type Tag } from '@/components/ui/TagsInput'
 import { Link } from '@/i18n/navigation'
+import { AuthorPicker } from '@/components/content/AuthorPicker'
 
 interface LocaleData {
   locale: string
@@ -23,6 +24,7 @@ interface LocaleData {
 interface EditArticleFormProps {
   id: string
   status: string
+  initialAuthorId: string
   sourceLocale: string
   translations: LocaleData[]
   availableLocales: string[]
@@ -47,6 +49,7 @@ const LOCALE_LABELS: Record<string, string> = {
 export function EditArticleForm({
   id,
   status,
+  initialAuthorId,
   sourceLocale,
   translations,
   availableLocales,
@@ -113,6 +116,8 @@ export function EditArticleForm({
 
   const autoSaveTimer = useRef<NodeJS.Timeout | null>(null)
   const skipAutoSave = useRef(false)
+  // Admin/editor-only: who the article is attributed to (sent with every save)
+  const authorIdRef = useRef(initialAuthorId)
   // Guards against out-of-order network responses: if a save is already in flight and
   // another one is requested (e.g. the user kept typing), queue it instead of firing a
   // second concurrent request — an older, slower request finishing last could otherwise
@@ -137,6 +142,7 @@ export function EditArticleForm({
     fd.set('image_credits', ic)
     fd.set('tag_ids', JSON.stringify(tg.map((tag) => tag.id)))
     fd.set('feature_requested', String(fr))
+    fd.set('author_id', authorIdRef.current)
     if (s.body) fd.set('body', JSON.stringify(s.body))
     isSavingRef.current = true
     setSaveStatus('saving')
@@ -295,6 +301,16 @@ export function EditArticleForm({
 
       {/* Main form card — one continuous page, no Text/Images tab split */}
       <div className="bg-card border border-primary/20 rounded-2xl shadow-[0px_4px_16px_0px_rgba(44,36,32,0.1),0px_8px_32px_0px_rgba(44,36,32,0.06)] p-8 space-y-6">
+        <AuthorPicker
+          defaultValue={initialAuthorId}
+          onChange={(authorId) => {
+            if (authorId !== authorIdRef.current) {
+              authorIdRef.current = authorId
+              triggerAutoSave()
+            }
+          }}
+        />
+
         {/* Article Title */}
         <div className="space-y-2">
           <label className="block text-sm font-semibold text-foreground">{t('articleTitleLabel')}</label>

@@ -3,11 +3,12 @@
 import { useRef, useState, useTransition } from 'react'
 import { useTranslations, useLocale } from 'next-intl'
 import { createArticle } from '@/lib/actions/article'
-import { RichTextEditor } from '@/components/editor/RichTextEditor'
-import type { EditorBlock } from '@/components/editor/RichTextEditor'
+import { RichTextEditor } from '@/components/editor/RichTextEditorLazy'
+import type { EditorBlock } from '@/components/editor/RichTextEditorLazy'
 import { CoverImageInput } from '@/components/ui/CoverImageInput'
 import { PhotoCreditInput } from '@/components/content/PhotoCreditInput'
 import { TagsInput, type Tag } from '@/components/ui/TagsInput'
+import { AuthorPicker } from '@/components/content/AuthorPicker'
 
 export function CreateArticleForm() {
   const t = useTranslations('editor')
@@ -33,6 +34,8 @@ export function CreateArticleForm() {
     <form ref={formRef} onSubmit={handleSubmit}>
       {/* One continuous page — no Text/Images tab split */}
       <div className="bg-card border border-primary/20 rounded-2xl shadow-[0px_4px_16px_0px_rgba(44,36,32,0.1),0px_8px_32px_0px_rgba(44,36,32,0.06)] p-8 space-y-6">
+        <AuthorPicker />
+
         <div className="space-y-2">
           <label className="block text-sm font-semibold text-foreground">{t('articleTitleLabel')}</label>
           <input

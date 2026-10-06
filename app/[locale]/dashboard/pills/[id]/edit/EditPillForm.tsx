@@ -4,16 +4,18 @@ import { useRef, useState, useTransition } from 'react'
 import { useTranslations, useLocale } from 'next-intl'
 import { updatePill } from '@/lib/actions/pill'
 import { publishContent, unpublishContent, deleteContent } from '@/lib/actions/content'
-import { RichTextEditor } from '@/components/editor/RichTextEditor'
-import type { EditorBlock } from '@/components/editor/RichTextEditor'
+import { RichTextEditor } from '@/components/editor/RichTextEditorLazy'
+import type { EditorBlock } from '@/components/editor/RichTextEditorLazy'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { CoverImageInput } from '@/components/ui/CoverImageInput'
+import { AuthorPicker } from '@/components/content/AuthorPicker'
 
 interface EditPillFormProps {
   id: string
   status: string
+  initialAuthorId: string
   initialTitle: string
   initialBody: EditorBlock[] | null
   initialAccentColor: string
@@ -21,7 +23,7 @@ interface EditPillFormProps {
 }
 
 export function EditPillForm({
-  id, status, initialTitle, initialBody, initialAccentColor, initialImageUrl,
+  id, status, initialAuthorId, initialTitle, initialBody, initialAccentColor, initialImageUrl,
 }: EditPillFormProps) {
   const t = useTranslations('editor')
   const td = useTranslations('dashboard')
@@ -40,6 +42,8 @@ export function EditPillForm({
 
   return (
     <form ref={formRef} onSubmit={handleSave} className="space-y-6">
+      <AuthorPicker defaultValue={initialAuthorId} />
+
       <div className="space-y-2">
         <Label htmlFor="title">{t('titleRequiredLabel')}</Label>
         <Input id="title" name="title" defaultValue={initialTitle} placeholder={t('titlePlaceholder')} required className="text-xl font-semibold" />

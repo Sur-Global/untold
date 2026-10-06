@@ -8,10 +8,12 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { CoverImageInput } from '@/components/ui/CoverImageInput'
+import { AuthorPicker } from '@/components/content/AuthorPicker'
 
 interface EditPodcastFormProps {
   id: string
   status: string
+  initialAuthorId: string
   initialTitle: string
   initialDescription: string
   initialEmbedUrl: string
@@ -22,7 +24,7 @@ interface EditPodcastFormProps {
 
 export function EditPodcastForm({
   id,
-  status,
+  status, initialAuthorId,
   initialTitle,
   initialDescription,
   initialEmbedUrl,
@@ -43,6 +45,8 @@ export function EditPodcastForm({
 
   return (
     <form ref={formRef} onSubmit={handleSave} className="space-y-6">
+      <AuthorPicker defaultValue={initialAuthorId} />
+
       <div className="space-y-2">
         <Label htmlFor="title">{t('titleRequiredLabel')}</Label>
         <Input
