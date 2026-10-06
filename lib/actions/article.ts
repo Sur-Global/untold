@@ -170,6 +170,8 @@ export async function updateArticle(id: string, formData: FormData) {
       .update(staleFields)
       .eq('content_id', id)
       .neq('locale', editLocale)
+      // Versions someone edited by hand are theirs — only automatic translations are refreshed
+      .or('is_auto_translated.is.null,is_auto_translated.eq.true')
   }
 
   if (bodyJson && editLocale === sourceLocale) {

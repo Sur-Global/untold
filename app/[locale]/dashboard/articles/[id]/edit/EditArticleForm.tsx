@@ -123,6 +123,13 @@ export function EditArticleForm({
   // second concurrent request — an older, slower request finishing last could otherwise
   // overwrite newer edits.
   const isSavingRef = useRef(false)
+  // True while there are edits not yet saved — switching language tabs must not save (and so
+  // must not mark a translation as manually edited) unless the user actually changed something.
+  const dirtyRef = useRef(false)
+  // Languages whose version was edited by hand (never overwritten by automatic translation)
+  const [manualLocales, setManualLocales] = useState<Set<string>>(
+    () => new Set(translations.filter((tr) => tr.isAutoTranslated === false).map((tr) => tr.locale)),
+  )
   const pendingSaveRef = useRef(false)
 
   const doSave = useCallback(() => {
@@ -145,12 +152,14 @@ export function EditArticleForm({
     fd.set('author_id', authorIdRef.current)
     if (s.body) fd.set('body', JSON.stringify(s.body))
     isSavingRef.current = true
+    dirtyRef.current = false
     setSaveStatus('saving')
     setSaveError(null)
     startTransition(async () => {
       try {
         await updateArticle(id, fd)
         setSaveStatus('saved')
+        if (al !== sourceLocale) setManualLocales((prev) => new Set(prev).add(al))
       } catch (err) {
         setSaveStatus('unsaved')
         setSaveError(err instanceof Error ? err.message : 'Save failed')
@@ -162,7 +171,7 @@ export function EditArticleForm({
         }
       }
     })
-  }, [id])
+  }, [id, sourceLocale])
 
   const triggerAutoSave = useCallback(() => {
     if (skipAutoSave.current) {
@@ -170,6 +179,7 @@ export function EditArticleForm({
       return
     }
     setSaveStatus('unsaved')
+    dirtyRef.current = true
     if (autoSaveTimer.current) clearTimeout(autoSaveTimer.current)
     autoSaveTimer.current = setTimeout(doSave, 2000)
   }, [doSave])
@@ -206,8 +216,11 @@ export function EditArticleForm({
 
   const switchLocale = useCallback((newLocale: string) => {
     if (newLocale === latestRef.current.activeLocale) return
-    // Save current locale before switching
-    doSave()
+    // Save current locale before switching — only if it was actually edited
+    if (dirtyRef.current) {
+      if (autoSaveTimer.current) clearTimeout(autoSaveTimer.current)
+      doSave()
+    }
     // Suppress the auto-save that fires when activeLocaleState reference changes
     skipAutoSave.current = true
     setActiveLocale(newLocale)
@@ -284,19 +297,29 @@ export function EditArticleForm({
                 {LOCALE_LABELS[loc] ?? loc.toUpperCase()}
                 {isSource && (
                   <span className={`text-[10px] ${isActive ? 'text-white/70' : 'text-muted-foreground'}`}>
-                    src
+                    {td('tabSource')}
                   </span>
                 )}
-                {!isSource && trData?.isAutoTranslated === false && (
-                  <span className={`text-[10px] ${isActive ? 'text-white/70' : 'text-blue-500'}`}>✓</span>
+                {!isSource && manualLocales.has(loc) && (
+                  <span className={`text-[10px] ${isActive ? 'text-white/70' : 'text-blue-500'}`}>{td('tabManual')}</span>
                 )}
-                {!isSource && trData?.isAutoTranslated === true && hasContent && (
-                  <span className={`text-[10px] ${isActive ? 'text-white/70' : 'text-secondary'}`}>✓</span>
+                {!isSource && !manualLocales.has(loc) && hasContent && (
+                  <span className={`text-[10px] ${isActive ? 'text-white/70' : 'text-muted-foreground'}`}>{td('tabAuto')}</span>
                 )}
               </button>
             )
           })}
         </div>
+      )}
+
+      {localeTabs.length > 1 && (
+        <p className="mb-4 text-xs text-muted-foreground">
+          {activeLocale === sourceLocale
+            ? td('noteOriginal')
+            : manualLocales.has(activeLocale)
+              ? td('noteManual')
+              : td('noteAuto')}
+        </p>
       )}
 
       {/* Main form card — one continuous page, no Text/Images tab split */}

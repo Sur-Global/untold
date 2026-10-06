@@ -123,6 +123,8 @@ export async function updatePill(id: string, formData: FormData) {
       .update(staleFields)
       .eq('content_id', id)
       .neq('locale', sourceLocale)
+      // Versions someone edited by hand are theirs — only automatic translations are refreshed
+      .or('is_auto_translated.is.null,is_auto_translated.eq.true')
   }
 
   await (supabase as any)

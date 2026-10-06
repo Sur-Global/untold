@@ -1,3 +1,4 @@
+import { getTranslations } from 'next-intl/server'
 import { requireCreator } from '@/lib/require-creator'
 import { createClient } from '@/lib/supabase/server'
 import { Navigation } from '@/components/layout/Navigation'
@@ -8,6 +9,7 @@ import { EditProfileForm } from '@/components/profile/EditProfileForm'
 
 export default async function EditProfilePage() {
   const { user } = await requireCreator()
+  const t = await getTranslations('dashboard')
   const supabase = await createClient()
 
   const [{ userId, ...navProps }, { data: profile }] = await Promise.all([
@@ -25,7 +27,7 @@ export default async function EditProfilePage() {
     <>
       <Navigation {...navProps} />
       <main className="max-w-2xl mx-auto px-4 sm:px-6 py-12">
-        <h1 className="text-2xl font-heading font-bold mb-8">Edit Profile</h1>
+        <h1 className="text-2xl font-heading font-bold mb-8">{t('editProfile')}</h1>
         <AdminPanel bodyClassName="p-6">
           <EditProfileForm
             userId={user.id}

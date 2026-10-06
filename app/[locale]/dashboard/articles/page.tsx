@@ -12,7 +12,7 @@ import { publishArticle, unpublishArticle } from '@/lib/actions/article'
 import { cn } from '@/lib/utils'
 import { DeleteArticleButton } from './DeleteArticleButton'
 
-function StatusBadge({ status }: { status: string }) {
+function StatusBadge({ status, label }: { status: string; label: string }) {
   const isPublished = status === 'published'
   return (
     <span
@@ -22,7 +22,7 @@ function StatusBadge({ status }: { status: string }) {
         color: isPublished ? '#16a34a' : '#A0522D',
       }}
     >
-      {status}
+      {label}
     </span>
   )
 }
@@ -52,7 +52,7 @@ export default async function DashboardArticlesPage({ params }: { params: Promis
     const srcLocale = article.source_locale ?? 'en'
     const tr = article.content_translations?.find((tr: any) => tr.locale === srcLocale)
       ?? article.content_translations?.[0]
-    return tr?.title ?? '(Untitled)'
+    return tr?.title ?? t('untitled')
   }
 
   return (
@@ -83,7 +83,7 @@ export default async function DashboardArticlesPage({ params }: { params: Promis
                   </p>
                 </div>
 
-                <StatusBadge status={article.status} />
+                <StatusBadge status={article.status} label={article.status === 'published' ? t('published') : t('draft')} />
 
                 <div className="flex items-center gap-2">
                   <Link

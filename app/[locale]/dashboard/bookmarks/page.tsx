@@ -15,6 +15,7 @@ export default async function BookmarksPage({ params }: PageProps) {
   const { locale } = await params
   const { user } = await requireUser()
   const supabase = await createClient()
+  const tDash = await getTranslations({ locale, namespace: 'dashboard' })
 
   // requireUser already verified auth — derive nav props without a second getUser() call
   const { data: navProfile } = await (supabase as any)
@@ -43,10 +44,10 @@ export default async function BookmarksPage({ params }: PageProps) {
     <>
       <Navigation {...navProps} />
       <main className="max-w-3xl mx-auto px-4 sm:px-6 py-12">
-        <h1 className="mb-8">My Bookmarks</h1>
+        <h1 className="mb-8">{tDash('bookmarksTitle')}</h1>
 
         {publishedBookmarks.length === 0 ? (
-          <p className="text-[#6B5F58]">No bookmarks yet. Visit any content page and click the bookmark icon.</p>
+          <p className="text-[#6B5F58]">{tDash('bookmarksEmpty')}</p>
         ) : (
           <ul className="space-y-3">
             {publishedBookmarks.map((bm: any) => {
@@ -62,7 +63,7 @@ export default async function BookmarksPage({ params }: PageProps) {
                     href={`/${item.type}s/${item.slug}`}
                     className="font-semibold hover:text-[#A0522D] transition-colors"
                   >
-                    {tr?.title ?? '(Untitled)'}
+                    {tr?.title ?? tDash('untitled')}
                   </Link>
                   <div className="flex items-center gap-3 mt-1">
                     <span className="text-xs font-mono text-[#6B5F58] capitalize">{item.type}</span>

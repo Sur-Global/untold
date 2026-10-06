@@ -15,15 +15,15 @@ import { DeleteContentButton } from './DeleteContentButton'
 import { AuthorStarToggle } from './AuthorStarToggle'
 import type { ContentType } from '@/lib/supabase/types'
 
-const TYPE_LABEL: Record<ContentType, string> = {
-  article: 'Article',
-  video: 'Video',
-  podcast: 'Podcast',
-  pill: 'Pill',
-  course: 'Course',
-}
+const TYPE_KEY = {
+  article: 'typeArticle',
+  video: 'typeVideo',
+  podcast: 'typePodcast',
+  pill: 'typePill',
+  course: 'typeCourse',
+} as const
 
-function StatusBadge({ status }: { status: string }) {
+function StatusBadge({ status, label }: { status: string; label: string }) {
   const isPublished = status === 'published'
   return (
     <span
@@ -33,15 +33,15 @@ function StatusBadge({ status }: { status: string }) {
         color: isPublished ? '#16a34a' : '#A0522D',
       }}
     >
-      {status}
+      {label}
     </span>
   )
 }
 
-function TypeBadge({ type }: { type: ContentType }) {
+function TypeBadge({ label }: { label: string }) {
   return (
     <span className="text-xs font-mono px-2 py-0.5 rounded-full bg-[rgba(196,93,58,0.1)] text-[#C45D3A]">
-      {TYPE_LABEL[type]}
+      {label}
     </span>
   )
 }
@@ -70,7 +70,7 @@ export default async function DashboardPage({ params }: { params: Promise<{ loca
     // Show the title in the language it was written in
     const tr = item.content_translations?.find((tr: any) => tr.locale === (item.source_locale ?? 'en'))
       ?? item.content_translations?.[0]
-    return tr?.title ?? '(Untitled)'
+    return tr?.title ?? t('untitled')
   }
 
   return (
@@ -86,7 +86,7 @@ export default async function DashboardPage({ params }: { params: Promise<{ loca
               </Link>
             )}
             <Link href="/dashboard/profile" className={cn(buttonVariants({ variant: 'outline' }))}>
-              Edit Profile
+              {t('editProfile')}
             </Link>
             <Link href="/create" className={cn(buttonVariants(), 'gradient-rust text-white border-0')}>
               {t('newContent')}
@@ -111,8 +111,8 @@ export default async function DashboardPage({ params }: { params: Promise<{ loca
                   </p>
                 </div>
 
-                <TypeBadge type={item.type} />
-                <StatusBadge status={item.status} />
+                <TypeBadge label={t(TYPE_KEY[item.type as ContentType])} />
+                <StatusBadge status={item.status} label={item.status === 'published' ? t('published') : t('draft')} />
 
                 <div className="flex items-center gap-2">
                   {item.status === 'published' && (

@@ -2,6 +2,7 @@
 
 import { useRef, useState, useTransition } from 'react'
 import { useRouter } from 'next/navigation'
+import { useTranslations } from 'next-intl'
 import { BlockNoteSchema } from '@blocknote/core'
 import { useCreateBlockNote } from '@blocknote/react'
 import { withMultiColumn } from '@blocknote/xl-multi-column'
@@ -55,6 +56,7 @@ export function EditProfileForm({
   isAdminEdit,
 }: EditProfileFormProps) {
   const router = useRouter()
+  const t = useTranslations('dashboard')
   const [isPending, startTransition] = useTransition()
   const [error, setError] = useState<string | null>(null)
   const [success, setSuccess] = useState(false)
@@ -117,7 +119,7 @@ export function EditProfileForm({
     <form onSubmit={handleSubmit} className="space-y-5">
       {/* Avatar */}
       <div className="space-y-1.5">
-        <label className={labelClass}>Profile Photo</label>
+        <label className={labelClass}>{t('profilePhoto')}</label>
         <CoverImageInput
           name="avatar_url"
           uploadType="avatar"
@@ -128,20 +130,20 @@ export function EditProfileForm({
 
       {/* Display name */}
       <div>
-        <label htmlFor="display_name" className={labelClass}>Display Name</label>
+        <label htmlFor="display_name" className={labelClass}>{t('displayName')}</label>
         <input
           id="display_name"
           className={fieldClass}
           value={displayName}
           onChange={(e) => handleDisplayNameChange(e.target.value)}
           required
-          placeholder="Your Name"
+          placeholder={t('displayNamePlaceholder')}
         />
       </div>
 
       {/* Slug */}
       <div>
-        <label htmlFor="slug" className={labelClass}>Profile URL slug</label>
+        <label htmlFor="slug" className={labelClass}>{t('slugLabel')}</label>
         <div className="flex items-center gap-0">
           <span className="px-3 py-3 rounded-l-[10px] border border-r-0 border-primary/20 bg-muted text-muted-foreground text-sm select-none">
             /author/
@@ -155,23 +157,23 @@ export function EditProfileForm({
             placeholder="your-name"
           />
         </div>
-        <p className="mt-1 text-xs text-muted-foreground">Lowercase letters, numbers and hyphens only.</p>
+        <p className="mt-1 text-xs text-muted-foreground">{t('slugHint')}</p>
       </div>
 
       {/* Bio */}
       <div>
-        <label className={labelClass}>Bio</label>
+        <label className={labelClass}>{t('bioLabel')}</label>
         <RichTextEditor
           value={bioBlocks}
           onChange={setBioBlocks}
           initialHtml={initialBio}
-          placeholder="A short description of who you are…"
+          placeholder={t('bioPlaceholder')}
         />
       </div>
 
       {/* Location */}
       <div>
-        <label htmlFor="location" className={labelClass}>Location</label>
+        <label htmlFor="location" className={labelClass}>{t('locationLabel')}</label>
         <input
           id="location"
           className={fieldClass}
@@ -183,7 +185,7 @@ export function EditProfileForm({
 
       {/* Website */}
       <div>
-        <label htmlFor="website" className={labelClass}>Website</label>
+        <label htmlFor="website" className={labelClass}>{t('websiteLabel')}</label>
         <input
           id="website"
           type="url"
@@ -196,7 +198,7 @@ export function EditProfileForm({
 
       {/* Email (contact/display only — not the login email) */}
       <div>
-        <label htmlFor="email" className={labelClass}>Contact Email</label>
+        <label htmlFor="email" className={labelClass}>{t('contactEmailLabel')}</label>
         <input
           id="email"
           type="email"
@@ -206,13 +208,13 @@ export function EditProfileForm({
           placeholder="name@example.com"
         />
         <p className="mt-1 text-xs text-muted-foreground">
-          Shown to admins/editors only — not your login email, and not published on your public page.
+          {t('contactEmailHint')}
         </p>
       </div>
 
       {/* Social links */}
       <div className="space-y-3 rounded-[10px] border border-primary/10 bg-muted/20 p-4">
-        <p className={labelClass}>Social Links</p>
+        <p className={labelClass}>{t('socialLinks')}</p>
         <div>
           <label htmlFor="social_bluesky" className="mb-1 block text-xs text-muted-foreground">BlueSky</label>
           <input
@@ -258,7 +260,7 @@ export function EditProfileForm({
           />
         </div>
         <div>
-          <label htmlFor="social_custom_url" className="mb-1 block text-xs text-muted-foreground">Custom link</label>
+          <label htmlFor="social_custom_url" className="mb-1 block text-xs text-muted-foreground">{t('customLink')}</label>
           <input
             id="social_custom_url"
             type="url"
@@ -274,7 +276,7 @@ export function EditProfileForm({
         <p className="rounded-[10px] bg-destructive/10 px-4 py-3 text-sm text-destructive">{error}</p>
       )}
       {success && !isAdminEdit && (
-        <p className="rounded-[10px] bg-secondary/10 px-4 py-3 text-sm text-secondary">Profile saved.</p>
+        <p className="rounded-[10px] bg-secondary/10 px-4 py-3 text-sm text-secondary">{t('profileSaved')}</p>
       )}
 
       <div className="flex items-center gap-3 pt-2">
@@ -283,14 +285,14 @@ export function EditProfileForm({
           disabled={isPending}
           className="px-6 py-2.5 rounded-[10px] bg-primary text-primary-foreground text-sm font-semibold transition-opacity hover:opacity-90 disabled:opacity-50"
         >
-          {isPending ? 'Saving…' : 'Save Profile'}
+          {isPending ? t('saving') : t('saveProfile')}
         </button>
         <button
           type="button"
           onClick={() => router.back()}
           className="px-6 py-2.5 rounded-[10px] border border-primary/20 text-sm font-medium text-foreground transition-colors hover:bg-muted/50"
         >
-          Cancel
+          {t('cancel')}
         </button>
       </div>
     </form>
