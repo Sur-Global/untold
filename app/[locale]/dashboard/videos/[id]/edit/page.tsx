@@ -20,7 +20,7 @@ export default async function EditVideoPage({ params }: PageProps) {
   const contentQuery = (supabase as any)
     .from('content')
     .select(`
-      id, author_id, status, source_locale, cover_image_url, feature_requested_at,
+      id, author_id, status, source_locale, single_language, subtitle_locales, cover_image_url, feature_requested_at,
       content_translations ( title, body, description, locale ),
       video_meta ( embed_url, thumbnail_url, duration, chapters, layout_style, transcript ),
       content_tags ( tag_id, tags ( id, slug, names ) )
@@ -54,6 +54,9 @@ export default async function EditVideoPage({ params }: PageProps) {
           id={id}
           status={content.status}
           initialAuthorId={content.author_id}
+          initialSingleLanguage={content.single_language ?? false}
+          initialSubtitleLocales={content.subtitle_locales ?? []}
+          sourceLocale={sourceLocale}
           initialTitle={tr?.title ?? ''}
           initialBody={
             Array.isArray(tr?.body) ? tr.body

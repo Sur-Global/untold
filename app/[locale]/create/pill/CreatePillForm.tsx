@@ -11,6 +11,7 @@ import { Label } from '@/components/ui/label'
 import { CoverImageInput } from '@/components/ui/CoverImageInput'
 import { AuthorPicker } from '@/components/content/AuthorPicker'
 import { ContentLanguageSelect } from '@/components/content/ContentLanguageSelect'
+import { LanguageAvailabilityFields } from '@/components/content/LanguageAvailabilityFields'
 
 export function CreatePillForm() {
   const t = useTranslations('editor')
@@ -37,6 +38,7 @@ export function CreatePillForm() {
     <form ref={formRef} onSubmit={handleSubmit} className="space-y-6">
       <AuthorPicker />
       <ContentLanguageSelect />
+      <LanguageAvailabilityFields />
 
       <div className="space-y-2">
         <Label htmlFor="title">{t('titleRequiredLabel')}</Label>

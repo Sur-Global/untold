@@ -86,6 +86,8 @@
     "slugInvalid": "Apenas letras, números e hífens"
   },
   "content": {
+    "onlyInLanguage": "Apenas em {language}",
+    "inLanguageWithSubtitles": "Em {language} · Legendas: {subtitles}",
     "readTime": "{minutes} min de leitura",
     "likes": "{count} curtidas",
     "publishedOn": "Publicado em {date}",
@@ -322,12 +324,18 @@
     "authorCancelButton": "Cancelar",
     "contentLanguageLabel": "Idioma em que está escrito",
     "contentLanguageHint": "O idioma original. Os outros idiomas são traduzidos a partir dele.",
+    "singleLanguageLabel": "Este conteúdo só está disponível neste idioma",
+    "singleLanguageHint": "Não será traduzido automaticamente. Os leitores verão uma etiqueta com o idioma.",
+    "subtitlesLabel": "Legendas disponíveis em",
     "authorCtaTitle": "Botão de ação (opcional)",
     "authorCtaLabel": "Texto do botão",
     "authorCtaUrl": "Link do botão",
     "authorCtaHint": "Aparece apenas na sua página de autor. O texto é traduzido automaticamente para os outros idiomas."
   },
   "footer": {
+    "subscribeCta": "Subscrever",
+    "subscribeClose": "Fechar",
+    "subscribeFormTitle": "Formulário de subscrição da newsletter",
     "brandTitle": "UNTOLD",
     "brandTagline": "Explorando ideias que transformam o futuro.",
     "contentHeading": "Conteúdo",

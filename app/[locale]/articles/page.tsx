@@ -91,7 +91,7 @@ export default async function ArticlesPage({ params, searchParams }: PageProps) 
     const { data: featuredRows } = await (supabase as any)
       .from('content')
       .select(`
-        id, slug, type, is_featured, likes_count, published_at, cover_image_url, read_time_minutes,
+        id, slug, type, source_locale, single_language, subtitle_locales, is_featured, likes_count, published_at, cover_image_url, read_time_minutes,
         profiles!author_id ( display_name, slug, role, avatar_url ),
         content_translations ( title, excerpt, featured_summary, locale ),
         content_tags ( tags ( names, slug ) )
@@ -113,7 +113,7 @@ export default async function ArticlesPage({ params, searchParams }: PageProps) 
       .from('content')
       .select(
         `
-        id, slug, type, is_featured, likes_count, published_at, cover_image_url, read_time_minutes,
+        id, slug, type, source_locale, single_language, subtitle_locales, is_featured, likes_count, published_at, cover_image_url, read_time_minutes,
         profiles!author_id ( display_name, slug, role, avatar_url ),
         content_translations ( title, excerpt, featured_summary, locale ),
         content_tags ( tags ( names, slug ) )
@@ -167,7 +167,7 @@ export default async function ArticlesPage({ params, searchParams }: PageProps) 
   let pendingTranslations = false
   if (listed.length > 0) {
     const untranslatedIds = listed
-      .filter(a => !(a.content_translations ?? []).some((t: any) => t.locale === locale))
+      .filter(a => !a.single_language && !(a.content_translations ?? []).some((t: any) => t.locale === locale))
       .map((a: any) => a.id)
     if (untranslatedIds.length > 0) {
       pendingTranslations = true
@@ -220,6 +220,9 @@ export default async function ArticlesPage({ params, searchParams }: PageProps) 
             isBookmarked={bookmarkedIds.has(article.id)}
             isLoggedIn={navProps.isLoggedIn}
             isFeatured={article.is_featured}
+            singleLanguage={article.single_language}
+            sourceLocale={article.source_locale}
+            subtitleLocales={article.subtitle_locales}
 
           />
         )

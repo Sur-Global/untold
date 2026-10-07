@@ -10,6 +10,8 @@ import { PhotoCreditInput } from '@/components/content/PhotoCreditInput'
 import { TagsInput, type Tag } from '@/components/ui/TagsInput'
 import { Link } from '@/i18n/navigation'
 import { AuthorPicker } from '@/components/content/AuthorPicker'
+import { LanguageAvailabilityFields } from '@/components/content/LanguageAvailabilityFields'
+import { AVAILABILITY_MARKER } from '@/lib/language-availability'
 
 interface LocaleData {
   locale: string
@@ -25,6 +27,7 @@ interface EditArticleFormProps {
   id: string
   status: string
   initialAuthorId: string
+  initialSingleLanguage: boolean
   sourceLocale: string
   translations: LocaleData[]
   availableLocales: string[]
@@ -50,6 +53,7 @@ export function EditArticleForm({
   id,
   status,
   initialAuthorId,
+  initialSingleLanguage,
   sourceLocale,
   translations,
   availableLocales,
@@ -118,6 +122,7 @@ export function EditArticleForm({
   const skipAutoSave = useRef(false)
   // Admin/editor-only: who the article is attributed to (sent with every save)
   const authorIdRef = useRef(initialAuthorId)
+  const singleLanguageRef = useRef(initialSingleLanguage)
   // Guards against out-of-order network responses: if a save is already in flight and
   // another one is requested (e.g. the user kept typing), queue it instead of firing a
   // second concurrent request — an older, slower request finishing last could otherwise
@@ -150,6 +155,8 @@ export function EditArticleForm({
     fd.set('tag_ids', JSON.stringify(tg.map((tag) => tag.id)))
     fd.set('feature_requested', String(fr))
     fd.set('author_id', authorIdRef.current)
+    fd.set(AVAILABILITY_MARKER, '1')
+    if (singleLanguageRef.current) fd.set('single_language', 'on')
     if (s.body) fd.set('body', JSON.stringify(s.body))
     isSavingRef.current = true
     dirtyRef.current = false
@@ -324,6 +331,15 @@ export function EditArticleForm({
 
       {/* Main form card — one continuous page, no Text/Images tab split */}
       <div className="bg-card border border-primary/20 rounded-2xl shadow-[0px_4px_16px_0px_rgba(44,36,32,0.1),0px_8px_32px_0px_rgba(44,36,32,0.06)] p-8 space-y-6">
+        <LanguageAvailabilityFields
+          defaultSingle={initialSingleLanguage}
+          onChange={({ single }) => {
+            if (single !== singleLanguageRef.current) {
+              singleLanguageRef.current = single
+              triggerAutoSave()
+            }
+          }}
+        />
         <AuthorPicker
           defaultValue={initialAuthorId}
           onChange={(authorId) => {

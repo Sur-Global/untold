@@ -2,6 +2,7 @@ import { notFound } from 'next/navigation'
 import { after } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
 import { getTranslation } from '@/lib/content'
+import { LanguageNotice } from '@/components/content/LanguageNotice'
 import { Navigation } from '@/components/layout/Navigation'
 import { Footer } from '@/components/layout/Footer'
 import { BodyTranslationLoader } from '@/components/content/BodyTranslationLoader'
@@ -28,7 +29,7 @@ export default async function PillPage({ params }: PageProps) {
   const { data: pill } = await (supabase as any)
     .from('content')
     .select(`
-      id, slug, source_locale, likes_count, published_at,
+      id, slug, source_locale, single_language, subtitle_locales, likes_count, published_at,
       profiles!author_id ( display_name, slug ),
       content_translations ( title, body, locale ),
       pill_meta ( accent_color, image_url )
@@ -40,7 +41,11 @@ export default async function PillPage({ params }: PageProps) {
 
   if (!pill) notFound()
 
-  const t = getTranslation(pill.content_translations ?? [], locale)
+  // "Only available in this language" content is never translated: readers in any
+  // language get the original, with a label (see LanguageNotice)
+  const singleLanguage: boolean = !!pill.single_language
+  const contentLocale: string = singleLanguage ? (pill.source_locale ?? 'en') : locale
+  const t = getTranslation(pill.content_translations ?? [], contentLocale)
   if (!t) notFound()
 
   const meta = pill.pill_meta
@@ -49,9 +54,9 @@ export default async function PillPage({ params }: PageProps) {
   const sourceTranslation = (pill.content_translations ?? []).find((tr: any) => tr.locale === sourceLocale)
   const sourceBody = sourceTranslation?.body as Record<string, unknown> | null
 
-  const usingFallback = t.locale !== locale
+  const usingFallback = t.locale !== contentLocale
   const body = usingFallback ? null : (t.body as Record<string, unknown> | null)
-  const needsBody = locale !== sourceLocale && !!sourceBody && (usingFallback || !body)
+  const needsBody = contentLocale !== sourceLocale && !!sourceBody && (usingFallback || !body)
 
   if (needsBody) {
     after(async () => {
@@ -115,6 +120,7 @@ export default async function PillPage({ params }: PageProps) {
               />
             </div>
           </div>
+          {singleLanguage && <LanguageNotice sourceLocale={sourceLocale} subtitleLocales={pill.subtitle_locales} />}
           <h1 className="mb-4" style={{ color: '#2C2420' }}>{t.title}</h1>
           {meta?.image_url && (
             <img src={meta.image_url} alt="" className="w-full rounded-xl object-cover max-h-48" />

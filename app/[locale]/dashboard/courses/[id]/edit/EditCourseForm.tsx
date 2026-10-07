@@ -9,11 +9,13 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { CoverImageInput } from '@/components/ui/CoverImageInput'
 import { AuthorPicker } from '@/components/content/AuthorPicker'
+import { LanguageAvailabilityFields } from '@/components/content/LanguageAvailabilityFields'
 
 interface EditCourseFormProps {
   id: string
   status: string
   initialAuthorId: string
+  initialSingleLanguage?: boolean
   initialTitle: string
   initialDescription: string
   initialCoverImageUrl: string
@@ -23,7 +25,7 @@ interface EditCourseFormProps {
 }
 
 export function EditCourseForm({
-  id, status, initialAuthorId, initialTitle, initialDescription, initialCoverImageUrl,
+  id, status, initialAuthorId, initialSingleLanguage = false, initialTitle, initialDescription, initialCoverImageUrl,
   initialPrice, initialCurrency, initialDuration,
 }: EditCourseFormProps) {
   const t = useTranslations('editor')
@@ -40,6 +42,7 @@ export function EditCourseForm({
   return (
     <form ref={formRef} onSubmit={handleSave} className="space-y-6">
       <AuthorPicker defaultValue={initialAuthorId} />
+      <LanguageAvailabilityFields defaultSingle={initialSingleLanguage} />
 
       <div className="space-y-2">
         <Label htmlFor="title">{t('titleRequiredLabel')}</Label>

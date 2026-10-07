@@ -13,12 +13,17 @@ import { Link } from '@/i18n/navigation'
 import type { VideoMetadata, VideoChapter as Chapter } from '@/app/api/video-metadata/route'
 import type { TranscriptCue } from '@/lib/transcript'
 import { AuthorPicker } from '@/components/content/AuthorPicker'
+import { LanguageAvailabilityFields } from '@/components/content/LanguageAvailabilityFields'
+import { AVAILABILITY_MARKER } from '@/lib/language-availability'
 type LayoutStyle = 'standard' | 'wide' | 'sidebar' | 'card'
 
 interface EditVideoFormProps {
   id: string
   status: string
   initialAuthorId: string
+  initialSingleLanguage: boolean
+  initialSubtitleLocales: string[]
+  sourceLocale: string
   initialTitle: string
   initialBody: EditorBlock[] | null
   initialEmbedUrl: string
@@ -89,6 +94,9 @@ export function EditVideoForm({
   id,
   status,
   initialAuthorId,
+  initialSingleLanguage,
+  initialSubtitleLocales,
+  sourceLocale,
   initialTitle,
   initialBody,
   initialEmbedUrl,
@@ -145,6 +153,7 @@ export function EditVideoForm({
   const isSavingRef = useRef(false)
   // Admin/editor-only: who the video is attributed to (sent with every save)
   const authorIdRef = useRef(initialAuthorId)
+  const availabilityRef = useRef({ single: initialSingleLanguage, subtitles: initialSubtitleLocales })
   const pendingSaveRef = useRef(false)
 
   const doSave = useCallback(() => {
@@ -165,6 +174,11 @@ export function EditVideoForm({
     fd.set('feature_requested', String(s.featureRequested))
     fd.set('layout_style', s.layoutStyle)
     fd.set('author_id', authorIdRef.current)
+    fd.set(AVAILABILITY_MARKER, '1')
+    if (availabilityRef.current.single) {
+      fd.set('single_language', 'on')
+      availabilityRef.current.subtitles.forEach((l) => fd.append('subtitle_locales', l))
+    }
     if (s.transcript) fd.set('transcript', JSON.stringify(s.transcript))
     isSavingRef.current = true
     setSaveStatus('saving')
@@ -311,6 +325,16 @@ export function EditVideoForm({
         {/* ── Text tab ── */}
         {activeTab === 'text' && (
           <>
+            <LanguageAvailabilityFields
+              showSubtitles
+              sourceLocale={sourceLocale}
+              defaultSingle={initialSingleLanguage}
+              defaultSubtitles={initialSubtitleLocales}
+              onChange={(v) => {
+                availabilityRef.current = v
+                triggerAutoSave()
+              }}
+            />
             <AuthorPicker
               defaultValue={initialAuthorId}
               onChange={(authorId) => {

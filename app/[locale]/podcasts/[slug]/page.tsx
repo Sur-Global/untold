@@ -2,6 +2,7 @@ import { notFound } from 'next/navigation'
 import { after } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
 import { getTranslation } from '@/lib/content'
+import { LanguageNotice } from '@/components/content/LanguageNotice'
 import { Navigation } from '@/components/layout/Navigation'
 import { Footer } from '@/components/layout/Footer'
 import { EmbedPlayer } from '@/components/content/EmbedPlayer'
@@ -30,7 +31,7 @@ export default async function PodcastPage({ params }: PageProps) {
   const { data: podcast } = await (supabase as any)
     .from('content')
     .select(`
-      id, slug, source_locale, likes_count, published_at,
+      id, slug, source_locale, single_language, subtitle_locales, likes_count, published_at,
       profiles!author_id ( display_name, slug, avatar_url ),
       content_translations ( title, description, locale ),
       podcast_meta ( embed_url, cover_image_url, duration, episode_number )
@@ -42,7 +43,11 @@ export default async function PodcastPage({ params }: PageProps) {
 
   if (!podcast) notFound()
 
-  const t = getTranslation(podcast.content_translations ?? [], locale)
+  // "Only available in this language" content is never translated: readers in any
+  // language get the original, with a label (see LanguageNotice)
+  const singleLanguage: boolean = !!podcast.single_language
+  const contentLocale: string = singleLanguage ? (podcast.source_locale ?? 'en') : locale
+  const t = getTranslation(podcast.content_translations ?? [], contentLocale)
   if (!t) notFound()
 
   const meta = podcast.podcast_meta
@@ -52,9 +57,9 @@ export default async function PodcastPage({ params }: PageProps) {
   const sourceTranslation = (podcast.content_translations ?? []).find((tr: any) => tr.locale === sourceLocale)
   const sourceDescription = sourceTranslation?.description as string | null
 
-  const usingFallback = t.locale !== locale
+  const usingFallback = t.locale !== contentLocale
   const description = usingFallback ? null : (t.description as string | null)
-  const needsDescription = locale !== sourceLocale && !!sourceDescription && (usingFallback || !description)
+  const needsDescription = contentLocale !== sourceLocale && !!sourceDescription && (usingFallback || !description)
 
   if (needsDescription) {
     after(async () => {
@@ -105,6 +110,7 @@ export default async function PodcastPage({ params }: PageProps) {
             {meta?.episode_number && (
               <p className="text-sm font-mono text-[#A0522D] mb-1">{meta.episode_number}</p>
             )}
+            {singleLanguage && <LanguageNotice sourceLocale={sourceLocale} subtitleLocales={podcast.subtitle_locales} />}
             <h1 className="text-2xl mb-2">{t.title}</h1>
             <div className="flex items-center gap-3 text-sm font-mono text-[#6B5F58]">
               {meta?.duration && <span>⏱ {meta.duration}</span>}

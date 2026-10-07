@@ -4,6 +4,7 @@ import type { Metadata } from 'next'
 import { getTranslations } from 'next-intl/server'
 import { createClient } from '@/lib/supabase/server'
 import { getTranslation } from '@/lib/content'
+import { LanguageNotice } from '@/components/content/LanguageNotice'
 import { formatDate } from '@/lib/format-date'
 import { getNavProps } from '@/lib/nav'
 import { Navigation } from '@/components/layout/Navigation'
@@ -56,7 +57,7 @@ export default async function VideoPage({ params }: PageProps) {
     (supabase as any)
       .from('content')
       .select(`
-        id, slug, source_locale, likes_count, published_at,
+        id, slug, source_locale, single_language, subtitle_locales, likes_count, published_at,
         profiles!author_id ( id, display_name, slug, avatar_url, bio, profile_translations, location, social_bluesky, social_linkedin, social_instagram, social_medium, social_custom_url ),
         content_translations ( title, body, description, locale ),
         content_tags ( tags ( slug, names ) ),
@@ -70,7 +71,11 @@ export default async function VideoPage({ params }: PageProps) {
 
   if (!video) notFound()
 
-  const t = getTranslation(video.content_translations ?? [], locale)
+  // "Only available in this language" content is never translated: readers in any
+  // language get the original, with a label (see LanguageNotice)
+  const singleLanguage: boolean = !!video.single_language
+  const contentLocale: string = singleLanguage ? (video.source_locale ?? 'en') : locale
+  const t = getTranslation(video.content_translations ?? [], contentLocale)
   if (!t) notFound()
 
   const meta = Array.isArray(video.video_meta) ? video.video_meta[0] : video.video_meta ?? {}
@@ -85,7 +90,7 @@ export default async function VideoPage({ params }: PageProps) {
   const sourceBody = sourceTranslation?.body as Record<string, unknown> | unknown[] | null
 
   // getTranslation falls back to source locale when no locale row exists — detect that case
-  const usingFallback = t.locale !== locale
+  const usingFallback = t.locale !== contentLocale
   const body = usingFallback ? null : (t.body as Record<string, unknown> | unknown[] | null)
   const legacyDescription = !body ? (t as any).description as string | null : null
 
@@ -95,10 +100,10 @@ export default async function VideoPage({ params }: PageProps) {
   const needsAuthorBio = locale !== sourceLocale && !!author?.bio && !translatedAuthorBio
 
   // Per-section translation flags
-  const needsBody = locale !== sourceLocale && !!sourceBody && (usingFallback || !body)
-  const needsChapters = locale !== sourceLocale && chapters.length > 0 && !chapterTranslations?.[locale]
+  const needsBody = contentLocale !== sourceLocale && !!sourceBody && (usingFallback || !body)
+  const needsChapters = contentLocale !== sourceLocale && chapters.length > 0 && !chapterTranslations?.[locale]
   const needsTranscript =
-    locale !== sourceLocale &&
+    contentLocale !== sourceLocale &&
     Array.isArray(meta?.transcript) &&
     (meta.transcript as unknown[]).length > 0 &&
     !meta?.transcript_translations?.[locale]
@@ -183,6 +188,7 @@ export default async function VideoPage({ params }: PageProps) {
           )}
 
           {/* Title */}
+          {singleLanguage && <LanguageNotice sourceLocale={sourceLocale} subtitleLocales={video.subtitle_locales} />}
           <h1
             className="font-heading text-foreground mb-6"
             style={{ fontSize: 50, lineHeight: '61.6px', letterSpacing: '-0.56px', maxWidth: 752 }}

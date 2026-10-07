@@ -28,7 +28,7 @@ export default async function CoursesPage({ params, searchParams }: PageProps) {
   const { data: featuredRows } = await (supabase as any)
     .from('content')
     .select(`
-      id, slug, type, is_featured, likes_count, published_at, cover_image_url, read_time_minutes,
+      id, slug, type, source_locale, single_language, subtitle_locales, is_featured, likes_count, published_at, cover_image_url, read_time_minutes,
       profiles!author_id ( display_name, slug, role, avatar_url ),
       content_translations ( title, excerpt, locale ),
       content_tags ( tags ( names, slug ) ),
@@ -46,7 +46,7 @@ export default async function CoursesPage({ params, searchParams }: PageProps) {
   const query = (supabase as any)
     .from('content')
     .select(`
-      id, slug, type, is_featured, likes_count, published_at, cover_image_url, read_time_minutes,
+      id, slug, type, source_locale, single_language, subtitle_locales, is_featured, likes_count, published_at, cover_image_url, read_time_minutes,
       profiles!author_id ( display_name, slug, role, avatar_url ),
       content_translations ( title, excerpt, locale ),
       content_tags ( tags ( names, slug ) ),
@@ -107,6 +107,9 @@ export default async function CoursesPage({ params, searchParams }: PageProps) {
         isBookmarked={bookmarkedIds.has(item.id)}
         isLoggedIn={navProps.isLoggedIn}
         isFeatured={item.is_featured}
+        singleLanguage={item.single_language}
+        sourceLocale={item.source_locale}
+        subtitleLocales={item.subtitle_locales}
       />
     )
   }

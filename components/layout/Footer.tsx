@@ -2,6 +2,7 @@ import { getLocale, getTranslations } from 'next-intl/server'
 import { createClient } from '@/lib/supabase/server'
 import { Link } from '@/i18n/navigation'
 import { getStaticPagesForFooter } from '@/lib/data/static-pages'
+import { SubscribeModalButton } from '@/components/layout/SubscribeModalButton'
 
 const TOPICS = [
   { msgKey: 'topicDecoloniality' as const, slug: 'decoloniality' },
@@ -56,6 +57,11 @@ export async function Footer() {
             <p className="text-sm" style={{ ...aeonikRegularBody, color: '#78716C' }}>
               {t('brandTagline')}
             </p>
+            <SubscribeModalButton
+              label={t('subscribeCta')}
+              closeLabel={t('subscribeClose')}
+              formTitle={t('subscribeFormTitle')}
+            />
           </div>
           <div>
             <p

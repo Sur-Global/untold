@@ -25,12 +25,17 @@ export async function POST(req: NextRequest) {
 
   const { data: content } = await (supabase as any)
     .from('content')
-    .select('type, author_id, source_locale')
+    .select('type, author_id, source_locale, single_language')
     .eq('id', contentId)
     .single()
 
   if (!content) {
     return NextResponse.json({ error: 'Content not found' }, { status: 404 })
+  }
+
+  // Marked "only available in this language": never translated
+  if (content.single_language) {
+    return NextResponse.json({ skipped: 'single_language' })
   }
 
   const sourceLocale: string = content.source_locale ?? 'en'

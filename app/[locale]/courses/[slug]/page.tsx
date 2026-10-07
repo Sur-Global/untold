@@ -2,6 +2,7 @@ import { notFound } from 'next/navigation'
 import { after } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
 import { getTranslation } from '@/lib/content'
+import { LanguageNotice } from '@/components/content/LanguageNotice'
 import { Navigation } from '@/components/layout/Navigation'
 import { Footer } from '@/components/layout/Footer'
 import { BodyTranslationLoader } from '@/components/content/BodyTranslationLoader'
@@ -28,7 +29,7 @@ export default async function CoursePage({ params }: PageProps) {
   const { data: course } = await (supabase as any)
     .from('content')
     .select(`
-      id, slug, source_locale, cover_image_url, likes_count, published_at,
+      id, slug, source_locale, single_language, subtitle_locales, cover_image_url, likes_count, published_at,
       profiles!author_id ( display_name, slug, avatar_url ),
       content_translations ( title, description, locale ),
       course_meta ( price, currency, duration, students_count, rating )
@@ -40,7 +41,11 @@ export default async function CoursePage({ params }: PageProps) {
 
   if (!course) notFound()
 
-  const t = getTranslation(course.content_translations ?? [], locale)
+  // "Only available in this language" content is never translated: readers in any
+  // language get the original, with a label (see LanguageNotice)
+  const singleLanguage: boolean = !!course.single_language
+  const contentLocale: string = singleLanguage ? (course.source_locale ?? 'en') : locale
+  const t = getTranslation(course.content_translations ?? [], contentLocale)
   if (!t) notFound()
 
   const meta = course.course_meta
@@ -50,9 +55,9 @@ export default async function CoursePage({ params }: PageProps) {
   const sourceTranslation = (course.content_translations ?? []).find((tr: any) => tr.locale === sourceLocale)
   const sourceDescription = sourceTranslation?.description as string | null
 
-  const usingFallback = t.locale !== locale
+  const usingFallback = t.locale !== contentLocale
   const description = usingFallback ? null : (t.description as string | null)
-  const needsDescription = locale !== sourceLocale && !!sourceDescription && (usingFallback || !description)
+  const needsDescription = contentLocale !== sourceLocale && !!sourceDescription && (usingFallback || !description)
 
   if (needsDescription) {
     after(async () => {
@@ -100,6 +105,7 @@ export default async function CoursePage({ params }: PageProps) {
                 className="w-full rounded-xl mb-8 aspect-video object-cover"
               />
             )}
+            {singleLanguage && <LanguageNotice sourceLocale={sourceLocale} subtitleLocales={course.subtitle_locales} />}
             <h1 className="mb-4">{t.title}</h1>
             <BodyTranslationLoader
               contentId={course.id}

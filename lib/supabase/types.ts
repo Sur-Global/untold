@@ -41,6 +41,8 @@ export interface Database {
           is_featured: boolean;
           is_hero_featured: boolean;
           is_home_featured: boolean;
+          single_language: boolean;
+          subtitle_locales: string[];
           cover_image_url: string | null;
           image_credits: string | null;
           likes_count: number;

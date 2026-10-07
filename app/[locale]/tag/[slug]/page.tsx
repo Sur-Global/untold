@@ -31,7 +31,7 @@ export default async function TagPage({ params }: PageProps) {
     .from('content_tags')
     .select(`
       content (
-        id, slug, type, is_featured, likes_count, published_at, cover_image_url, status,
+        id, slug, type, source_locale, single_language, subtitle_locales, is_featured, likes_count, published_at, cover_image_url, status,
         profiles!author_id ( display_name, slug, role ),
         content_translations ( title, excerpt, featured_summary, description, locale ),
         video_meta ( duration ),
@@ -90,6 +90,9 @@ export default async function TagPage({ params }: PageProps) {
                   coverImageUrl={item.cover_image_url}
                   publishedAt={item.published_at}
                   likesCount={item.likes_count}
+                  singleLanguage={item.single_language}
+                  sourceLocale={item.source_locale}
+                  subtitleLocales={item.subtitle_locales}
                   authorName={author?.display_name}
                   authorSlug={author?.slug}
                   duration={item.video_meta?.duration ?? item.podcast_meta?.duration}

@@ -86,6 +86,8 @@
     "slugInvalid": "Kun bogstaver, tal og bindestreger"
   },
   "content": {
+    "onlyInLanguage": "Kun på {language}",
+    "inLanguageWithSubtitles": "På {language} · Undertekster: {subtitles}",
     "readTime": "{minutes} min læsning",
     "likes": "{count} synes godt om",
     "publishedOn": "Udgivet {date}",
@@ -322,12 +324,18 @@
     "authorCancelButton": "Annuller",
     "contentLanguageLabel": "Sprog, det er skrevet på",
     "contentLanguageHint": "Originalsproget. Andre sprog oversættes fra det.",
+    "singleLanguageLabel": "Dette indhold er kun tilgængeligt på dette sprog",
+    "singleLanguageHint": "Det oversættes ikke automatisk. Læserne ser en label med sproget.",
+    "subtitlesLabel": "Undertekster tilgængelige på",
     "authorCtaTitle": "Handlingsknap (valgfri)",
     "authorCtaLabel": "Knaptekst",
     "authorCtaUrl": "Knaplink",
     "authorCtaHint": "Vises kun på din forfattersiden. Teksten oversættes automatisk til de andre sprog."
   },
   "footer": {
+    "subscribeCta": "Abonnér",
+    "subscribeClose": "Luk",
+    "subscribeFormTitle": "Tilmeldingsformular til nyhedsbrev",
     "brandTitle": "UNTOLD",
     "brandTagline": "Udforsker idéer, der former fremtiden.",
     "contentHeading": "Indhold",

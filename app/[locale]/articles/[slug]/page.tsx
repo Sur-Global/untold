@@ -4,6 +4,7 @@ import type { Metadata } from 'next'
 import { getTranslations } from 'next-intl/server'
 import { createClient } from '@/lib/supabase/server'
 import { getTranslation } from '@/lib/content'
+import { LanguageNotice } from '@/components/content/LanguageNotice'
 import { readTime } from '@/lib/utils'
 import { renderCreditHtml } from '@/lib/photo-credit'
 import { sanitizeBioHtml } from '@/lib/sanitize-bio-html'
@@ -58,7 +59,7 @@ export default async function ArticlePage({ params }: PageProps) {
   const { data: article } = await (supabase as any)
     .from('content')
     .select(`
-      id, slug, likes_count, published_at, cover_image_url, image_credits, source_locale,
+      id, slug, likes_count, published_at, cover_image_url, image_credits, source_locale, single_language, subtitle_locales,
       profiles!author_id ( id, display_name, slug, avatar_url, bio, profile_translations, location, followers_count, role, social_bluesky, social_linkedin, social_instagram, social_medium, social_custom_url ),
       content_translations ( title, excerpt, featured_summary, body, locale ),
       content_tags ( tags ( slug, names ) )
@@ -70,7 +71,11 @@ export default async function ArticlePage({ params }: PageProps) {
 
   if (!article) notFound()
 
-  const t = getTranslation(article.content_translations ?? [], locale)
+  // "Only available in this language" content is never translated: readers in any
+  // language get the original, with a label (see LanguageNotice)
+  const singleLanguage: boolean = !!article.single_language
+  const contentLocale: string = singleLanguage ? (article.source_locale ?? 'en') : locale
+  const t = getTranslation(article.content_translations ?? [], contentLocale)
   if (!t) notFound()
 
   const author = article.profiles
@@ -81,9 +86,9 @@ export default async function ArticlePage({ params }: PageProps) {
   const sourceBody = sourceTranslation?.body as Record<string, unknown> | null
 
   // getTranslation falls back to source locale when no locale row exists — detect that case
-  const usingFallback = t.locale !== locale
+  const usingFallback = t.locale !== contentLocale
   const body = usingFallback ? null : (t.body as Record<string, unknown> | null)
-  const needsBody = locale !== sourceLocale && !!sourceBody && (usingFallback || !body)
+  const needsBody = contentLocale !== sourceLocale && !!sourceBody && (usingFallback || !body)
 
   // Author bio translation
   const profileTrans = author?.profile_translations as Record<string, any> | null
@@ -196,6 +201,7 @@ export default async function ArticlePage({ params }: PageProps) {
                 )}
 
                 {/* Title */}
+                {singleLanguage && <LanguageNotice sourceLocale={sourceLocale} subtitleLocales={article.subtitle_locales} />}
                 <h1
                   className="font-heading text-foreground mb-6"
                   style={{ fontSize: 50, lineHeight: '61.6px', letterSpacing: '-0.56px', maxWidth: 752 }}

@@ -1,6 +1,7 @@
 'use client'
 import { useRef } from 'react'
-import { useTranslations } from 'next-intl'
+import { useLocale, useTranslations } from 'next-intl'
+import { languageLabel } from '@/lib/language-availability'
 import { Link } from '@/i18n/navigation'
 import type { ContentType } from '@/lib/supabase/types'
 import { BookmarkButton } from '@/components/social/BookmarkButton'
@@ -33,6 +34,10 @@ interface ContentCardProps {
   isBookmarked?: boolean
   isLoggedIn?: boolean
   isFeatured?: boolean
+  /** Content that only exists in its original language (never auto-translated) */
+  singleLanguage?: boolean
+  sourceLocale?: string | null
+  subtitleLocales?: string[] | null
   duration?: string | null
   episodeNumber?: string | null
   accentColor?: string | null
@@ -89,6 +94,9 @@ export function ContentCard({
   isBookmarked = false,
   isLoggedIn = false,
   isFeatured = false,
+  singleLanguage = false,
+  sourceLocale,
+  subtitleLocales,
   duration,
   episodeNumber,
   accentColor,
@@ -98,6 +106,7 @@ export function ContentCard({
 }: ContentCardProps) {
   const tContent = useTranslations('content')
   const tCreate = useTranslations('create')
+  const uiLocale = useLocale()
   const href = `/${TYPE_PATHS[type]}/${slug}`
   const blurb = excerpt ?? description
   const image = coverImageUrl ?? thumbnailUrl
@@ -243,6 +252,16 @@ export function ContentCard({
 
       {/* Card body */}
       <div className="flex flex-col gap-3 flex-1 px-6 pt-6">
+        {/* Language availability — shown on content that only exists in one language */}
+        {singleLanguage && sourceLocale && (
+          <span
+            className="self-start rounded-full px-2.5 py-0.5 text-[11px] text-[#5d4e37]"
+            style={{ background: 'rgba(212,165,116,0.18)', fontFamily: 'JetBrains Mono, monospace' }}
+          >
+            🌐 {languageLabel(tContent, uiLocale, { sourceLocale, subtitleLocales })}
+          </span>
+        )}
+
         {/* Episode / duration (non-article) */}
         {(episodeNumber || duration || rating != null) && (
           <div className="flex items-center gap-2 text-xs text-[#8b7355]" style={{ fontFamily: 'JetBrains Mono, monospace' }}>

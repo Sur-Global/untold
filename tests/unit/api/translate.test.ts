@@ -69,6 +69,20 @@ describe('POST /api/translate', () => {
     expect(res.status).toBe(401)
   })
 
+  it('skips content marked as only available in its own language', async () => {
+    const { from, upsertMock } = makeChainMock({
+      singleValues: [{ data: { type: 'pill', author_id: 'a', source_locale: 'es', single_language: true } }],
+    })
+    vi.mocked(createServiceRoleClient).mockReturnValue({ from } as any)
+
+    const res = await POST(makeRequest({ contentId: 'abc' }, SECRET))
+
+    expect(res.status).toBe(200)
+    expect(await res.json()).toEqual({ skipped: 'single_language' })
+    expect(translateTexts).not.toHaveBeenCalled()
+    expect(upsertMock).not.toHaveBeenCalled()
+  })
+
   it('returns 400 when contentId is missing', async () => {
     const res = await POST(makeRequest({}, SECRET))
     expect(res.status).toBe(400)

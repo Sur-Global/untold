@@ -9,6 +9,8 @@ import { isEditorRole } from '@/lib/require-editor'
 import { slugify } from '@/lib/utils'
 import { computeReadTime } from '@/lib/readTime'
 import { resolveSourceLocale } from '@/lib/resolve-source-locale'
+import { readLanguageAvailability } from '@/lib/language-availability'
+import { saveLanguageAvailability } from '@/lib/save-language-availability'
 import { publishNewContent } from '@/lib/publish-new-content'
 import { resolveAuthorId, requestedAuthorId } from '@/lib/resolve-author'
 import { logActivity, getContentLogInfo } from '@/lib/actions/activity-log'
@@ -38,6 +40,7 @@ export async function createArticle(formData: FormData) {
       author_id: authorId,
       slug,
       source_locale: sourceLocale,
+      ...(readLanguageAvailability(formData) ?? {}),
       status: 'draft',
       cover_image_url: coverImageUrl,
       image_credits: imageCredits,
@@ -108,6 +111,7 @@ export async function updateArticle(id: string, formData: FormData) {
   if (!canManageAll && contentMeta.author_id !== user.id) throw new Error('Unauthorized')
 
   const sourceLocale: string = contentMeta.source_locale ?? 'en'
+  await saveLanguageAvailability(supabase, id, sourceLocale, formData)
 
   const title = (formData.get('title') as string)?.trim() || ''
   const excerpt = (formData.get('excerpt') as string)?.trim() || null

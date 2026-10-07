@@ -49,7 +49,7 @@ export default async function EditArticlePage({ params }: PageProps) {
   const articleQuery = (supabase as any)
     .from('content')
     .select(`
-      id, author_id, status, source_locale, cover_image_url, image_credits, feature_requested_at,
+      id, author_id, status, source_locale, single_language, subtitle_locales, cover_image_url, image_credits, feature_requested_at,
       profiles!author_id ( display_name, bio ),
       content_translations ( title, excerpt, featured_summary, body, locale, is_auto_translated ),
       content_tags ( tag_id, tags ( id, slug, names ) )
@@ -102,6 +102,7 @@ export default async function EditArticlePage({ params }: PageProps) {
         id={id}
         status={article.status}
         initialAuthorId={article.author_id}
+        initialSingleLanguage={article.single_language ?? false}
         sourceLocale={sourceLocale}
         translations={translations}
         availableLocales={SUPPORTED_LOCALES as unknown as string[]}

@@ -9,11 +9,13 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { CoverImageInput } from '@/components/ui/CoverImageInput'
 import { AuthorPicker } from '@/components/content/AuthorPicker'
+import { LanguageAvailabilityFields } from '@/components/content/LanguageAvailabilityFields'
 
 interface EditPodcastFormProps {
   id: string
   status: string
   initialAuthorId: string
+  initialSingleLanguage?: boolean
   initialTitle: string
   initialDescription: string
   initialEmbedUrl: string
@@ -24,7 +26,7 @@ interface EditPodcastFormProps {
 
 export function EditPodcastForm({
   id,
-  status, initialAuthorId,
+  status, initialAuthorId, initialSingleLanguage = false,
   initialTitle,
   initialDescription,
   initialEmbedUrl,
@@ -46,6 +48,7 @@ export function EditPodcastForm({
   return (
     <form ref={formRef} onSubmit={handleSave} className="space-y-6">
       <AuthorPicker defaultValue={initialAuthorId} />
+      <LanguageAvailabilityFields defaultSingle={initialSingleLanguage} />
 
       <div className="space-y-2">
         <Label htmlFor="title">{t('titleRequiredLabel')}</Label>

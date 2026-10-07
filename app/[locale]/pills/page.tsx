@@ -32,7 +32,7 @@ export default async function PillsPage({ params, searchParams }: PageProps) {
   const { data: featuredRows } = await (supabase as any)
     .from('content')
     .select(`
-      id, slug, type, is_featured, likes_count, published_at, cover_image_url, read_time_minutes,
+      id, slug, type, source_locale, single_language, subtitle_locales, is_featured, likes_count, published_at, cover_image_url, read_time_minutes,
       profiles!author_id ( display_name, slug, role, avatar_url ),
       content_translations ( title, excerpt, locale ),
       content_tags ( tags ( names, slug ) ),
@@ -50,7 +50,7 @@ export default async function PillsPage({ params, searchParams }: PageProps) {
   const query = (supabase as any)
     .from('content')
     .select(`
-      id, slug, type, is_featured, likes_count, published_at, cover_image_url, read_time_minutes,
+      id, slug, type, source_locale, single_language, subtitle_locales, is_featured, likes_count, published_at, cover_image_url, read_time_minutes,
       profiles!author_id ( display_name, slug, role, avatar_url ),
       content_translations ( title, excerpt, locale ),
       content_tags ( tags ( names, slug ) ),
@@ -85,7 +85,7 @@ export default async function PillsPage({ params, searchParams }: PageProps) {
   let pendingTranslations = false
   if (listed.length > 0) {
     const untranslatedIds = listed
-      .filter(i => !(i.content_translations ?? []).some((t: any) => t.locale === locale))
+      .filter(i => !i.single_language && !(i.content_translations ?? []).some((t: any) => t.locale === locale))
       .map((i: any) => i.id)
     if (untranslatedIds.length > 0) {
       pendingTranslations = true
@@ -120,6 +120,9 @@ export default async function PillsPage({ params, searchParams }: PageProps) {
         isBookmarked={bookmarkedIds.has(item.id)}
         isLoggedIn={navProps.isLoggedIn}
         isFeatured={item.is_featured}
+        singleLanguage={item.single_language}
+        sourceLocale={item.source_locale}
+        subtitleLocales={item.subtitle_locales}
       />
     )
   }

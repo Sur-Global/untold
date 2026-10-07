@@ -8,6 +8,8 @@ import { requireCreator } from '@/lib/require-creator'
 import { isEditorRole } from '@/lib/require-editor'
 import { slugify } from '@/lib/utils'
 import { resolveSourceLocale } from '@/lib/resolve-source-locale'
+import { readLanguageAvailability } from '@/lib/language-availability'
+import { saveLanguageAvailability } from '@/lib/save-language-availability'
 import { publishNewContent } from '@/lib/publish-new-content'
 import { resolveAuthorId, requestedAuthorId } from '@/lib/resolve-author'
 import { logActivity } from '@/lib/actions/activity-log'
@@ -32,6 +34,7 @@ export async function createPill(formData: FormData) {
       author_id: authorId,
       slug,
       source_locale: sourceLocale,
+      ...(readLanguageAvailability(formData) ?? {}),
       status: 'draft',
       cover_image_url: imageUrl,
     })
@@ -94,6 +97,7 @@ export async function updatePill(id: string, formData: FormData) {
 
   if (!owned) return
   const sourceLocale: string = owned.source_locale ?? 'en'
+  await saveLanguageAvailability(supabase, id, sourceLocale, formData)
 
   const bodyJson = body ? (() => { try { return JSON.parse(body) } catch { return null } })() : null
 

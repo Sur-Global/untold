@@ -1,5 +1,6 @@
 import { after } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
+import { SubscribeEmbed } from '@/components/layout/SubscribeEmbed'
 import { getNavProps } from '@/lib/nav'
 import { getPlatformSettings } from '@/lib/data/platform-settings'
 import { getTranslation } from '@/lib/content'
@@ -30,6 +31,7 @@ export default async function HomePage({ params }: PageProps) {
   const t = await getTranslations('home')
   const tListings = await getTranslations('listings')
   const tContentHome = await getTranslations('content')
+  const tFooterHome = await getTranslations('footer')
   const platform = await getPlatformSettings()
   const featuredArticleLimit = platform.featuredContent.count
   const toSentenceCase = (s: string) =>
@@ -85,7 +87,7 @@ export default async function HomePage({ params }: PageProps) {
     (supabase as any)
       .from('content')
       .select(`
-        id, slug, type, is_featured, likes_count, published_at, cover_image_url, read_time_minutes,
+        id, slug, type, source_locale, single_language, subtitle_locales, is_featured, likes_count, published_at, cover_image_url, read_time_minutes,
         profiles!author_id ( display_name, slug, avatar_url ),
         content_translations ( title, excerpt, featured_summary, locale ),
         content_tags ( tags ( names, slug ) )
@@ -100,7 +102,7 @@ export default async function HomePage({ params }: PageProps) {
     (supabase as any)
       .from('content')
       .select(`
-        id, slug, type, is_featured, likes_count, published_at, cover_image_url,
+        id, slug, type, source_locale, single_language, subtitle_locales, is_featured, likes_count, published_at, cover_image_url,
         profiles!author_id ( display_name, slug, avatar_url ),
         content_translations ( title, excerpt, featured_summary, locale ),
         content_tags ( tags ( names, slug ) ),
@@ -116,7 +118,7 @@ export default async function HomePage({ params }: PageProps) {
     (supabase as any)
       .from('content')
       .select(`
-        id, slug, type, is_featured, likes_count, published_at,
+        id, slug, type, source_locale, single_language, subtitle_locales, is_featured, likes_count, published_at,
         profiles!author_id ( display_name, slug, avatar_url ),
         content_translations ( title, excerpt, featured_summary, locale ),
         content_tags ( tags ( names, slug ) ),
@@ -132,7 +134,7 @@ export default async function HomePage({ params }: PageProps) {
     (supabase as any)
       .from('content')
       .select(`
-        id, slug, type, is_featured, likes_count, published_at, cover_image_url,
+        id, slug, type, source_locale, single_language, subtitle_locales, is_featured, likes_count, published_at, cover_image_url,
         profiles!author_id ( display_name, slug, avatar_url ),
         content_translations ( title, excerpt, featured_summary, locale ),
         content_tags ( tags ( names, slug ) ),
@@ -148,7 +150,7 @@ export default async function HomePage({ params }: PageProps) {
     (supabase as any)
       .from('content')
       .select(`
-        id, slug, type, is_featured, likes_count, published_at, cover_image_url,
+        id, slug, type, source_locale, single_language, subtitle_locales, is_featured, likes_count, published_at, cover_image_url,
         profiles!author_id ( display_name, slug, avatar_url ),
         content_translations ( title, excerpt, featured_summary, locale ),
         content_tags ( tags ( names, slug ) ),
@@ -186,7 +188,7 @@ export default async function HomePage({ params }: PageProps) {
   let pendingTranslations = false
   {
     const untranslatedIds = allItems
-      .filter((i: any) => !(i.content_translations ?? []).some((t: any) => t.locale === locale))
+      .filter((i: any) => !i.single_language && !(i.content_translations ?? []).some((t: any) => t.locale === locale))
       .map((i: any) => i.id)
     const uniqueIds = [...new Set(untranslatedIds)] as string[]
     if (uniqueIds.length > 0) {
@@ -792,6 +794,13 @@ export default async function HomePage({ params }: PageProps) {
             </section>
           )}
         </div>
+
+        {/* Newsletter sign-up (Sender form) */}
+        <section style={{ background: '#F1F1F1' }} aria-label={tFooterHome('subscribeFormTitle')}>
+          <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6">
+            <SubscribeEmbed title={tFooterHome('subscribeFormTitle')} />
+          </div>
+        </section>
       </main>
       <Footer />
     </>

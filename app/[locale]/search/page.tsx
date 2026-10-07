@@ -35,7 +35,7 @@ export default async function SearchPage({ params, searchParams }: PageProps) {
       .select(`
         content_id, locale, title, excerpt, description,
         content!inner (
-          id, slug, type, is_featured, likes_count, published_at, cover_image_url,
+          id, slug, type, source_locale, single_language, subtitle_locales, is_featured, likes_count, published_at, cover_image_url,
           profiles!author_id ( display_name, slug, role ),
           video_meta ( duration ),
           podcast_meta ( duration, episode_number ),
@@ -150,6 +150,9 @@ export default async function SearchPage({ params, searchParams }: PageProps) {
                   coverImageUrl={item.cover_image_url}
                   publishedAt={item.published_at}
                   likesCount={item.likes_count}
+                  singleLanguage={item.single_language}
+                  sourceLocale={item.source_locale}
+                  subtitleLocales={item.subtitle_locales}
                   authorName={author?.display_name}
                   authorSlug={author?.slug}
                   duration={item.video_meta?.duration ?? item.podcast_meta?.duration}
