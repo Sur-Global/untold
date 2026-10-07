@@ -1,9 +1,12 @@
+import { getTranslations } from 'next-intl/server'
 import { createClient } from '@/lib/supabase/server'
 import { getNavProps } from '@/lib/nav'
 import { getTranslation } from '@/lib/content'
 import { Navigation } from '@/components/layout/Navigation'
 import { Footer } from '@/components/layout/Footer'
 import { ContentCard } from '@/components/content/ContentCard'
+import { FeaturedSection } from '@/components/content/FeaturedSection'
+import { PAGE_FEATURED_SLOTS } from '@/lib/featured-slots'
 
 const PAGE_SIZE = 12
 
@@ -19,6 +22,26 @@ export default async function CoursesPage({ params, searchParams }: PageProps) {
   const offset = (page - 1) * PAGE_SIZE
 
   const supabase = await createClient()
+  const tListings = await getTranslations('listings')
+
+  // ★ picks (admin/content) shown at the top of page 1; kept out of the main list below
+  const { data: featuredRows } = await (supabase as any)
+    .from('content')
+    .select(`
+      id, slug, type, is_featured, likes_count, published_at, cover_image_url, read_time_minutes,
+      profiles!author_id ( display_name, slug, role, avatar_url ),
+      content_translations ( title, excerpt, locale ),
+      content_tags ( tags ( names, slug ) ),
+      course_meta ( price, currency, duration, rating )
+    `)
+    .eq('type', 'course')
+    .eq('status', 'published')
+    .eq('is_featured', true)
+    .in('profiles.role', ['admin', 'author'])
+    .order('published_at', { ascending: false })
+    .limit(PAGE_FEATURED_SLOTS)
+  const featuredItems: any[] = featuredRows ?? []
+  const featuredIds = featuredItems.map((i) => i.id)
 
   const query = (supabase as any)
     .from('content')
@@ -32,6 +55,7 @@ export default async function CoursesPage({ params, searchParams }: PageProps) {
     .eq('type', 'course')
     .eq('status', 'published')
     .in('profiles.role', ['admin', 'author'])
+    .not('id', 'in', `(${featuredIds.length ? featuredIds.join(',') : '00000000-0000-0000-0000-000000000000'})`)
     .order('published_at', { ascending: false })
     .range(offset, offset + PAGE_SIZE - 1)
 
@@ -40,7 +64,8 @@ export default async function CoursesPage({ params, searchParams }: PageProps) {
     query,
   ])
 
-  const contentIds = (items ?? []).map((i: any) => i.id)
+  const listed = [...featuredItems, ...(items ?? [])]
+  const contentIds = listed.map((i: any) => i.id)
   const bookmarkedIds = new Set<string>()
   if (userId && contentIds.length > 0) {
     const { data: bookmarks } = await (supabase as any)
@@ -53,50 +78,56 @@ export default async function CoursesPage({ params, searchParams }: PageProps) {
 
   const totalPages = Math.ceil((count ?? 0) / PAGE_SIZE)
 
+  const renderCard = (item: any) => {
+    const t = getTranslation(item.content_translations ?? [], locale)
+    const author = item.profiles
+    const firstTag = item.content_tags?.[0]?.tags
+    const categoryTag = firstTag ? (firstTag.names[locale] ?? firstTag.names["en"] ?? null) : null
+    const categoryTagSlug = firstTag?.slug ?? null
+    return (
+      <ContentCard
+        key={item.id}
+        contentId={item.id}
+        type="course"
+        slug={item.slug}
+        title={t?.title ?? 'Untitled'}
+        excerpt={t?.excerpt}
+        coverImageUrl={item.cover_image_url}
+        publishedAt={item.published_at}
+        likesCount={item.likes_count}
+        authorName={author?.display_name}
+        authorSlug={author?.slug}
+        authorAvatarUrl={author?.avatar_url}
+        categoryTag={categoryTag}
+        categoryTagSlug={categoryTagSlug}
+        price={item.course_meta?.price}
+        currency={item.course_meta?.currency}
+        rating={item.course_meta?.rating}
+        duration={item.course_meta?.duration}
+        isBookmarked={bookmarkedIds.has(item.id)}
+        isLoggedIn={navProps.isLoggedIn}
+        isFeatured={item.is_featured}
+      />
+    )
+  }
+
   return (
     <>
       <Navigation {...navProps} />
       <main className="max-w-7xl mx-auto px-4 sm:px-6 py-16">
         <div className="mb-12">
           <h1 className="mb-2">Courses</h1>
-          <p className="text-[#6B5F58]">Structured learning from Global South practitioners.</p>
+          <p className="text-[#6B5F58]">{tListings('coursesDesc')}</p>
         </div>
+
+        {page === 1 && featuredItems.length > 0 && (
+          <FeaturedSection label={tListings('filterFeatured')}>{featuredItems.map(renderCard)}</FeaturedSection>
+        )}
 
         {items && items.length > 0 ? (
           <>
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {items.map((item: any) => {
-                const t = getTranslation(item.content_translations ?? [], locale)
-                const author = item.profiles
-                const firstTag = item.content_tags?.[0]?.tags
-                const categoryTag = firstTag ? (firstTag.names[locale] ?? firstTag.names["en"] ?? null) : null
-                const categoryTagSlug = firstTag?.slug ?? null
-                return (
-                  <ContentCard
-                    key={item.id}
-                    contentId={item.id}
-                    type="course"
-                    slug={item.slug}
-                    title={t?.title ?? 'Untitled'}
-                    excerpt={t?.excerpt}
-                    coverImageUrl={item.cover_image_url}
-                    publishedAt={item.published_at}
-                    likesCount={item.likes_count}
-                    authorName={author?.display_name}
-                    authorSlug={author?.slug}
-                    authorAvatarUrl={author?.avatar_url}
-                    categoryTag={categoryTag}
-                      categoryTagSlug={categoryTagSlug}
-                    price={item.course_meta?.price}
-                    currency={item.course_meta?.currency}
-                    rating={item.course_meta?.rating}
-                    duration={item.course_meta?.duration}
-                    isBookmarked={bookmarkedIds.has(item.id)}
-                    isLoggedIn={navProps.isLoggedIn}
-                    isFeatured={item.is_featured}
-                  />
-                )
-              })}
+              {items.map(renderCard)}
             </div>
             {totalPages > 1 && (
               <div className="flex justify-center gap-2 mt-12">
@@ -114,7 +145,7 @@ export default async function CoursesPage({ params, searchParams }: PageProps) {
               </div>
             )}
           </>
-        ) : (
+        ) : featuredItems.length > 0 ? null : (
           <p className="text-center py-20 text-[#6B5F58]">No courses yet.</p>
         )}
       </main>

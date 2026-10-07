@@ -2,8 +2,8 @@ import { createClient } from '@/lib/supabase/server'
 import { Link } from '@/i18n/navigation'
 import { getPublicContentPath } from '@/lib/utils'
 import type { ContentType } from '@/lib/supabase/types'
-import { FeatureButton } from '@/components/admin/FeatureButton'
-import { HeroFeatureButton } from '@/components/admin/HeroFeatureButton'
+import { PlacementButtons } from '@/components/admin/PlacementButtons'
+import { CONTENT_TYPES, HERO_SLOTS, HOME_SLOTS, PAGE_FEATURED_SLOTS, TYPE_PLURAL } from '@/lib/featured-slots'
 import { AdminUnpublishButton } from '@/components/admin/AdminUnpublishButton'
 import { AdminPageHeader } from '@/components/admin/AdminPageHeader'
 import { AdminPanel } from '@/components/admin/AdminPanel'
@@ -36,31 +36,26 @@ export default async function AdminContentPage({ searchParams }: PageProps) {
 
   const supabase = await createClient()
 
-  // is_hero_featured requires a migration (supabase/migrations/20260717180000_hero_featured.sql)
-  // that may not be applied to every environment yet — select it defensively so the whole
-  // page doesn't come up empty if the column isn't there.
-  function buildItemsQuery(withHeroFeatured: boolean) {
-    const q = (supabase as any)
-      .from('content')
-      .select(`
-        id,
-        type,
-        slug,
-        source_locale,
-        status,
-        created_at,
-        is_featured,
-        ${withHeroFeatured ? 'is_hero_featured,' : ''}
-        published_at,
-        content_translations(title, locale),
-        profiles!content_author_id_fkey(display_name)
-      `)
-      .order(statusFilter === 'published' ? 'published_at' : 'created_at', { ascending: false })
-      .range((page - 1) * PAGE_SIZE, page * PAGE_SIZE - 1)
-    if (statusFilter !== 'all') q.eq('status', statusFilter)
-    if (typeFilter) q.eq('type', typeFilter)
-    return q
-  }
+  const itemsQuery = (supabase as any)
+    .from('content')
+    .select(`
+      id,
+      type,
+      slug,
+      source_locale,
+      status,
+      created_at,
+      is_featured,
+      is_home_featured,
+      is_hero_featured,
+      published_at,
+      content_translations(title, locale),
+      profiles!content_author_id_fkey(display_name)
+    `)
+    .order(statusFilter === 'published' ? 'published_at' : 'created_at', { ascending: false })
+    .range((page - 1) * PAGE_SIZE, page * PAGE_SIZE - 1)
+  if (statusFilter !== 'all') itemsQuery.eq('status', statusFilter)
+  if (typeFilter) itemsQuery.eq('type', typeFilter)
 
   const countQuery = (supabase as any)
     .from('content')
@@ -68,48 +63,86 @@ export default async function AdminContentPage({ searchParams }: PageProps) {
   if (statusFilter !== 'all') countQuery.eq('status', statusFilter)
   if (typeFilter) countQuery.eq('type', typeFilter)
 
-  let [{ data: items, error: itemsError }, { count }] = await Promise.all([
-    buildItemsQuery(true),
-    countQuery,
-  ])
-  if (itemsError) {
-    ;({ data: items } = await buildItemsQuery(false))
-  }
+  const [{ data: items }, { count }] = await Promise.all([itemsQuery, countQuery])
 
   const totalPages = Math.max(1, Math.ceil((count ?? 0) / PAGE_SIZE))
 
-  // Who currently holds the (max 3) homepage hero slots
-  const { data: heroRows } = await (supabase as any)
+  // Who currently holds each placement slot (★ page / ⌂ home / ↑ hero)
+  const { data: placedRows } = await (supabase as any)
     .from('content')
-    .select('id, type, source_locale, content_translations(title, locale)')
-    .eq('is_hero_featured', true)
+    .select('id, type, source_locale, is_featured, is_home_featured, is_hero_featured, content_translations(title, locale)')
     .eq('status', 'published')
-  const heroItems: Array<{ id: string; type: string; title: string }> = (heroRows ?? []).map((r: any) => ({
-    id: r.id,
-    type: r.type,
-    title:
-      r.content_translations?.find((t: any) => t.locale === (r.source_locale ?? 'en'))?.title ??
+    .or('is_featured.eq.true,is_home_featured.eq.true,is_hero_featured.eq.true')
+  type Placed = { id: string; type: string; title: string }
+  const placed = (placedRows ?? []).map((r: any) => ({
+    id: r.id as string,
+    type: r.type as string,
+    page: !!r.is_featured,
+    home: !!r.is_home_featured,
+    hero: !!r.is_hero_featured,
+    title: (r.content_translations?.find((t: any) => t.locale === (r.source_locale ?? 'en'))?.title ??
       r.content_translations?.[0]?.title ??
-      r.id,
+      r.id) as string,
   }))
+  const heroItems: Placed[] = placed.filter((r: any) => r.hero)
+  const slotsFor = (type: string, key: 'page' | 'home'): Placed[] => placed.filter((r: any) => r.type === type && r[key])
 
   return (
     <div className="space-y-6">
       <AdminPageHeader
         title="Content"
-        description="Content across all authors — published and drafts. Feature or unpublish published items, or open a draft to edit and publish it."
+        description="Content across all authors — published and drafts. Place published items (★ ⌂ ↑) or unpublish them, or open a draft to edit and publish it."
       />
 
       <div className="rounded-xl border border-primary/15 bg-card px-5 py-4 text-sm">
-        <p className="font-semibold text-foreground">
-          Homepage hero: {heroItems.length} of 3 slots used{heroItems.length >= 3 ? ' (full)' : ''}
-        </p>
+        <p className="font-semibold text-foreground">Placement slots</p>
         <p className="mt-0.5 text-xs text-muted-foreground">
-          The ⌂ button puts an item in the big banner at the top of the homepage — only 3 fit. Featured items
-          (★) already appear in their own section further down (Articles, Videos, Podcasts…).
+          Three buttons on each published item: <strong>★</strong> featured at the top of its own page (Podcasts, Videos…),{' '}
+          <strong>⌂</strong> shown in its section on the homepage, <strong>↑</strong> the big hero banner on the homepage
+          (any type). Each has a limited number of slots — remove one to free a slot.
+        </p>
+        <div className="mt-3 overflow-x-auto">
+          <table className="w-full text-xs">
+            <thead>
+              <tr className="text-left text-muted-foreground">
+                <th className="py-1 pr-4 font-medium">Type</th>
+                <th className="py-1 pr-4 font-medium">★ Its own page</th>
+                <th className="py-1 font-medium">⌂ Homepage section</th>
+              </tr>
+            </thead>
+            <tbody>
+              {CONTENT_TYPES.map((t) => {
+                const star = slotsFor(t, 'page')
+                const home = slotsFor(t, 'home')
+                const cell = (list: Placed[], cap: number) => (
+                  <>
+                    <span className={list.length > cap ? 'font-semibold text-[#991b1b]' : 'font-semibold'}>
+                      {list.length} of {cap}
+                    </span>
+                    {list.length > cap && (
+                      <span className="ml-1 text-[#991b1b]">(over the limit — only the newest {cap} are shown)</span>
+                    )}
+                    {list.map((i) => (
+                      <div key={i.id} className="truncate text-muted-foreground" title={i.title}>{i.title}</div>
+                    ))}
+                  </>
+                )
+                return (
+                  <tr key={t} className="border-t border-primary/10 align-top">
+                    <td className="py-1.5 pr-4 font-mono capitalize">{TYPE_PLURAL[t]}</td>
+                    <td className="max-w-[16rem] py-1.5 pr-4">{cell(star, PAGE_FEATURED_SLOTS)}</td>
+                    <td className="max-w-[16rem] py-1.5">{cell(home, HOME_SLOTS[t])}</td>
+                  </tr>
+                )
+              })}
+            </tbody>
+          </table>
+        </div>
+        <p className="mt-3 font-semibold text-foreground">
+          ↑ Homepage hero: {heroItems.length} of {HERO_SLOTS} slots used{heroItems.length >= HERO_SLOTS ? ' (full)' : ''}
         </p>
         {heroItems.length > 0 && (
-          <ul className="mt-2 space-y-0.5 text-xs text-foreground">
+          <ul className="mt-1 space-y-0.5 text-xs text-foreground">
             {heroItems.map((h) => (
               <li key={h.id}>
                 <span className="rounded bg-muted px-1.5 py-0.5 font-mono text-[11px] text-muted-foreground">{h.type}</span>{' '}
@@ -131,7 +164,7 @@ export default async function AdminContentPage({ searchParams }: PageProps) {
                 <th className="px-6 py-3">Title</th>
                 <th className="px-6 py-3">Author</th>
                 <th className="px-6 py-3">Published</th>
-                <th className="px-6 py-3">Featured</th>
+                <th className="px-6 py-3" title="★ its own page · ⌂ homepage section · ↑ homepage hero">Placement</th>
                 <th className="px-6 py-3">Actions</th>
               </tr>
             </thead>
@@ -189,10 +222,10 @@ export default async function AdminContentPage({ searchParams }: PageProps) {
                     <td className="px-6 py-3">
                       <div className="flex items-center gap-2">
                         {isDraft ? <span className="text-xs text-muted-foreground">—</span> : (<>
-                        <FeatureButton contentId={item.id} isFeatured={item.is_featured} contentType={item.type} />
-                        <HeroFeatureButton
+                        <PlacementButtons
                           contentId={item.id}
-                          isFeatured={item.is_featured}
+                          isFeatured={item.is_featured ?? false}
+                          isHomeFeatured={item.is_home_featured ?? false}
                           isHeroFeatured={item.is_hero_featured ?? false}
                         />
                         </>)}

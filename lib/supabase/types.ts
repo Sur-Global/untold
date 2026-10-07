@@ -40,6 +40,7 @@ export interface Database {
           status: ContentStatus;
           is_featured: boolean;
           is_hero_featured: boolean;
+          is_home_featured: boolean;
           cover_image_url: string | null;
           image_credits: string | null;
           likes_count: number;

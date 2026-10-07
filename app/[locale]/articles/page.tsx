@@ -13,6 +13,8 @@ import { TranslationRefresher } from '@/components/TranslationRefresher'
 import { ArticlesFilter } from './ArticlesFilter'
 import type { TagItem } from './ArticlesFilter'
 import Link from 'next/link'
+import { FeaturedSection } from '@/components/content/FeaturedSection'
+import { PAGE_FEATURED_SLOTS } from '@/lib/featured-slots'
 
 const BASE_LIMIT = 12
 const LOAD_MORE_STEP = 12
@@ -83,6 +85,25 @@ export default async function ArticlesPage({ params, searchParams }: PageProps) 
     }
   }
 
+  // ★ picks (admin/content) at the top of the default view; kept out of the main list below
+  let featuredItems: any[] = []
+  if (!q?.trim() && !tag && !filter) {
+    const { data: featuredRows } = await (supabase as any)
+      .from('content')
+      .select(`
+        id, slug, type, is_featured, likes_count, published_at, cover_image_url, read_time_minutes,
+        profiles!author_id ( display_name, slug, role, avatar_url ),
+        content_translations ( title, excerpt, featured_summary, locale ),
+        content_tags ( tags ( names, slug ) )
+      `)
+      .eq('type', 'article')
+      .eq('status', 'published')
+      .eq('is_featured', true)
+      .order('published_at', { ascending: false })
+      .limit(PAGE_FEATURED_SLOTS)
+    featuredItems = featuredRows ?? []
+  }
+
   // Build articles query
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   let articlesQuery: any = null
@@ -110,14 +131,16 @@ export default async function ArticlesPage({ params, searchParams }: PageProps) 
       articlesQuery = articlesQuery.eq('is_featured', true)
     }
 
+    if (featuredItems.length > 0) {
+      articlesQuery = articlesQuery.not('id', 'in', `(${featuredItems.map((i) => i.id).join(',')})`)
+    }
+
     if (filter === 'trending') {
       articlesQuery = articlesQuery.order('likes_count', { ascending: false })
     } else if (filter === 'recent') {
       articlesQuery = articlesQuery.order('published_at', { ascending: false })
     } else {
-      articlesQuery = articlesQuery
-        .order('is_featured', { ascending: false })
-        .order('published_at', { ascending: false })
+      articlesQuery = articlesQuery.order('published_at', { ascending: false })
     }
 
     articlesQuery = articlesQuery.range(0, limit - 1)
@@ -128,7 +151,8 @@ export default async function ArticlesPage({ params, searchParams }: PageProps) 
     : { data: [], count: 0 }
 
   // Fetch bookmarks
-  const contentIds = (articles ?? []).map((a: any) => a.id)
+  const listed = [...featuredItems, ...(articles ?? [])]
+  const contentIds = listed.map((a: any) => a.id)
   const bookmarkedIds = new Set<string>()
   if (userId && contentIds.length > 0) {
     const { data: bookmarks } = await (supabase as any)
@@ -141,8 +165,8 @@ export default async function ArticlesPage({ params, searchParams }: PageProps) 
 
   // Trigger background translation for articles without a locale translation yet
   let pendingTranslations = false
-  if (articles && articles.length > 0) {
-    const untranslatedIds = (articles as any[])
+  if (listed.length > 0) {
+    const untranslatedIds = listed
       .filter(a => !(a.content_translations ?? []).some((t: any) => t.locale === locale))
       .map((a: any) => a.id)
     if (untranslatedIds.length > 0) {
@@ -166,6 +190,39 @@ export default async function ArticlesPage({ params, searchParams }: PageProps) 
     }
     const qs = new URLSearchParams(params).toString()
     return qs ? `?${qs}` : ''
+  }
+
+  const renderCard = (article: any) => {
+        const t = getTranslation(article.content_translations ?? [], locale)
+        const firstTag = article.content_tags?.[0]?.tags
+        const categoryTag = firstTag
+          ? (firstTag.names[locale] ?? firstTag.names['en'] ?? null)
+          : null
+        const categoryTagSlug = firstTag?.slug ?? null
+        const author = article.profiles
+        return (
+          <ContentCard
+            key={article.id}
+            contentId={article.id}
+            type="article"
+            slug={article.slug}
+            title={t?.title ?? 'Untitled'}
+            excerpt={t?.excerpt || t?.featured_summary}
+            coverImageUrl={article.cover_image_url}
+            publishedAt={article.published_at}
+            likesCount={article.likes_count}
+            authorName={author?.display_name}
+            authorSlug={author?.slug}
+            authorAvatarUrl={author?.avatar_url}
+            categoryTag={categoryTag}
+            categoryTagSlug={categoryTagSlug}
+            readTimeMinutes={article.read_time_minutes}
+            isBookmarked={bookmarkedIds.has(article.id)}
+            isLoggedIn={navProps.isLoggedIn}
+            isFeatured={article.is_featured}
+
+          />
+        )
   }
 
   return (
@@ -214,41 +271,13 @@ export default async function ArticlesPage({ params, searchParams }: PageProps) 
 
         {/* Articles grid */}
         <div className="max-w-[1280px] mx-auto px-6 py-12">
+          {featuredItems.length > 0 && (
+            <FeaturedSection label={tListings('filterFeatured')}>{featuredItems.map(renderCard)}</FeaturedSection>
+          )}
           {articles && articles.length > 0 ? (
             <>
               <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                {articles.map((article: any) => {
-                  const t = getTranslation(article.content_translations ?? [], locale)
-                  const firstTag = article.content_tags?.[0]?.tags
-                  const categoryTag = firstTag
-                    ? (firstTag.names[locale] ?? firstTag.names['en'] ?? null)
-                    : null
-                  const categoryTagSlug = firstTag?.slug ?? null
-                  const author = article.profiles
-                  return (
-                    <ContentCard
-                      key={article.id}
-                      contentId={article.id}
-                      type="article"
-                      slug={article.slug}
-                      title={t?.title ?? 'Untitled'}
-                      excerpt={t?.excerpt || t?.featured_summary}
-                      coverImageUrl={article.cover_image_url}
-                      publishedAt={article.published_at}
-                      likesCount={article.likes_count}
-                      authorName={author?.display_name}
-                      authorSlug={author?.slug}
-                      authorAvatarUrl={author?.avatar_url}
-                      categoryTag={categoryTag}
-                      categoryTagSlug={categoryTagSlug}
-                      readTimeMinutes={article.read_time_minutes}
-                      isBookmarked={bookmarkedIds.has(article.id)}
-                      isLoggedIn={navProps.isLoggedIn}
-                      isFeatured={article.is_featured}
-
-                    />
-                  )
-                })}
+                {articles.map(renderCard)}
               </div>
 
               {/* Load more */}
@@ -279,7 +308,7 @@ export default async function ArticlesPage({ params, searchParams }: PageProps) 
                 )}
               </div>
             </>
-          ) : (
+          ) : featuredItems.length > 0 ? null : (
             <div className="text-center py-24">
               <p
                 className="text-sm"

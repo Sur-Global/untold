@@ -15,6 +15,7 @@ vi.mock('@/lib/supabase/service-role', () => ({
 
 import {
   toggleFeatured,
+  toggleHomeFeatured,
   toggleHeroFeatured,
   adminUnpublishContent,
   setUserRole,
@@ -47,36 +48,10 @@ function makeDb(singleData: object | null = null) {
   return { from, chain }
 }
 
-describe('toggleFeatured', () => {
-  beforeEach(() => {
-    vi.clearAllMocks()
-    mockViewer('admin')
-  })
-
-  it('flips is_featured from false to true', async () => {
-    const { from, chain } = makeDb({ is_featured: false })
-    vi.mocked(createClient).mockResolvedValue({ from } as any)
-
-    await toggleFeatured('content-1')
-
-    expect(chain.update).toHaveBeenCalledWith({ is_featured: true })
-    expect(revalidatePath).toHaveBeenCalledWith('/admin/content')
-  })
-
-  it('flips is_featured from true to false and clears hero placement', async () => {
-    const { from, chain } = makeDb({ is_featured: true })
-    vi.mocked(createClient).mockResolvedValue({ from } as any)
-
-    await toggleFeatured('content-2')
-
-    expect(chain.update).toHaveBeenCalledWith({ is_featured: false, is_hero_featured: false })
-  })
-})
-
-// toggleHeroFeatured makes 3 sequential from('content') calls: item lookup (.single()),
-// a count check (awaited directly, no .single()), then the update. Build a distinct
-// chain per call via mockImplementationOnce.
-function makeHeroFrom(itemData: object | null, count: number | null) {
+// togglePlacement makes sequential from('content') calls: item lookup (.single()), then —
+// only when turning ON — a slot count (awaited directly, no .single()), then the update.
+// Build a distinct chain per call via mockImplementationOnce.
+function makePlacementFrom(itemData: object | null, count: number | null) {
   const itemChain: any = { select: vi.fn().mockReturnThis(), eq: vi.fn().mockReturnThis(), single: vi.fn().mockResolvedValue({ data: itemData }) }
   const countChain: any = { select: vi.fn().mockReturnThis(), eq: vi.fn(), then: (resolve: any) => resolve({ count }) }
   countChain.eq.mockReturnValue(countChain)
@@ -85,54 +60,129 @@ function makeHeroFrom(itemData: object | null, count: number | null) {
     .mockImplementationOnce(() => itemChain)
     .mockImplementationOnce(() => countChain)
     .mockImplementationOnce(() => updateChain)
-  return { from, itemChain, countChain, updateChain }
+  return { from, countChain, updateChain }
 }
 
-describe('toggleHeroFeatured', () => {
+const flags = { type: 'podcast', status: 'published', is_featured: false, is_home_featured: false, is_hero_featured: false }
+
+function makeOffFrom(itemData: object) {
+  const itemChain: any = { select: vi.fn().mockReturnThis(), eq: vi.fn().mockReturnThis(), single: vi.fn().mockResolvedValue({ data: itemData }) }
+  const updateChain: any = { update: vi.fn().mockReturnThis(), eq: vi.fn().mockResolvedValue({}) }
+  const from = vi.fn().mockImplementationOnce(() => itemChain).mockImplementationOnce(() => updateChain)
+  return { from, updateChain }
+}
+
+describe('toggleFeatured (★ type page)', () => {
   beforeEach(() => {
     vi.clearAllMocks()
     mockViewer('admin')
   })
 
-  it('rejects turning on hero placement when not Featured', async () => {
-    const { from } = makeHeroFrom({ is_featured: false, is_hero_featured: false }, 0)
+  it('turns on when under the per-type cap of 3, without touching other placements', async () => {
+    const { from, updateChain, countChain } = makePlacementFrom(flags, 2)
     vi.mocked(createClient).mockResolvedValue({ from } as any)
 
-    // Returned (not thrown) so the message survives production builds
-    expect(await toggleHeroFeatured('content-1')).toEqual({
-      ok: false,
-      error: 'Must be Featured before it can go in the homepage hero',
-    })
-  })
+    expect(await toggleFeatured('content-1')).toEqual({ ok: true })
 
-  it('rejects turning on hero placement when already at the cap of 3', async () => {
-    const { from } = makeHeroFrom({ is_featured: true, is_hero_featured: false }, 3)
-    vi.mocked(createClient).mockResolvedValue({ from } as any)
-
-    const result = await toggleHeroFeatured('content-1')
-    expect(result.ok).toBe(false)
-    expect(!result.ok && result.error).toContain('The homepage hero is full')
-  })
-
-  it('turns on hero placement when Featured and under the cap', async () => {
-    const { from, updateChain } = makeHeroFrom({ is_featured: true, is_hero_featured: false }, 2)
-    vi.mocked(createClient).mockResolvedValue({ from } as any)
-
-    await toggleHeroFeatured('content-1')
-
-    expect(updateChain.update).toHaveBeenCalledWith({ is_hero_featured: true })
+    expect(updateChain.update).toHaveBeenCalledWith({ is_featured: true })
+    expect(countChain.eq).toHaveBeenCalledWith('type', 'podcast')
     expect(revalidatePath).toHaveBeenCalledWith('/admin/content')
+  })
+
+  it('names the page and slot usage when the cap is reached', async () => {
+    const { from } = makePlacementFrom(flags, 3)
+    vi.mocked(createClient).mockResolvedValue({ from } as any)
+
+    const result = await toggleFeatured('content-1')
+    expect(result.ok).toBe(false)
+    expect(!result.ok && result.error).toContain('podcasts page are full (3 of 3)')
+  })
+
+  it('turns off without checking the cap and leaves home/hero alone', async () => {
+    const { from, updateChain } = makeOffFrom({ ...flags, is_featured: true, is_hero_featured: true })
+    vi.mocked(createClient).mockResolvedValue({ from } as any)
+
+    await toggleFeatured('content-2')
+
+    expect(updateChain.update).toHaveBeenCalledWith({ is_featured: false })
+  })
+
+  it('rejects unpublished content', async () => {
+    const { from } = makePlacementFrom({ ...flags, status: 'draft' }, 0)
+    vi.mocked(createClient).mockResolvedValue({ from } as any)
+
+    expect(await toggleFeatured('content-1')).toEqual({ ok: false, error: 'Only published content can be placed' })
+  })
+})
+
+describe('toggleHomeFeatured (⌂ homepage section)', () => {
+  beforeEach(() => {
+    vi.clearAllMocks()
+    mockViewer('admin')
+  })
+
+  it('uses the per-type cap (podcasts 4)', async () => {
+    const { from } = makePlacementFrom(flags, 4)
+    vi.mocked(createClient).mockResolvedValue({ from } as any)
+
+    const result = await toggleHomeFeatured('content-1')
+    expect(!result.ok && result.error).toContain('homepage podcasts section is full (4 of 4)')
+  })
+
+  it('courses only have 2 slots', async () => {
+    const { from } = makePlacementFrom({ ...flags, type: 'course' }, 2)
+    vi.mocked(createClient).mockResolvedValue({ from } as any)
+
+    const result = await toggleHomeFeatured('content-1')
+    expect(!result.ok && result.error).toContain('(2 of 2)')
+  })
+
+  it('turns on under the cap, even without ★', async () => {
+    const { from, updateChain } = makePlacementFrom(flags, 3)
+    vi.mocked(createClient).mockResolvedValue({ from } as any)
+
+    expect(await toggleHomeFeatured('content-1')).toEqual({ ok: true })
+    expect(updateChain.update).toHaveBeenCalledWith({ is_home_featured: true })
+  })
+
+  it('refuses an item that is already in the hero', async () => {
+    const { from } = makePlacementFrom({ ...flags, is_hero_featured: true }, 0)
+    vi.mocked(createClient).mockResolvedValue({ from } as any)
+
+    const result = await toggleHomeFeatured('content-1')
+    expect(!result.ok && result.error).toContain('already in the homepage hero')
+  })
+})
+
+describe('toggleHeroFeatured (↑ homepage hero)', () => {
+  beforeEach(() => {
+    vi.clearAllMocks()
+    mockViewer('admin')
+  })
+
+  it('does not require ★', async () => {
+    const { from, updateChain } = makePlacementFrom(flags, 2)
+    vi.mocked(createClient).mockResolvedValue({ from } as any)
+
+    expect(await toggleHeroFeatured('content-1')).toEqual({ ok: true })
+    expect(updateChain.update).toHaveBeenCalledWith({ is_hero_featured: true, is_home_featured: false })
     expect(revalidatePath).toHaveBeenCalledWith('/')
   })
 
-  it('turns off hero placement without checking the cap', async () => {
-    const itemChain: any = { select: vi.fn().mockReturnThis(), eq: vi.fn().mockReturnThis(), single: vi.fn().mockResolvedValue({ data: { is_featured: true, is_hero_featured: true } }) }
-    const updateChain: any = { update: vi.fn().mockReturnThis(), eq: vi.fn().mockResolvedValue({}) }
-    const from = vi.fn().mockImplementationOnce(() => itemChain).mockImplementationOnce(() => updateChain)
+  it('counts across all types (no type filter) and rejects at 3', async () => {
+    const { from, countChain } = makePlacementFrom(flags, 3)
+    vi.mocked(createClient).mockResolvedValue({ from } as any)
+
+    const result = await toggleHeroFeatured('content-1')
+    expect(!result.ok && result.error).toContain('The homepage hero is full (3 of 3)')
+    expect(countChain.eq).not.toHaveBeenCalledWith('type', expect.anything())
+  })
+
+  it('turns off without checking the cap', async () => {
+    const { from, updateChain } = makeOffFrom({ ...flags, is_hero_featured: true })
     vi.mocked(createClient).mockResolvedValue({ from } as any)
 
     await toggleHeroFeatured('content-1')
-
     expect(updateChain.update).toHaveBeenCalledWith({ is_hero_featured: false })
   })
 })
@@ -143,7 +193,7 @@ describe('adminUnpublishContent', () => {
     mockViewer('admin')
   })
 
-  it('sets status draft, clears published_at and is_featured', async () => {
+  it('sets status draft, clears published_at and every placement', async () => {
     const { from, chain } = makeDb()
     vi.mocked(createClient).mockResolvedValue({ from } as any)
 
@@ -153,6 +203,8 @@ describe('adminUnpublishContent', () => {
       status: 'draft',
       published_at: null,
       is_featured: false,
+      is_home_featured: false,
+      is_hero_featured: false,
     })
     expect(revalidatePath).toHaveBeenCalledWith('/admin/content')
   })

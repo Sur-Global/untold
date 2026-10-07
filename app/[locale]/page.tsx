@@ -63,10 +63,9 @@ export default async function HomePage({ params }: PageProps) {
       .select('tag_id, tags(slug, names), content!inner(status)')
       .eq('content.status', 'published')
       .limit(2000),
-    // Homepage hero picks (1 large + 2 small = 3 slots) — a narrower, explicitly
-    // curated subset of is_featured that can be ANY content type, so it never
-    // overlaps with the per-type featured sections below (see is_hero_featured
-    // in admin/content).
+    // Homepage hero picks (1 large + 2 small = 3 slots) — explicitly curated (↑ in
+    // admin/content), can be ANY content type, and never overlaps with the
+    // per-type sections below (those use is_home_featured, ⌂).
     (supabase as any)
       .from('content')
       .select(`
@@ -93,7 +92,7 @@ export default async function HomePage({ params }: PageProps) {
       `)
       .eq('type', 'article')
       .eq('status', 'published')
-      .eq('is_featured', true)
+      .eq('is_home_featured', true)
       .eq('is_hero_featured', false)
       .order('published_at', { ascending: false })
       .limit(Math.max(1, Math.min(24, featuredArticleLimit))),
@@ -109,7 +108,7 @@ export default async function HomePage({ params }: PageProps) {
       `)
       .eq('type', 'video')
       .eq('status', 'published')
-      .eq('is_featured', true)
+      .eq('is_home_featured', true)
       .eq('is_hero_featured', false)
       .order('published_at', { ascending: false })
       .limit(3),
@@ -125,7 +124,7 @@ export default async function HomePage({ params }: PageProps) {
       `)
       .eq('type', 'podcast')
       .eq('status', 'published')
-      .eq('is_featured', true)
+      .eq('is_home_featured', true)
       .eq('is_hero_featured', false)
       .order('published_at', { ascending: false })
       .limit(4),
@@ -141,7 +140,7 @@ export default async function HomePage({ params }: PageProps) {
       `)
       .eq('type', 'pill')
       .eq('status', 'published')
-      .eq('is_featured', true)
+      .eq('is_home_featured', true)
       .eq('is_hero_featured', false)
       .order('published_at', { ascending: false })
       .limit(6),
@@ -157,7 +156,7 @@ export default async function HomePage({ params }: PageProps) {
       `)
       .eq('type', 'course')
       .eq('status', 'published')
-      .eq('is_featured', true)
+      .eq('is_home_featured', true)
       .eq('is_hero_featured', false)
       .order('published_at', { ascending: false })
       .limit(3),
