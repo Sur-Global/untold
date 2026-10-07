@@ -1,6 +1,6 @@
 'use client'
 
-import { useRef, useTransition } from 'react'
+import { useRef, useState, useTransition } from 'react'
 import { useTranslations } from 'next-intl'
 import { createPodcast } from '@/lib/actions/podcast'
 import { Button } from '@/components/ui/button'
@@ -17,6 +17,8 @@ export function CreatePodcastForm() {
   const [isPending, startTransition] = useTransition()
   // Which submit button was pressed (draft vs publish)
   const publishRef = useRef(false)
+  // Mirrors publishRef for rendering (refs can't be read during render)
+  const [publishing, setPublishing] = useState(false)
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
@@ -63,17 +65,17 @@ export function CreatePodcastForm() {
           type="submit"
           variant="outline"
           disabled={isPending}
-          onClick={() => { publishRef.current = false }}
+          onClick={() => { publishRef.current = false; setPublishing(false) }}
         >
-          {isPending && !publishRef.current ? td('saving') : td('saveAsDraft')}
+          {isPending && !publishing ? td('saving') : td('saveAsDraft')}
         </Button>
         <Button
           type="submit"
           disabled={isPending}
-          onClick={() => { publishRef.current = true }}
+          onClick={() => { publishRef.current = true; setPublishing(true) }}
           className="gradient-rust text-white border-0"
         >
-          {isPending && publishRef.current ? td('saving') : td('publish')}
+          {isPending && publishing ? td('saving') : td('publish')}
         </Button>
       </div>
     </form>

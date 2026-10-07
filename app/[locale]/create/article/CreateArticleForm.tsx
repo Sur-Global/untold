@@ -23,6 +23,8 @@ export function CreateArticleForm() {
   const [publishConfirmed, setPublishConfirmed] = useState(false)
   // Which submit button was pressed (draft vs publish)
   const publishRef = useRef(false)
+  // Mirrors publishRef for rendering (refs can't be read during render)
+  const [publishing, setPublishing] = useState(false)
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
@@ -142,20 +144,20 @@ export function CreateArticleForm() {
         <button
           type="submit"
           disabled={isPending}
-          onClick={() => { publishRef.current = false }}
+          onClick={() => { publishRef.current = false; setPublishing(false) }}
           className="flex-1 h-[54px] rounded-[16px] border border-primary/30 text-sm font-['JetBrains_Mono',monospace] font-medium tracking-[0.28px] text-primary hover:bg-primary/5 transition-colors disabled:opacity-50"
         >
-          {isPending && !publishRef.current ? td('saving') : td('saveAsDraft')}
+          {isPending && !publishing ? td('saving') : td('saveAsDraft')}
         </button>
         <button
           type="submit"
           disabled={isPending || !publishConfirmed}
-          onClick={() => { publishRef.current = true }}
+          onClick={() => { publishRef.current = true; setPublishing(true) }}
           title={!publishConfirmed ? t('publishConfirmTooltip') : undefined}
           className="flex-1 h-[54px] rounded-[16px] text-sm font-['JetBrains_Mono',monospace] font-medium tracking-[0.28px] text-white transition-opacity disabled:opacity-50"
           style={{ background: 'linear-gradient(175.88deg, #8b4513 0%, #a0522d 100%)' }}
         >
-          {isPending && publishRef.current ? td('saving') : td('publish')}
+          {isPending && publishing ? td('saving') : td('publish')}
         </button>
       </div>
     </form>

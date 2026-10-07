@@ -24,6 +24,8 @@ export function CreateVideoForm() {
   const [isPending, startTransition] = useTransition()
   // Which submit button was pressed (draft vs publish)
   const publishRef = useRef(false)
+  // Mirrors publishRef for rendering (refs can't be read during render)
+  const [publishing, setPublishing] = useState(false)
 
   const [embedUrl, setEmbedUrl] = useState('')
   const [title, setTitle] = useState('')
@@ -120,18 +122,18 @@ export function CreateVideoForm() {
         <button
           type="submit"
           disabled={isPending || !embedUrl.trim() || !title.trim()}
-          onClick={() => { publishRef.current = false }}
+          onClick={() => { publishRef.current = false; setPublishing(false) }}
           className="flex-1 h-[54px] rounded-[16px] border border-primary/30 text-primary text-sm font-['JetBrains_Mono',monospace] font-medium tracking-[0.28px] hover:bg-primary/5 transition-colors disabled:opacity-60"
         >
-          {isPending && !publishRef.current ? td('saving') : td('saveAsDraft')}
+          {isPending && !publishing ? td('saving') : td('saveAsDraft')}
         </button>
         <button
           type="submit"
           disabled={isPending || !embedUrl.trim() || !title.trim()}
-          onClick={() => { publishRef.current = true }}
+          onClick={() => { publishRef.current = true; setPublishing(true) }}
           className="flex-1 h-[54px] rounded-[16px] gradient-rust text-white text-sm font-['JetBrains_Mono',monospace] font-medium tracking-[0.28px] transition-opacity disabled:opacity-60"
         >
-          {isPending && publishRef.current ? td('saving') : td('publish')}
+          {isPending && publishing ? td('saving') : td('publish')}
         </button>
       </div>
     </form>
