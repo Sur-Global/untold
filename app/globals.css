@@ -388,12 +388,18 @@ details.bn-toggle > .bn-toggle-body {
 
 
 /* ========== Standalone pages (About…): team photo grids ========== */
-/* Photos side by side in columns read as portraits: no card shadow, round, evenly
-   spaced and the same size whatever the row, name centered underneath. */
+/* Photos side by side in columns read as portraits: no card shadow, round, and every
+   photo in a row exactly the same size (columns share the row equally, photos are
+   square), so a row of 3 is larger than a row of 4 but never uneven inside a row.
+   Names and roles are centered under each photo. */
 .static-page-body .bn-block-column-list {
   gap: 2rem !important;
   align-items: flex-start;
   margin-bottom: 2.5rem;
+}
+.static-page-body .bn-block-column {
+  flex: 1 1 0 !important; /* equal widths, ignoring the editor's saved column ratios */
+  min-width: 0;
 }
 .static-page-body .bn-block-column-list figure {
   margin: 0 !important;
@@ -402,13 +408,17 @@ details.bn-toggle > .bn-toggle-body {
 .static-page-body .bn-block-column-list img {
   display: block;
   width: 100%;
-  max-width: 220px;
+  max-width: 260px;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
   margin: 0 auto !important;
   border-radius: 9999px;
   box-shadow: none !important;
 }
 .static-page-body .bn-block-column-list figcaption {
   margin-top: 0.9rem;
+  padding: 0 !important;
+  background: none !important;
   font-size: 14px;
   line-height: 1.4;
   text-align: center;
