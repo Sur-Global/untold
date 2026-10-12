@@ -9,12 +9,14 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { CoverImageInput } from '@/components/ui/CoverImageInput'
 import { AuthorPicker } from '@/components/content/AuthorPicker'
+import { ViewContentLink } from '@/components/content/ViewContentLink'
 import { LanguageAvailabilityFields } from '@/components/content/LanguageAvailabilityFields'
 
 interface EditPodcastFormProps {
   id: string
   status: string
   initialAuthorId: string
+  slug: string
   initialSingleLanguage?: boolean
   initialTitle: string
   initialDescription: string
@@ -26,7 +28,7 @@ interface EditPodcastFormProps {
 
 export function EditPodcastForm({
   id,
-  status, initialAuthorId, initialSingleLanguage = false,
+  status, initialAuthorId, slug, initialSingleLanguage = false,
   initialTitle,
   initialDescription,
   initialEmbedUrl,
@@ -111,6 +113,7 @@ export function EditPodcastForm({
           {isPending ? td('saving') : td('saveChanges')}
         </Button>
 
+        {status === 'published' && <ViewContentLink type="podcast" slug={slug} />}
         {status === 'draft' ? (
           <Button
             type="button"

@@ -21,7 +21,7 @@ export default async function EditPillPage({ params }: EditPillPageProps) {
   const contentQuery = (supabase as any)
     .from('content')
     .select(`
-      id, author_id, status, source_locale, single_language, subtitle_locales,
+      id, slug, author_id, status, source_locale, single_language, subtitle_locales, feature_requested_at,
       content_translations ( title, body, locale ),
       pill_meta ( accent_color, image_url )
     `)
@@ -55,7 +55,9 @@ export default async function EditPillPage({ params }: EditPillPageProps) {
           id={id}
           status={content.status}
           initialAuthorId={content.author_id}
+        slug={content.slug}
           initialSingleLanguage={content.single_language ?? false}
+          initialFeatureRequested={!!content.feature_requested_at}
           initialTitle={tr?.title ?? ''}
           initialBody={initialBody}
           initialAccentColor={meta?.accent_color ?? '#C45D3A'}

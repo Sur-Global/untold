@@ -176,6 +176,7 @@ export function EditProfileForm({
           onChange={setBioBlocks}
           initialHtml={initialBio}
           placeholder={t('bioPlaceholder')}
+          videos="none"
         />
       </div>
 

@@ -37,7 +37,11 @@ function fullMessage(placement: Placement, type: string, count: number, cap: num
 
 // Expected problems ("slots are full") are returned, not thrown: in production Next.js
 // replaces the message of a thrown server-action error with a generic one.
-async function togglePlacement(contentId: string, placement: Placement): Promise<ActionResult> {
+async function togglePlacement(
+  contentId: string,
+  placement: Placement,
+  force?: 'on',
+): Promise<ActionResult> {
   await requireEditor()
   const supabase = await createClient()
   const column = PLACEMENT_COLUMN[placement]
@@ -50,8 +54,11 @@ async function togglePlacement(contentId: string, placement: Placement): Promise
 
   if (!item) return { ok: false, error: 'Content not found' }
 
+  // `force: 'on'` makes it idempotent (used when resolving a feature request)
+  if (force === 'on' && item[column]) return { ok: true }
   const turningOn = !item[column]
-  const update: Record<string, boolean> = { [column]: turningOn }
+  // Placing an item also approves it for the general pages (listings, search, tags)
+  const update: Record<string, boolean> = { [column]: turningOn, ...(turningOn ? { is_curated: true } : {}) }
 
   if (turningOn) {
     if (item.status !== 'published') return { ok: false, error: 'Only published content can be placed' }
@@ -97,6 +104,11 @@ export async function toggleHeroFeatured(contentId: string): Promise<ActionResul
   return togglePlacement(contentId, 'hero')
 }
 
+/** Puts an item in a placement if it isn't there already (never removes) */
+export async function setContentPlacement(contentId: string, placement: Placement): Promise<ActionResult> {
+  return togglePlacement(contentId, placement, 'on')
+}
+
 export async function adminUnpublishContent(contentId: string) {
   await requireEditor()
   const supabase = await createClient()
@@ -136,6 +148,11 @@ export async function setUserRole(userId: string, role: 'user' | 'author' | 'edi
     .from('profiles')
     .update({ role })
     .eq('id', userId)
+
+  // Promoting someone to author/editor/admin makes everything they've published general
+  if (role !== 'user') {
+    await (supabase as any).from('content').update({ is_curated: true }).eq('author_id', userId)
+  }
 
   await logActivity({ entityType: 'user', entityId: userId, entityLabel: target?.display_name ?? null, action: `role_changed_to_${role}` })
 

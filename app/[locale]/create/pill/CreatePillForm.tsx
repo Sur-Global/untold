@@ -11,6 +11,7 @@ import { Label } from '@/components/ui/label'
 import { CoverImageInput } from '@/components/ui/CoverImageInput'
 import { AuthorPicker } from '@/components/content/AuthorPicker'
 import { ContentLanguageSelect } from '@/components/content/ContentLanguageSelect'
+import { FeatureRequestField } from '@/components/content/FeatureRequestField'
 import { LanguageAvailabilityFields } from '@/components/content/LanguageAvailabilityFields'
 
 export function CreatePillForm() {
@@ -63,8 +64,10 @@ export function CreatePillForm() {
 
       <div className="space-y-2">
         <Label>{t('bodyLabel')}</Label>
-        <RichTextEditor value={body} onChange={setBody} placeholder={t('bodyPlaceholder')} locale={locale} />
+        <RichTextEditor value={body} onChange={setBody} placeholder={t('bodyPlaceholder')} locale={locale} videos="none" />
       </div>
+
+      <FeatureRequestField />
 
       <div className="flex items-center gap-3">
         <Button

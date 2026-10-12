@@ -5,6 +5,7 @@ import { redirect } from 'next/navigation'
 import { after } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
 import { requireCreator } from '@/lib/require-creator'
+import { notifyFeatureRequest } from '@/lib/feature-request'
 import { isEditorRole } from '@/lib/require-editor'
 import { logActivity, getContentLogInfo } from '@/lib/actions/activity-log'
 
@@ -26,6 +27,7 @@ export async function publishContent(id: string, _formData: FormData) {
   revalidatePath('/dashboard', 'layout')
 
   after(async () => {
+    await notifyFeatureRequest(id)
     try {
       const res = await fetch(`${process.env.NEXT_PUBLIC_SITE_URL}/api/translate`, {
         method: 'POST',

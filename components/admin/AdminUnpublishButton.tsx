@@ -2,6 +2,7 @@
 
 import { useState, useTransition } from 'react'
 import { useRouter } from 'next/navigation'
+import { useTranslations } from 'next-intl'
 import { adminUnpublishContent } from '@/lib/actions/admin'
 import { Button } from '@/components/ui/button'
 
@@ -11,11 +12,12 @@ interface Props {
 
 export function AdminUnpublishButton({ contentId }: Props) {
   const router = useRouter()
+  const t = useTranslations('dashboard')
   const [isPending, startTransition] = useTransition()
   const [error, setError] = useState<string | null>(null)
 
   const handleClick = () => {
-    if (!confirm('Unpublish this content? It will be moved back to draft.')) return
+    if (!confirm(t('unpublishConfirm'))) return
     setError(null)
     startTransition(async () => {
       try {
@@ -36,7 +38,7 @@ export function AdminUnpublishButton({ contentId }: Props) {
         disabled={isPending}
         className="h-6 px-2 text-xs text-red-600 hover:text-red-700"
       >
-        {isPending ? '…' : 'Unpublish'}
+        {isPending ? '…' : t('unpublish')}
       </Button>
       {error && <span className="text-xs text-red-500">{error}</span>}
     </span>

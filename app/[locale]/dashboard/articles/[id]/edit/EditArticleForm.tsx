@@ -10,6 +10,7 @@ import { PhotoCreditInput } from '@/components/content/PhotoCreditInput'
 import { TagsInput, type Tag } from '@/components/ui/TagsInput'
 import { Link } from '@/i18n/navigation'
 import { AuthorPicker } from '@/components/content/AuthorPicker'
+import { ViewContentLink } from '@/components/content/ViewContentLink'
 import { LanguageAvailabilityFields } from '@/components/content/LanguageAvailabilityFields'
 import { AVAILABILITY_MARKER } from '@/lib/language-availability'
 
@@ -27,6 +28,7 @@ interface EditArticleFormProps {
   id: string
   status: string
   initialAuthorId: string
+  slug: string
   initialSingleLanguage: boolean
   sourceLocale: string
   translations: LocaleData[]
@@ -53,6 +55,7 @@ export function EditArticleForm({
   id,
   status,
   initialAuthorId,
+  slug,
   initialSingleLanguage,
   sourceLocale,
   translations,
@@ -501,6 +504,7 @@ export function EditArticleForm({
           {isPending ? td('saving') : td('saveChanges')}
         </button>
 
+        {status === 'published' && <ViewContentLink type="article" slug={slug} />}
         {status === 'draft' ? (
           <button
             type="button"

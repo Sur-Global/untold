@@ -6,6 +6,7 @@ import { createVideo } from '@/lib/actions/video'
 import type { VideoMetadata } from '@/app/api/video-metadata/route'
 import { AuthorPicker } from '@/components/content/AuthorPicker'
 import { ContentLanguageSelect } from '@/components/content/ContentLanguageSelect'
+import { FeatureRequestField } from '@/components/content/FeatureRequestField'
 import { LanguageAvailabilityFields } from '@/components/content/LanguageAvailabilityFields'
 
 async function fetchVideoMetadata(url: string): Promise<VideoMetadata | null> {
@@ -119,6 +120,8 @@ export function CreateVideoForm() {
           </div>
         </div>
       )}
+
+      <FeatureRequestField />
 
       <div className="flex gap-4">
         <button

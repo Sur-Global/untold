@@ -13,6 +13,7 @@ import { Link } from '@/i18n/navigation'
 import type { VideoMetadata, VideoChapter as Chapter } from '@/app/api/video-metadata/route'
 import type { TranscriptCue } from '@/lib/transcript'
 import { AuthorPicker } from '@/components/content/AuthorPicker'
+import { ViewContentLink } from '@/components/content/ViewContentLink'
 import { LanguageAvailabilityFields } from '@/components/content/LanguageAvailabilityFields'
 import { AVAILABILITY_MARKER } from '@/lib/language-availability'
 type LayoutStyle = 'standard' | 'wide' | 'sidebar' | 'card'
@@ -21,6 +22,7 @@ interface EditVideoFormProps {
   id: string
   status: string
   initialAuthorId: string
+  slug: string
   initialSingleLanguage: boolean
   initialSubtitleLocales: string[]
   sourceLocale: string
@@ -94,6 +96,7 @@ export function EditVideoForm({
   id,
   status,
   initialAuthorId,
+  slug,
   initialSingleLanguage,
   initialSubtitleLocales,
   sourceLocale,
@@ -547,6 +550,7 @@ export function EditVideoForm({
           {isPending ? td('saving') : td('saveChanges')}
         </button>
 
+        {status === 'published' && <ViewContentLink type="video" slug={slug} />}
         {status === 'draft' ? (
           <button
             type="button"

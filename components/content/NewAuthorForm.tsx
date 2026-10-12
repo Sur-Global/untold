@@ -95,7 +95,7 @@ export function NewAuthorForm({ onCreated, onCancel }: Props) {
 
       <div>
         <label className={labelClass}>{t('authorBioLabel')}</label>
-        <RichTextEditor value={bioBlocks} onChange={setBioBlocks} placeholder={t('authorBioPlaceholder')} />
+        <RichTextEditor value={bioBlocks} onChange={setBioBlocks} placeholder={t('authorBioPlaceholder')} videos="none" />
       </div>
 
       <div className="grid gap-3 sm:grid-cols-2">

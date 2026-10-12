@@ -31,7 +31,7 @@ export default async function TagPage({ params }: PageProps) {
     .from('content_tags')
     .select(`
       content (
-        id, slug, type, source_locale, single_language, subtitle_locales, is_featured, likes_count, published_at, cover_image_url, status,
+        id, slug, type, source_locale, single_language, subtitle_locales, is_featured, likes_count, published_at, cover_image_url, status, is_curated,
         profiles!author_id ( display_name, slug, role ),
         content_translations ( title, excerpt, featured_summary, description, locale ),
         video_meta ( duration ),
@@ -45,7 +45,7 @@ export default async function TagPage({ params }: PageProps) {
   // Flatten and filter: published content only
   const published = (items ?? [])
     .map((row: any) => row.content)
-    .filter((c: any) => c && c.status === 'published')
+    .filter((c: any) => c && c.status === 'published' && c.is_curated)
     .sort((a: any, b: any) => {
       if (a.is_featured && !b.is_featured) return -1
       if (!a.is_featured && b.is_featured) return 1

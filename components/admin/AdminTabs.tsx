@@ -1,12 +1,13 @@
 'use client'
 
 import { Link, usePathname } from '@/i18n/navigation'
-import { LayoutDashboard, Globe, FileText, Users, BookOpen, Settings } from 'lucide-react'
+import { LayoutDashboard, Globe, FileText, Users, BookOpen, Settings, Inbox } from 'lucide-react'
 import type { UserRole } from '@/lib/supabase/types'
 
 const TABS = [
   { href: '/admin', label: 'Overview', icon: LayoutDashboard, exact: true, adminOnly: false },
   { href: '/admin/content', label: 'Content', icon: FileText, exact: false, adminOnly: false },
+  { href: '/admin/requests', label: 'Requests', icon: Inbox, exact: false, adminOnly: false },
   { href: '/admin/translations', label: 'Translations', icon: Globe, exact: false, adminOnly: false },
   { href: '/admin/users', label: 'Users', icon: Users, exact: false, adminOnly: false },
   { href: '/admin/pages', label: 'Pages', icon: BookOpen, exact: false, adminOnly: true },
@@ -20,7 +21,7 @@ function tabActive(pathname: string, href: string, exact: boolean) {
   return pathname === href || pathname.startsWith(`${href}/`)
 }
 
-export function AdminTabs({ role }: { role: UserRole }) {
+export function AdminTabs({ role, pendingRequests = 0 }: { role: UserRole; pendingRequests?: number }) {
   const pathname = usePathname()
   const visibleTabs = TABS.filter((tab) => !tab.adminOnly || role === 'admin')
 
@@ -45,6 +46,11 @@ export function AdminTabs({ role }: { role: UserRole }) {
             >
               <Icon className="h-4 w-4 opacity-80" aria-hidden />
               {label}
+              {href === '/admin/requests' && pendingRequests > 0 && (
+                <span className="rounded-full bg-primary px-1.5 py-0.5 text-[11px] font-semibold leading-none text-primary-foreground">
+                  {pendingRequests}
+                </span>
+              )}
             </Link>
           )
         })}

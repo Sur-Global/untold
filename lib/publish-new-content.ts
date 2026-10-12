@@ -1,4 +1,5 @@
 import { after } from 'next/server'
+import { notifyFeatureRequest } from '@/lib/feature-request'
 
 /**
  * Publishes a just-created content item (the "Publish" button on create forms),
@@ -18,6 +19,7 @@ export async function publishNewContent(
   if (error) throw new Error(error.message ?? 'Saved, but could not publish')
 
   after(async () => {
+    await notifyFeatureRequest(contentId)
     try {
       const res = await fetch(`${process.env.NEXT_PUBLIC_SITE_URL}/api/translate`, {
         method: 'POST',

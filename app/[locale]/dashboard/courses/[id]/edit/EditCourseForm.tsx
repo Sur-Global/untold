@@ -9,12 +9,14 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { CoverImageInput } from '@/components/ui/CoverImageInput'
 import { AuthorPicker } from '@/components/content/AuthorPicker'
+import { ViewContentLink } from '@/components/content/ViewContentLink'
 import { LanguageAvailabilityFields } from '@/components/content/LanguageAvailabilityFields'
 
 interface EditCourseFormProps {
   id: string
   status: string
   initialAuthorId: string
+  slug: string
   initialSingleLanguage?: boolean
   initialTitle: string
   initialDescription: string
@@ -25,7 +27,7 @@ interface EditCourseFormProps {
 }
 
 export function EditCourseForm({
-  id, status, initialAuthorId, initialSingleLanguage = false, initialTitle, initialDescription, initialCoverImageUrl,
+  id, status, initialAuthorId, slug, initialSingleLanguage = false, initialTitle, initialDescription, initialCoverImageUrl,
   initialPrice, initialCurrency, initialDuration,
 }: EditCourseFormProps) {
   const t = useTranslations('editor')
@@ -77,6 +79,7 @@ export function EditCourseForm({
           {isPending ? td('saving') : td('saveChanges')}
         </Button>
 
+        {status === 'published' && <ViewContentLink type="course" slug={slug} />}
         {status === 'draft' ? (
           <Button type="button" variant="outline" disabled={isPending}
             onClick={() => startTransition(() => publishContent(id, new FormData()))}>

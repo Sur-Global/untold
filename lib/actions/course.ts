@@ -5,6 +5,7 @@ import { redirect } from 'next/navigation'
 import { after } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
 import { requireCreator } from '@/lib/require-creator'
+import { notifyFeatureRequest } from '@/lib/feature-request'
 import { requireAdmin } from '@/lib/require-admin'
 import { isEditorRole } from '@/lib/require-editor'
 import { slugify } from '@/lib/utils'
@@ -143,6 +144,7 @@ export async function publishCourse(id: string) {
   revalidatePath(`/dashboard/courses/${id}/edit`)
 
   after(async () => {
+    await notifyFeatureRequest(id)
     try {
       const res = await fetch(`${process.env.NEXT_PUBLIC_SITE_URL}/api/translate`, {
         method: 'POST',

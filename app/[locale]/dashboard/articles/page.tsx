@@ -10,6 +10,7 @@ import { Button } from '@/components/ui/button'
 import { buttonVariants } from '@/components/ui/button-variants'
 import { publishArticle, unpublishArticle } from '@/lib/actions/article'
 import { cn } from '@/lib/utils'
+import { ViewContentLink } from '@/components/content/ViewContentLink'
 import { DeleteArticleButton } from './DeleteArticleButton'
 
 function StatusBadge({ status, label }: { status: string; label: string }) {
@@ -86,6 +87,9 @@ export default async function DashboardArticlesPage({ params }: { params: Promis
                 <StatusBadge status={article.status} label={article.status === 'published' ? t('published') : t('draft')} />
 
                 <div className="flex items-center gap-2">
+                  {article.status === 'published' && article.slug && (
+                    <ViewContentLink type="article" slug={article.slug} variant="ghost" />
+                  )}
                   <Link
                     href={`/dashboard/articles/${article.id}/edit`}
                     className={cn(buttonVariants({ variant: 'ghost', size: 'sm' }))}

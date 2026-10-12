@@ -46,6 +46,7 @@ export default async function SearchPage({ params, searchParams }: PageProps) {
       .or(`title.ilike.${ilikePattern},excerpt.ilike.${ilikePattern},description.ilike.${ilikePattern}`)
       .eq('locale', locale !== 'en' ? locale : 'en')
       .eq('content.status', 'published')
+      .eq('content.is_curated', true)
       .limit(40)
 
     if (typeFilter && CONTENT_TYPES.includes(typeFilter as ContentType)) {

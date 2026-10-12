@@ -430,3 +430,22 @@ details.bn-toggle > .bn-toggle-body {
     gap: 1.75rem !important;
   }
 }
+
+/* Video embeds in article bodies (YouTube / Vimeo / video files): responsive 16:9 */
+.bn-embed {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  margin: 1.25rem 0;
+  border-radius: 12px;
+  overflow: hidden;
+  background: #000;
+}
+.bn-embed iframe,
+.bn-embed video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}

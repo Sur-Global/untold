@@ -1,12 +1,10 @@
 'use client'
-import { BlockNoteSchema } from '@blocknote/core'
 import { useCreateBlockNote } from '@blocknote/react'
-import { withMultiColumn } from '@blocknote/xl-multi-column'
 import { useMemo } from 'react'
 import { renderCreditHtml } from '@/lib/photo-credit'
 import { blocksToReaderHtml } from '@/lib/blocknote-html'
-
-const schema = withMultiColumn(BlockNoteSchema.create())
+import { sanitizeReaderHtml } from '@/lib/sanitize-html'
+import { contentSchema as schema } from '@/lib/blocknote-schema'
 
 interface BlockNoteReaderProps {
   blocks: unknown[]
@@ -36,7 +34,7 @@ export function BlockNoteReader({ blocks, className }: BlockNoteReaderProps) {
   // Create a minimal editor (no UI) just for HTML conversion
   const editor = useCreateBlockNote({ schema })
   const html = useMemo(
-    () => linkifyCaptions(blocksToReaderHtml(editor, blocks as any[])),
+    () => sanitizeReaderHtml(linkifyCaptions(blocksToReaderHtml(editor, blocks as any[]))),
     [editor, blocks]
   )
 

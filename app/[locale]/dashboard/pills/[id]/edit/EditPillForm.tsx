@@ -11,13 +11,17 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { CoverImageInput } from '@/components/ui/CoverImageInput'
 import { AuthorPicker } from '@/components/content/AuthorPicker'
+import { FeatureRequestField } from '@/components/content/FeatureRequestField'
+import { ViewContentLink } from '@/components/content/ViewContentLink'
 import { LanguageAvailabilityFields } from '@/components/content/LanguageAvailabilityFields'
 
 interface EditPillFormProps {
   id: string
   status: string
   initialAuthorId: string
+  slug: string
   initialSingleLanguage?: boolean
+  initialFeatureRequested?: boolean
   initialTitle: string
   initialBody: EditorBlock[] | null
   initialAccentColor: string
@@ -25,7 +29,7 @@ interface EditPillFormProps {
 }
 
 export function EditPillForm({
-  id, status, initialAuthorId, initialSingleLanguage = false, initialTitle, initialBody, initialAccentColor, initialImageUrl,
+  id, status, initialAuthorId, slug, initialSingleLanguage = false, initialFeatureRequested = false, initialTitle, initialBody, initialAccentColor, initialImageUrl,
 }: EditPillFormProps) {
   const t = useTranslations('editor')
   const td = useTranslations('dashboard')
@@ -70,14 +74,17 @@ export function EditPillForm({
 
       <div className="space-y-2">
         <Label>{t('bodyLabel')}</Label>
-        <RichTextEditor value={body} onChange={setBody} placeholder={t('bodyPlaceholder')} locale={locale} />
+        <RichTextEditor value={body} onChange={setBody} placeholder={t('bodyPlaceholder')} locale={locale} videos="none" />
       </div>
+
+      <FeatureRequestField defaultChecked={initialFeatureRequested} />
 
       <div className="flex items-center gap-3 pt-2">
         <Button type="submit" disabled={isPending} className="gradient-rust text-white border-0">
           {isPending ? td('saving') : td('saveChanges')}
         </Button>
 
+        {status === 'published' && <ViewContentLink type="pill" slug={slug} />}
         {status === 'draft' ? (
           <Button type="button" variant="outline" disabled={isPending}
             onClick={() => startTransition(() => publishContent(id, new FormData()))}>

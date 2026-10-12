@@ -5,6 +5,7 @@ import { redirect } from 'next/navigation'
 import { after } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
 import { requireCreator } from '@/lib/require-creator'
+import { notifyFeatureRequest, readFeatureRequest, syncFeatureRequest } from '@/lib/feature-request'
 import { isEditorRole } from '@/lib/require-editor'
 import { slugify } from '@/lib/utils'
 import { computeReadTime } from '@/lib/readTime'
@@ -120,7 +121,7 @@ export async function updateArticle(id: string, formData: FormData) {
   const imageCredits = (formData.get('image_credits') as string)?.trim() || null
   const body = formData.get('body') as string | null
   const tagIdsRaw = formData.get('tag_ids') as string | null
-  const featureRequested = formData.get('feature_requested') === 'true'
+  const featureRequest = readFeatureRequest(formData)
 
   const newAuthorId = await requestedAuthorId(supabase, formData, profile.role)
 
@@ -131,10 +132,12 @@ export async function updateArticle(id: string, formData: FormData) {
       ...(newAuthorId ? { author_id: newAuthorId } : {}),
       cover_image_url: coverImageUrl,
       image_credits: imageCredits,
-      feature_requested_at: featureRequested ? new Date().toISOString() : null,
       updated_at: new Date().toISOString(),
     })
     .eq('id', id)
+
+  await syncFeatureRequest(id, featureRequest)
+  after(() => notifyFeatureRequest(id))
 
   const bodyJson = body ? (() => { try { return JSON.parse(body) } catch { return null } })() : null
 
@@ -218,6 +221,7 @@ export async function publishArticle(id: string, _formData: FormData) {
   revalidatePath(`/dashboard/articles/${id}/edit`)
 
   after(async () => {
+    await notifyFeatureRequest(id)
     try {
       const res = await fetch(`${process.env.NEXT_PUBLIC_SITE_URL}/api/translate`, {
         method: 'POST',

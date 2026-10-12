@@ -5,6 +5,7 @@ import { redirect } from 'next/navigation'
 import { after } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
 import { requireCreator } from '@/lib/require-creator'
+import { notifyFeatureRequest, readFeatureRequest, syncFeatureRequest } from '@/lib/feature-request'
 import { isEditorRole } from '@/lib/require-editor'
 import { slugify } from '@/lib/utils'
 import { resolveSourceLocale } from '@/lib/resolve-source-locale'
@@ -13,6 +14,7 @@ import { saveLanguageAvailability } from '@/lib/save-language-availability'
 import { publishNewContent } from '@/lib/publish-new-content'
 import { resolveAuthorId, requestedAuthorId } from '@/lib/resolve-author'
 import { logActivity } from '@/lib/actions/activity-log'
+import { stripNewMediaBlocks } from '@/lib/body-policy'
 
 export async function createPill(formData: FormData) {
   const { user, profile } = await requireCreator()
@@ -24,6 +26,7 @@ export async function createPill(formData: FormData) {
   const body = formData.get('body') as string | null
   const accentColor = (formData.get('accent_color') as string)?.trim() || '#C45D3A'
   const imageUrl = (formData.get('image_url') as string)?.trim() || null
+  const featureRequested = readFeatureRequest(formData) === true
 
   const slug = `${slugify(title)}-${Date.now().toString(36)}`
 
@@ -37,6 +40,7 @@ export async function createPill(formData: FormData) {
       ...(readLanguageAvailability(formData) ?? {}),
       status: 'draft',
       cover_image_url: imageUrl,
+      feature_requested_at: featureRequested ? new Date().toISOString() : null,
     })
     .select('id')
     .single()
@@ -49,7 +53,8 @@ export async function createPill(formData: FormData) {
       content_id: content.id,
       locale: sourceLocale,
       title,
-      body: body ? (() => { try { return JSON.parse(body) } catch { return null } })() : null,
+      // Knowledge pills can't contain videos, audio or files, whatever the editor sent
+      body: body ? stripNewMediaBlocks((() => { try { return JSON.parse(body) } catch { return null } })()) : null,
     })
 
   if (translationError) throw new Error(translationError.message ?? 'Failed to save pill translation')
@@ -96,10 +101,12 @@ export async function updatePill(id: string, formData: FormData) {
   const { data: owned } = await updateQuery.select('id, source_locale').single()
 
   if (!owned) return
+  await syncFeatureRequest(id, readFeatureRequest(formData))
+  after(() => notifyFeatureRequest(id))
   const sourceLocale: string = owned.source_locale ?? 'en'
   await saveLanguageAvailability(supabase, id, sourceLocale, formData)
 
-  const bodyJson = body ? (() => { try { return JSON.parse(body) } catch { return null } })() : null
+  const rawBodyJson = body ? (() => { try { return JSON.parse(body) } catch { return null } })() : null
 
   const { data: currentEn } = await (supabase as any)
     .from('content_translations')
@@ -108,6 +115,8 @@ export async function updatePill(id: string, formData: FormData) {
     .eq('locale', sourceLocale)
     .single()
 
+  // Media blocks already in the stored body are kept; new ones are dropped (pills allow none)
+  const bodyJson = stripNewMediaBlocks(rawBodyJson, currentEn?.body)
   const titleChanged = currentEn?.title !== title
   const bodyChanged = JSON.stringify(currentEn?.body ?? null) !== JSON.stringify(bodyJson)
 
@@ -159,6 +168,7 @@ export async function publishPill(id: string) {
   revalidatePath(`/dashboard/pills/${id}/edit`)
 
   after(async () => {
+    await notifyFeatureRequest(id)
     try {
       const res = await fetch(`${process.env.NEXT_PUBLIC_SITE_URL}/api/translate`, {
         method: 'POST',

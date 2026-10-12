@@ -12,6 +12,7 @@ import { buttonVariants } from '@/components/ui/button-variants'
 import { cn, getEditPath } from '@/lib/utils'
 import { publishContent, unpublishContent } from '@/lib/actions/content'
 import { DeleteContentButton } from './DeleteContentButton'
+import { ViewContentLink } from '@/components/content/ViewContentLink'
 import { AuthorStarToggle } from './AuthorStarToggle'
 import type { ContentType } from '@/lib/supabase/types'
 
@@ -54,17 +55,33 @@ export default async function DashboardPage({ params }: { params: Promise<{ loca
   const itemsPromise = (supabase as any)
     .from('content')
     .select(`
-      id, type, status, created_at, source_locale, is_author_featured,
+      id, type, slug, status, created_at, is_curated, source_locale, is_author_featured,
       content_translations ( title, locale )
     `)
     .eq('author_id', user.id)
     .order('created_at', { ascending: false })
 
-  const [{ userId, ...navProps }, t, { data: items }] = await Promise.all([
+  const [{ userId, ...navProps }, t, { data: items }, { data: myProfile }] = await Promise.all([
     getNavProps(),
     getTranslations('dashboard'),
     itemsPromise,
+    (supabase as any)
+      .from('profiles')
+      .select('avatar_url, bio, website, social_bluesky, social_linkedin, social_instagram, social_medium, social_custom_url')
+      .eq('id', user.id)
+      .single(),
   ])
+
+  // Nudge creators to complete their public profile
+  const hasText = (v: unknown) => typeof v === 'string' && v.replace(/<[^>]*>/g, '').trim().length > 0
+  const missingProfile: string[] = []
+  if (!hasText(myProfile?.avatar_url)) missingProfile.push(t('nudgePhoto'))
+  if (!hasText(myProfile?.bio)) missingProfile.push(t('nudgeBio'))
+  if (
+    ![myProfile?.website, myProfile?.social_bluesky, myProfile?.social_linkedin, myProfile?.social_instagram, myProfile?.social_medium, myProfile?.social_custom_url].some(hasText)
+  ) {
+    missingProfile.push(t('nudgeLinks'))
+  }
 
   const getTitle = (item: any) => {
     // Show the title in the language it was written in
@@ -94,6 +111,20 @@ export default async function DashboardPage({ params }: { params: Promise<{ loca
           </div>
         </div>
 
+        {missingProfile.length > 0 && (
+          <div
+            className="mb-6 rounded-xl p-5"
+            style={{ border: '1px solid rgba(169,168,233,0.6)', background: 'rgba(169,168,233,0.12)' }}
+          >
+            <p className="font-semibold">{t('profileNudgeTitle')}</p>
+            <p className="mt-1 text-sm text-[#4b3a2a] leading-relaxed">{t('profileNudgeText')}</p>
+            <p className="mt-2 text-sm text-[#6B5F58]">{t('profileNudgeMissing', { items: missingProfile.join(', ') })}</p>
+            <Link href="/dashboard/profile" className={cn(buttonVariants({ size: 'sm' }), 'mt-3')}>
+              {t('profileNudgeCta')}
+            </Link>
+          </div>
+        )}
+
         {(!items || items.length === 0) ? (
           <p className="text-[#6B5F58]">{t('noContent')}</p>
         ) : (
@@ -113,10 +144,22 @@ export default async function DashboardPage({ params }: { params: Promise<{ loca
 
                 <TypeBadge label={t(TYPE_KEY[item.type as ContentType])} />
                 <StatusBadge status={item.status} label={item.status === 'published' ? t('published') : t('draft')} />
+                {item.status === 'published' && !item.is_curated && (
+                  <span
+                    className="text-xs px-2 py-0.5 rounded-full"
+                    style={{ background: 'rgba(120,113,108,0.12)', color: '#44403c' }}
+                    title={t('creatorPageOnly')}
+                  >
+                    {t('creatorPageOnly')}
+                  </span>
+                )}
 
                 <div className="flex items-center gap-2">
                   {item.status === 'published' && (
                     <AuthorStarToggle contentId={item.id} initialStarred={!!item.is_author_featured} />
+                  )}
+                  {item.status === 'published' && item.slug && (
+                    <ViewContentLink type={item.type} slug={item.slug} variant="ghost" />
                   )}
                   <Link
                     href={getEditPath(item.type, item.id)}

@@ -1,6 +1,8 @@
 'use server'
 
 import { revalidatePath } from 'next/cache'
+import { after } from 'next/server'
+import { notifyFeatureRequest, readFeatureRequest, syncFeatureRequest } from '@/lib/feature-request'
 import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
 import { requireCreator } from '@/lib/require-creator'
@@ -109,7 +111,7 @@ export async function updateVideo(id: string, formData: FormData) {
   const thumbnailUrl = (formData.get('thumbnail_url') as string)?.trim() || null
   const duration = (formData.get('duration') as string)?.trim() || null
   const tagIdsRaw = formData.get('tag_ids') as string | null
-  const featureRequested = formData.get('feature_requested') === 'true'
+  const featureRequest = readFeatureRequest(formData)
   const chaptersRaw = formData.get('chapters') as string | null
   const layoutStyle = (formData.get('layout_style') as string)?.trim() || 'standard'
   const transcriptRaw = formData.get('transcript') as string | null
@@ -123,7 +125,6 @@ export async function updateVideo(id: string, formData: FormData) {
       ...(newAuthorId ? { author_id: newAuthorId } : {}),
       cover_image_url: thumbnailUrl,
       updated_at: new Date().toISOString(),
-      feature_requested_at: featureRequested ? new Date().toISOString() : null,
     })
     .eq('id', id)
   if (!isEditorRole(profile.role)) updateQuery.eq('author_id', user.id)
@@ -132,6 +133,8 @@ export async function updateVideo(id: string, formData: FormData) {
   if (!owned) return
   const sourceLocale: string = owned.source_locale ?? 'en'
   await saveLanguageAvailability(supabase, id, sourceLocale, formData)
+  await syncFeatureRequest(id, featureRequest)
+  after(() => notifyFeatureRequest(id))
 
   await (supabase as any)
     .from('content_translations')

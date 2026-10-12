@@ -84,7 +84,7 @@ describe('toggleFeatured (★ type page)', () => {
 
     expect(await toggleFeatured('content-1')).toEqual({ ok: true })
 
-    expect(updateChain.update).toHaveBeenCalledWith({ is_featured: true })
+    expect(updateChain.update).toHaveBeenCalledWith({ is_featured: true, is_curated: true })
     expect(countChain.eq).toHaveBeenCalledWith('type', 'podcast')
     expect(revalidatePath).toHaveBeenCalledWith('/admin/content')
   })
@@ -105,6 +105,22 @@ describe('toggleFeatured (★ type page)', () => {
     await toggleFeatured('content-2')
 
     expect(updateChain.update).toHaveBeenCalledWith({ is_featured: false })
+  })
+
+  it('placing an item also approves it for the general pages', async () => {
+    const { from, updateChain } = makePlacementFrom(flags, 0)
+    vi.mocked(createClient).mockResolvedValue({ from } as any)
+
+    await toggleFeatured('content-1')
+    expect(updateChain.update.mock.calls[0][0].is_curated).toBe(true)
+  })
+
+  it('removing a placement never un-approves the item', async () => {
+    const { from, updateChain } = makeOffFrom({ ...flags, is_featured: true })
+    vi.mocked(createClient).mockResolvedValue({ from } as any)
+
+    await toggleFeatured('content-1')
+    expect(updateChain.update.mock.calls[0][0]).toEqual({ is_featured: false })
   })
 
   it('rejects unpublished content', async () => {
@@ -142,7 +158,7 @@ describe('toggleHomeFeatured (⌂ homepage section)', () => {
     vi.mocked(createClient).mockResolvedValue({ from } as any)
 
     expect(await toggleHomeFeatured('content-1')).toEqual({ ok: true })
-    expect(updateChain.update).toHaveBeenCalledWith({ is_home_featured: true })
+    expect(updateChain.update).toHaveBeenCalledWith({ is_home_featured: true, is_curated: true })
   })
 
   it('refuses an item that is already in the hero', async () => {
@@ -165,7 +181,7 @@ describe('toggleHeroFeatured (↑ homepage hero)', () => {
     vi.mocked(createClient).mockResolvedValue({ from } as any)
 
     expect(await toggleHeroFeatured('content-1')).toEqual({ ok: true })
-    expect(updateChain.update).toHaveBeenCalledWith({ is_hero_featured: true, is_home_featured: false })
+    expect(updateChain.update).toHaveBeenCalledWith({ is_hero_featured: true, is_curated: true, is_home_featured: false })
     expect(revalidatePath).toHaveBeenCalledWith('/')
   })
 
