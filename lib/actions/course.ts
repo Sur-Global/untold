@@ -16,7 +16,7 @@ import { resolveAuthorId, requestedAuthorId } from '@/lib/resolve-author'
 import { logActivity } from '@/lib/actions/activity-log'
 
 export async function createCourse(formData: FormData) {
-  const { user, profile } = await requireCreator()
+  const { user, profile } = await requireCreator('course')
   const supabase = await createClient()
   const sourceLocale = resolveSourceLocale(formData)
   const authorId = await resolveAuthorId(supabase, formData, user, profile.role)

@@ -54,8 +54,9 @@ function isEditorOrAdmin(role: UserRole | null) {
   return role === 'admin' || role === 'editor'
 }
 
+// Every logged-in member can create (articles, videos, pills); podcasts/courses are limited later
 function isCreator(role: UserRole | null) {
-  return role === 'admin' || role === 'author' || role === 'editor'
+  return role === 'admin' || role === 'author' || role === 'editor' || role === 'user'
 }
 
 function SearchIcon() {

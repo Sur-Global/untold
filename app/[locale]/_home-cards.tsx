@@ -119,89 +119,76 @@ export function LargeArticleCard({
   return (
     <Link
       href={`/articles/${slug}`}
-      className="relative flex flex-col rounded-2xl overflow-hidden"
+      className="relative flex flex-col rounded-2xl overflow-hidden md:flex-row"
       style={{
-        height: '100%',
-        minHeight: 280,
-        background: '#0A0A0A',
+        background: '#2C2420',
         border: '1px solid rgba(0,0,0,0.08)',
         textDecoration: 'none',
         boxShadow: '0 4px 20px rgba(44,36,32,0.12)',
       }}
     >
-      {/* Background image */}
-      {coverImageUrl && (
-        <img
-          src={coverImageUrl}
-          alt={title}
-          className="absolute inset-0 w-full h-full object-cover"
-        />
-      )}
-      {/* Gradient overlay */}
-      <div
-        className="absolute inset-0"
-        style={{
-          background:
-            'linear-gradient(to top, rgba(44,36,32,0.97) 0%, rgba(44,36,32,0.55) 45%, rgba(0,0,0,0.12) 100%)',
-        }}
-      />
+      {/* Cover image — 16:9, so horizontal covers are barely cropped; on wide screens it sits beside the text */}
+      <div className="relative w-full shrink-0 md:w-[58%] md:self-start" style={{ aspectRatio: '16 / 9', background: '#0A0A0A' }}>
+        {coverImageUrl && (
+          <img src={coverImageUrl} alt={title} className="absolute inset-0 h-full w-full object-cover" />
+        )}
 
-      {/* Top badges */}
-      <div className="absolute top-4 left-4 right-4 flex items-center justify-between">
-        {isFeatured && (
-          <span
-            className="flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold"
-            style={{
-              background: '#D2FE73',
-              color: '#000',
-              fontFamily: 'var(--font-aeonik), Aeonik, sans-serif', fontWeight: 400,
-              fontSize: 11,
-            }}
-          >
-            ★ FEATURED
-          </span>
-        )}
-        {categoryTag && (
-          categoryTagSlug ? (
-            <button
-              className="ml-auto px-3 py-1 rounded-full text-xs hover:opacity-80 transition-opacity"
-              style={{
-                background: 'rgba(253,252,250,0.9)',
-                color: '#444',
-                fontFamily: 'var(--font-aeonik), Aeonik, sans-serif', fontWeight: 400,
-                fontSize: 11,
-                border: 'none',
-                cursor: 'pointer',
-              }}
-              onClick={(e) => { e.preventDefault(); e.stopPropagation(); router.push(`/tag/${categoryTagSlug}`) }}
-            >
-              {categoryTag}
-            </button>
-          ) : (
+        {/* Top badges */}
+        <div className="absolute top-4 left-4 right-4 flex items-center justify-between">
+          {isFeatured && (
             <span
-              className="ml-auto px-3 py-1 rounded-full text-xs"
+              className="flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold"
               style={{
-                background: 'rgba(253,252,250,0.9)',
-                color: '#444',
+                background: '#D2FE73',
+                color: '#000',
                 fontFamily: 'var(--font-aeonik), Aeonik, sans-serif', fontWeight: 400,
                 fontSize: 11,
               }}
             >
-              {categoryTag}
+              ★ FEATURED
             </span>
-          )
-        )}
+          )}
+          {categoryTag && (
+            categoryTagSlug ? (
+              <button
+                className="ml-auto px-3 py-1 rounded-full text-xs hover:opacity-80 transition-opacity"
+                style={{
+                  background: 'rgba(253,252,250,0.9)',
+                  color: '#444',
+                  fontFamily: 'var(--font-aeonik), Aeonik, sans-serif', fontWeight: 400,
+                  fontSize: 11,
+                  border: 'none',
+                  cursor: 'pointer',
+                }}
+                onClick={(e) => { e.preventDefault(); e.stopPropagation(); router.push(`/tag/${categoryTagSlug}`) }}
+              >
+                {categoryTag}
+              </button>
+            ) : (
+              <span
+                className="ml-auto px-3 py-1 rounded-full text-xs"
+                style={{
+                  background: 'rgba(253,252,250,0.9)',
+                  color: '#444',
+                  fontFamily: 'var(--font-aeonik), Aeonik, sans-serif', fontWeight: 400,
+                  fontSize: 11,
+                }}
+              >
+                {categoryTag}
+              </span>
+            )
+          )}
+        </div>
       </div>
 
-      {/* Bottom content */}
-      <div className="absolute bottom-0 left-0 right-0 p-6">
+      {/* Text panel: below the image on mobile, beside it on wide screens */}
+      <div className="flex flex-1 flex-col justify-end p-6 md:justify-center md:p-8">
         <h3
-          className="leading-snug line-clamp-3 mb-3"
+          className="leading-snug line-clamp-4 mb-3"
           style={{
             fontFamily: 'var(--font-heading)',
-            fontSize: 22,
+            fontSize: 24,
             color: '#F5F1E8',
-            
           }}
         >
           {title}
@@ -209,7 +196,7 @@ export function LargeArticleCard({
 
         {excerpt && (
           <p
-            className="text-sm mb-5 line-clamp-2"
+            className="text-sm mb-5 line-clamp-3"
             style={{
               color: 'rgba(245,241,232,0.75)',
               fontFamily: 'var(--font-aeonik), Aeonik, sans-serif',
@@ -309,7 +296,7 @@ export function VideoCard({
         href={`/videos/${slug}`}
         className="relative block rounded-2xl overflow-hidden"
         style={{
-          paddingBottom: '62.5%',
+          paddingBottom: '56.25%',
           background: '#0A0A0A',
           textDecoration: 'none',
         }}

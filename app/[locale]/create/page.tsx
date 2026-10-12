@@ -1,5 +1,5 @@
 import { getTranslations } from 'next-intl/server'
-import { requireCreator } from '@/lib/require-creator'
+import { requireCreator, canCreateType } from '@/lib/require-creator'
 import { Navigation } from '@/components/layout/Navigation'
 import { Footer } from '@/components/layout/Footer'
 import { getNavProps } from '@/lib/nav'
@@ -15,7 +15,7 @@ const CONTENT_TYPES = [
 ] as const
 
 export default async function CreatePickerPage() {
-  await requireCreator()
+  const { profile } = await requireCreator()
   const [{ userId, ...navProps }, t] = await Promise.all([
     getNavProps(),
     getTranslations('create'),
@@ -27,7 +27,7 @@ export default async function CreatePickerPage() {
       <main className="max-w-2xl mx-auto px-4 sm:px-6 py-16">
         <h1 className="mb-10 text-center">{t('pickType')}</h1>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          {CONTENT_TYPES.map(({ key, href, Icon }) => (
+          {CONTENT_TYPES.filter(({ key }) => canCreateType(profile.role, key)).map(({ key, href, Icon }) => (
             <Link
               key={key}
               href={href}

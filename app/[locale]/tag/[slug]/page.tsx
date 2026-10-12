@@ -42,10 +42,10 @@ export default async function TagPage({ params }: PageProps) {
     `)
     .eq('tag_id', tag.id)
 
-  // Flatten and filter: published content by admin/author only (mirrors homepage_feed logic)
+  // Flatten and filter: published content only
   const published = (items ?? [])
     .map((row: any) => row.content)
-    .filter((c: any) => c && c.status === 'published' && ['admin', 'author'].includes(c.profiles?.role))
+    .filter((c: any) => c && c.status === 'published')
     .sort((a: any, b: any) => {
       if (a.is_featured && !b.is_featured) return -1
       if (!a.is_featured && b.is_featured) return 1

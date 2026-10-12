@@ -45,8 +45,15 @@ describe('Navigation', () => {
     expect(screen.getByText('nav.createContent')).toBeInTheDocument()
   })
 
-  it('does not show Dashboard or Create for reader role', () => {
+  it('shows Dashboard and Create for a plain member, but not the admin link', () => {
     render(<Navigation isLoggedIn={true} userRole="user" />)
+    expect(screen.getByText('nav.dashboard')).toBeInTheDocument()
+    expect(screen.getByText('nav.createContent')).toBeInTheDocument()
+    expect(screen.queryByText('nav.adminDashboard')).not.toBeInTheDocument()
+  })
+
+  it('shows neither for logged-out visitors', () => {
+    render(<Navigation isLoggedIn={false} userRole={null} />)
     expect(screen.queryByText('nav.dashboard')).not.toBeInTheDocument()
     expect(screen.queryByText('nav.createContent')).not.toBeInTheDocument()
   })

@@ -41,7 +41,6 @@ export default async function VideosPage({ params, searchParams }: PageProps) {
     .eq('type', 'video')
     .eq('status', 'published')
     .eq('is_featured', true)
-    .in('profiles.role', ['admin', 'author'])
     .order('published_at', { ascending: false })
     .limit(PAGE_FEATURED_SLOTS)
   const featuredItems: any[] = featuredRows ?? []
@@ -58,7 +57,6 @@ export default async function VideosPage({ params, searchParams }: PageProps) {
     `, { count: 'exact' })
     .eq('type', 'video')
     .eq('status', 'published')
-    .in('profiles.role', ['admin', 'author'])
     .not('id', 'in', `(${featuredIds.length ? featuredIds.join(',') : '00000000-0000-0000-0000-000000000000'})`)
     .order('published_at', { ascending: false })
     .range(offset, offset + PAGE_SIZE - 1)

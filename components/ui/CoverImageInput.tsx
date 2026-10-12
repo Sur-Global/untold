@@ -3,6 +3,42 @@
 import { useState, useRef } from 'react'
 import { Label } from '@/components/ui/label'
 
+// Phone and camera photos are often 5–15 MB, over what the upload endpoint accepts (and over
+// Vercel's ~4.5 MB request limit). Shrink big images in the browser before uploading; the
+// server then converts them to WebP.
+const MAX_DIMENSION = 2400
+const SAFE_BYTES = 3 * 1024 * 1024
+
+async function prepareImage(file: File): Promise<File> {
+  if (!file.type.startsWith('image/') || file.type === 'image/gif' || file.type === 'image/svg+xml') return file
+  try {
+    const bitmap = await createImageBitmap(file, { imageOrientation: 'from-image' })
+    const scale = Math.min(1, MAX_DIMENSION / Math.max(bitmap.width, bitmap.height))
+    if (scale === 1 && file.size <= SAFE_BYTES) {
+      bitmap.close()
+      return file
+    }
+    const canvas = document.createElement('canvas')
+    canvas.width = Math.round(bitmap.width * scale)
+    canvas.height = Math.round(bitmap.height * scale)
+    const ctx = canvas.getContext('2d')
+    if (!ctx) {
+      bitmap.close()
+      return file
+    }
+    ctx.fillStyle = '#fff'
+    ctx.fillRect(0, 0, canvas.width, canvas.height)
+    ctx.drawImage(bitmap, 0, 0, canvas.width, canvas.height)
+    bitmap.close()
+    const blob = await new Promise<Blob | null>((resolve) => canvas.toBlob(resolve, 'image/jpeg', 0.88))
+    if (!blob) return file
+    return new File([blob], file.name.replace(/\.[^.]+$/, '') + '.jpg', { type: 'image/jpeg' })
+  } catch {
+    // Format the browser can't decode (e.g. HEIC in Chrome): send as is, the server will say if it can't use it
+    return file
+  }
+}
+
 interface CoverImageInputProps {
   name: string
   defaultValue?: string | null
@@ -32,12 +68,19 @@ export function CoverImageInput({
     setUploading(true)
     try {
       const fd = new FormData()
-      fd.append('file', file)
+      fd.append('file', await prepareImage(file))
       fd.append('type', uploadType)
       const res = await fetch('/api/upload', { method: 'POST', body: fd })
       if (!res.ok) {
         const body = await res.json().catch(() => ({}))
-        setError(body.error ?? 'Upload failed')
+        setError(
+          body.error ??
+            (res.status === 413
+              ? 'Image too large — try a smaller one (JPG or PNG).'
+              : res.status === 401
+                ? 'Your session expired — log in again and retry.'
+                : `Upload failed (${res.status}). Try a JPG or PNG, or paste an image URL below.`),
+        )
         return
       }
       const { url: uploadedUrl } = await res.json()
@@ -130,7 +173,8 @@ export function CoverImageInput({
                   <strong style={{ color: '#8b4513', fontWeight: 500 }}>Click to upload</strong> or drag & drop
                 </div>
                 <div style={{ fontSize: 11, color: '#9a8f87', fontFamily: 'JetBrains Mono, monospace' }}>
-                  JPEG · PNG · WebP · max 5 MB → optimised to WebP
+                  JPEG · PNG · WebP · large photos are resized automatically
+                  {!isAvatar && <><br />Best: horizontal 16:9 (e.g. 1600×900) so nothing gets cropped</>}
                 </div>
               </>
             )}

@@ -7,7 +7,7 @@ import { Link } from '@/i18n/navigation'
 import { CreatePodcastForm } from './CreatePodcastForm'
 
 export default async function CreatePodcastPage() {
-  await requireCreator()
+  await requireCreator('podcast')
   const [{ userId, ...navProps }, t] = await Promise.all([
     getNavProps(),
     getTranslations('editor'),

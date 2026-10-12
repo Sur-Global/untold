@@ -7,7 +7,7 @@ import { Link } from '@/i18n/navigation'
 import { CreateCourseForm } from './CreateCourseForm'
 
 export default async function CreateCoursePage() {
-  await requireCreator()
+  await requireCreator('course')
   const [{ userId, ...navProps }, t] = await Promise.all([
     getNavProps(),
     getTranslations('editor'),

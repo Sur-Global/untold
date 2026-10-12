@@ -151,7 +151,7 @@ export function ContentCard({
       }}
     >
       {/* Cover image */}
-      <div className="relative overflow-hidden shrink-0" style={{ height: 224 }}>
+      <div className="relative overflow-hidden shrink-0" style={{ aspectRatio: '16 / 9' }}>
         <Link href={href} className="block h-full">
           {image ? (
             <img

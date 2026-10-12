@@ -452,7 +452,7 @@ export default async function HomePage({ params }: PageProps) {
                       borderRadius: 20,
                       overflow: 'hidden',
                       position: 'relative',
-                      height: 340,
+                      aspectRatio: '16 / 9',
                       background: getHeroCoverImage(heroArticle)
                         ? 'transparent'
                         : 'linear-gradient(135deg, #1a1a2e 0%, #16213e 60%, #0f3460 100%)',
@@ -493,7 +493,7 @@ export default async function HomePage({ params }: PageProps) {
                       borderRadius: 20,
                       overflow: 'hidden',
                       position: 'relative',
-                      height: 340,
+                      aspectRatio: '16 / 9',
                       background: 'linear-gradient(135deg, #1a1a2e 0%, #16213e 60%, #0f3460 100%)',
                     }}
                   >
@@ -587,44 +587,38 @@ export default async function HomePage({ params }: PageProps) {
 
               {(sectionLargeArticle || sectionSmallArticles.length > 0) ? (
                 <div className={`mt-6 ${featuredLayoutClass}`}>
-                  {/* Top: large card full-width on mobile, side-by-side on md+ */}
-                  <div className="flex flex-col md:flex-row gap-5 md:items-stretch">
-                    {/* Large featured card — distinct from the hero's large card above */}
-                    {sectionLargeArticle && sectionLargeTrans && (
-                      <div className="w-full md:shrink-0 md:w-[55%]">
-                        <LargeArticleCard
-                            slug={sectionLargeArticle.slug}
-                            title={sectionLargeTrans.title}
-                            excerpt={sectionLargeTrans.excerpt || sectionLargeTrans.featured_summary}
-                            coverImageUrl={sectionLargeArticle.cover_image_url}
-                            authorName={sectionLargeArticle.profiles?.display_name}
-                            authorSlug={sectionLargeArticle.profiles?.slug}
-                            authorAvatarUrl={sectionLargeArticle.profiles?.avatar_url}
-                            categoryTag={sectionLargeCategoryTag}
-                            categoryTagSlug={sectionLargeCategoryTagSlug}
-                            readTimeMinutes={sectionLargeArticle.read_time_minutes}
-                            likesCount={sectionLargeArticle.likes_count}
-                            isFeatured
-                          />
-                      </div>
-                    )}
-                    {/* Right: 2 stacked article cards — single column always */}
-                    {sectionSmallArticles.length > 0 && (
-                      <div className="w-full md:flex-1 flex flex-col gap-5">
-                        {sectionSmallArticles.slice(0, 2).map((item: any) => (
-                          <ContentCard
-                            key={item.id}
-                            {...getItemProps(item)}
-                          />
-                        ))}
-                      </div>
-                    )}
-                  </div>
+                  {/* Large featured card: image beside the text (stacked on mobile) */}
+                  {sectionLargeArticle && sectionLargeTrans && (
+                    <LargeArticleCard
+                      slug={sectionLargeArticle.slug}
+                      title={sectionLargeTrans.title}
+                      excerpt={sectionLargeTrans.excerpt || sectionLargeTrans.featured_summary}
+                      coverImageUrl={sectionLargeArticle.cover_image_url}
+                      authorName={sectionLargeArticle.profiles?.display_name}
+                      authorSlug={sectionLargeArticle.profiles?.slug}
+                      authorAvatarUrl={sectionLargeArticle.profiles?.avatar_url}
+                      categoryTag={sectionLargeCategoryTag}
+                      categoryTagSlug={sectionLargeCategoryTagSlug}
+                      readTimeMinutes={sectionLargeArticle.read_time_minutes}
+                      likesCount={sectionLargeArticle.likes_count}
+                      isFeatured
+                    />
+                  )}
 
-                  {/* Bottom row: 2 more cards, side-by-side only on md+ */}
-                  {sectionSmallArticles.length > 2 && (
-                    <div className="grid w-full min-w-0 grid-cols-1 gap-5 md:grid-cols-2">
-                      {sectionSmallArticles.slice(2, 4).map((item: any) => (
+                  {/* The other featured articles, in an even row (all covers keep their 16:9 shape) */}
+                  {sectionSmallArticles.length > 0 && (
+                    <div
+                      className={`grid w-full min-w-0 grid-cols-1 gap-5 ${
+                        sectionSmallArticles.length === 1
+                          ? ''
+                          : sectionSmallArticles.length === 3
+                            ? 'md:grid-cols-3'
+                            : sectionSmallArticles.length === 2
+                              ? 'md:grid-cols-2'
+                              : 'md:grid-cols-2 lg:grid-cols-4'
+                      }`}
+                    >
+                      {sectionSmallArticles.slice(0, 4).map((item: any) => (
                         <ContentCard
                           key={item.id}
                           {...getItemProps(item)}
