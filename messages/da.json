@@ -332,6 +332,20 @@
     "authorCtaUrl": "Knaplink",
     "authorCtaHint": "Vises kun på din forfattersiden. Teksten oversættes automatisk til de andre sprog."
   },
+  "subscribe": {
+    "eyebrow": "Nyhedsbrev",
+    "title": "Tænd din nysgerrighed, forandr fremtiden",
+    "subtitle": "Idéer og stemmer fra Det Globale Syd i din indbakke. Gratis og uden spam.",
+    "emailPlaceholder": "dig@email.com",
+    "emailLabel": "E-mailadresse",
+    "namePlaceholder": "Fornavn (valgfrit)",
+    "submit": "Abonnér",
+    "sending": "Tilmelder…",
+    "success": "Tak for din tilmelding.",
+    "errorInvalid": "Indtast en gyldig e-mailadresse.",
+    "errorFailed": "Vi kunne ikke tilmelde dig lige nu. Prøv igen om lidt.",
+    "privacy": "Vi respekterer dit privatliv. Afmeld når som helst."
+  },
   "footer": {
     "subscribeCta": "Abonnér",
     "subscribeClose": "Luk",

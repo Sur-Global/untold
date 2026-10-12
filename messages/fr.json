@@ -332,6 +332,20 @@
     "authorCtaUrl": "Lien du bouton",
     "authorCtaHint": "Affiché uniquement sur votre page d'auteur. Le texte est traduit automatiquement dans les autres langues."
   },
+  "subscribe": {
+    "eyebrow": "Newsletter",
+    "title": "Éveillez votre curiosité, transformez l'avenir",
+    "subtitle": "Des idées et des voix du Sud global dans votre boîte mail. Gratuit, sans spam.",
+    "emailPlaceholder": "vous@email.com",
+    "emailLabel": "Adresse e-mail",
+    "namePlaceholder": "Prénom (facultatif)",
+    "submit": "S'abonner",
+    "sending": "Abonnement…",
+    "success": "Merci de votre abonnement.",
+    "errorInvalid": "Saisissez une adresse e-mail valide.",
+    "errorFailed": "Impossible de vous abonner pour le moment. Réessayez dans un instant.",
+    "privacy": "Nous respectons votre vie privée. Désabonnez-vous à tout moment."
+  },
   "footer": {
     "subscribeCta": "S'abonner",
     "subscribeClose": "Fermer",

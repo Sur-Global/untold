@@ -332,6 +332,20 @@
     "authorCtaUrl": "Link do botão",
     "authorCtaHint": "Aparece apenas na sua página de autor. O texto é traduzido automaticamente para os outros idiomas."
   },
+  "subscribe": {
+    "eyebrow": "Newsletter",
+    "title": "Acende a tua curiosidade, transforma o futuro",
+    "subtitle": "Ideias e vozes do Sul Global na tua caixa de correio. Grátis e sem spam.",
+    "emailPlaceholder": "tu@email.com",
+    "emailLabel": "Endereço de email",
+    "namePlaceholder": "Nome (opcional)",
+    "submit": "Subscrever",
+    "sending": "A subscrever…",
+    "success": "Obrigado por subscreveres.",
+    "errorInvalid": "Introduz um email válido.",
+    "errorFailed": "Não foi possível subscrever agora. Tenta novamente daqui a pouco.",
+    "privacy": "Respeitamos a tua privacidade. Podes cancelar a subscrição quando quiseres."
+  },
   "footer": {
     "subscribeCta": "Subscrever",
     "subscribeClose": "Fechar",

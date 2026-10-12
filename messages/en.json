@@ -332,6 +332,20 @@
     "authorCtaUrl": "Button link",
     "authorCtaHint": "Shown on your author page only. The text is translated automatically into the other languages."
   },
+  "subscribe": {
+    "eyebrow": "Newsletter",
+    "title": "Ignite your curiosity, transform the future",
+    "subtitle": "Ideas and voices from the Global South in your inbox. Free, no spam.",
+    "emailPlaceholder": "you@email.com",
+    "emailLabel": "Email address",
+    "namePlaceholder": "First name (optional)",
+    "submit": "Subscribe",
+    "sending": "Subscribing…",
+    "success": "Thanks for subscribing.",
+    "errorInvalid": "Enter a valid email address.",
+    "errorFailed": "Couldn't subscribe right now. Try again in a moment.",
+    "privacy": "We respect your privacy. Unsubscribe anytime."
+  },
   "footer": {
     "subscribeCta": "Subscribe",
     "subscribeClose": "Close",

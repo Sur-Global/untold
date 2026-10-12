@@ -332,6 +332,20 @@
     "authorCtaUrl": "Enlace del botón",
     "authorCtaHint": "Se muestra solo en tu página de autor. El texto se traduce automáticamente a los demás idiomas."
   },
+  "subscribe": {
+    "eyebrow": "Boletín",
+    "title": "Enciende tu curiosidad, transforma el futuro",
+    "subtitle": "Ideas y voces del Sur Global en tu correo. Gratis y sin spam.",
+    "emailPlaceholder": "tu@correo.com",
+    "emailLabel": "Correo electrónico",
+    "namePlaceholder": "Nombre (opcional)",
+    "submit": "Suscríbete",
+    "sending": "Suscribiendo…",
+    "success": "Gracias por suscribirte.",
+    "errorInvalid": "Escribe un correo electrónico válido.",
+    "errorFailed": "No pudimos suscribirte ahora. Inténtalo de nuevo en un momento.",
+    "privacy": "Respetamos tu privacidad. Puedes darte de baja cuando quieras."
+  },
   "footer": {
     "subscribeCta": "Suscríbete",
     "subscribeClose": "Cerrar",

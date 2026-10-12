@@ -332,6 +332,20 @@
     "authorCtaUrl": "Button-Link",
     "authorCtaHint": "Wird nur auf deiner Autorenseite angezeigt. Der Text wird automatisch in die anderen Sprachen übersetzt."
   },
+  "subscribe": {
+    "eyebrow": "Newsletter",
+    "title": "Wecken Sie Ihre Neugier, gestalten Sie die Zukunft",
+    "subtitle": "Ideen und Stimmen aus dem Globalen Süden in Ihrem Postfach. Kostenlos, kein Spam.",
+    "emailPlaceholder": "sie@email.com",
+    "emailLabel": "E-Mail-Adresse",
+    "namePlaceholder": "Vorname (optional)",
+    "submit": "Abonnieren",
+    "sending": "Wird abonniert…",
+    "success": "Danke für Ihr Abonnement.",
+    "errorInvalid": "Geben Sie eine gültige E-Mail-Adresse ein.",
+    "errorFailed": "Das Abonnement hat gerade nicht geklappt. Versuchen Sie es gleich noch einmal.",
+    "privacy": "Wir respektieren Ihre Privatsphäre. Abmeldung jederzeit möglich."
+  },
   "footer": {
     "subscribeCta": "Abonnieren",
     "subscribeClose": "Schließen",

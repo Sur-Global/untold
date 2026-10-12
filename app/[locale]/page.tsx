@@ -1,6 +1,6 @@
 import { after } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
-import { SubscribeEmbed } from '@/components/layout/SubscribeEmbed'
+import { SubscribeSection } from '@/components/layout/SubscribeSection'
 import { getNavProps } from '@/lib/nav'
 import { getPlatformSettings } from '@/lib/data/platform-settings'
 import { getTranslation } from '@/lib/content'
@@ -31,7 +31,6 @@ export default async function HomePage({ params }: PageProps) {
   const t = await getTranslations('home')
   const tListings = await getTranslations('listings')
   const tContentHome = await getTranslations('content')
-  const tFooterHome = await getTranslations('footer')
   const platform = await getPlatformSettings()
   const featuredArticleLimit = platform.featuredContent.count
   const toSentenceCase = (s: string) =>
@@ -795,14 +794,10 @@ export default async function HomePage({ params }: PageProps) {
           )}
         </div>
 
-        {/* Newsletter sign-up (Sender form) */}
-        <section style={{ background: '#F1F1F1' }} aria-label={tFooterHome('subscribeFormTitle')}>
-          <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6">
-            <SubscribeEmbed title={tFooterHome('subscribeFormTitle')} />
-          </div>
-        </section>
+        {/* Newsletter sign-up */}
+        <SubscribeSection />
       </main>
-      <Footer />
+      <Footer flushTop />
     </>
   )
 }

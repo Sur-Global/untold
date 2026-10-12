@@ -2,6 +2,7 @@ import { getLocale, getTranslations } from 'next-intl/server'
 import { createClient } from '@/lib/supabase/server'
 import { Link } from '@/i18n/navigation'
 import { getStaticPagesForFooter } from '@/lib/data/static-pages'
+import { isSenderConfigured } from '@/lib/sender'
 import { SubscribeModalButton } from '@/components/layout/SubscribeModalButton'
 
 const TOPICS = [
@@ -22,7 +23,8 @@ const aeonikRegularBody: React.CSSProperties = {
   fontWeight: 400,
 }
 
-export async function Footer() {
+/** `flushTop` removes the gap above the footer (for pages that end in a full-width band) */
+export async function Footer({ flushTop = false }: { flushTop?: boolean } = {}) {
   const [t, tNav, locale, supabase] = await Promise.all([
     getTranslations('footer'),
     getTranslations('nav'),
@@ -45,7 +47,7 @@ export async function Footer() {
 
   return (
     <footer
-      className="mt-20 border-t py-16"
+      className={`${flushTop ? '' : 'mt-20 '}border-t py-16`}
       style={{ backgroundColor: '#000', borderColor: 'rgba(255,255,255,0.1)' }}
     >
       <div className="mx-auto max-w-7xl px-4 sm:px-6">
@@ -61,6 +63,7 @@ export async function Footer() {
               label={t('subscribeCta')}
               closeLabel={t('subscribeClose')}
               formTitle={t('subscribeFormTitle')}
+              native={isSenderConfigured()}
             />
           </div>
           <div>
