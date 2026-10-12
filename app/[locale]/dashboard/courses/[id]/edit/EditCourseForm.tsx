@@ -1,6 +1,6 @@
 'use client'
 
-import { useRef, useTransition } from 'react'
+import { useRef, useState, useTransition } from 'react'
 import { useTranslations } from 'next-intl'
 import { updateCourse } from '@/lib/actions/course'
 import { publishContent, unpublishContent, deleteContent } from '@/lib/actions/content'
@@ -10,6 +10,7 @@ import { Label } from '@/components/ui/label'
 import { CoverImageInput } from '@/components/ui/CoverImageInput'
 import { AuthorPicker } from '@/components/content/AuthorPicker'
 import { ViewContentLink } from '@/components/content/ViewContentLink'
+import { ResponsibilityDeclaration } from '@/components/content/ResponsibilityDeclaration'
 import { LanguageAvailabilityFields } from '@/components/content/LanguageAvailabilityFields'
 
 interface EditCourseFormProps {
@@ -18,6 +19,7 @@ interface EditCourseFormProps {
   initialAuthorId: string
   slug: string
   initialSingleLanguage?: boolean
+  initialDeclared?: boolean
   initialTitle: string
   initialDescription: string
   initialCoverImageUrl: string
@@ -27,12 +29,19 @@ interface EditCourseFormProps {
 }
 
 export function EditCourseForm({
-  id, status, initialAuthorId, slug, initialSingleLanguage = false, initialTitle, initialDescription, initialCoverImageUrl,
+  id, status, initialAuthorId, slug, initialSingleLanguage = false, initialDeclared = false, initialTitle, initialDescription, initialCoverImageUrl,
   initialPrice, initialCurrency, initialDuration,
 }: EditCourseFormProps) {
   const t = useTranslations('editor')
   const td = useTranslations('dashboard')
   const formRef = useRef<HTMLFormElement>(null)
+  const [declared, setDeclared] = useState(initialDeclared)
+  const publishNow = () =>
+    startTransition(async () => {
+      const fd = new FormData()
+      fd.set('responsibility_confirmed', String(declared))
+      await publishContent(id, fd)
+    })
   const [isPending, startTransition] = useTransition()
 
   const handleSave = (e: React.FormEvent) => {
@@ -74,6 +83,8 @@ export function EditCourseForm({
         <Input id="duration" name="duration" defaultValue={initialDuration} placeholder={t('durationPlaceholder')} />
       </div>
 
+      {status === 'draft' && <ResponsibilityDeclaration checked={declared} onChange={setDeclared} />}
+
       <div className="flex items-center gap-3 pt-2">
         <Button type="submit" disabled={isPending} className="gradient-rust text-white border-0">
           {isPending ? td('saving') : td('saveChanges')}
@@ -81,8 +92,8 @@ export function EditCourseForm({
 
         {status === 'published' && <ViewContentLink type="course" slug={slug} />}
         {status === 'draft' ? (
-          <Button type="button" variant="outline" disabled={isPending}
-            onClick={() => startTransition(() => publishContent(id, new FormData()))}>
+          <Button type="button" variant="outline" disabled={isPending || !declared}
+            onClick={publishNow}>
             {td('publish')}
           </Button>
         ) : (

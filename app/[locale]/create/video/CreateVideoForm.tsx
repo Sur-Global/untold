@@ -7,6 +7,7 @@ import type { VideoMetadata } from '@/app/api/video-metadata/route'
 import { AuthorPicker } from '@/components/content/AuthorPicker'
 import { ContentLanguageSelect } from '@/components/content/ContentLanguageSelect'
 import { FeatureRequestField } from '@/components/content/FeatureRequestField'
+import { ResponsibilityDeclaration } from '@/components/content/ResponsibilityDeclaration'
 import { LanguageAvailabilityFields } from '@/components/content/LanguageAvailabilityFields'
 
 async function fetchVideoMetadata(url: string): Promise<VideoMetadata | null> {
@@ -28,6 +29,7 @@ export function CreateVideoForm() {
   const publishRef = useRef(false)
   // Mirrors publishRef for rendering (refs can't be read during render)
   const [publishing, setPublishing] = useState(false)
+  const [declared, setDeclared] = useState(false)
 
   const [embedUrl, setEmbedUrl] = useState('')
   const [title, setTitle] = useState('')
@@ -123,6 +125,8 @@ export function CreateVideoForm() {
 
       <FeatureRequestField />
 
+      <ResponsibilityDeclaration checked={declared} onChange={setDeclared} />
+
       <div className="flex gap-4">
         <button
           type="submit"
@@ -134,7 +138,7 @@ export function CreateVideoForm() {
         </button>
         <button
           type="submit"
-          disabled={isPending || !embedUrl.trim() || !title.trim()}
+          disabled={isPending || !declared || !embedUrl.trim() || !title.trim()}
           onClick={() => { publishRef.current = true; setPublishing(true) }}
           className="flex-1 h-[54px] rounded-[16px] gradient-rust text-white text-sm font-['JetBrains_Mono',monospace] font-medium tracking-[0.28px] transition-opacity disabled:opacity-60"
         >

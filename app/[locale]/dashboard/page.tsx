@@ -12,6 +12,7 @@ import { buttonVariants } from '@/components/ui/button-variants'
 import { cn, getEditPath } from '@/lib/utils'
 import { publishContent, unpublishContent } from '@/lib/actions/content'
 import { DeleteContentButton } from './DeleteContentButton'
+import { ProfileNudge } from '@/components/profile/ProfileNudge'
 import { ViewContentLink } from '@/components/content/ViewContentLink'
 import { AuthorStarToggle } from './AuthorStarToggle'
 import type { ContentType } from '@/lib/supabase/types'
@@ -55,7 +56,7 @@ export default async function DashboardPage({ params }: { params: Promise<{ loca
   const itemsPromise = (supabase as any)
     .from('content')
     .select(`
-      id, type, slug, status, created_at, is_curated, source_locale, is_author_featured,
+      id, type, slug, status, created_at, is_curated, declaration_accepted_at, source_locale, is_author_featured,
       content_translations ( title, locale )
     `)
     .eq('author_id', user.id)
@@ -71,17 +72,6 @@ export default async function DashboardPage({ params }: { params: Promise<{ loca
       .eq('id', user.id)
       .single(),
   ])
-
-  // Nudge creators to complete their public profile
-  const hasText = (v: unknown) => typeof v === 'string' && v.replace(/<[^>]*>/g, '').trim().length > 0
-  const missingProfile: string[] = []
-  if (!hasText(myProfile?.avatar_url)) missingProfile.push(t('nudgePhoto'))
-  if (!hasText(myProfile?.bio)) missingProfile.push(t('nudgeBio'))
-  if (
-    ![myProfile?.website, myProfile?.social_bluesky, myProfile?.social_linkedin, myProfile?.social_instagram, myProfile?.social_medium, myProfile?.social_custom_url].some(hasText)
-  ) {
-    missingProfile.push(t('nudgeLinks'))
-  }
 
   const getTitle = (item: any) => {
     // Show the title in the language it was written in
@@ -111,19 +101,7 @@ export default async function DashboardPage({ params }: { params: Promise<{ loca
           </div>
         </div>
 
-        {missingProfile.length > 0 && (
-          <div
-            className="mb-6 rounded-xl p-5"
-            style={{ border: '1px solid rgba(169,168,233,0.6)', background: 'rgba(169,168,233,0.12)' }}
-          >
-            <p className="font-semibold">{t('profileNudgeTitle')}</p>
-            <p className="mt-1 text-sm text-[#4b3a2a] leading-relaxed">{t('profileNudgeText')}</p>
-            <p className="mt-2 text-sm text-[#6B5F58]">{t('profileNudgeMissing', { items: missingProfile.join(', ') })}</p>
-            <Link href="/dashboard/profile" className={cn(buttonVariants({ size: 'sm' }), 'mt-3')}>
-              {t('profileNudgeCta')}
-            </Link>
-          </div>
-        )}
+        <ProfileNudge profile={myProfile} />
 
         {(!items || items.length === 0) ? (
           <p className="text-[#6B5F58]">{t('noContent')}</p>
@@ -169,9 +147,16 @@ export default async function DashboardPage({ params }: { params: Promise<{ loca
                   </Link>
 
                   {item.status === 'draft' ? (
-                    <form action={publishContent.bind(null, item.id)}>
-                      <Button type="submit" size="sm" variant="outline">{t('publish')}</Button>
-                    </form>
+                    item.declaration_accepted_at ? (
+                      <form action={publishContent.bind(null, item.id)}>
+                        <Button type="submit" size="sm" variant="outline">{t('publish')}</Button>
+                      </form>
+                    ) : (
+                      // Publishing needs the "I take responsibility" confirmation, which lives on the edit page
+                      <Link href={getEditPath(item.type, item.id)} className={cn(buttonVariants({ variant: 'outline', size: 'sm' }))}>
+                        {t('publish')}
+                      </Link>
+                    )
                   ) : (
                     <form action={unpublishContent.bind(null, item.id)}>
                       <Button type="submit" size="sm" variant="outline">{t('unpublish')}</Button>

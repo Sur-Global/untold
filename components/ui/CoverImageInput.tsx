@@ -93,7 +93,7 @@ export function CoverImageInput({
     }
   }
 
-  function handleUseUrl() {
+  async function handleUseUrl() {
     const trimmed = urlInput.trim()
     try {
       new URL(trimmed)
@@ -102,9 +102,32 @@ export function CoverImageInput({
       return
     }
     setError(null)
-    setUrl(trimmed)
-    onChange?.(trimmed)
-    setUrlInput('')
+    setUploading(true)
+    try {
+      // Re-host the image on our side (resized, never breaks). If that isn't possible,
+      // keep the link as it is so the creator isn't blocked.
+      const res = await fetch('/api/upload/from-url', {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ url: trimmed, type: uploadType }),
+      })
+      if (res.ok) {
+        const { url: hostedUrl } = await res.json()
+        setUrl(hostedUrl)
+        onChange?.(hostedUrl)
+      } else {
+        const body = await res.json().catch(() => ({}))
+        setUrl(trimmed)
+        onChange?.(trimmed)
+        setError(`${body.error ?? 'Could not import that image'} — the link was kept as is, check that the picture shows up.`)
+      }
+    } catch {
+      setUrl(trimmed)
+      onChange?.(trimmed)
+    } finally {
+      setUploading(false)
+      setUrlInput('')
+    }
   }
 
   return (

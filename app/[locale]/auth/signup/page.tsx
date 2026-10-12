@@ -5,11 +5,13 @@ import { SignupForm } from '@/components/auth/SignupForm'
 
 export default async function SignupPage() {
   const t = await getTranslations('auth')
+  const tDash = await getTranslations('dashboard')
   return (
     <main className="min-h-screen flex items-center justify-center px-4">
       <Card className="w-full max-w-md shadow-vintage">
         <CardHeader><CardTitle className="text-2xl">{t('signupTitle')}</CardTitle></CardHeader>
         <CardContent>
+          <p className="mb-4 rounded-lg bg-muted/40 p-3 text-sm leading-relaxed text-muted-foreground">{tDash('profileNudgeText')}</p>
           <SignupForm />
           <p className="text-center text-sm mt-4 text-muted-foreground">
             {t('hasAccount')}{' '}

@@ -36,7 +36,7 @@ export default async function DashboardArticlesPage({ params }: { params: Promis
   const articlesPromise = (supabase as any)
     .from('content')
     .select(`
-      id, slug, status, source_locale, published_at, created_at,
+      id, slug, status, source_locale, published_at, created_at, declaration_accepted_at,
       content_translations ( title, locale )
     `)
     .eq('author_id', user.id)
@@ -98,9 +98,16 @@ export default async function DashboardArticlesPage({ params }: { params: Promis
                   </Link>
 
                   {article.status === 'draft' ? (
-                    <form action={publishArticle.bind(null, article.id)}>
-                      <Button type="submit" size="sm" variant="outline">{t('publish')}</Button>
-                    </form>
+                    article.declaration_accepted_at ? (
+                      <form action={publishArticle.bind(null, article.id)}>
+                        <Button type="submit" size="sm" variant="outline">{t('publish')}</Button>
+                      </form>
+                    ) : (
+                      // Publishing needs the "I take responsibility" confirmation, which lives on the edit page
+                      <Link href={`/dashboard/articles/${article.id}/edit`} className={cn(buttonVariants({ variant: 'outline', size: 'sm' }))}>
+                        {t('publish')}
+                      </Link>
+                    )
                   ) : (
                     <form action={unpublishArticle.bind(null, article.id)}>
                       <Button type="submit" size="sm" variant="outline">{t('unpublish')}</Button>

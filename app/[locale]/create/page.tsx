@@ -1,5 +1,7 @@
 import { getTranslations } from 'next-intl/server'
 import { requireCreator, canCreateType } from '@/lib/require-creator'
+import { createClient } from '@/lib/supabase/server'
+import { ProfileNudge } from '@/components/profile/ProfileNudge'
 import { Navigation } from '@/components/layout/Navigation'
 import { Footer } from '@/components/layout/Footer'
 import { getNavProps } from '@/lib/nav'
@@ -15,7 +17,13 @@ const CONTENT_TYPES = [
 ] as const
 
 export default async function CreatePickerPage() {
-  const { profile } = await requireCreator()
+  const { user, profile } = await requireCreator()
+  const supabase = await createClient()
+  const { data: myProfile } = await (supabase as any)
+    .from('profiles')
+    .select('avatar_url, bio, website, social_bluesky, social_linkedin, social_instagram, social_medium, social_custom_url')
+    .eq('id', user.id)
+    .single()
   const [{ userId, ...navProps }, t] = await Promise.all([
     getNavProps(),
     getTranslations('create'),
@@ -25,6 +33,7 @@ export default async function CreatePickerPage() {
     <>
       <Navigation {...navProps} />
       <main className="max-w-2xl mx-auto px-4 sm:px-6 py-16">
+        <ProfileNudge profile={myProfile} />
         <h1 className="mb-10 text-center">{t('pickType')}</h1>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           {CONTENT_TYPES.filter(({ key }) => canCreateType(profile.role, key)).map(({ key, href, Icon }) => (

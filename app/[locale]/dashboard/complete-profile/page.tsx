@@ -15,11 +15,15 @@ export default async function CompleteProfilePage() {
   if (profile && !profile.slug.startsWith('user-')) redirect('/')
 
   const t = await getTranslations('auth')
+  const tDash = await getTranslations('dashboard')
   return (
     <main className="min-h-screen flex items-center justify-center px-4">
       <Card className="w-full max-w-md shadow-vintage">
         <CardHeader><CardTitle className="text-2xl">{t('completeProfileTitle')}</CardTitle></CardHeader>
-        <CardContent><CompleteProfileForm /></CardContent>
+        <CardContent>
+          <p className="mb-4 rounded-lg bg-muted/40 p-3 text-sm leading-relaxed text-muted-foreground">{tDash('profileNudgeText')}</p>
+          <CompleteProfileForm />
+        </CardContent>
       </Card>
     </main>
   )

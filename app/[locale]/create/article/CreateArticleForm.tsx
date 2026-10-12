@@ -10,6 +10,7 @@ import { PhotoCreditInput } from '@/components/content/PhotoCreditInput'
 import { TagsInput, type Tag } from '@/components/ui/TagsInput'
 import { AuthorPicker } from '@/components/content/AuthorPicker'
 import { ContentLanguageSelect } from '@/components/content/ContentLanguageSelect'
+import { ResponsibilityDeclaration } from '@/components/content/ResponsibilityDeclaration'
 import { LanguageAvailabilityFields } from '@/components/content/LanguageAvailabilityFields'
 
 export function CreateArticleForm() {
@@ -34,6 +35,7 @@ export function CreateArticleForm() {
     if (body) fd.set('body', JSON.stringify(body))
     fd.set('tag_ids', JSON.stringify(tags.map((t) => t.id)))
     fd.set('feature_requested', String(featureRequested))
+    fd.set('responsibility_confirmed', String(publishConfirmed))
     fd.set('publish', String(publishRef.current))
     startTransition(() => createArticle(fd))
   }
@@ -123,24 +125,7 @@ export function CreateArticleForm() {
         </div>
       </div>
 
-      {/* Same confirmation as the edit screen — required before publishing */}
-      <div
-        className="rounded-[16px] p-6 border-2 mt-6"
-        style={{ background: '#fdf5f5', borderColor: '#8b4513', boxShadow: '0px 2px 8px 0px rgba(139,69,19,0.1)' }}
-      >
-        <label className="flex items-start gap-3 cursor-pointer">
-          <input
-            type="checkbox"
-            checked={publishConfirmed}
-            onChange={(e) => setPublishConfirmed(e.target.checked)}
-            className="mt-1 w-4 h-4 rounded accent-[#8b4513]"
-          />
-          <p className="text-sm text-[#4b3a2a] leading-relaxed">{t('publishConfirmationText')}</p>
-        </label>
-      </div>
-      {!publishConfirmed && (
-        <p className="mt-3 text-sm text-muted-foreground">{t('publishConfirmTooltip')}</p>
-      )}
+      <ResponsibilityDeclaration checked={publishConfirmed} onChange={setPublishConfirmed} />
 
       <div className="mt-6 flex gap-4">
         <button

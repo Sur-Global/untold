@@ -14,6 +14,7 @@ import type { VideoMetadata, VideoChapter as Chapter } from '@/app/api/video-met
 import type { TranscriptCue } from '@/lib/transcript'
 import { AuthorPicker } from '@/components/content/AuthorPicker'
 import { ViewContentLink } from '@/components/content/ViewContentLink'
+import { ResponsibilityDeclaration } from '@/components/content/ResponsibilityDeclaration'
 import { LanguageAvailabilityFields } from '@/components/content/LanguageAvailabilityFields'
 import { AVAILABILITY_MARKER } from '@/lib/language-availability'
 type LayoutStyle = 'standard' | 'wide' | 'sidebar' | 'card'
@@ -24,6 +25,7 @@ interface EditVideoFormProps {
   initialAuthorId: string
   slug: string
   initialSingleLanguage: boolean
+  initialDeclared: boolean
   initialSubtitleLocales: string[]
   sourceLocale: string
   initialTitle: string
@@ -98,6 +100,7 @@ export function EditVideoForm({
   initialAuthorId,
   slug,
   initialSingleLanguage,
+  initialDeclared,
   initialSubtitleLocales,
   sourceLocale,
   initialTitle,
@@ -156,6 +159,8 @@ export function EditVideoForm({
   const isSavingRef = useRef(false)
   // Admin/editor-only: who the video is attributed to (sent with every save)
   const authorIdRef = useRef(initialAuthorId)
+  const [declared, setDeclared] = useState(initialDeclared)
+  const declaredRef = useRef(initialDeclared)
   const availabilityRef = useRef({ single: initialSingleLanguage, subtitles: initialSubtitleLocales })
   const pendingSaveRef = useRef(false)
 
@@ -177,6 +182,7 @@ export function EditVideoForm({
     fd.set('feature_requested', String(s.featureRequested))
     fd.set('layout_style', s.layoutStyle)
     fd.set('author_id', authorIdRef.current)
+    fd.set('responsibility_confirmed', String(declaredRef.current))
     fd.set(AVAILABILITY_MARKER, '1')
     if (availabilityRef.current.single) {
       fd.set('single_language', 'on')
@@ -535,6 +541,16 @@ export function EditVideoForm({
         )}
       </div>
 
+      {status === 'draft' && (
+        <ResponsibilityDeclaration
+          checked={declared}
+          onChange={(v) => {
+            declaredRef.current = v
+            setDeclared(v)
+          }}
+        />
+      )}
+
       {/* Action bar */}
       <div className="flex gap-4 mt-6">
         <button
@@ -554,8 +570,14 @@ export function EditVideoForm({
         {status === 'draft' ? (
           <button
             type="button"
-            disabled={isPending}
-            onClick={() => startTransition(() => publishContent(id, new FormData()))}
+            disabled={isPending || !declared}
+            onClick={() =>
+              startTransition(async () => {
+                const fd = new FormData()
+                fd.set('responsibility_confirmed', String(declared))
+                await publishContent(id, fd)
+              })
+            }
             className="h-[54px] px-6 rounded-[16px] border border-primary/30 text-primary text-sm font-['JetBrains_Mono',monospace] font-medium tracking-[0.28px] hover:bg-primary/5 transition-colors disabled:opacity-60"
           >
             {td('publish')}

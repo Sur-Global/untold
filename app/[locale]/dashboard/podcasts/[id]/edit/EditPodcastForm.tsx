@@ -1,6 +1,6 @@
 'use client'
 
-import { useRef, useTransition } from 'react'
+import { useRef, useState, useTransition } from 'react'
 import { useTranslations } from 'next-intl'
 import { updatePodcast } from '@/lib/actions/podcast'
 import { publishContent, unpublishContent, deleteContent } from '@/lib/actions/content'
@@ -10,6 +10,7 @@ import { Label } from '@/components/ui/label'
 import { CoverImageInput } from '@/components/ui/CoverImageInput'
 import { AuthorPicker } from '@/components/content/AuthorPicker'
 import { ViewContentLink } from '@/components/content/ViewContentLink'
+import { ResponsibilityDeclaration } from '@/components/content/ResponsibilityDeclaration'
 import { LanguageAvailabilityFields } from '@/components/content/LanguageAvailabilityFields'
 
 interface EditPodcastFormProps {
@@ -18,6 +19,7 @@ interface EditPodcastFormProps {
   initialAuthorId: string
   slug: string
   initialSingleLanguage?: boolean
+  initialDeclared?: boolean
   initialTitle: string
   initialDescription: string
   initialEmbedUrl: string
@@ -28,7 +30,7 @@ interface EditPodcastFormProps {
 
 export function EditPodcastForm({
   id,
-  status, initialAuthorId, slug, initialSingleLanguage = false,
+  status, initialAuthorId, slug, initialSingleLanguage = false, initialDeclared = false,
   initialTitle,
   initialDescription,
   initialEmbedUrl,
@@ -39,6 +41,13 @@ export function EditPodcastForm({
   const t = useTranslations('editor')
   const td = useTranslations('dashboard')
   const formRef = useRef<HTMLFormElement>(null)
+  const [declared, setDeclared] = useState(initialDeclared)
+  const publishNow = () =>
+    startTransition(async () => {
+      const fd = new FormData()
+      fd.set('responsibility_confirmed', String(declared))
+      await publishContent(id, fd)
+    })
   const [isPending, startTransition] = useTransition()
 
   const handleSave = (e: React.FormEvent) => {
@@ -108,6 +117,8 @@ export function EditPodcastForm({
         />
       </div>
 
+      {status === 'draft' && <ResponsibilityDeclaration checked={declared} onChange={setDeclared} />}
+
       <div className="flex items-center gap-3 pt-2">
         <Button type="submit" disabled={isPending} className="gradient-rust text-white border-0">
           {isPending ? td('saving') : td('saveChanges')}
@@ -118,8 +129,8 @@ export function EditPodcastForm({
           <Button
             type="button"
             variant="outline"
-            disabled={isPending}
-            onClick={() => startTransition(() => publishContent(id, new FormData()))}
+            disabled={isPending || !declared}
+            onClick={publishNow}
           >
             {td('publish')}
           </Button>

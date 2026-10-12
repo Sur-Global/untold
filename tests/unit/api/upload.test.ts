@@ -5,11 +5,12 @@ import { NextRequest } from 'next/server'
 // Mock sharp before importing route
 vi.mock('sharp', () => {
   const chain = {
+    rotate: vi.fn().mockReturnThis(),
     resize: vi.fn().mockReturnThis(),
     webp: vi.fn().mockReturnThis(),
     toBuffer: vi.fn().mockResolvedValue(Buffer.from('fake-webp')),
   }
-  return { default: vi.fn().mockReturnValue(chain) }
+  return { default: Object.assign(vi.fn().mockReturnValue(chain), { strategy: { attention: 'attention' } }) }
 })
 
 vi.mock('@/lib/supabase/server', () => ({

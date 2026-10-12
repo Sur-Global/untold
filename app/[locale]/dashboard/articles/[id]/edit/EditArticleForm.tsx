@@ -11,6 +11,7 @@ import { TagsInput, type Tag } from '@/components/ui/TagsInput'
 import { Link } from '@/i18n/navigation'
 import { AuthorPicker } from '@/components/content/AuthorPicker'
 import { ViewContentLink } from '@/components/content/ViewContentLink'
+import { ResponsibilityDeclaration } from '@/components/content/ResponsibilityDeclaration'
 import { LanguageAvailabilityFields } from '@/components/content/LanguageAvailabilityFields'
 import { AVAILABILITY_MARKER } from '@/lib/language-availability'
 
@@ -30,6 +31,7 @@ interface EditArticleFormProps {
   initialAuthorId: string
   slug: string
   initialSingleLanguage: boolean
+  initialDeclared: boolean
   sourceLocale: string
   translations: LocaleData[]
   availableLocales: string[]
@@ -57,6 +59,7 @@ export function EditArticleForm({
   initialAuthorId,
   slug,
   initialSingleLanguage,
+  initialDeclared,
   sourceLocale,
   translations,
   availableLocales,
@@ -104,7 +107,8 @@ export function EditArticleForm({
   const [tags, setTags] = useState<Tag[]>(initialTags)
   const [featureRequested, setFeatureRequested] = useState(initialFeatureRequested)
   // Not persisted — must be re-confirmed before every publish action, not just once ever.
-  const [publishConfirmed, setPublishConfirmed] = useState(false)
+  const [publishConfirmed, setPublishConfirmed] = useState(initialDeclared)
+  const declaredRef = useRef(initialDeclared)
 
   const [saveStatus, setSaveStatus] = useState<'saved' | 'saving' | 'unsaved'>('saved')
   const [saveError, setSaveError] = useState<string | null>(null)
@@ -158,6 +162,7 @@ export function EditArticleForm({
     fd.set('tag_ids', JSON.stringify(tg.map((tag) => tag.id)))
     fd.set('feature_requested', String(fr))
     fd.set('author_id', authorIdRef.current)
+    fd.set('responsibility_confirmed', String(declaredRef.current))
     fd.set(AVAILABILITY_MARKER, '1')
     if (singleLanguageRef.current) fd.set('single_language', 'on')
     if (s.body) fd.set('body', JSON.stringify(s.body))
@@ -465,28 +470,15 @@ export function EditArticleForm({
         )}
       </div>
 
-      {/* Publish confirmation — required before every publish, not persisted */}
+      {/* "I take responsibility" — required before publishing, recorded once confirmed */}
       {status === 'draft' && (
-        <div
-          className="rounded-[16px] p-6 border-2 mt-6"
-          style={{ background: '#fdf5f5', borderColor: '#8b4513', boxShadow: '0px 2px 8px 0px rgba(139,69,19,0.1)' }}
-        >
-          <label className="flex items-start gap-3 cursor-pointer">
-            <input
-              type="checkbox"
-              checked={publishConfirmed}
-              onChange={(e) => setPublishConfirmed(e.target.checked)}
-              className="mt-1 w-4 h-4 rounded accent-[#8b4513]"
-            />
-            <p className="text-sm text-[#4b3a2a] leading-relaxed">
-              {t('publishConfirmationText')}
-            </p>
-          </label>
-        </div>
-      )}
-
-      {status === 'draft' && !publishConfirmed && (
-        <p className="mt-3 text-sm text-muted-foreground">{t('publishConfirmTooltip')}</p>
+        <ResponsibilityDeclaration
+          checked={publishConfirmed}
+          onChange={(v) => {
+            declaredRef.current = v
+            setPublishConfirmed(v)
+          }}
+        />
       )}
       {saveError && (
         <p className="mt-3 rounded-[10px] bg-destructive/10 px-4 py-2 text-sm text-destructive">{saveError}</p>
@@ -511,7 +503,9 @@ export function EditArticleForm({
             onClick={() => startTransition(async () => {
               setSaveError(null)
               try {
-                await publishArticle(id, new FormData())
+                const fd = new FormData()
+                fd.set('responsibility_confirmed', String(publishConfirmed))
+                await publishArticle(id, fd)
               } catch (err) {
                 setSaveError(err instanceof Error ? err.message : 'Publish failed')
               }

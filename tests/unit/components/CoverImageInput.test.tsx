@@ -1,4 +1,4 @@
-import { render, screen, fireEvent } from '@testing-library/react'
+import { render, screen, fireEvent, waitFor } from '@testing-library/react'
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 
 // Mock fetch for upload
@@ -35,13 +35,36 @@ describe('CoverImageInput', () => {
     expect(screen.getByText(/click to upload/i)).toBeInTheDocument()
   })
 
-  it('sets url from URL input when Use URL is clicked', () => {
-    render(<CoverImageInput name="cover_image_url" />)
+  it('re-hosts a pasted link on our side and uses the hosted copy', async () => {
+    vi.mocked(global.fetch).mockResolvedValue({
+      ok: true,
+      json: async () => ({ url: 'https://storage.example.com/hosted.webp' }),
+    } as Response)
+    const onChange = vi.fn()
+    const { container } = render(<CoverImageInput name="cover_image_url" onChange={onChange} />)
     fireEvent.change(screen.getByPlaceholderText(/https:\/\/example\.com\/image/i), {
       target: { value: 'https://cdn.example.com/photo.jpg' },
     })
     fireEvent.click(screen.getByText('Use URL'))
-    expect(screen.getByRole('img')).toBeInTheDocument()
+    await waitFor(() => expect(onChange).toHaveBeenCalledWith('https://storage.example.com/hosted.webp'))
+    expect(global.fetch).toHaveBeenCalledWith('/api/upload/from-url', expect.objectContaining({ method: 'POST' }))
+    expect((container.querySelector('input[type="hidden"]') as HTMLInputElement).value).toBe('https://storage.example.com/hosted.webp')
+  })
+
+  it('keeps the pasted link and says why when it cannot be re-hosted', async () => {
+    vi.mocked(global.fetch).mockResolvedValue({
+      ok: false,
+      status: 422,
+      json: async () => ({ error: 'That link is not a direct image' }),
+    } as Response)
+    const onChange = vi.fn()
+    render(<CoverImageInput name="cover_image_url" onChange={onChange} />)
+    fireEvent.change(screen.getByPlaceholderText(/https:\/\/example\.com\/image/i), {
+      target: { value: 'https://cdn.example.com/photo.jpg' },
+    })
+    fireEvent.click(screen.getByText('Use URL'))
+    await waitFor(() => expect(onChange).toHaveBeenCalledWith('https://cdn.example.com/photo.jpg'))
+    expect(screen.getByText(/not a direct image/i)).toBeInTheDocument()
   })
 
   it('shows error for invalid URL', () => {
@@ -51,15 +74,5 @@ describe('CoverImageInput', () => {
     })
     fireEvent.click(screen.getByText('Use URL'))
     expect(screen.getByText(/valid URL/i)).toBeInTheDocument()
-  })
-
-  it('calls onChange when url changes via URL input', () => {
-    const onChange = vi.fn()
-    render(<CoverImageInput name="cover_image_url" onChange={onChange} />)
-    fireEvent.change(screen.getByPlaceholderText(/https:\/\/example\.com\/image/i), {
-      target: { value: 'https://cdn.example.com/photo.jpg' },
-    })
-    fireEvent.click(screen.getByText('Use URL'))
-    expect(onChange).toHaveBeenCalledWith('https://cdn.example.com/photo.jpg')
   })
 })

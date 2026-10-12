@@ -5,13 +5,16 @@ import { redirect } from 'next/navigation'
 import { after } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
 import { requireCreator } from '@/lib/require-creator'
+import { requireDeclaration } from '@/lib/declaration'
 import { notifyFeatureRequest } from '@/lib/feature-request'
 import { isEditorRole } from '@/lib/require-editor'
 import { logActivity, getContentLogInfo } from '@/lib/actions/activity-log'
 
-export async function publishContent(id: string, _formData: FormData) {
+export async function publishContent(id: string, formData: FormData) {
   const { user, profile } = await requireCreator()
   const supabase = await createClient()
+  // Publishing needs the creator's "I take responsibility" confirmation (recorded the first time)
+  await requireDeclaration(supabase, id, formData)
 
   const query = (supabase as any)
     .from('content')

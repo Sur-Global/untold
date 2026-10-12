@@ -10,6 +10,7 @@ import { isEditorRole } from '@/lib/require-editor'
 import { slugify } from '@/lib/utils'
 import { resolveSourceLocale } from '@/lib/resolve-source-locale'
 import { readLanguageAvailability } from '@/lib/language-availability'
+import { readDeclaration, recordDeclaration } from '@/lib/declaration'
 import { saveLanguageAvailability } from '@/lib/save-language-availability'
 import { publishNewContent } from '@/lib/publish-new-content'
 import { resolveAuthorId, requestedAuthorId } from '@/lib/resolve-author'
@@ -19,6 +20,10 @@ export async function createVideo(formData: FormData) {
   const { user, profile } = await requireCreator()
   const supabase = await createClient()
   const sourceLocale = resolveSourceLocale(formData)
+  const declared = readDeclaration(formData)
+  if (formData.get('publish') === 'true' && !declared) {
+    throw new Error('Please confirm the responsibility statement before publishing')
+  }
   const authorId = await resolveAuthorId(supabase, formData, user, profile.role)
 
   const title = (formData.get('title') as string).trim()
@@ -44,6 +49,7 @@ export async function createVideo(formData: FormData) {
       slug,
       source_locale: sourceLocale,
       ...(readLanguageAvailability(formData) ?? {}),
+      declaration_accepted_at: declared ? new Date().toISOString() : null,
       status: 'draft',
       cover_image_url: thumbnailUrl,
       feature_requested_at: featureRequested ? new Date().toISOString() : null,
@@ -133,6 +139,7 @@ export async function updateVideo(id: string, formData: FormData) {
   if (!owned) return
   const sourceLocale: string = owned.source_locale ?? 'en'
   await saveLanguageAvailability(supabase, id, sourceLocale, formData)
+  await recordDeclaration(supabase, id, formData)
   await syncFeatureRequest(id, featureRequest)
   after(() => notifyFeatureRequest(id))
 

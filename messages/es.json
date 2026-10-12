@@ -287,6 +287,8 @@
     "featureRequestDescription": "Tu contenido se publicará de inmediato en tu página personal de UNTOLD. Si es aprobado por un editor, podría convertirse en contenido destacado con mayor visibilidad en la portada y en las búsquedas.",
     "publishConfirmationText": "Confirmo que este es contenido original creado por mí, o que cuento con los derechos necesarios para publicarlo. He verificado las fuentes y afirmaciones presentadas, y todas las imágenes, citas y referencias bibliográficas están correcta y completamente acreditadas a sus creadores originales o titulares de derechos de autor. Entiendo y acepto que, como autor/a, soy responsable de la exactitud, originalidad y legalidad de este contenido, y que UNTOLD puede despublicarlo si estos compromisos no se cumplen.",
     "publishConfirmTooltip": "Confirma la declaración anterior antes de publicar",
+    "responsibilityText": "Me responsabilizo de mi contenido: es original o tengo derecho a publicarlo, he acreditado fuentes e imágenes, y entiendo que UNTOLD puede despublicarlo si esto no se cumple.",
+    "responsibilityReadFull": "Leer la declaración completa",
     "authorNameLabel": "Nombre del autor",
     "editArticleTitle": "Editar artículo",
     "editArticleSubtitle": "Edita el texto, diseño e imágenes de tu artículo",

@@ -287,6 +287,8 @@
     "featureRequestDescription": "Your content will be published immediately on your personal UNTOLD page. If approved by an Editor, it could become featured content with higher visibility on the homepage and in searches.",
     "publishConfirmationText": "I hereby confirm that this is original content created by me, or that I hold the necessary rights to publish it. I have fact-checked the sources and claims presented, and all images, quotations, and bibliographic references are correctly and fully credited to their original creators or copyright holders. I understand and accept that, as the author, I am responsible for the accuracy, originality, and legality of this content, and that UNTOLD may unpublish it if these commitments are not met.",
     "publishConfirmTooltip": "Confirm the statement above before publishing",
+    "responsibilityText": "I take responsibility for my content: it's original or I have the right to publish it, I've credited sources and images, and I understand UNTOLD may unpublish it if this isn't the case.",
+    "responsibilityReadFull": "Read the full statement",
     "authorNameLabel": "Author Name",
     "editArticleTitle": "Edit Article",
     "editArticleSubtitle": "Edit text, layout, and images for your article",

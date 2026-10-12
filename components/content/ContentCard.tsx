@@ -1,5 +1,6 @@
 'use client'
-import { useRef } from 'react'
+import { useRef, useState } from 'react'
+import { BookOpen, FileText, Mic, Video, Zap } from 'lucide-react'
 import { useLocale, useTranslations } from 'next-intl'
 import { languageLabel } from '@/lib/language-availability'
 import { Link } from '@/i18n/navigation'
@@ -46,12 +47,31 @@ interface ContentCardProps {
   currency?: string | null
 }
 
+const TYPE_ICONS = { article: FileText, video: Video, podcast: Mic, pill: Zap, course: BookOpen } as const
+
+// Shown instead of a grey box when an item has no cover image
+function CoverPlaceholder({ type, accentColor }: { type: ContentType; accentColor?: string | null }) {
+  const Icon = TYPE_ICONS[type]
+  const accent = accentColor || '#8b7355'
+  return (
+    <div
+      className="flex h-full w-full items-center justify-center"
+      style={{ background: `linear-gradient(135deg, ${accent}33 0%, ${accent}1A 100%)`, color: accent }}
+    >
+      <Icon size={44} strokeWidth={1.4} aria-hidden style={{ opacity: 0.55 }} />
+    </div>
+  )
+}
+
 function AuthorAvatar({ name, avatarUrl }: { name?: string | null; avatarUrl?: string | null }) {
-  if (avatarUrl) {
+  // A broken photo link falls back to the initial instead of a broken-image icon
+  const [failed, setFailed] = useState(false)
+  if (avatarUrl && !failed) {
     return (
       <img
         src={avatarUrl}
         alt={name ?? ''}
+        onError={() => setFailed(true)}
         className="rounded-full object-cover object-top shrink-0"
         style={{ width: 32, height: 32, border: '1.5px solid rgba(212,165,116,0.6)' }}
       />
@@ -161,7 +181,7 @@ export function ContentCard({
               loading="lazy"
             />
           ) : (
-            <div className="w-full h-full" style={{ background: '#e8e0d8' }} />
+            <CoverPlaceholder type={type} accentColor={accentColor} />
           )}
           {/* Gradient overlay */}
           <div

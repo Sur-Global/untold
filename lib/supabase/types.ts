@@ -43,6 +43,10 @@ export interface Database {
           is_home_featured: boolean;
           single_language: boolean;
           is_curated: boolean;
+          declaration_accepted_at: string | null;
+          feature_review_assigned_to: string | null;
+          feature_review_assigned_at: string | null;
+          feature_review_note: string | null;
           feature_requested_at: string | null;
           feature_request_resolved_at: string | null;
           feature_request_notified_at: string | null;

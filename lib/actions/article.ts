@@ -5,12 +5,14 @@ import { redirect } from 'next/navigation'
 import { after } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
 import { requireCreator } from '@/lib/require-creator'
+import { requireDeclaration } from '@/lib/declaration'
 import { notifyFeatureRequest, readFeatureRequest, syncFeatureRequest } from '@/lib/feature-request'
 import { isEditorRole } from '@/lib/require-editor'
 import { slugify } from '@/lib/utils'
 import { computeReadTime } from '@/lib/readTime'
 import { resolveSourceLocale } from '@/lib/resolve-source-locale'
 import { readLanguageAvailability } from '@/lib/language-availability'
+import { readDeclaration, recordDeclaration } from '@/lib/declaration'
 import { saveLanguageAvailability } from '@/lib/save-language-availability'
 import { publishNewContent } from '@/lib/publish-new-content'
 import { resolveAuthorId, requestedAuthorId } from '@/lib/resolve-author'
@@ -20,6 +22,10 @@ export async function createArticle(formData: FormData) {
   const { user, profile } = await requireCreator()
   const supabase = await createClient()
   const sourceLocale = resolveSourceLocale(formData)
+  const declared = readDeclaration(formData)
+  if (formData.get('publish') === 'true' && !declared) {
+    throw new Error('Please confirm the responsibility statement before publishing')
+  }
   const authorId = await resolveAuthorId(supabase, formData, user, profile.role)
 
   const title = (formData.get('title') as string).trim()
@@ -42,6 +48,7 @@ export async function createArticle(formData: FormData) {
       slug,
       source_locale: sourceLocale,
       ...(readLanguageAvailability(formData) ?? {}),
+      declaration_accepted_at: declared ? new Date().toISOString() : null,
       status: 'draft',
       cover_image_url: coverImageUrl,
       image_credits: imageCredits,
@@ -113,6 +120,7 @@ export async function updateArticle(id: string, formData: FormData) {
 
   const sourceLocale: string = contentMeta.source_locale ?? 'en'
   await saveLanguageAvailability(supabase, id, sourceLocale, formData)
+  await recordDeclaration(supabase, id, formData)
 
   const title = (formData.get('title') as string)?.trim() || ''
   const excerpt = (formData.get('excerpt') as string)?.trim() || null
@@ -203,9 +211,11 @@ export async function updateArticle(id: string, formData: FormData) {
   revalidatePath(`/dashboard/articles/${id}/edit`)
 }
 
-export async function publishArticle(id: string, _formData: FormData) {
+export async function publishArticle(id: string, formData: FormData) {
   const { user, profile } = await requireCreator()
   const supabase = await createClient()
+  // Publishing needs the creator's "I take responsibility" confirmation (recorded the first time)
+  await requireDeclaration(supabase, id, formData)
 
   const query = (supabase as any)
     .from('content')

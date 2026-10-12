@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
-import sharp from 'sharp'
 import { createClient } from '@/lib/supabase/server'
-import { createServiceRoleClient } from '@/lib/supabase/service-role'
+import { processAndStoreImage } from '@/lib/image-upload'
 
 const MAX_BYTES = 5 * 1024 * 1024
 
@@ -34,45 +33,11 @@ export async function POST(request: NextRequest) {
 
   try {
     const buffer = Buffer.from(await file.arrayBuffer())
-    let processed: Buffer
-    let storagePath: string
-    let bucket: string
-
-    if (type === 'cover') {
-      processed = await sharp(buffer)
-        .resize({ width: 1200, withoutEnlargement: true })
-        .webp({ quality: 80 })
-        .toBuffer()
-      storagePath = `covers/${user.id}/${crypto.randomUUID()}.webp`
-      bucket = 'content-images'
-    } else if (type === 'content') {
-      processed = await sharp(buffer)
-        .resize({ width: 1200, withoutEnlargement: true })
-        .webp({ quality: 82 })
-        .toBuffer()
-      storagePath = `inline/${user.id}/${crypto.randomUUID()}.webp`
-      bucket = 'content-images'
-    } else {
-      processed = await sharp(buffer)
-        .resize(256, 256, { fit: 'cover', position: 'centre' })
-        .webp({ quality: 80 })
-        .toBuffer()
-      storagePath = `${user.id}.webp`
-      bucket = 'avatars'
-    }
-
-    const storage = createServiceRoleClient()
-    const { error: uploadError } = await storage.storage
-      .from(bucket)
-      .upload(storagePath, processed, { contentType: 'image/webp', upsert: true })
-
-    if (uploadError) {
+    return NextResponse.json({ url: await processAndStoreImage(buffer, type, user.id) })
+  } catch (err) {
+    if (err instanceof Error && err.message === 'Storage upload failed') {
       return NextResponse.json({ error: 'Storage upload failed' }, { status: 500 })
     }
-
-    const { data: { publicUrl } } = storage.storage.from(bucket).getPublicUrl(storagePath)
-    return NextResponse.json({ url: publicUrl })
-  } catch {
     return NextResponse.json({ error: 'Image processing failed' }, { status: 500 })
   }
 }

@@ -1,15 +1,19 @@
 'use client'
+import { useState } from 'react'
 import { Link, useRouter } from '@/i18n/navigation'
 import { BookmarkButton } from '@/components/social/BookmarkButton'
 
 // ─── Shared helpers ────────────────────────────────────────────────────────────
 
 function AuthorAvatar({ name, avatarUrl, size = 32 }: { name?: string | null; avatarUrl?: string | null; size?: number }) {
-  if (avatarUrl) {
+  // A broken photo link falls back to the initial instead of a broken-image icon
+  const [failed, setFailed] = useState(false)
+  if (avatarUrl && !failed) {
     return (
       <img
         src={avatarUrl}
         alt={name ?? ''}
+        onError={() => setFailed(true)}
         className="rounded-full object-cover object-top shrink-0"
         style={{ width: size, height: size, border: '1.5px solid rgba(169,168,233,0.4)' }}
       />

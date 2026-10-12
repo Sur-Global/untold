@@ -287,6 +287,8 @@
     "featureRequestDescription": "Dit indhold offentliggøres straks på din personlige UNTOLD-side. Hvis det godkendes af en redaktør, kan det blive fremhævet indhold med større synlighed på forsiden og i søgninger.",
     "publishConfirmationText": "Jeg bekræfter hermed, at dette er originalt indhold skabt af mig, eller at jeg har de nødvendige rettigheder til at offentliggøre det. Jeg har faktatjekket kilderne og de fremsatte påstande, og alle billeder, citater og bibliografiske referencer er korrekt og fuldt ud krediteret til deres oprindelige skabere eller rettighedshavere. Jeg forstår og accepterer, at jeg som forfatter er ansvarlig for nøjagtigheden, originaliteten og lovligheden af dette indhold, og at UNTOLD kan afpublicere det, hvis disse forpligtelser ikke overholdes.",
     "publishConfirmTooltip": "Bekræft erklæringen ovenfor, før du udgiver",
+    "responsibilityText": "Jeg tager ansvar for mit indhold: Det er originalt, eller jeg har ret til at udgive det, jeg har krediteret kilder og billeder, og jeg forstår, at UNTOLD kan fjerne det, hvis dette ikke er tilfældet.",
+    "responsibilityReadFull": "Læs hele erklæringen",
     "authorNameLabel": "Forfatternavn",
     "editArticleTitle": "Rediger artikel",
     "editArticleSubtitle": "Rediger tekst, layout og billeder for din artikel",

@@ -9,6 +9,7 @@ import { Label } from '@/components/ui/label'
 import { CoverImageInput } from '@/components/ui/CoverImageInput'
 import { AuthorPicker } from '@/components/content/AuthorPicker'
 import { ContentLanguageSelect } from '@/components/content/ContentLanguageSelect'
+import { ResponsibilityDeclaration } from '@/components/content/ResponsibilityDeclaration'
 import { LanguageAvailabilityFields } from '@/components/content/LanguageAvailabilityFields'
 
 export function CreateCourseForm() {
@@ -20,6 +21,7 @@ export function CreateCourseForm() {
   const publishRef = useRef(false)
   // Mirrors publishRef for rendering (refs can't be read during render)
   const [publishing, setPublishing] = useState(false)
+  const [declared, setDeclared] = useState(false)
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
@@ -63,6 +65,8 @@ export function CreateCourseForm() {
         <Input id="duration" name="duration" placeholder={t('durationPlaceholder')} />
       </div>
 
+      <ResponsibilityDeclaration checked={declared} onChange={setDeclared} />
+
       <div className="flex items-center gap-3">
         <Button
           type="submit"
@@ -74,7 +78,7 @@ export function CreateCourseForm() {
         </Button>
         <Button
           type="submit"
-          disabled={isPending}
+          disabled={isPending || !declared}
           onClick={() => { publishRef.current = true; setPublishing(true) }}
           className="gradient-rust text-white border-0"
         >

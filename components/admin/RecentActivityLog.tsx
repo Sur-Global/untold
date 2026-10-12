@@ -16,6 +16,7 @@ const ACTION_LABELS: Record<string, string> = {
   home_unfeatured: 'removed from homepage section',
   hero_featured: 'added to homepage hero',
   hero_unfeatured: 'removed from homepage hero',
+  feature_request_assigned: 'feature request assigned to an editor',
   feature_request_page: 'feature request → featured on its page',
   feature_request_home: 'feature request → homepage section',
   feature_request_hero: 'feature request → homepage hero',

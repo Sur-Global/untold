@@ -287,6 +287,8 @@
     "featureRequestDescription": "Dein Inhalt wird sofort auf deiner persönlichen UNTOLD-Seite veröffentlicht. Wenn er von einem Editor genehmigt wird, könnte er zu hervorgehobenem Inhalt mit höherer Sichtbarkeit auf der Startseite und in Suchergebnissen werden.",
     "publishConfirmationText": "Ich bestätige hiermit, dass dies Originalinhalt ist, den ich selbst erstellt habe, oder dass ich über die notwendigen Rechte zur Veröffentlichung verfüge. Ich habe die dargestellten Quellen und Behauptungen faktengeprüft, und alle Bilder, Zitate und bibliografischen Angaben sind korrekt und vollständig ihren ursprünglichen Urhebern oder Rechteinhabern zugeschrieben. Ich verstehe und akzeptiere, dass ich als Autor/in für die Richtigkeit, Originalität und Rechtmäßigkeit dieses Inhalts verantwortlich bin und dass UNTOLD ihn depublizieren kann, wenn diese Verpflichtungen nicht eingehalten werden.",
     "publishConfirmTooltip": "Bestätige die obige Erklärung vor der Veröffentlichung",
+    "responsibilityText": "Ich übernehme die Verantwortung für meinen Inhalt: Er ist original oder ich habe das Recht, ihn zu veröffentlichen, ich habe Quellen und Bilder angegeben und verstehe, dass UNTOLD ihn zurückziehen kann, wenn dies nicht zutrifft.",
+    "responsibilityReadFull": "Vollständige Erklärung lesen",
     "authorNameLabel": "Autorenname",
     "editArticleTitle": "Artikel bearbeiten",
     "editArticleSubtitle": "Bearbeite Text, Layout und Bilder deines Artikels",
