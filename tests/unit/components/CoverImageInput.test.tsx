@@ -75,4 +75,16 @@ describe('CoverImageInput', () => {
     fireEvent.click(screen.getByText('Use URL'))
     expect(screen.getByText(/valid URL/i)).toBeInTheDocument()
   })
+
+  it('profile photos are upload-only: no paste-a-link option', () => {
+    render(<CoverImageInput name="avatar_url" uploadType="avatar" />)
+    expect(screen.getByText(/click to upload/i)).toBeInTheDocument()
+    expect(screen.queryByText('Use URL')).not.toBeInTheDocument()
+    expect(screen.queryByPlaceholderText(/https:\/\/example\.com\/image/i)).not.toBeInTheDocument()
+  })
+
+  it('cover images still offer the link option', () => {
+    render(<CoverImageInput name="cover_image_url" />)
+    expect(screen.getByText('Use URL')).toBeInTheDocument()
+  })
 })

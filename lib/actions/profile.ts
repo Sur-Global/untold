@@ -6,6 +6,7 @@ import { isEditorRole } from '@/lib/require-editor'
 import { sanitizeBioHtml } from '@/lib/sanitize-bio-html'
 import { logActivity } from '@/lib/actions/activity-log'
 import { urlOrNull, emailOrNull, linkOrMailtoOrNull } from '@/lib/profile-fields'
+import { assertUploadedAvatar } from '@/lib/avatar-url'
 
 export async function updateProfile(userId: string, formData: FormData) {
   const supabase = await createClient()
@@ -48,9 +49,10 @@ export async function updateProfile(userId: string, formData: FormData) {
   // from — drop them when the original changes so they get re-translated.
   const { data: current } = await (supabase as any)
     .from('profiles')
-    .select('bio, bio_cta_label, profile_translations')
+    .select('bio, bio_cta_label, profile_translations, avatar_url')
     .eq('id', userId)
     .single()
+  assertUploadedAvatar(avatar_url, current?.avatar_url)
   let profile_translations = current?.profile_translations as Record<string, any> | null
   if (profile_translations) {
     const dropKeys: string[] = []

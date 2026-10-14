@@ -5,6 +5,7 @@ import { createServiceRoleClient } from '@/lib/supabase/service-role'
 import { revalidatePath } from 'next/cache'
 import { requireEditor, isEditorRole } from '@/lib/require-editor'
 import { requireCreator } from '@/lib/require-creator'
+import { assertUploadedAvatar } from '@/lib/avatar-url'
 import { slugify } from '@/lib/utils'
 import { logActivity } from '@/lib/actions/activity-log'
 import { sanitizeBioHtml } from '@/lib/sanitize-bio-html'
@@ -64,6 +65,7 @@ export async function createAuthor(input: NewAuthorInput): Promise<AuthorOption>
   await requireEditor()
 
   // Validate everything up front, before creating any account
+  assertUploadedAvatar(input.avatarUrl?.trim() || null, null)
   const bioRaw = input.bioHtml?.trim() || null
   const details = {
     bio: bioRaw ? sanitizeBioHtml(bioRaw) : null,

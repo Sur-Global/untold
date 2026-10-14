@@ -202,6 +202,9 @@ export function CoverImageInput({
               </>
             )}
           </div>
+          {/* Profile photos are upload-only (resized and hosted by us); covers may also be pasted as a link */}
+          {!isAvatar && (
+            <>
           <div style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '0 12px', marginBottom: 12 }}>
             <div style={{ flex: 1, height: 1, background: 'rgba(139,69,19,0.12)' }} />
             <span style={{ fontSize: 11, color: '#9a8f87', fontFamily: 'JetBrains Mono, monospace', textTransform: 'uppercase', letterSpacing: '.5px' }}>or paste URL</span>
@@ -224,6 +227,8 @@ export function CoverImageInput({
               Use URL
             </button>
           </div>
+            </>
+          )}
         </div>
       )}
 
