@@ -14,7 +14,7 @@ const LABEL_KEY = {
   course: 'viewMyCourse',
 } as const
 
-/** "View my article / video / pill…" — opens the published page of a content item. */
+/** "View my article / video / pill…" — opens the published page of a content item in a new tab. */
 export function ViewContentLink({
   type,
   slug,
@@ -26,8 +26,14 @@ export function ViewContentLink({
 }) {
   const t = useTranslations('dashboard')
   return (
-    <Link href={getPublicContentPath(type, slug)} className={cn(buttonVariants({ variant, size: 'sm' }))}>
-      {t(LABEL_KEY[type])} ↗
+    // The ↗ promises a new tab, so it opens one (the creator keeps their dashboard/editor open)
+    <Link
+      href={getPublicContentPath(type, slug)}
+      target="_blank"
+      rel="noopener noreferrer"
+      className={cn(buttonVariants({ variant, size: 'sm' }))}
+    >
+      {t(LABEL_KEY[type])} <span aria-hidden>↗</span>
     </Link>
   )
 }
