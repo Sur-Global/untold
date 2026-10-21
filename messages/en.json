@@ -9,11 +9,11 @@
     "login": "Log in",
     "signup": "Sign up",
     "createContent": "Create",
-    "dashboard": "Dashboard",
+    "dashboard": "My content",
     "logout": "Log out",
     "search": "Search",
     "topics": "Topics",
-    "adminDashboard": "Admin dashboard",
+    "adminDashboard": "Admin",
     "home": "Home"
   },
   "home": {
@@ -136,7 +136,8 @@
     "courseDesc": "Structured curriculum with pricing"
   },
   "dashboard": {
-    "myContent": "My Content",
+    "myContent": "My content",
+    "myContentHint": "Your articles, videos, pills and drafts. Edit and publish them here, and manage your profile.",
     "newContent": "Create",
     "noContent": "You haven't created anything yet.",
     "deleteContent": "Delete",
@@ -172,7 +173,7 @@
     "savedOn": "Saved {date}",
     "unsavedStatus": "Unsaved",
     "savedStatus": "✓ Saved",
-    "adminDashboard": "Admin dashboard",
+    "adminDashboard": "Admin",
     "typeArticle": "Article",
     "typeVideo": "Video",
     "typePodcast": "Podcast",
@@ -251,7 +252,7 @@
     "newPodcast": "New podcast",
     "newPill": "New knowledge pill",
     "newCourse": "New course",
-    "backToDashboard": "← Dashboard",
+    "backToDashboard": "← My content",
     "backToCreate": "← Create",
     "embedUrlLabel": "Embed URL",
     "embedUrlPlaceholder": "YouTube, Spotify, etc.",

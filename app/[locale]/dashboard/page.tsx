@@ -84,7 +84,7 @@ export default async function DashboardPage({ params }: { params: Promise<{ loca
     <>
       <Navigation {...navProps} />
       <main className="max-w-4xl mx-auto px-4 sm:px-6 py-12">
-        <div className="flex items-center justify-between mb-8">
+        <div className="flex items-center justify-between mb-2">
           <h1>{t('myContent')}</h1>
           <div className="flex items-center gap-3">
             {isEditorRole(profile.role) && (
@@ -100,6 +100,8 @@ export default async function DashboardPage({ params }: { params: Promise<{ loca
             </Link>
           </div>
         </div>
+
+        <p className="mb-8 text-sm text-[#6B5F58]">{t('myContentHint')}</p>
 
         <ProfileNudge profile={myProfile} />
 

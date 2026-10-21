@@ -9,11 +9,11 @@
     "login": "Entrar",
     "signup": "Registrar",
     "createContent": "Criar",
-    "dashboard": "Painel",
+    "dashboard": "Meu conteúdo",
     "logout": "Sair",
     "search": "Pesquisar",
     "topics": "Tópicos",
-    "adminDashboard": "Painel de administração",
+    "adminDashboard": "Administração",
     "home": "Início"
   },
   "home": {
@@ -136,7 +136,8 @@
     "courseDesc": "Currículo estruturado com preços"
   },
   "dashboard": {
-    "myContent": "Meu Conteúdo",
+    "myContent": "Meu conteúdo",
+    "myContentHint": "Seus artigos, vídeos, pílulas e rascunhos. Aqui você os edita, publica e gerencia seu perfil.",
     "newContent": "Criar",
     "noContent": "Você ainda não criou nada.",
     "deleteContent": "Excluir",
@@ -172,7 +173,7 @@
     "savedOn": "Salvo em {date}",
     "unsavedStatus": "Não salvo",
     "savedStatus": "✓ Salvo",
-    "adminDashboard": "Painel de administração",
+    "adminDashboard": "Administração",
     "typeArticle": "Artigo",
     "typeVideo": "Vídeo",
     "typePodcast": "Podcast",
@@ -251,7 +252,7 @@
     "newPodcast": "Novo podcast",
     "newPill": "Nova pílula de conhecimento",
     "newCourse": "Novo curso",
-    "backToDashboard": "← Painel",
+    "backToDashboard": "← Meu conteúdo",
     "backToCreate": "← Criar",
     "embedUrlLabel": "URL de incorporação",
     "embedUrlPlaceholder": "YouTube, Spotify, etc.",

@@ -9,11 +9,11 @@
     "login": "Se connecter",
     "signup": "S'inscrire",
     "createContent": "Créer",
-    "dashboard": "Tableau de bord",
+    "dashboard": "Mon contenu",
     "logout": "Se déconnecter",
     "search": "Rechercher",
     "topics": "Sujets",
-    "adminDashboard": "Tableau de bord admin",
+    "adminDashboard": "Administration",
     "home": "Accueil"
   },
   "home": {
@@ -136,7 +136,8 @@
     "courseDesc": "Programme structuré avec tarification"
   },
   "dashboard": {
-    "myContent": "Mon Contenu",
+    "myContent": "Mon contenu",
+    "myContentHint": "Vos articles, vidéos, pilules et brouillons. Modifiez-les, publiez-les et gérez votre profil ici.",
     "newContent": "Créer",
     "noContent": "Vous n'avez encore rien créé.",
     "deleteContent": "Supprimer",
@@ -172,7 +173,7 @@
     "savedOn": "Enregistré le {date}",
     "unsavedStatus": "Non enregistré",
     "savedStatus": "✓ Enregistré",
-    "adminDashboard": "Tableau de bord admin",
+    "adminDashboard": "Administration",
     "typeArticle": "Article",
     "typeVideo": "Vidéo",
     "typePodcast": "Podcast",
@@ -251,7 +252,7 @@
     "newPodcast": "Nouveau podcast",
     "newPill": "Nouvelle pilule de connaissance",
     "newCourse": "Nouveau cours",
-    "backToDashboard": "← Tableau de bord",
+    "backToDashboard": "← Mon contenu",
     "backToCreate": "← Créer",
     "embedUrlLabel": "URL d'intégration",
     "embedUrlPlaceholder": "YouTube, Spotify, etc.",
