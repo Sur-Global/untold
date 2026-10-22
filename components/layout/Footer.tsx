@@ -3,6 +3,7 @@ import { createClient } from '@/lib/supabase/server'
 import { Link } from '@/i18n/navigation'
 import { getStaticPagesForFooter } from '@/lib/data/static-pages'
 import { isSenderConfigured } from '@/lib/sender'
+import { CookieSettingsButton } from '@/components/analytics/CookieSettingsButton'
 import { SubscribeModalButton } from '@/components/layout/SubscribeModalButton'
 
 const TOPICS = [
@@ -137,6 +138,7 @@ export async function Footer({ flushTop = false }: { flushTop?: boolean } = {}) 
           style={{ ...aeonikRegularBody, color: '#555', borderColor: 'rgba(255,255,255,0.1)' }}
         >
           {t('copyright', { year })}
+          <CookieSettingsButton />
         </div>
       </div>
     </footer>

@@ -46,6 +46,14 @@ the site is live and works, but the items below are needed for newsletter sign-u
 - **DeepL quota is exhausted** (500,000 / 500,000 characters on the free plan). Automatic translations of new content will fail until the monthly reset or until the account is upgraded to a paid (Pro) API plan.
 - Privacy policy: lawyer review, fill the `[bracketed]` fields, then publish in Admin → Pages and tick "show in footer".
 
+## G2. Google Analytics 4 (cookie banner is built; it stays invisible until the id exists)
+1. analytics.google.com → sign in with the Google account → Admin → Create → Account (e.g. "UNTOLD / SurGlobal") → Property ("UNTOLD.ink", time zone Peru, currency USD).
+2. Data stream → Web → URL of the site (production URL, or the final domain) → keep "Enhanced measurement" on → copy the **Measurement ID** (looks like `G-XXXXXXXXXX`).
+3. Recommended privacy settings: Admin → Data collection → turn **Google signals** off; Data retention → 14 months; no ad personalization.
+4. Vercel → Environment Variables → `NEXT_PUBLIC_GA_MEASUREMENT_ID` = the id (not a secret) → **Redeploy** (it is baked in at build time).
+5. Test in a private window: the cookie banner appears; "Accept" → Google Analytics → Reports → Realtime shows 1 user; "Decline" → nothing is sent. The footer link "Cookie settings" reopens the banner.
+6. Mention Google Analytics as a provider in the privacy policy (section 5, "Who we share data with") — to be added by Elsie/lawyer.
+
 ## H. Decisions waiting for Elsie
 1. **Cover images** for pills / podcasts / videos (see the three options shown earlier):
    A) cover required (16:9) for everything; B) never required, auto-designed card when missing; **C) recommended:** one format per type (video 16:9 auto from YouTube/Vimeo, podcast square 1:1, pill any shape shown whole) plus the auto-designed card when a photo is missing. Also: should the square cover be **required** for podcasts?

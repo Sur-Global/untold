@@ -363,6 +363,14 @@
     "errorFailed": "Impossible de vous abonner pour le moment. Réessayez dans un instant.",
     "privacy": "Nous respectons votre vie privée. Désabonnez-vous à tout moment."
   },
+  "cookies": {
+    "title": "Cookies",
+    "text": "Nous utilisons des cookies techniques nécessaires au fonctionnement du site. Avec votre autorisation, nous utilisons aussi des cookies d’analyse (Google Analytics) pour comprendre comment le site est utilisé et l’améliorer.",
+    "accept": "Accepter",
+    "decline": "Refuser",
+    "policy": "Politique de confidentialité",
+    "settings": "Paramètres des cookies"
+  },
   "footer": {
     "subscribeCta": "S'abonner",
     "subscribeClose": "Fermer",

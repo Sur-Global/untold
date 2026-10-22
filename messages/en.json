@@ -363,6 +363,14 @@
     "errorFailed": "Couldn't subscribe right now. Try again in a moment.",
     "privacy": "We respect your privacy. Unsubscribe anytime."
   },
+  "cookies": {
+    "title": "Cookies",
+    "text": "We use technical cookies the site needs to work. With your permission, we also use analytics cookies (Google Analytics) to understand how the site is used and improve it.",
+    "accept": "Accept",
+    "decline": "Decline",
+    "policy": "Privacy policy",
+    "settings": "Cookie settings"
+  },
   "footer": {
     "subscribeCta": "Subscribe",
     "subscribeClose": "Close",

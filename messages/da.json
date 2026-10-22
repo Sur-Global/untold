@@ -363,6 +363,14 @@
     "errorFailed": "Vi kunne ikke tilmelde dig lige nu. Prøv igen om lidt.",
     "privacy": "Vi respekterer dit privatliv. Afmeld når som helst."
   },
+  "cookies": {
+    "title": "Cookies",
+    "text": "Vi bruger tekniske cookies, som er nødvendige for, at hjemmesiden fungerer. Med din tilladelse bruger vi også analysecookies (Google Analytics) for at forstå, hvordan hjemmesiden bruges, og for at forbedre den.",
+    "accept": "Accepter",
+    "decline": "Afvis",
+    "policy": "Privatlivspolitik",
+    "settings": "Cookieindstillinger"
+  },
   "footer": {
     "subscribeCta": "Abonnér",
     "subscribeClose": "Luk",

@@ -363,6 +363,14 @@
     "errorFailed": "No pudimos suscribirte ahora. Inténtalo de nuevo en un momento.",
     "privacy": "Respetamos tu privacidad. Puedes darte de baja cuando quieras."
   },
+  "cookies": {
+    "title": "Cookies",
+    "text": "Usamos cookies técnicas necesarias para que el sitio funcione. Con tu permiso, también usamos cookies de analítica (Google Analytics) para entender cómo se usa el sitio y mejorarlo.",
+    "accept": "Aceptar",
+    "decline": "Rechazar",
+    "policy": "Política de privacidad",
+    "settings": "Configurar cookies"
+  },
   "footer": {
     "subscribeCta": "Suscríbete",
     "subscribeClose": "Cerrar",

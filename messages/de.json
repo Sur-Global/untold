@@ -363,6 +363,14 @@
     "errorFailed": "Das Abonnement hat gerade nicht geklappt. Versuchen Sie es gleich noch einmal.",
     "privacy": "Wir respektieren Ihre Privatsphäre. Abmeldung jederzeit möglich."
   },
+  "cookies": {
+    "title": "Cookies",
+    "text": "Wir verwenden technische Cookies, die für den Betrieb der Website notwendig sind. Mit deiner Erlaubnis verwenden wir außerdem Analyse-Cookies (Google Analytics), um zu verstehen, wie die Website genutzt wird, und sie zu verbessern.",
+    "accept": "Akzeptieren",
+    "decline": "Ablehnen",
+    "policy": "Datenschutzerklärung",
+    "settings": "Cookie-Einstellungen"
+  },
   "footer": {
     "subscribeCta": "Abonnieren",
     "subscribeClose": "Schließen",
