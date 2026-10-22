@@ -1,5 +1,5 @@
 import { createClient } from '@/lib/supabase/server'
-import { SUPPORTED_LOCALES } from '@/lib/deepl'
+import { getEnabledLocales } from '@/lib/data/enabled-locales'
 import { Link } from '@/i18n/navigation'
 import { getPublicContentPath } from '@/lib/utils'
 import type { ContentType } from '@/lib/supabase/types'
@@ -12,6 +12,7 @@ import { adminTableHead, adminTableRow } from '@/components/admin/admin-ui'
 
 export default async function AdminOverviewPage() {
   const supabase = await createClient()
+  const enabledLocales = await getEnabledLocales()
 
   const { data: publishedItems } = await (supabase as any)
     .from('content')
@@ -44,7 +45,7 @@ export default async function AdminOverviewPage() {
     const existingLocales = new Set(
       (item.content_translations ?? []).map((t: any) => t.locale),
     )
-    if (SUPPORTED_LOCALES.some((l) => !existingLocales.has(l))) {
+    if (enabledLocales.some((l) => !existingLocales.has(l))) {
       pendingCount++
     }
   }

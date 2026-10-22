@@ -1,4 +1,5 @@
 import type { PlatformSettings } from "./types";
+import { LANGUAGE_CATALOG, normalizeEnabledLocales } from "@/lib/languages";
 
 export const DEFAULT_PLATFORM_SETTINGS: PlatformSettings = {
   navItems: [
@@ -54,6 +55,7 @@ export const DEFAULT_PLATFORM_SETTINGS: PlatformSettings = {
     linkedin: { enabled: false },
     youtube: { enabled: false },
   },
+  languages: { enabled: LANGUAGE_CATALOG.map((l) => l.code) },
   featuredSections: {
     articles: true,
     videos: true,
@@ -136,6 +138,10 @@ export function mergePlatformSettings(row: unknown): PlatformSettings {
     s.social && typeof s.social === "object"
       ? (s.social as Record<string, unknown>)
       : {};
+  const languages =
+    s.languages && typeof s.languages === "object"
+      ? (s.languages as Record<string, unknown>)
+      : {};
   const featuredSections =
     s.featuredSections && typeof s.featuredSections === "object"
       ? (s.featuredSections as Record<string, unknown>)
@@ -185,6 +191,7 @@ export function mergePlatformSettings(row: unknown): PlatformSettings {
       linkedin: soc("linkedin"),
       youtube: soc("youtube"),
     },
+    languages: { enabled: normalizeEnabledLocales(languages.enabled) },
     featuredSections: {
       articles: asBool(featuredSections.articles, true),
       videos: asBool(featuredSections.videos, true),

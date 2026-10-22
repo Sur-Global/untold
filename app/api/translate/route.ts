@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createServiceRoleClient } from '@/lib/supabase/service-role'
+import { getEnabledLocalesForJobs } from '@/lib/data/enabled-locales'
 import { translateTexts, SUPPORTED_LOCALES, DeepLQuotaExceededError, type SupportedLocale } from '@/lib/deepl'
 import { extractTextNodes, injectTextNodes } from '@/lib/tiptap-translate'
 import { extractBlockNoteTextNodes, injectBlockNoteTextNodes } from '@/lib/blocknote-translate'
@@ -22,6 +23,12 @@ export async function POST(req: NextRequest) {
   }
 
   const supabase = createServiceRoleClient()
+
+  // Languages that are switched off aren't translated into (saves translation quota; existing translations are kept)
+  const enabledLocales = await getEnabledLocalesForJobs()
+  if (locale && !enabledLocales.includes(locale)) {
+    return NextResponse.json({ ok: true, translated: [], failed: [], skipped: 'locale_disabled' })
+  }
 
   const { data: content } = await (supabase as any)
     .from('content')
@@ -53,7 +60,7 @@ export async function POST(req: NextRequest) {
 
   const locales: SupportedLocale[] = locale
     ? [locale as SupportedLocale]
-    : (SUPPORTED_LOCALES as readonly SupportedLocale[]).filter(l => l !== sourceLocale)
+    : (SUPPORTED_LOCALES as readonly SupportedLocale[]).filter(l => l !== sourceLocale && enabledLocales.includes(l))
 
   const translated: string[] = []
   const failed: string[] = []

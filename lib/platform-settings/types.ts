@@ -32,6 +32,10 @@ export type PlatformSettings = {
     linkedin: { enabled: boolean };
     youtube: { enabled: boolean };
   };
+  languages: {
+    /** Language codes switched on for the public site (the default language is always on). */
+    enabled: string[];
+  };
   featuredSections: {
     articles: boolean;
     videos: boolean;

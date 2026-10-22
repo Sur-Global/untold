@@ -4,7 +4,7 @@ import { getPublicContentPath } from '@/lib/utils'
 import type { ContentType } from '@/lib/supabase/types'
 import { TranslateButton } from '@/components/admin/TranslateButton'
 import { TranslateAllButton } from '@/components/admin/TranslateAllButton'
-import { SUPPORTED_LOCALES } from '@/lib/deepl'
+import { getEnabledLocales } from '@/lib/data/enabled-locales'
 import { AdminPageHeader } from '@/components/admin/AdminPageHeader'
 import { AdminPanel } from '@/components/admin/AdminPanel'
 import { ContentTypeFilter } from '@/components/admin/ContentTypeFilter'
@@ -24,6 +24,8 @@ export default async function TranslationsPage({ searchParams }: PageProps) {
   const typeFilter = type && VALID_TYPES.includes(type) ? type : null
 
   const supabase = await createClient()
+  // Only languages that are switched on (Admin → Settings → Languages) get translated
+  const enabledLocales = await getEnabledLocales()
 
   const itemsQuery = (supabase as any)
     .from('content')
@@ -79,7 +81,7 @@ export default async function TranslationsPage({ searchParams }: PageProps) {
               <tr className={adminTableHead}>
                 <th className="py-3 pl-6 pr-4">Title</th>
                 <th className="py-3 pr-4">Published</th>
-                {SUPPORTED_LOCALES.map((locale) => (
+                {enabledLocales.map((locale) => (
                   <th key={locale} className="py-3 pr-2 text-center font-mono uppercase">
                     {locale}
                   </th>
@@ -128,7 +130,7 @@ export default async function TranslationsPage({ searchParams }: PageProps) {
                         ? new Date(item.published_at).toLocaleDateString()
                         : '—'}
                     </td>
-                    {SUPPORTED_LOCALES.map((locale) => {
+                    {enabledLocales.map((locale) => {
                       const isAutoTranslated = translationMap.get(locale)
                       const exists = translationMap.has(locale)
                       return (

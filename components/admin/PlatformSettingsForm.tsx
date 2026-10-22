@@ -10,6 +10,7 @@ import {
   Shield,
   Share2,
   Sparkles,
+  Languages,
   FileText,
   Pencil,
   Plus,
@@ -20,6 +21,7 @@ import type { NavItemSetting, PlatformSettings } from '@/lib/platform-settings/t
 import { AdminPanel } from '@/components/admin/AdminPanel'
 import { AdminPageHeader } from '@/components/admin/AdminPageHeader'
 import { adminPrimaryButton, adminGhostButton } from '@/components/admin/admin-ui'
+import { DEFAULT_LOCALE, LANGUAGE_CATALOG } from '@/lib/languages'
 
 export type StaticPageSummary = {
   id: string
@@ -503,6 +505,63 @@ export function PlatformSettingsForm({
             </li>
           ))}
         </ul>
+      </AdminPanel>
+
+      {/* Languages */}
+      <AdminPanel>
+        <div className="border-b border-primary/10 px-6 py-4">
+          <h2 className="flex items-center gap-2 font-mono text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+            <Languages className="h-4 w-4 text-primary" aria-hidden />
+            Languages
+          </h2>
+          <p className="mt-1 text-sm text-muted-foreground">
+            Choose which languages the public site offers. A language that is switched off disappears from the
+            language menu, its web addresses (for example <code>/de/…</code>) send visitors to the same page in
+            English, and new content is no longer translated into it. Translations already written are kept, so
+            you can switch it back on at any time.
+          </p>
+        </div>
+        <ul className="divide-y divide-primary/5 px-6 py-2">
+          {LANGUAGE_CATALOG.map(({ code, label }) => {
+            const isDefault = code === DEFAULT_LOCALE
+            const on = settings.languages.enabled.includes(code)
+            return (
+              <li key={code} className="flex items-center justify-between py-3">
+                <span className="text-sm text-foreground">
+                  {label}{' '}
+                  <span className="font-mono text-xs text-muted-foreground">({code})</span>
+                  {isDefault && (
+                    <span className="ml-2 rounded-md bg-muted px-2 py-0.5 text-xs text-muted-foreground">
+                      default — always on
+                    </span>
+                  )}
+                </span>
+                <input
+                  type="checkbox"
+                  checked={on}
+                  disabled={isDefault}
+                  aria-label={`${label} on the public site`}
+                  onChange={(e) =>
+                    setSettings((s) => ({
+                      ...s,
+                      languages: {
+                        enabled: e.target.checked
+                          ? [...s.languages.enabled, code]
+                          : s.languages.enabled.filter((c) => c !== code),
+                      },
+                    }))
+                  }
+                  className="size-4 rounded border-primary/30 disabled:opacity-60"
+                />
+              </li>
+            )
+          })}
+        </ul>
+        <p className="border-t border-primary/5 px-6 py-3 text-xs text-muted-foreground">
+          Changes take effect within about a minute after you press “Save all changes”. Offering a language that is
+          not in this list (for example Italian) needs its interface texts to be added first — ask for it and it
+          will appear here as a new switch.
+        </p>
       </AdminPanel>
 
       {/* Featured sections */}

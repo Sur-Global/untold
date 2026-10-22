@@ -1,6 +1,7 @@
 'use client'
 
 import { useLocale, useTranslations } from 'next-intl'
+import { useEnabledLocales } from '@/components/layout/EnabledLocales'
 
 const LANGUAGES: Array<{ code: string; label: string }> = [
   { code: 'en', label: 'English' },
@@ -19,6 +20,7 @@ const LANGUAGES: Array<{ code: string; label: string }> = [
 export function ContentLanguageSelect() {
   const t = useTranslations('editor')
   const locale = useLocale()
+  const enabled = useEnabledLocales()
 
   return (
     <div className="space-y-2">
@@ -26,10 +28,10 @@ export function ContentLanguageSelect() {
       <p className="text-xs text-muted-foreground -mt-1">{t('contentLanguageHint')}</p>
       <select
         name="source_locale"
-        defaultValue={LANGUAGES.some((l) => l.code === locale) ? locale : 'en'}
+        defaultValue={LANGUAGES.some((l) => l.code === locale && enabled.includes(l.code)) ? locale : 'en'}
         className="w-full h-[50px] px-4 rounded-[10px] border border-primary/20 bg-white text-foreground text-base outline-none focus:border-primary/50 transition-colors"
       >
-        {LANGUAGES.map((l) => (
+        {LANGUAGES.filter((l) => enabled.includes(l.code)).map((l) => (
           <option key={l.code} value={l.code}>{l.label}</option>
         ))}
       </select>

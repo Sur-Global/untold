@@ -3,6 +3,8 @@ import { getMessages } from 'next-intl/server'
 import { routing } from '@/i18n/routing'
 import { notFound } from 'next/navigation'
 import { CookieConsent } from '@/components/analytics/CookieConsent'
+import { EnabledLocalesProvider } from '@/components/layout/EnabledLocales'
+import { getEnabledLocales } from '@/lib/data/enabled-locales'
 
 export function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }))
@@ -17,12 +19,14 @@ export default async function LocaleLayout({
 }) {
   const { locale } = await params
   if (!routing.locales.includes(locale as (typeof routing.locales)[number])) notFound()
-  const messages = await getMessages()
+  const [messages, enabledLocales] = await Promise.all([getMessages(), getEnabledLocales()])
 
   return (
     <NextIntlClientProvider messages={messages}>
-      {children}
-      <CookieConsent />
+      <EnabledLocalesProvider locales={enabledLocales}>
+        {children}
+        <CookieConsent />
+      </EnabledLocalesProvider>
     </NextIntlClientProvider>
   )
 }

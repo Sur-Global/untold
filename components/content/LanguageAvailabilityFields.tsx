@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { useTranslations } from 'next-intl'
 import { AVAILABILITY_MARKER } from '@/lib/language-availability'
+import { useEnabledLocales } from '@/components/layout/EnabledLocales'
 
 const LANGUAGES: Array<{ code: string; label: string }> = [
   { code: 'en', label: 'English' },
@@ -36,6 +37,7 @@ export function LanguageAvailabilityFields({
   onChange,
 }: Props) {
   const t = useTranslations('editor')
+  const enabled = useEnabledLocales()
   const [single, setSingle] = useState(defaultSingle)
   const [subtitles, setSubtitles] = useState<string[]>(defaultSubtitles)
 
@@ -66,7 +68,7 @@ export function LanguageAvailabilityFields({
         <fieldset className="pl-7">
           <legend className="mb-1.5 text-sm font-semibold text-foreground">{t('subtitlesLabel')}</legend>
           <div className="flex flex-wrap gap-x-4 gap-y-1.5">
-            {LANGUAGES.filter((l) => l.code !== sourceLocale).map((l) => (
+            {LANGUAGES.filter((l) => l.code !== sourceLocale && (enabled.includes(l.code) || subtitles.includes(l.code))).map((l) => (
               <label key={l.code} className="flex items-center gap-1.5 text-sm text-foreground">
                 <input
                   type="checkbox"

@@ -11,7 +11,7 @@ import StarterKit from '@tiptap/starter-kit'
 import Link from '@tiptap/extension-link'
 import { Table, TableRow, TableCell, TableHeader } from '@tiptap/extension-table'
 import { ImageWithCredit } from '@/lib/tiptap/image-with-credit'
-import { SUPPORTED_LOCALES } from '@/lib/deepl'
+import { getEnabledLocales } from '@/lib/data/enabled-locales'
 import type { EditorBlock } from '@/components/editor/RichTextEditorLazy'
 
 interface PageProps {
@@ -67,6 +67,7 @@ export default async function EditArticlePage({ params }: PageProps) {
   if (!article) notFound()
 
   const sourceLocale: string = article.source_locale ?? 'en'
+  const enabledLocales = await getEnabledLocales()
 
   // Build per-locale translation data, converting ProseMirror bodies to HTML where needed
   const rawTranslations: Array<any> = article.content_translations ?? []
@@ -107,7 +108,7 @@ export default async function EditArticlePage({ params }: PageProps) {
         initialDeclared={!!article.declaration_accepted_at}
         sourceLocale={sourceLocale}
         translations={translations}
-        availableLocales={SUPPORTED_LOCALES as unknown as string[]}
+        availableLocales={[...new Set([...enabledLocales, sourceLocale])]}
         initialCoverImageUrl={article.cover_image_url ?? ''}
         initialImageCredits={article.image_credits ?? ''}
         initialTags={initialTags}

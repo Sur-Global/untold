@@ -1,6 +1,7 @@
 'use client'
 import { useLocale } from 'next-intl'
 import { useRouter, usePathname } from '@/i18n/navigation'
+import { useEnabledLocales } from '@/components/layout/EnabledLocales'
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -35,6 +36,7 @@ interface LocaleSwitcherProps {
 
 export function LocaleSwitcher({ variant = 'default' }: LocaleSwitcherProps) {
   const locale = useLocale()
+  const enabled = useEnabledLocales()
   const router = useRouter()
   const pathname = usePathname()
 
@@ -83,7 +85,7 @@ export function LocaleSwitcher({ variant = 'default' }: LocaleSwitcherProps) {
         }
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
-        {LOCALES.map((l) => (
+        {LOCALES.filter((l) => enabled.includes(l.code) || l.code === locale).map((l) => (
           <DropdownMenuItem
             key={l.code}
             onClick={() => switchLocale(l.code)}

@@ -83,6 +83,30 @@ describe('POST /api/translate', () => {
     expect(upsertMock).not.toHaveBeenCalled()
   })
 
+  it('does not translate into languages that are switched off', async () => {
+    vi.mocked(translateTexts).mockResolvedValue(['Hola'])
+    const settingsRow = { data: { settings: { languages: { enabled: ['es'] } } } }
+
+    // an explicit request for a disabled language is skipped outright
+    const first = makeChainMock({ singleValues: [{ data: { type: 'video', source_locale: 'en' } }], maybeSingleValue: settingsRow })
+    vi.mocked(createServiceRoleClient).mockReturnValue({ from: first.from } as any)
+    const skipped = await POST(makeRequest({ contentId: 'c1', locale: 'de' }, SECRET))
+    expect((await skipped.json()).skipped).toBe('locale_disabled')
+    expect(first.upsertMock).not.toHaveBeenCalled()
+
+    // a full run only reaches the enabled language
+    const second = makeChainMock({
+      singleValues: [
+        { data: { type: 'video', source_locale: 'en' } },
+        { data: { title: 'Hi', description: null, excerpt: null, body: null } },
+      ],
+      maybeSingleValue: settingsRow,
+    })
+    vi.mocked(createServiceRoleClient).mockReturnValue({ from: second.from } as any)
+    const res = await POST(makeRequest({ contentId: 'c2' }, SECRET))
+    expect((await res.json()).translated).toEqual(['es'])
+  })
+
   it('returns 400 when contentId is missing', async () => {
     const res = await POST(makeRequest({}, SECRET))
     expect(res.status).toBe(400)
