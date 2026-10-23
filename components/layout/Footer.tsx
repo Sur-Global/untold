@@ -35,21 +35,24 @@ export async function Footer({ flushTop = false }: { flushTop?: boolean } = {}) 
 
   const footerPages = await getStaticPagesForFooter(supabase, locale)
   const year = new Date().getFullYear()
-  const exploreLinks = [
-    { href: '/articles' as const, label: tNav('articles') },
-    { href: '/videos' as const, label: tNav('videos') },
-    { href: '/podcasts' as const, label: tNav('podcasts') },
-    { href: '/pills' as const, label: tNav('pills') },
-    { href: '/courses' as const, label: tNav('courses') },
-  ]
+  // Each list is in alphabetical order in the reader's language
+  const alphabetical = <T extends { label: string }>(links: T[]) => [...links].sort((a, b) => a.label.localeCompare(b.label, locale))
 
-  const communityLinks = [
-    { href: '/creators' as const, label: tNav('creators') },
-    { href: '/issues' as const, label: tNav('issues') },
-  ]
+  // Content: the kinds of content plus the magazine's issues
+  const contentLinks = alphabetical([
+    { href: '/articles', label: tNav('articles') },
+    { href: '/videos', label: tNav('videos') },
+    { href: '/podcasts', label: tNav('podcasts') },
+    { href: '/pills', label: tNav('pills') },
+    { href: '/courses', label: tNav('courses') },
+    { href: '/issues', label: tNav('issues') },
+  ])
 
-  const gridCols =
-    footerPages.length > 0 ? 'md:grid-cols-4' : 'md:grid-cols-3'
+  // Pages: the static pages plus the creators directory
+  const pageLinks = alphabetical([
+    ...footerPages.map((p) => ({ href: `/${p.slug}`, label: p.title })),
+    { href: '/creators', label: tNav('creators') },
+  ])
 
   return (
     <footer
@@ -57,7 +60,7 @@ export async function Footer({ flushTop = false }: { flushTop?: boolean } = {}) 
       style={{ backgroundColor: '#000', borderColor: 'rgba(255,255,255,0.1)' }}
     >
       <div className="mx-auto max-w-7xl px-4 sm:px-6">
-        <div className={`mb-12 grid gap-12 ${gridCols}`}>
+        <div className="mb-12 grid gap-12 md:grid-cols-4">
           <div>
             <div className="mb-4">
               <img src="/logo-untold.png" alt="UNTOLD.ink" style={{ height: 18, width: 'auto' }} />
@@ -80,26 +83,7 @@ export async function Footer({ flushTop = false }: { flushTop?: boolean } = {}) 
               {t('contentHeading')}
             </p>
             <ul className="space-y-3 text-sm" style={{ color: '#78716C' }}>
-              {exploreLinks.map(({ href, label }) => (
-                <li key={href}>
-                  <Link
-                    href={href}
-                    className="transition-colors hover:text-[#A9A8E9]"
-                    style={aeonikRegularBody}
-                  >
-                    {label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-            <p
-              className="mb-4 mt-8 text-sm"
-              style={{ ...aeonikRegular, color: '#A8A29E' }}
-            >
-              {tNav('community')}
-            </p>
-            <ul className="space-y-3 text-sm" style={{ color: '#78716C' }}>
-              {communityLinks.map(({ href, label }) => (
+              {contentLinks.map(({ href, label }) => (
                 <li key={href}>
                   <Link
                     href={href}
@@ -133,29 +117,27 @@ export async function Footer({ flushTop = false }: { flushTop?: boolean } = {}) 
               ))}
             </ul>
           </div>
-          {footerPages.length > 0 && (
-            <div>
-              <p
-                className="mb-4 text-sm"
-                style={{ ...aeonikRegular, color: '#A8A29E' }}
-              >
-                {t('pagesHeading')}
-              </p>
-              <ul className="space-y-3 text-sm" style={{ color: '#78716C' }}>
-                {footerPages.map((p) => (
-                  <li key={p.slug}>
-                    <Link
-                      href={`/${p.slug}`}
-                      className="transition-colors hover:text-[#A9A8E9]"
-                      style={aeonikRegularBody}
-                    >
-                      {p.title}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          )}
+          <div>
+            <p
+              className="mb-4 text-sm"
+              style={{ ...aeonikRegular, color: '#A8A29E' }}
+            >
+              {t('pagesHeading')}
+            </p>
+            <ul className="space-y-3 text-sm" style={{ color: '#78716C' }}>
+              {pageLinks.map(({ href, label }) => (
+                <li key={href}>
+                  <Link
+                    href={href}
+                    className="transition-colors hover:text-[#A9A8E9]"
+                    style={aeonikRegularBody}
+                  >
+                    {label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
         </div>
         <div
           className="border-t pt-8 text-center text-sm"
