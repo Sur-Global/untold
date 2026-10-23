@@ -68,12 +68,12 @@ export default async function CreatorsPage({
   const { data: profiles } = byAuthor.size
     ? await (supabase as any)
         .from('profiles')
-        .select('id, slug, display_name, avatar_url, bio, countries, profile_translations, suspended_at')
+        .select('id, slug, display_name, avatar_url, bio, countries, profile_translations, suspended_at, hidden')
         .in('id', [...byAuthor.keys()])
     : { data: [] }
 
   const creators: Creator[] = (profiles ?? [])
-    .filter((p: any) => !p.suspended_at && !HIDDEN_SLUGS.has(p.slug) && p.display_name)
+    .filter((p: any) => !p.suspended_at && !p.hidden && !HIDDEN_SLUGS.has(p.slug) && p.display_name)
     .map((p: any) => {
       const acc = byAuthor.get(p.id)!
       const translated = p.profile_translations?.[locale]?.bio

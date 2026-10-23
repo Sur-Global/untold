@@ -26,12 +26,12 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const supabase = await createClient()
   const { data: profile } = await (supabase as any)
     .from('profiles')
-    .select('display_name')
+    .select('display_name, hidden')
     .eq('slug', slug)
     .single()
 
   return {
-    title: profile?.display_name ? `${profile.display_name} — UNTOLD` : 'UNTOLD',
+    title: profile?.display_name && !profile.hidden ? `${profile.display_name} — UNTOLD` : 'UNTOLD',
   }
 }
 
@@ -52,11 +52,12 @@ export default async function AuthorPage({ params }: PageProps) {
 
   const { data: author } = await (supabase as any)
     .from('profiles')
-    .select('id, display_name, slug, avatar_url, bio, profile_translations, location_country, website, followers_count, following_count, role, created_at, social_bluesky, social_linkedin, social_instagram, social_medium, social_custom_url, bio_cta_label, bio_cta_url')
+    .select('id, display_name, slug, avatar_url, bio, profile_translations, location_country, hidden, website, followers_count, following_count, role, created_at, social_bluesky, social_linkedin, social_instagram, social_medium, social_custom_url, bio_cta_label, bio_cta_url')
     .eq('slug', slug)
     .single()
 
-  if (!author) notFound()
+  // a profile an admin hid (a test account, for example) is only for the team and the person themself
+  if (!author || (author.hidden && !(user && (user.id === author.id || navUserRole === 'admin' || navUserRole === 'editor')))) notFound()
 
   let isFollowing = false
   if (user) {

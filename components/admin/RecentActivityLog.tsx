@@ -26,6 +26,8 @@ const ACTION_LABELS: Record<string, string> = {
   feature_request_dismiss: 'feature request dismissed',
   suspended: 'suspended',
   unsuspended: 'unsuspended',
+  hidden_from_public: 'hidden from the public site',
+  shown_publicly: 'shown on the public site again',
 }
 
 function describeAction(action: string): string {

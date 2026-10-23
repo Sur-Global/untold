@@ -2,6 +2,7 @@ import { createClient } from '@/lib/supabase/server'
 import { requireEditor } from '@/lib/require-editor'
 import { RoleSelect } from '@/components/admin/RoleSelect'
 import { SuspendButton } from '@/components/admin/SuspendButton'
+import { HideProfileButton } from '@/components/admin/HideProfileButton'
 import { DeleteUserButton } from '@/components/admin/DeleteUserButton'
 import { AdminPageHeader } from '@/components/admin/AdminPageHeader'
 import { AdminPanel } from '@/components/admin/AdminPanel'
@@ -35,7 +36,7 @@ export default async function AdminUsersPage({ searchParams }: PageProps) {
   const [{ data: profiles }, { count }] = await Promise.all([
     (supabase as any)
       .from('profiles')
-      .select('id, display_name, email, role, created_at, suspended_at')
+      .select('id, display_name, email, role, created_at, suspended_at, hidden')
       .order(sortColumn, { ascending, nullsFirst: false })
       .range((page - 1) * PAGE_SIZE, page * PAGE_SIZE - 1),
     (supabase as any)
@@ -88,6 +89,9 @@ export default async function AdminUsersPage({ searchParams }: PageProps) {
                     ) : (
                       <span className="text-xs font-semibold text-[#14532d]">Active</span>
                     )}
+                    {profile.hidden && (
+                      <span className="ml-2 rounded bg-muted px-1.5 py-0.5 text-[11px] font-medium text-muted-foreground" title="Not shown on the public site">Hidden</span>
+                    )}
                   </td>
                   <td className="px-6 py-3">
                     <div className="flex flex-wrap items-center gap-2">
@@ -97,6 +101,7 @@ export default async function AdminUsersPage({ searchParams }: PageProps) {
                       >
                         Edit
                       </Link>
+                      {viewerIsAdmin && <HideProfileButton userId={profile.id} isHidden={!!profile.hidden} />}
                       <SuspendButton
                         userId={profile.id}
                         isSuspended={!!profile.suspended_at}

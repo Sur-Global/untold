@@ -189,6 +189,33 @@ export async function setUserRole(userId: string, role: 'user' | 'author' | 'edi
   revalidatePath('/admin/users')
 }
 
+/**
+ * Hides a profile from the public site, or shows it again (admins only). A hidden profile is not in the
+ * Creators list, its author page is not found for visitors and its content stays out of the listings.
+ */
+export async function toggleProfileHidden(userId: string) {
+  const { profile: viewer } = await requireEditor()
+  if (viewer.role !== 'admin') throw new Error('Only admins can hide a profile')
+  const supabase = await createClient()
+
+  const { data: target } = await (supabase as any)
+    .from('profiles')
+    .select('display_name, slug, hidden')
+    .eq('id', userId)
+    .single()
+  if (!target) throw new Error('Profile not found')
+
+  const nowHidden = !target.hidden
+  const { error } = await (supabase as any).from('profiles').update({ hidden: nowHidden }).eq('id', userId)
+  if (error) throw new Error(error.message)
+
+  await logActivity({ entityType: 'user', entityId: userId, entityLabel: target.display_name ?? null, action: nowHidden ? 'hidden_from_public' : 'shown_publicly' })
+
+  revalidatePath('/admin/users')
+  revalidatePath('/creators')
+  revalidatePath(`/author/${target.slug}`)
+}
+
 export async function toggleSuspendUser(userId: string) {
   const { profile: viewer } = await requireEditor()
   const supabase = await createClient()
