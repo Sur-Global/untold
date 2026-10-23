@@ -50,7 +50,7 @@ the site is live and works, but the items below are needed for newsletter sign-u
 1. analytics.google.com → sign in with the Google account → Admin → Create → Account (e.g. "UNTOLD / SurGlobal") → Property ("UNTOLD.ink", time zone Peru, currency USD).
 2. Data stream → Web → URL of the site (production URL, or the final domain) → keep "Enhanced measurement" on → copy the **Measurement ID** (looks like `G-XXXXXXXXXX`).
 3. Recommended privacy settings: Admin → Data collection → turn **Google signals** off; Data retention → 14 months; no ad personalization.
-4. Vercel → Environment Variables → `NEXT_PUBLIC_GA_MEASUREMENT_ID` = the id (not a secret) → **Redeploy** (it is baked in at build time).
+4. DONE — the measurement id `G-H99ZMNWD14` (stream UNTOLD, https://untold-six.vercel.app/) is built into the code (`lib/analytics/consent.ts`), so no Vercel variable is needed. If the site moves to its own domain, update the stream URL in Google Analytics. `NEXT_PUBLIC_GA_MEASUREMENT_ID` can still override it.
 5. Test in a private window: the cookie banner appears; "Accept" → Google Analytics → Reports → Realtime shows 1 user; "Decline" → nothing is sent. The footer link "Cookie settings" reopens the banner.
 6. Mention Google Analytics as a provider in the privacy policy (section 5, "Who we share data with") — to be added by Elsie/lawyer.
 

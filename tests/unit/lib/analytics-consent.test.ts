@@ -1,4 +1,4 @@
-import { describe, it, expect, afterEach } from 'vitest'
+import { describe, it, expect, afterEach, vi } from 'vitest'
 import { parseConsent, serializeConsent, analyticsCookieNames, getGaMeasurementId } from '@/lib/analytics/consent'
 
 describe('consent cookie', () => {
@@ -27,6 +27,7 @@ describe('consent cookie', () => {
 describe('getGaMeasurementId', () => {
   const original = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID
   afterEach(() => {
+    vi.unstubAllEnvs()
     if (original === undefined) delete process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID
     else process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID = original
   })
@@ -39,5 +40,21 @@ describe('getGaMeasurementId', () => {
     expect(getGaMeasurementId()).toBeNull()
     process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID = ' G-ABCD123456 '
     expect(getGaMeasurementId()).toBe('G-ABCD123456')
+  })
+
+  it('uses UNTOLD’s own data stream in production, and nothing in development or tests', () => {
+    delete process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID
+    vi.stubEnv('NODE_ENV', 'production')
+    expect(getGaMeasurementId()).toBe('G-H99ZMNWD14')
+    vi.stubEnv('NODE_ENV', 'development')
+    expect(getGaMeasurementId()).toBeNull()
+  })
+
+  it('an explicit env value wins over the built-in one, and an invalid one switches analytics off', () => {
+    vi.stubEnv('NODE_ENV', 'production')
+    process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID = 'G-OTHER12345'
+    expect(getGaMeasurementId()).toBe('G-OTHER12345')
+    process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID = 'not-an-id'
+    expect(getGaMeasurementId()).toBeNull()
   })
 })

@@ -7,10 +7,17 @@ const MAX_AGE_DAYS = 180
 
 export type ConsentChoice = 'granted' | 'denied'
 
+// UNTOLD's Google Analytics 4 data stream. A measurement id is public (it is visible in any page's
+// source), so it can live in the code. NEXT_PUBLIC_GA_MEASUREMENT_ID overrides it (e.g. to point
+// another environment at a different stream). Local development and tests send nothing.
+const DEFAULT_GA_MEASUREMENT_ID = 'G-H99ZMNWD14'
+const GA_ID_PATTERN = /^G-[A-Z0-9]{4,20}$/
+
 /** The Google Analytics 4 measurement id (G-XXXXXXXXXX), or null when analytics isn't configured. */
 export function getGaMeasurementId(): string | null {
-  const id = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID?.trim()
-  return id && /^G-[A-Z0-9]{4,20}$/.test(id) ? id : null
+  const fromEnv = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID?.trim()
+  if (fromEnv) return GA_ID_PATTERN.test(fromEnv) ? fromEnv : null
+  return process.env.NODE_ENV === 'production' ? DEFAULT_GA_MEASUREMENT_ID : null
 }
 
 export function parseConsent(cookieHeader: string): ConsentChoice | null {
