@@ -467,12 +467,7 @@
     "contentHeading": "Indhold",
     "topicsHeading": "Emner",
     "pagesHeading": "Sider",
-    "copyright": "© {year} UNTOLD. Alle rettigheder forbeholdes. En SurGlobal-publication.",
-    "topicDecoloniality": "Dekolonialitet",
-    "topicSustainability": "Bæredygtighed",
-    "topicTechnology": "Teknologi",
-    "topicEducation": "Uddannelse",
-    "topicResponsibleAI": "Ansvarlig AI"
+    "copyright": "© {year} UNTOLD. Alle rettigheder forbeholdes. En SurGlobal-publication."
   },
   "banners": {
     "adLabel": "Annonce",

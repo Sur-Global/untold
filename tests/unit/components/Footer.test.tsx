@@ -12,6 +12,9 @@ vi.mock('next-intl/server', () => ({
 }))
 vi.mock('@/lib/supabase/server', () => ({ createClient: async () => ({}) }))
 vi.mock('@/lib/data/static-pages', () => ({ getStaticPagesForFooter: vi.fn() }))
+vi.mock('@/lib/data/trending-topics', () => ({
+  getTrendingTopics: async () => [{ slug: 'decolonizacion', label: 'Decolonización' }, { slug: 'futuros', label: 'Futuros' }],
+}))
 vi.mock('@/lib/sender', () => ({ isSenderConfigured: () => false }))
 vi.mock('@/components/analytics/CookieSettingsButton', () => ({ CookieSettingsButton: () => null }))
 vi.mock('@/components/layout/SubscribeModalButton', () => ({ SubscribeModalButton: () => null }))
@@ -50,5 +53,13 @@ describe('Footer', () => {
     render(await Footer())
     expect(screen.queryByText('community')).not.toBeInTheDocument()
     expect(labels(column('Páginas'))).toEqual(['Creadores'])
+  })
+
+  it('lists the most trending topics, linked to their pages', async () => {
+    render(await Footer())
+    const topics = column('Temas')
+    expect(labels(topics)).toEqual(['Decolonización', 'Futuros'])
+    expect(within(topics).getByRole('link', { name: 'Decolonización' })).toHaveAttribute('href', '/tag/decolonizacion')
+    expect(screen.queryByText('Descolonialidad')).not.toBeInTheDocument()
   })
 })

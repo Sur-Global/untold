@@ -1,6 +1,6 @@
 import { render, screen } from '@testing-library/react'
 import { describe, it, expect, vi } from 'vitest'
-import { Navigation } from '@/components/layout/Navigation'
+import { NavigationClient as Navigation } from '@/components/layout/NavigationClient'
 
 // Mock next-intl
 vi.mock('next-intl', () => ({
@@ -76,5 +76,13 @@ describe('Navigation', () => {
       expect(panel.style.top).toBe('100%')
       expect(panel.style.paddingTop).toBe('12px')
     })
+  })
+})
+
+describe('Navigation topics ("Explorar")', () => {
+  it('shows the topics it is given, linked to their pages', () => {
+    render(<Navigation isLoggedIn={false} userRole={null} topics={[{ slug: 'decolonizacion', label: 'Decolonización' }, { slug: 'futuros', label: 'Futuros' }]} />)
+    for (const link of screen.getAllByRole('link', { name: 'Decolonización' })) expect(link).toHaveAttribute('href', '/tag/decolonizacion')
+    expect(screen.getAllByRole('link', { name: 'Futuros' }).length).toBeGreaterThan(0)
   })
 })

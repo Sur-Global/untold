@@ -467,12 +467,7 @@
     "contentHeading": "Content",
     "topicsHeading": "Topics",
     "pagesHeading": "Pages",
-    "copyright": "© {year} UNTOLD. All rights reserved. A SurGlobal publication.",
-    "topicDecoloniality": "Decoloniality",
-    "topicSustainability": "Sustainability",
-    "topicTechnology": "Technology",
-    "topicEducation": "Education",
-    "topicResponsibleAI": "Responsible AI"
+    "copyright": "© {year} UNTOLD. All rights reserved. A SurGlobal publication."
   },
   "banners": {
     "adLabel": "Advertisement",

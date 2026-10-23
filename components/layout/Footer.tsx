@@ -2,17 +2,10 @@ import { getLocale, getTranslations } from 'next-intl/server'
 import { createClient } from '@/lib/supabase/server'
 import { Link } from '@/i18n/navigation'
 import { getStaticPagesForFooter } from '@/lib/data/static-pages'
+import { getTrendingTopics } from '@/lib/data/trending-topics'
 import { isSenderConfigured } from '@/lib/sender'
 import { CookieSettingsButton } from '@/components/analytics/CookieSettingsButton'
 import { SubscribeModalButton } from '@/components/layout/SubscribeModalButton'
-
-const TOPICS = [
-  { msgKey: 'topicDecoloniality' as const, slug: 'decoloniality' },
-  { msgKey: 'topicSustainability' as const, slug: 'sustainability' },
-  { msgKey: 'topicTechnology' as const, slug: 'technology' },
-  { msgKey: 'topicEducation' as const, slug: 'education' },
-  { msgKey: 'topicResponsibleAI' as const, slug: 'responsible-ai' },
-]
 
 const aeonikRegular: React.CSSProperties = {
   fontFamily: 'var(--font-aeonik), Aeonik, sans-serif',
@@ -33,7 +26,7 @@ export async function Footer({ flushTop = false }: { flushTop?: boolean } = {}) 
     createClient(),
   ])
 
-  const footerPages = await getStaticPagesForFooter(supabase, locale)
+  const [footerPages, topics] = await Promise.all([getStaticPagesForFooter(supabase, locale), getTrendingTopics(locale)])
   const year = new Date().getFullYear()
   // Each list is in alphabetical order in the reader's language
   const alphabetical = <T extends { label: string }>(links: T[]) => [...links].sort((a, b) => a.label.localeCompare(b.label, locale))
@@ -104,14 +97,14 @@ export async function Footer({ flushTop = false }: { flushTop?: boolean } = {}) 
               {t('topicsHeading')}
             </p>
             <ul className="space-y-3 text-sm" style={{ color: '#78716C' }}>
-              {TOPICS.map(({ msgKey, slug }) => (
+              {topics.map(({ slug, label }) => (
                 <li key={slug}>
                   <Link
                     href={`/tag/${slug}`}
                     className="transition-colors hover:text-[#A9A8E9]"
                     style={aeonikRegularBody}
                   >
-                    {t(msgKey)}
+                    {label}
                   </Link>
                 </li>
               ))}
