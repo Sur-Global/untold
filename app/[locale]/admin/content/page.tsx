@@ -7,6 +7,7 @@ import { CONTENT_TYPES, HERO_SLOTS, HOME_SLOTS, PAGE_FEATURED_SLOTS, TYPE_PLURAL
 import { AdminUnpublishButton } from '@/components/admin/AdminUnpublishButton'
 import { AdminPageHeader } from '@/components/admin/AdminPageHeader'
 import { AdminPanel } from '@/components/admin/AdminPanel'
+import { CollapsiblePanel } from '@/components/admin/CollapsiblePanel'
 import { ContentTypeFilter } from '@/components/admin/ContentTypeFilter'
 import { ContentStatusFilter } from '@/components/admin/ContentStatusFilter'
 import { AdminPagination } from '@/components/admin/AdminPagination'
@@ -95,8 +96,11 @@ export default async function AdminContentPage({ searchParams }: PageProps) {
         description="Content across all authors — published and drafts. Place published items (★ ⌂ ↑) or unpublish them, or open a draft to edit and publish it."
       />
 
-      <div className="rounded-xl border border-primary/15 bg-card px-5 py-4 text-sm">
-        <p className="font-semibold text-foreground">Placement slots</p>
+      <CollapsiblePanel
+        storageKey="admin-content-placement-legend"
+        title="Placement slots"
+        summary={`★ its own page · ⌂ homepage section · ↑ homepage hero (${heroItems.length} of ${HERO_SLOTS} hero slots used)`}
+      >
         <p className="mt-0.5 text-xs text-muted-foreground">
           Three buttons on each published item (plus <strong>✎</strong> on articles: the editorial shown in “Lo más reciente”): <strong>★</strong> featured at the top of its own page (Podcasts, Videos…),{' '}
           <strong>⌂</strong> shown in its section on the homepage, <strong>↑</strong> the big hero banner on the homepage
@@ -152,7 +156,7 @@ export default async function AdminContentPage({ searchParams }: PageProps) {
             ))}
           </ul>
         )}
-      </div>
+      </CollapsiblePanel>
 
       <ContentStatusFilter />
       <ContentTypeFilter />
