@@ -9,6 +9,7 @@ const aeonik = localFont({
     { path: './fonts/Aeonik-AirItalic.ttf',  weight: '100', style: 'italic' },
     { path: './fonts/Aeonik-Thin.ttf',       weight: '200', style: 'normal' },
     { path: './fonts/Aeonik-ThinItalic.ttf', weight: '200', style: 'italic' },
+    { path: './fonts/Aeonik-Light.ttf',      weight: '300', style: 'normal' },
     { path: './fonts/Aeonik-Regular.ttf',    weight: '400', style: 'normal' },
     { path: './fonts/Aeonik-RegularItalic.ttf', weight: '400', style: 'italic' },
     { path: './fonts/Aeonik Pro Medium.ttf', weight: '500', style: 'normal' },

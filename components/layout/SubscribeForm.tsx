@@ -5,6 +5,8 @@ import { useTranslations } from 'next-intl'
 import { subscribeToNewsletter } from '@/lib/actions/subscribe'
 
 const aeonik: React.CSSProperties = { fontFamily: 'var(--font-aeonik), Aeonik, sans-serif' }
+// Button is Aeonik Regular; every other line is Aeonik Light.
+const light: React.CSSProperties = { ...aeonik, fontWeight: 300 }
 
 const inputClass =
   'h-11 w-full rounded-full border border-[#3a3a3a] bg-[#111] px-5 text-sm text-white outline-none transition-colors placeholder:text-[#78716C] focus:border-[#A9A8E9]'
@@ -33,7 +35,7 @@ export function SubscribeForm() {
 
   if (status === 'success') {
     return (
-      <p role="status" className="py-3 text-base text-[#D2FE73]" style={aeonik}>
+      <p role="status" className="py-3 text-base text-[#D2FE73]" style={light}>
         {t('success')}
       </p>
     )
@@ -49,7 +51,7 @@ export function SubscribeForm() {
         </label>
       </div>
 
-      <input name="firstname" type="text" autoComplete="given-name" placeholder={t('namePlaceholder')} aria-label={t('namePlaceholder')} className={inputClass} style={aeonik} />
+      <input name="firstname" type="text" autoComplete="given-name" placeholder={t('namePlaceholder')} aria-label={t('namePlaceholder')} className={inputClass} style={light} />
       <div className="flex flex-col gap-3 sm:flex-row">
         <input
           name="email"
@@ -60,25 +62,25 @@ export function SubscribeForm() {
           aria-label={t('emailLabel')}
           aria-invalid={status === 'invalid'}
           className={inputClass}
-          style={aeonik}
+          style={light}
         />
         <button
           type="submit"
           disabled={isPending}
-          className="h-11 shrink-0 rounded-full px-6 text-sm font-medium text-black transition-opacity hover:opacity-90 disabled:opacity-60"
-          style={{ backgroundColor: '#D2FE73', ...aeonik }}
+          className="h-11 shrink-0 rounded-full px-6 text-sm text-black transition-opacity hover:opacity-90 disabled:opacity-60"
+          style={{ backgroundColor: '#D2FE73', ...aeonik, fontWeight: 400 }}
         >
           {isPending ? t('sending') : t('submit')}
         </button>
       </div>
 
       {status === 'invalid' && (
-        <p role="alert" className="text-sm text-[#FCA5A5]" style={aeonik}>{t('errorInvalid')}</p>
+        <p role="alert" className="text-sm text-[#FCA5A5]" style={light}>{t('errorInvalid')}</p>
       )}
       {status === 'failed' && (
-        <p role="alert" className="text-sm text-[#FCA5A5]" style={aeonik}>{t('errorFailed')}</p>
+        <p role="alert" className="text-sm text-[#FCA5A5]" style={light}>{t('errorFailed')}</p>
       )}
-      <p className="text-center text-xs text-[#78716C]" style={aeonik}>{t('privacy')}</p>
+      <p className="text-center text-xs text-[#78716C]" style={light}>{t('privacy')}</p>
     </form>
   )
 }

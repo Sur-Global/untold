@@ -4,6 +4,8 @@ import { SubscribeForm } from '@/components/layout/SubscribeForm'
 import { SubscribeEmbed } from '@/components/layout/SubscribeEmbed'
 
 const aeonik: React.CSSProperties = { fontFamily: 'var(--font-aeonik), Aeonik, sans-serif' }
+// Title and button use Aeonik Medium/Regular; every other line is Aeonik Light.
+const light: React.CSSProperties = { ...aeonik, fontWeight: 300 }
 
 /**
  * Newsletter band at the bottom of the homepage. Uses our own form once Sender's API token
@@ -25,7 +27,7 @@ export async function SubscribeSection() {
   return (
     <section style={{ background: '#000' }} aria-label={t('title')}>
       <div className="mx-auto max-w-7xl px-4 py-20 text-center sm:px-6">
-        <p className="mb-3 text-xs uppercase tracking-[0.08em] text-[#A9A8E9]" style={{ fontFamily: 'JetBrains Mono, monospace' }}>
+        <p className="mb-3 text-xs uppercase tracking-[0.08em] text-[#A9A8E9]" style={light}>
           {t('eyebrow')}
         </p>
         <h2
@@ -34,7 +36,7 @@ export async function SubscribeSection() {
         >
           {t('title')}
         </h2>
-        <p className="mx-auto mb-8 max-w-[480px] text-base" style={{ ...aeonik, color: '#A8A29E' }}>
+        <p className="mx-auto mb-8 max-w-[480px] text-base" style={{ ...light, color: '#A8A29E' }}>
           {t('subtitle')}
         </p>
         <SubscribeForm />

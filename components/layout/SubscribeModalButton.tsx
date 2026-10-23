@@ -31,8 +31,8 @@ export function SubscribeModalButton({ label, closeLabel, formTitle, native = fa
       <button
         type="button"
         onClick={() => setOpen(true)}
-        className="mt-5 inline-flex h-10 items-center rounded-full px-6 text-sm font-medium text-black transition-opacity hover:opacity-90"
-        style={{ backgroundColor: '#D2FE73', fontFamily: 'var(--font-aeonik), Aeonik, sans-serif' }}
+        className="mt-5 inline-flex h-10 items-center rounded-full px-6 text-sm text-black transition-opacity hover:opacity-90"
+        style={{ backgroundColor: '#D2FE73', fontFamily: 'var(--font-aeonik), Aeonik, sans-serif', fontWeight: 400 }}
       >
         {label}
       </button>
@@ -56,9 +56,9 @@ export function SubscribeModalButton({ label, closeLabel, formTitle, native = fa
         </button>
         {open && native && (
           <div className="px-6 py-12 text-center">
-            <p className="mb-3 text-xs uppercase tracking-[0.08em] text-[#A9A8E9]" style={{ fontFamily: 'JetBrains Mono, monospace' }}>{t('eyebrow')}</p>
+            <p className="mb-3 text-xs uppercase tracking-[0.08em] text-[#A9A8E9]" style={{ fontFamily: 'var(--font-aeonik), Aeonik, sans-serif', fontWeight: 300 }}>{t('eyebrow')}</p>
             <h2 className="mb-3 text-2xl text-white" style={{ fontFamily: 'var(--font-aeonik), Aeonik, sans-serif', fontWeight: 500, lineHeight: 1.15, letterSpacing: '-0.02em' }}>{t('title')}</h2>
-            <p className="mx-auto mb-6 max-w-[360px] text-sm text-[#A8A29E]">{t('subtitle')}</p>
+            <p className="mx-auto mb-6 max-w-[360px] text-sm text-[#A8A29E]" style={{ fontFamily: 'var(--font-aeonik), Aeonik, sans-serif', fontWeight: 300 }}>{t('subtitle')}</p>
             <SubscribeForm />
           </div>
         )}
