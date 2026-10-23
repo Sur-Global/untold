@@ -43,7 +43,11 @@
     "podcastsSubtext": "Hören und Lernen",
     "pillsSubtext": "Schnelle Einblicke",
     "coursesSubtext": "Strukturiertes Lernen von Praktikern aus dem Globalen Süden",
-    "tagResources": "{count} Ressourcen"
+    "tagResources": "{count} Ressourcen",
+    "latestTitle": "Das Neueste",
+    "latestEditorial": "Editorial",
+    "latestReadMore": "Weiterlesen",
+    "latestNew": "Neu"
   },
   "listings": {
     "videosDesc": "Videos von Journalisten und Erstellern aus dem Globalen Süden ansehen.",

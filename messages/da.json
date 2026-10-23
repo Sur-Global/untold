@@ -43,7 +43,11 @@
     "podcastsSubtext": "Lyt og lær",
     "pillsSubtext": "Hurtige indsigter",
     "coursesSubtext": "Struktureret læring fra praktikere i det Globale Syd",
-    "tagResources": "{count} ressourcer"
+    "tagResources": "{count} ressourcer",
+    "latestTitle": "Seneste",
+    "latestEditorial": "Leder",
+    "latestReadMore": "Læs mere",
+    "latestNew": "Nyt"
   },
   "listings": {
     "videosDesc": "Se videoer fra journalister og skabere fra hele det Globale Syd.",

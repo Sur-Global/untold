@@ -36,6 +36,12 @@ export type PlatformSettings = {
     /** Language codes switched on for the public site (the default language is always on). */
     enabled: string[];
   };
+  /** The "Lo más reciente" homepage section: newest articles next to the latest editorial. */
+  latestSection: {
+    enabled: boolean;
+    /** how many of the newest articles to list (3–5) */
+    count: number;
+  };
   featuredSections: {
     articles: boolean;
     videos: boolean;

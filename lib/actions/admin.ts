@@ -104,6 +104,36 @@ export async function toggleHeroFeatured(contentId: string): Promise<ActionResul
   return togglePlacement(contentId, 'hero')
 }
 
+/**
+ * ✎ Editorial: marks an article as the editorial of an issue. The homepage section "Lo más reciente"
+ * shows the latest published one next to the newest articles; older ones stay marked as history.
+ */
+export async function toggleEditorial(contentId: string): Promise<ActionResult> {
+  await requireEditor()
+  const supabase = await createClient()
+
+  const { data: item } = await (supabase as any)
+    .from('content')
+    .select('type, status, is_editorial')
+    .eq('id', contentId)
+    .single()
+  if (!item) return { ok: false, error: 'Content not found' }
+  if (item.type !== 'article') return { ok: false, error: 'Only articles can be an editorial' }
+
+  const turningOn = !item.is_editorial
+  if (turningOn && item.status !== 'published') return { ok: false, error: 'Only published articles can be an editorial' }
+
+  const { error } = await (supabase as any).from('content').update({ is_editorial: turningOn }).eq('id', contentId)
+  if (error) return { ok: false, error: error.message ?? 'Could not change the editorial mark' }
+
+  const { type, label } = await getContentLogInfo(supabase, contentId)
+  await logActivity({ entityType: type ?? 'content', entityId: contentId, entityLabel: label, action: turningOn ? 'editorial_on' : 'editorial_off' })
+
+  revalidatePath('/admin/content')
+  revalidatePath('/')
+  return { ok: true }
+}
+
 /** Puts an item in a placement if it isn't there already (never removes) */
 export async function setContentPlacement(contentId: string, placement: Placement): Promise<ActionResult> {
   return togglePlacement(contentId, placement, 'on')

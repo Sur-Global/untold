@@ -43,7 +43,11 @@
     "podcastsSubtext": "Listen and learn",
     "pillsSubtext": "Quick insights",
     "coursesSubtext": "Structured learning from Global South practitioners",
-    "tagResources": "{count} resources"
+    "tagResources": "{count} resources",
+    "latestTitle": "Latest",
+    "latestEditorial": "Editorial",
+    "latestReadMore": "Read more",
+    "latestNew": "New"
   },
   "listings": {
     "articlesDesc": "In-depth analysis, research and reflections on responsible technology, accessibility and decolonial thinking.",

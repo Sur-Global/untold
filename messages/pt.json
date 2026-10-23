@@ -43,7 +43,11 @@
     "podcastsSubtext": "Ouvir e aprender",
     "pillsSubtext": "Insights rápidos",
     "coursesSubtext": "Aprendizagem estruturada de profissionais do Sul Global",
-    "tagResources": "{count} recursos"
+    "tagResources": "{count} recursos",
+    "latestTitle": "Mais recentes",
+    "latestEditorial": "Editorial",
+    "latestReadMore": "Ler mais",
+    "latestNew": "Novo"
   },
   "listings": {
     "videosDesc": "Assista a vídeos de jornalistas e criadores de todo o Sul Global.",

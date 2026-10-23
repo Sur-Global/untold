@@ -43,7 +43,11 @@
     "podcastsSubtext": "Écouter et apprendre",
     "pillsSubtext": "Insights rapides",
     "coursesSubtext": "Apprentissage structuré par des praticiens du Sud Global",
-    "tagResources": "{count} ressources"
+    "tagResources": "{count} ressources",
+    "latestTitle": "Les plus récents",
+    "latestEditorial": "Éditorial",
+    "latestReadMore": "Lire la suite",
+    "latestNew": "Nouveau"
   },
   "listings": {
     "videosDesc": "Regardez des vidéos de journalistes et créateurs de tout le Sud Global.",

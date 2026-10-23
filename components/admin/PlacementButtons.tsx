@@ -2,7 +2,7 @@
 
 import { useState, useTransition } from 'react'
 import { useRouter } from 'next/navigation'
-import { toggleFeatured, toggleHomeFeatured, toggleHeroFeatured, type ActionResult } from '@/lib/actions/admin'
+import { toggleFeatured, toggleHomeFeatured, toggleHeroFeatured, toggleEditorial, type ActionResult } from '@/lib/actions/admin'
 import { Button } from '@/components/ui/button'
 
 interface Props {
@@ -10,6 +10,9 @@ interface Props {
   isFeatured: boolean
   isHomeFeatured: boolean
   isHeroFeatured: boolean
+  /** ✎ is only offered for articles */
+  type?: string
+  isEditorial?: boolean
 }
 
 const BUTTONS = [
@@ -18,12 +21,20 @@ const BUTTONS = [
   { key: 'hero', icon: '↑', action: toggleHeroFeatured, title: 'Homepage hero banner (top of the homepage)' },
 ] as const
 
-export function PlacementButtons({ contentId, isFeatured, isHomeFeatured, isHeroFeatured }: Props) {
+const EDITORIAL_BUTTON = {
+  key: 'editorial',
+  icon: '✎',
+  action: toggleEditorial,
+  title: 'Editorial — shown next to the newest articles in "Lo más reciente" on the homepage',
+} as const
+
+export function PlacementButtons({ contentId, isFeatured, isHomeFeatured, isHeroFeatured, type, isEditorial = false }: Props) {
   const router = useRouter()
   const [pending, startTransition] = useTransition()
   const [busy, setBusy] = useState<string | null>(null)
   const [error, setError] = useState<string | null>(null)
-  const active = { page: isFeatured, home: isHomeFeatured, hero: isHeroFeatured }
+  const active = { page: isFeatured, home: isHomeFeatured, hero: isHeroFeatured, editorial: isEditorial }
+  const buttons = type === 'article' ? [...BUTTONS, EDITORIAL_BUTTON] : BUTTONS
 
   const click = (key: string, action: (id: string) => Promise<ActionResult>) => {
     setError(null)
@@ -42,7 +53,7 @@ export function PlacementButtons({ contentId, isFeatured, isHomeFeatured, isHero
   return (
     <span className="inline-flex flex-col items-start gap-0.5">
       <span className="inline-flex items-center gap-1">
-        {BUTTONS.map(({ key, icon, action, title }) => (
+        {buttons.map(({ key, icon, action, title }) => (
           <Button
             key={key}
             variant="ghost"

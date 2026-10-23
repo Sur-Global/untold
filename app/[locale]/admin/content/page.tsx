@@ -48,6 +48,7 @@ export default async function AdminContentPage({ searchParams }: PageProps) {
       is_featured,
       is_home_featured,
       is_hero_featured,
+      is_editorial,
       published_at,
       content_translations(title, locale),
       profiles!content_author_id_fkey(display_name)
@@ -97,7 +98,7 @@ export default async function AdminContentPage({ searchParams }: PageProps) {
       <div className="rounded-xl border border-primary/15 bg-card px-5 py-4 text-sm">
         <p className="font-semibold text-foreground">Placement slots</p>
         <p className="mt-0.5 text-xs text-muted-foreground">
-          Three buttons on each published item: <strong>★</strong> featured at the top of its own page (Podcasts, Videos…),{' '}
+          Three buttons on each published item (plus <strong>✎</strong> on articles: the editorial shown in “Lo más reciente”): <strong>★</strong> featured at the top of its own page (Podcasts, Videos…),{' '}
           <strong>⌂</strong> shown in its section on the homepage, <strong>↑</strong> the big hero banner on the homepage
           (any type). Each has a limited number of slots — remove one to free a slot.
         </p>
@@ -227,6 +228,8 @@ export default async function AdminContentPage({ searchParams }: PageProps) {
                           isFeatured={item.is_featured ?? false}
                           isHomeFeatured={item.is_home_featured ?? false}
                           isHeroFeatured={item.is_hero_featured ?? false}
+                          type={item.type}
+                          isEditorial={item.is_editorial ?? false}
                         />
                         </>)}
                       </div>

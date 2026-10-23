@@ -5,6 +5,9 @@ import { getNavProps } from '@/lib/nav'
 import { getPlatformSettings } from '@/lib/data/platform-settings'
 import { getHomeBanners } from '@/lib/data/home-banners'
 import { AdBanner } from '@/components/home/AdBanner'
+import { LatestSection, type LatestEditorial, type LatestItem } from '@/components/home/LatestSection'
+import { bodyExcerpt, isRecent } from '@/lib/editorial'
+import { formatDate } from '@/lib/format-date'
 import { getTranslation } from '@/lib/content'
 import { triggerListingTranslations } from '@/lib/trigger-listing-translations'
 import { triggerTagTranslations } from '@/lib/trigger-tag-translations'
@@ -66,6 +69,8 @@ export default async function HomePage({ params }: PageProps) {
     { data: podcasts },
     { data: pills },
     { data: courses },
+    { data: latestRows },
+    { data: editorialRows },
   ] = await Promise.all([
     getNavProps(),
     // Tag counts for hero stats
@@ -171,7 +176,44 @@ export default async function HomePage({ params }: PageProps) {
       .eq('is_hero_featured', false)
       .order('published_at', { ascending: false })
       .limit(3),
+    // "Lo más reciente": the newest articles (a few extra, so the hero picks and the editorial can be left out below)
+    platform.latestSection.enabled
+      ? (supabase as any)
+          .from('content')
+          .select(`
+            id, slug, source_locale, single_language, published_at, read_time_minutes, cover_image_url,
+            profiles!author_id ( display_name, slug, avatar_url ),
+            content_translations ( title, excerpt, featured_summary, locale ),
+            content_tags ( tags ( names, slug ) )
+          `)
+          .eq('type', 'article')
+          .eq('status', 'published')
+          .eq('is_curated', true)
+          .order('published_at', { ascending: false })
+          .limit(platform.latestSection.count + 4)
+      : Promise.resolve({ data: [] }),
+    // ...and the latest editorial (marked with ✎ in Admin → Content)
+    platform.latestSection.enabled
+      ? (supabase as any)
+          .from('content')
+          .select(`
+            id, slug, source_locale, single_language, published_at,
+            profiles!author_id ( display_name, slug, avatar_url ),
+            content_translations ( title, excerpt, featured_summary, locale )
+          `)
+          .eq('type', 'article')
+          .eq('status', 'published')
+          .eq('is_editorial', true)
+          .order('published_at', { ascending: false })
+          .limit(1)
+      : Promise.resolve({ data: [] }),
   ])
+
+  const editorialRow = (editorialRows ?? [])[0] ?? null
+  const heroIds = new Set((heroPicks ?? []).map((i: any) => i.id))
+  const latestArticles = (latestRows ?? [])
+    .filter((i: any) => !heroIds.has(i.id) && i.id !== editorialRow?.id)
+    .slice(0, platform.latestSection.count)
 
   // Batch bookmark resolution
   const allItems = [
@@ -181,6 +223,8 @@ export default async function HomePage({ params }: PageProps) {
     ...(podcasts ?? []),
     ...(pills ?? []),
     ...(courses ?? []),
+    ...latestArticles,
+    ...(editorialRow ? [editorialRow] : []),
   ]
   const contentIds = allItems.map((i: any) => i.id)
   const bookmarkedIds = new Set<string>()
@@ -304,6 +348,46 @@ export default async function HomePage({ params }: PageProps) {
   const sectionLargeCategoryTagSlug = sectionLargeTag?.slug ?? null
   // Remaining section cards (after the section's own large card, which takes index 0)
   const sectionSmallArticles = featuredArticles.slice(1)
+
+  // "Lo más reciente" section data
+  const dateOf = (iso: string | null) => (iso ? formatDate(iso, locale, { day: 'numeric', month: 'short' }) : null)
+  const latestItems: LatestItem[] = latestArticles.map((item: any) => {
+    const p = getItemProps(item)
+    return {
+      slug: p.slug,
+      title: p.title,
+      coverImageUrl: p.coverImageUrl ?? null,
+      categoryTag: p.categoryTag,
+      authorName: p.authorName ?? null,
+      dateLabel: dateOf(item.published_at),
+      readTimeLabel: item.read_time_minutes ? tContentHome('readTime', { minutes: item.read_time_minutes }) : null,
+      isNew: isRecent(item.published_at),
+    }
+  })
+  let latestEditorial: LatestEditorial | null = null
+  if (editorialRow) {
+    const trans = getTranslation(editorialRow.content_translations ?? [], locale)
+    let excerpt = trans?.excerpt || trans?.featured_summary || ''
+    if (!excerpt) {
+      // no written summary: open with the first paragraph of the text
+      const { data: bodies } = await (supabase as any)
+        .from('content_translations')
+        .select('locale, body')
+        .eq('content_id', editorialRow.id)
+        .in('locale', [locale, editorialRow.source_locale])
+      const row = (bodies ?? []).find((b: any) => b.locale === locale) ?? (bodies ?? [])[0]
+      excerpt = bodyExcerpt(row?.body)
+    }
+    latestEditorial = {
+      slug: editorialRow.slug,
+      title: trans?.title ?? 'Untitled',
+      excerpt: excerpt.length > 320 ? `${excerpt.slice(0, 320).replace(/\s+\S*$/, '')}…` : excerpt,
+      authorName: editorialRow.profiles?.display_name ?? null,
+      authorSlug: editorialRow.profiles?.slug ?? null,
+      authorAvatarUrl: editorialRow.profiles?.avatar_url ?? null,
+      dateLabel: dateOf(editorialRow.published_at),
+    }
+  }
 
   return (
     <>
@@ -584,6 +668,21 @@ export default async function HomePage({ params }: PageProps) {
 
         {/* Content sections */}
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-16 space-y-20">
+
+          {/* Latest — the newest articles next to the latest editorial */}
+          {platform.latestSection.enabled && (
+            <LatestSection
+              items={latestItems}
+              editorial={latestEditorial}
+              labels={{
+                title: t('latestTitle'),
+                viewAll: t('viewAll'),
+                editorial: t('latestEditorial'),
+                readMore: t('latestReadMore'),
+                newBadge: t('latestNew'),
+              }}
+            />
+          )}
 
           {/* Featured Articles — large hero card + smaller featured cards */}
           {platform.featuredSections.articles && (

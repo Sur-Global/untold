@@ -56,6 +56,7 @@ export const DEFAULT_PLATFORM_SETTINGS: PlatformSettings = {
     youtube: { enabled: false },
   },
   languages: { enabled: LANGUAGE_CATALOG.map((l) => l.code) },
+  latestSection: { enabled: true, count: 4 },
   featuredSections: {
     articles: true,
     videos: true,
@@ -142,6 +143,10 @@ export function mergePlatformSettings(row: unknown): PlatformSettings {
     s.languages && typeof s.languages === "object"
       ? (s.languages as Record<string, unknown>)
       : {};
+  const latestSection =
+    s.latestSection && typeof s.latestSection === "object"
+      ? (s.latestSection as Record<string, unknown>)
+      : {};
   const featuredSections =
     s.featuredSections && typeof s.featuredSections === "object"
       ? (s.featuredSections as Record<string, unknown>)
@@ -192,6 +197,10 @@ export function mergePlatformSettings(row: unknown): PlatformSettings {
       youtube: soc("youtube"),
     },
     languages: { enabled: normalizeEnabledLocales(languages.enabled) },
+    latestSection: {
+      enabled: asBool(latestSection.enabled, true),
+      count: clampInt(latestSection.count, 3, 5, base.latestSection.count),
+    },
     featuredSections: {
       articles: asBool(featuredSections.articles, true),
       videos: asBool(featuredSections.videos, true),

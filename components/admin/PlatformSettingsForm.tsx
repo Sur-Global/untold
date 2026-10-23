@@ -564,6 +564,52 @@ export function PlatformSettingsForm({
         </p>
       </AdminPanel>
 
+      {/* Latest section */}
+      <AdminPanel>
+        <div className="border-b border-primary/10 px-6 py-4">
+          <h2 className="flex items-center gap-2 font-mono text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+            <Sparkles className="h-4 w-4 text-primary" aria-hidden />
+            “Lo más reciente” section
+          </h2>
+          <p className="mt-1 text-sm text-muted-foreground">
+            Right under the homepage hero: the newest articles, next to the latest editorial. To choose the editorial,
+            press ✎ on an article in Content (articles only).
+          </p>
+        </div>
+        <ul className="divide-y divide-primary/5 px-6 py-2">
+          <li className="flex items-center justify-between py-3">
+            <span className="text-sm text-foreground">Show the section</span>
+            <input
+              type="checkbox"
+              checked={settings.latestSection.enabled}
+              onChange={(e) =>
+                setSettings((s) => ({ ...s, latestSection: { ...s.latestSection, enabled: e.target.checked } }))
+              }
+              className="size-4 rounded border-primary/30"
+            />
+          </li>
+          <li className="flex items-center justify-between py-3">
+            <label htmlFor="latest-count" className="text-sm text-foreground">
+              How many newest articles to list
+            </label>
+            <select
+              id="latest-count"
+              value={settings.latestSection.count}
+              onChange={(e) =>
+                setSettings((s) => ({ ...s, latestSection: { ...s.latestSection, count: Number(e.target.value) } }))
+              }
+              className="rounded-lg border border-primary/20 bg-background px-3 py-1.5 text-sm"
+            >
+              {[3, 4, 5].map((n) => (
+                <option key={n} value={n}>
+                  {n}
+                </option>
+              ))}
+            </select>
+          </li>
+        </ul>
+      </AdminPanel>
+
       {/* Featured sections */}
       <AdminPanel>
         <div className="border-b border-primary/10 px-6 py-4">
