@@ -10,6 +10,7 @@ import { locationName } from '@/lib/countries'
 import { getNavProps } from '@/lib/nav'
 import { Navigation } from '@/components/layout/Navigation'
 import { Footer } from '@/components/layout/Footer'
+import { RelatedContent } from '@/components/content/RelatedContent'
 import { EmbedPlayer } from '@/components/content/EmbedPlayer'
 import { VideoTranslationLoader } from '@/components/content/VideoTranslationLoader'
 import { AuthorBioLoader } from '@/components/content/AuthorBioLoader'
@@ -395,6 +396,7 @@ export default async function VideoPage({ params }: PageProps) {
 
         </div>
       </main>
+      <RelatedContent contentId={video.id} type="video" locale={locale} userId={userId} />
       <Footer />
     </>
   )

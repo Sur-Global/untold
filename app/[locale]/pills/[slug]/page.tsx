@@ -5,6 +5,7 @@ import { getTranslation } from '@/lib/content'
 import { LanguageNotice } from '@/components/content/LanguageNotice'
 import { Navigation } from '@/components/layout/Navigation'
 import { Footer } from '@/components/layout/Footer'
+import { RelatedContent } from '@/components/content/RelatedContent'
 import { BodyTranslationLoader } from '@/components/content/BodyTranslationLoader'
 import { LikeButton } from '@/components/social/LikeButton'
 import { BookmarkButton } from '@/components/social/BookmarkButton'
@@ -136,6 +137,7 @@ export default async function PillPage({ params }: PageProps) {
           initialContent={body}
         />
       </main>
+      <RelatedContent contentId={pill.id} type="pill" locale={locale} userId={user?.id} />
       <Footer />
     </>
   )

@@ -96,6 +96,7 @@
     "onlyInLanguage": "Nur auf {language}",
     "inLanguageWithSubtitles": "Auf {language} · Untertitel: {subtitles}",
     "readTime": "{minutes} Min. Lesezeit",
+    "relatedTitle": "Das könnte dich auch interessieren",
     "likes": "{count} Gefällt mir",
     "publishedOn": "Veröffentlicht am {date}",
     "by": "von",

@@ -11,6 +11,7 @@ import { sanitizeBioHtml } from '@/lib/sanitize-bio-html'
 import { formatDate } from '@/lib/format-date'
 import { Navigation } from '@/components/layout/Navigation'
 import { Footer } from '@/components/layout/Footer'
+import { RelatedContent } from '@/components/content/RelatedContent'
 import { ArticleBody } from '@/components/content/ArticleBody'
 import { BodyTranslationLoader } from '@/components/content/BodyTranslationLoader'
 import { AuthorBioLoader } from '@/components/content/AuthorBioLoader'
@@ -522,6 +523,8 @@ export default async function ArticlePage({ params }: PageProps) {
           </article>
         </div>
       </main>
+      {/* An issue's editorial already lists the issue's articles */}
+      {!editorialIssue && <RelatedContent contentId={article.id} type="article" locale={locale} userId={user?.id} />}
       <Footer />
     </>
   )

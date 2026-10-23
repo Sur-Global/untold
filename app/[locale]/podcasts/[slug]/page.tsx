@@ -5,6 +5,7 @@ import { getTranslation } from '@/lib/content'
 import { LanguageNotice } from '@/components/content/LanguageNotice'
 import { Navigation } from '@/components/layout/Navigation'
 import { Footer } from '@/components/layout/Footer'
+import { RelatedContent } from '@/components/content/RelatedContent'
 import { EmbedPlayer } from '@/components/content/EmbedPlayer'
 import { BodyTranslationLoader } from '@/components/content/BodyTranslationLoader'
 import { LikeButton } from '@/components/social/LikeButton'
@@ -153,6 +154,7 @@ export default async function PodcastPage({ params }: PageProps) {
           descriptionClassName="text-[#6B5F58] leading-relaxed"
         />
       </main>
+      <RelatedContent contentId={podcast.id} type="podcast" locale={locale} userId={user?.id} />
       <Footer />
     </>
   )

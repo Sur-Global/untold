@@ -96,6 +96,7 @@
     "onlyInLanguage": "Kun på {language}",
     "inLanguageWithSubtitles": "På {language} · Undertekster: {subtitles}",
     "readTime": "{minutes} min læsning",
+    "relatedTitle": "Det kan også interessere dig",
     "likes": "{count} synes godt om",
     "publishedOn": "Udgivet {date}",
     "by": "af",
