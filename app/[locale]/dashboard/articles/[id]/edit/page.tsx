@@ -16,6 +16,7 @@ import type { EditorBlock } from '@/components/editor/RichTextEditorLazy'
 import { getTranslations } from 'next-intl/server'
 import { IssuePanel } from '@/components/content/IssuePanel'
 import { issueLabel } from '@/lib/issues'
+import { tagDisplayName } from '@/lib/tag-name'
 
 interface PageProps {
   params: Promise<{ locale: string; id: string }>
@@ -96,7 +97,7 @@ export default async function EditArticlePage({ params }: PageProps) {
   const initialTags = (article.content_tags ?? [])
     .map((ct: any) => ct.tags)
     .filter(Boolean)
-    .map((t: any) => ({ id: t.id, slug: t.slug, name: t.names?.en ?? t.slug }))
+    .map((t: any) => ({ id: t.id, slug: t.slug, name: tagDisplayName(t.names, locale, t.slug) }))
 
   const author = Array.isArray(article.profiles) ? article.profiles[0] : article.profiles
 

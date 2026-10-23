@@ -9,6 +9,7 @@ import { TagCloud } from '@/components/content/TagCloud'
 import { contentIdsForTag, loadTagCloud } from '@/lib/data/tag-cloud'
 import { FeaturedSection } from '@/components/content/FeaturedSection'
 import { PAGE_FEATURED_SLOTS } from '@/lib/featured-slots'
+import { tagDisplayName } from '@/lib/tag-name'
 
 const PAGE_SIZE = 12
 
@@ -94,7 +95,7 @@ export default async function CoursesPage({ params, searchParams }: PageProps) {
     const t = getTranslation(item.content_translations ?? [], locale)
     const author = item.profiles
     const firstTag = item.content_tags?.[0]?.tags
-    const categoryTag = firstTag ? (firstTag.names[locale] ?? firstTag.names["en"] ?? null) : null
+    const categoryTag = firstTag ? tagDisplayName(firstTag.names, locale, firstTag.slug) : null
     const categoryTagSlug = firstTag?.slug ?? null
     return (
       <ContentCard

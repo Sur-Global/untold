@@ -6,6 +6,7 @@ import { getTranslation } from '@/lib/content'
 import { Navigation } from '@/components/layout/Navigation'
 import { Footer } from '@/components/layout/Footer'
 import { ContentCard } from '@/components/content/ContentCard'
+import { tagDisplayName } from '@/lib/tag-name'
 
 interface PageProps {
   params: Promise<{ locale: string; slug: string }>
@@ -26,7 +27,7 @@ export default async function TagPage({ params }: PageProps) {
 
   if (!tag) notFound()
 
-  const tagLabel = (tag.names as Record<string, string>)?.[locale] ?? tag.names?.en ?? tag.slug
+  const tagLabel = tagDisplayName(tag.names as Record<string, string>, locale, tag.slug)
 
   // Get all published content with this tag
   const { data: items } = await (supabase as any)

@@ -1,6 +1,8 @@
 // Tag cloud of a listing page (/videos, /podcasts…): the topics that the published content of that kind has,
 // bigger the more content they have. Pure helpers; the data comes from lib/data/tag-cloud.ts.
 
+import { tagDisplayName } from '@/lib/tag-name'
+
 export type CloudTag = { slug: string; name: string; count: number }
 
 type Row = { tags?: { slug: string; names?: Record<string, string> | null } | null }
@@ -13,7 +15,7 @@ export function buildTagCloud(rows: Row[], locale: string, limit = 40): CloudTag
     if (!tag?.slug) continue
     const found = byTag.get(tag.slug)
     if (found) found.count++
-    else byTag.set(tag.slug, { slug: tag.slug, name: tag.names?.[locale] || tag.names?.en || tag.slug, count: 1 })
+    else byTag.set(tag.slug, { slug: tag.slug, name: tagDisplayName(tag.names, locale, tag.slug), count: 1 })
   }
   return [...byTag.values()]
     .sort((a, b) => b.count - a.count || a.name.localeCompare(b.name, locale))

@@ -16,6 +16,7 @@ import { TagCloud } from '@/components/content/TagCloud'
 import Link from 'next/link'
 import { FeaturedSection } from '@/components/content/FeaturedSection'
 import { PAGE_FEATURED_SLOTS } from '@/lib/featured-slots'
+import { tagDisplayName } from '@/lib/tag-name'
 
 const BASE_LIMIT = 12
 const LOAD_MORE_STEP = 12
@@ -185,7 +186,7 @@ export default async function ArticlesPage({ params, searchParams }: PageProps) 
         const t = getTranslation(article.content_translations ?? [], locale)
         const firstTag = article.content_tags?.[0]?.tags
         const categoryTag = firstTag
-          ? (firstTag.names[locale] ?? firstTag.names['en'] ?? null)
+          ? tagDisplayName(firstTag.names, locale, firstTag.slug)
           : null
         const categoryTagSlug = firstTag?.slug ?? null
         const author = article.profiles

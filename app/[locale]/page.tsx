@@ -27,6 +27,7 @@ import {
   HomePillCard,
   CourseCard,
 } from './_home-cards'
+import { tagDisplayName } from '@/lib/tag-name'
 
 interface PageProps {
   params: Promise<{ locale: string }>
@@ -302,7 +303,7 @@ export default async function HomePage({ params }: PageProps) {
     const trans = getTranslation(item.content_translations ?? [], locale)
     const author = item.profiles
     const firstTag = item.content_tags?.[0]?.tags
-    const categoryTag = firstTag ? (firstTag.names[locale] ?? firstTag.names['en'] ?? null) : null
+    const categoryTag = firstTag ? tagDisplayName(firstTag.names, locale, firstTag.slug) : null
     const categoryTagSlug = firstTag?.slug ?? null
     const vm = item.video_meta
     const pm = item.podcast_meta
@@ -361,7 +362,7 @@ export default async function HomePage({ params }: PageProps) {
 
   const featuredTag = heroArticle?.content_tags?.[0]?.tags
   const featuredCategoryTag = featuredTag
-    ? (featuredTag.names[locale] ?? featuredTag.names['en'] ?? null)
+    ? tagDisplayName(featuredTag.names, locale, featuredTag.slug)
     : null
   const featuredCategoryTagSlug = featuredTag?.slug ?? null
 
@@ -373,7 +374,7 @@ export default async function HomePage({ params }: PageProps) {
     : null
   const sectionLargeTag = sectionLargeArticle?.content_tags?.[0]?.tags
   const sectionLargeCategoryTag = sectionLargeTag
-    ? (sectionLargeTag.names[locale] ?? sectionLargeTag.names['en'] ?? null)
+    ? tagDisplayName(sectionLargeTag.names, locale, sectionLargeTag.slug)
     : null
   const sectionLargeCategoryTagSlug = sectionLargeTag?.slug ?? null
   // Remaining section cards (after the section's own large card, which takes index 0)
@@ -505,7 +506,7 @@ export default async function HomePage({ params }: PageProps) {
                 <div className="flex flex-wrap gap-2.5">
                   {topTags.length > 0
                     ? topTags.map(({ slug, names, count }, i) => {
-                        const label = names[locale] ?? names['en'] ?? slug
+                        const label = tagDisplayName(names, locale, slug)
                         return (
                           <Link
                             key={slug}
@@ -661,7 +662,7 @@ export default async function HomePage({ params }: PageProps) {
                     if (item) {
                       const trans = getTranslation(item.content_translations ?? [], locale)
                       const tag = item.content_tags?.[0]?.tags
-                      const tagLabel = tag ? (tag.names[locale] ?? tag.names['en'] ?? null) : null
+                      const tagLabel = tag ? tagDisplayName(tag.names, locale, tag.slug) : null
                       const coverImage = getHeroCoverImage(item)
                       const hasPhoto = !!coverImage
                       return (

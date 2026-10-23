@@ -29,6 +29,7 @@ import { triggerListingTranslations } from '@/lib/trigger-listing-translations'
 import { issueMonthLabel } from '@/lib/issues'
 import { locationName } from '@/lib/countries'
 import { EditContentButton } from '@/components/content/EditContentButton'
+import { tagDisplayName } from '@/lib/tag-name'
 
 interface PageProps {
   params: Promise<{ locale: string; slug: string }>
@@ -229,7 +230,7 @@ export default async function ArticlePage({ params }: PageProps) {
                         <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden>
                           <path d="M2 4a2 2 0 012-2h4.586a1 1 0 01.707.293l4.414 4.414a1 1 0 010 1.414l-4.586 4.586a1 1 0 01-1.414 0L3.293 8.293A1 1 0 013 7.586V4z"/>
                         </svg>
-                        {tag.names?.[locale] ?? tag.names?.en ?? tag.slug}
+                        {tagDisplayName(tag.names, locale, tag.slug)}
                       </Link>
                     ))}
                   </div>

@@ -9,6 +9,7 @@ import { Footer } from '@/components/layout/Footer'
 import { getNavProps } from '@/lib/nav'
 import { Link } from '@/i18n/navigation'
 import { EditPillForm } from './EditPillForm'
+import { tagDisplayName } from '@/lib/tag-name'
 
 interface EditPillPageProps {
   params: Promise<{ locale: string; id: string }>
@@ -69,7 +70,7 @@ export default async function EditPillPage({ params }: EditPillPageProps) {
           initialSlides={parseSlides(meta?.slides)}
           initialDescription={tr?.excerpt ?? ''}
           brandLogos={isEditorRole(profile.role)}
-          initialTags={(content.content_tags ?? []).filter((ct: any) => ct.tags).map((ct: any) => ({ id: ct.tags.id, slug: ct.tags.slug, name: ct.tags.names?.[locale] ?? ct.tags.names?.en ?? ct.tags.slug }))}
+          initialTags={(content.content_tags ?? []).filter((ct: any) => ct.tags).map((ct: any) => ({ id: ct.tags.id, slug: ct.tags.slug, name: tagDisplayName(ct.tags.names, locale, ct.tags.slug) }))}
         />
       </main>
       <Footer />

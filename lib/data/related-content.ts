@@ -1,6 +1,7 @@
 import type { SupabaseClient } from '@supabase/supabase-js'
 import { getTranslation } from '@/lib/content'
 import { rankRelated, type RelatedCandidate } from '@/lib/related'
+import { tagDisplayName } from '@/lib/tag-name'
 
 /** What the content cards under "También te puede interesar" need */
 export type RelatedItem = {
@@ -116,7 +117,7 @@ export async function loadRelatedContent(
       authorName: r.profiles?.display_name ?? null,
       authorSlug: r.profiles?.slug ?? null,
       authorAvatarUrl: r.profiles?.avatar_url ?? null,
-      categoryTag: tag ? (tag.names?.[locale] ?? tag.names?.en ?? null) : null,
+      categoryTag: tag ? tagDisplayName(tag.names, locale, tag.slug) : null,
       categoryTagSlug: tag?.slug ?? null,
       readTimeMinutes: r.read_time_minutes ?? null,
       isBookmarked: bookmarked.has(r.id),

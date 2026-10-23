@@ -3,6 +3,7 @@ import { getTranslation } from '@/lib/content'
 import { formatDate } from '@/lib/format-date'
 import { isRecent } from '@/lib/editorial'
 import type { LatestItem } from '@/components/home/LatestSection'
+import { tagDisplayName } from '@/lib/tag-name'
 
 /** The published articles of an issue, newest first (the editorial itself is left out) */
 export async function loadIssueArticles(supabase: SupabaseClient, issueId: string, excludeId?: string | null): Promise<any[]> {
@@ -30,7 +31,7 @@ export function toIssueItems(rows: any[], locale: string, readTimeLabel: (minute
       slug: r.slug,
       title: trans?.title ?? 'Untitled',
       coverImageUrl: r.cover_image_url ?? null,
-      categoryTag: tag ? (tag.names?.[locale] ?? tag.names?.en ?? null) : null,
+      categoryTag: tag ? tagDisplayName(tag.names, locale, tag.slug) : null,
       authorName: r.profiles?.display_name ?? null,
       dateLabel: r.published_at ? formatDate(r.published_at, locale, { day: 'numeric', month: 'short' }) : null,
       readTimeLabel: r.read_time_minutes ? readTimeLabel(r.read_time_minutes) : null,

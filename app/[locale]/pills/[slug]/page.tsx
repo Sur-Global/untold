@@ -23,6 +23,7 @@ import { localizedSlides, parseSlides, slideCredits } from '@/lib/pill-slides'
 import { localizedPath, siteUrl } from '@/lib/content-metadata'
 import { normalizeAccent } from '@/lib/pill-accent'
 import { readableTextColor } from '@/lib/cover-formats'
+import { tagDisplayName } from '@/lib/tag-name'
 
 interface PageProps {
   params: Promise<{ locale: string; slug: string }>
@@ -90,7 +91,7 @@ export default async function PillPage({ params }: PageProps) {
   const topics: { slug: string; name: string }[] = (pill.content_tags ?? [])
     .map((ct: any) => ct.tags)
     .filter(Boolean)
-    .map((tag: any) => ({ slug: tag.slug, name: tag.names?.[locale] ?? tag.names?.en ?? tag.slug }))
+    .map((tag: any) => ({ slug: tag.slug, name: tagDisplayName(tag.names, locale, tag.slug) }))
   const pillUrl = `${siteUrl()}${localizedPath(locale, `/pills/${slug}`)}`
 
   if (needsBody || needsSlides) {

@@ -16,6 +16,7 @@ import {
   type ContentKind,
   type Creator,
 } from '@/lib/creators'
+import { tagDisplayName } from '@/lib/tag-name'
 
 const aeonik = (weight: 300 | 400 | 500): React.CSSProperties => ({
   fontFamily: 'var(--font-aeonik), Aeonik, sans-serif',
@@ -59,7 +60,7 @@ export default async function CreatorsPage({
       const tag = ct.tags
       if (!tag) continue
       acc.tags.add(tag.slug)
-      topicNames.set(tag.slug, tag.names?.[locale] ?? tag.names?.en ?? tag.slug)
+      topicNames.set(tag.slug, tagDisplayName(tag.names, locale, tag.slug))
       topicCreators.set(tag.slug, (topicCreators.get(tag.slug) ?? new Set()).add(row.author_id))
     }
     byAuthor.set(row.author_id, acc)

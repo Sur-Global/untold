@@ -7,13 +7,14 @@ import { Navigation } from '@/components/layout/Navigation'
 import { Footer } from '@/components/layout/Footer'
 import { getNavProps } from '@/lib/nav'
 import { EditVideoForm } from './EditVideoForm'
+import { tagDisplayName } from '@/lib/tag-name'
 
 interface PageProps {
   params: Promise<{ locale: string; id: string }>
 }
 
 export default async function EditVideoPage({ params }: PageProps) {
-  const { id } = await params
+  const { id, locale } = await params
   const { user, profile } = await requireCreator()
   const supabase = await createClient()
 
@@ -44,7 +45,7 @@ export default async function EditVideoPage({ params }: PageProps) {
   const initialTags = (content.content_tags ?? [])
     .map((ct: any) => ct.tags)
     .filter(Boolean)
-    .map((t: any) => ({ id: t.id, slug: t.slug, name: t.names?.en ?? t.slug }))
+    .map((t: any) => ({ id: t.id, slug: t.slug, name: tagDisplayName(t.names, locale, t.slug) }))
 
   return (
     <>

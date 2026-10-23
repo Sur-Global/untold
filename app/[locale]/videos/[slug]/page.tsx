@@ -22,6 +22,7 @@ import type { TranscriptCue } from '@/lib/transcript'
 import Link from 'next/link'
 import { SocialLinks } from '@/components/author/SocialLinks'
 import { EditContentButton } from '@/components/content/EditContentButton'
+import { tagDisplayName } from '@/lib/tag-name'
 
 interface VideoChapter {
   timestamp: string
@@ -174,7 +175,7 @@ export default async function VideoPage({ params }: PageProps) {
                   <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden>
                     <path d="M2 4a2 2 0 012-2h4.586a1 1 0 01.707.293l4.414 4.414a1 1 0 010 1.414l-4.586 4.586a1 1 0 01-1.414 0L3.293 8.293A1 1 0 013 7.586V4z"/>
                   </svg>
-                  {tag.names?.[locale] ?? tag.names?.en ?? tag.slug}
+                  {tagDisplayName(tag.names, locale, tag.slug)}
                 </Link>
               ))}
             </div>

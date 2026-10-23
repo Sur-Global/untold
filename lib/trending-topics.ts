@@ -1,6 +1,8 @@
 // The topics shown in the "Explorar" menu and the footer: the most trending ones on the site. A topic is as
 // trending as the content that has it is recent and liked: this season's content weighs more than old content.
 
+import { tagDisplayName } from '@/lib/tag-name'
+
 export type TopicRow = {
   tags?: { slug: string; names?: Record<string, string> | null } | null
   content?: { published_at?: string | null; likes_count?: number | null } | null
@@ -45,6 +47,6 @@ export function rankTrendingTopics(rows: TopicRow[], now: Date = new Date(), lim
 
 /** "decolonización" → "Decolonización", in the reader's language, as the menu shows it */
 export function topicLabel(topic: Topic, locale: string): string {
-  const name = topic.names[locale] || topic.names.en || topic.slug
+  const name = tagDisplayName(topic.names, locale, topic.slug)
   return name.charAt(0).toLocaleUpperCase(locale) + name.slice(1)
 }
