@@ -422,7 +422,9 @@
     "back": "← Alle Ausgaben",
     "inThisIssue": "In dieser Ausgabe",
     "readEditorial": "Editorial lesen",
-    "draft": "Entwurf"
+    "draft": "Entwurf",
+    "editorialOf": "Editorial der Ausgabe {month}",
+    "viewIssue": "Die ganze Ausgabe ansehen"
   },
   "creators": {
     "title": "Kreative",

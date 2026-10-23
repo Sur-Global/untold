@@ -422,7 +422,9 @@
     "back": "← Alle udgaver",
     "inThisIssue": "I denne udgave",
     "readEditorial": "Læs lederen",
-    "draft": "Kladde"
+    "draft": "Kladde",
+    "editorialOf": "Leder fra udgaven {month}",
+    "viewIssue": "Se hele udgaven"
   },
   "creators": {
     "title": "Skabere",

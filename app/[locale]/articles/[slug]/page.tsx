@@ -19,7 +19,12 @@ import { LikeButton } from '@/components/social/LikeButton'
 import { BookmarkButton } from '@/components/social/BookmarkButton'
 import { ShareButton } from '@/components/social/ShareButton'
 import Link from 'next/link'
+import { Link as IntlLink } from '@/i18n/navigation'
 import { SocialLinks } from '@/components/author/SocialLinks'
+import { ArticleRow } from '@/components/home/LatestSection'
+import { loadIssueArticles, toIssueItems } from '@/lib/data/issue-articles'
+import { triggerListingTranslations } from '@/lib/trigger-listing-translations'
+import { issueMonthLabel, issuePath } from '@/lib/issues'
 
 interface PageProps {
   params: Promise<{ locale: string; slug: string }>
@@ -77,6 +82,17 @@ export default async function ArticlePage({ params }: PageProps) {
   const contentLocale: string = singleLanguage ? (article.source_locale ?? 'en') : locale
   const t = getTranslation(article.content_translations ?? [], contentLocale)
   if (!t) notFound()
+
+  // Is this the editorial of a numbered issue? Then the page looks different: straight to the text,
+  // then the issue's articles, and the author's card last.
+  const { data: editorialIssues } = await (supabase as any)
+    .from('issues')
+    .select('id, issue_date, status')
+    .eq('editorial_id', article.id)
+    .order('issue_date', { ascending: false })
+    .limit(1)
+  const editorialIssue: { id: string; issue_date: string } | null = editorialIssues?.[0] ?? null
+  const issueRows = editorialIssue ? await loadIssueArticles(supabase, editorialIssue.id, article.id) : []
 
   const author = article.profiles
   const tags = article.content_tags?.map((ct: any) => ct.tags) ?? []
@@ -141,10 +157,17 @@ export default async function ArticlePage({ params }: PageProps) {
     ? JSON.stringify(body).replace(/"[^"]*":\s*"/g, ' ').replace(/[{}\[\]",]/g, ' ')
     : ''
   const minutes = readTime(bodyText)
-  const [tContent, tAuthor] = await Promise.all([
+  const [tContent, tAuthor, tIssues, tHome] = await Promise.all([
     getTranslations({ locale, namespace: 'content' }),
     getTranslations({ locale, namespace: 'author' }),
+    getTranslations({ locale, namespace: 'issues' }),
+    getTranslations({ locale, namespace: 'home' }),
   ])
+  const issueItems = toIssueItems(issueRows, locale, (m) => tContent('readTime', { minutes: m }))
+  const untranslatedIssueIds = issueRows
+    .filter((r: any) => !r.single_language && !(r.content_translations ?? []).some((tr: any) => tr.locale === locale))
+    .map((r: any) => r.id)
+  if (untranslatedIssueIds.length > 0) after(() => triggerListingTranslations(untranslatedIssueIds, locale))
 
   // Reusable action button style using design tokens
   const actionButtonClass = [
@@ -155,6 +178,36 @@ export default async function ArticlePage({ params }: PageProps) {
     'disabled:opacity-50 disabled:cursor-not-allowed',
   ].join(' ')
 
+  const actionBar = (
+  <div className="flex items-center gap-4 mb-10">
+    <LikeButton
+      contentId={article.id}
+      initialIsLiked={isLiked}
+      initialCount={article.likes_count ?? 0}
+      isLoggedIn={!!user}
+      className={actionButtonClass}
+    />
+    <BookmarkButton
+      contentId={article.id}
+      initialIsBookmarked={isBookmarked}
+      isLoggedIn={!!user}
+      className={actionButtonClass}
+    />
+    <ShareButton title={t.title} className={actionButtonClass} />
+    {user && (navUserRole === 'admin' || user.id === author?.id) && (
+      <Link
+        href={`/dashboard/articles/${article.id}/edit`}
+        className={actionButtonClass}
+      >
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden>
+          <path d="M9.5 1.5a1.414 1.414 0 012 2L4 11l-3 1 1-3 7.5-7.5z" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round"/>
+        </svg>
+        {tContent('edit')}
+      </Link>
+    )}
+  </div>
+  )
+
   return (
     <>
       <Navigation {...navProps} />
@@ -162,15 +215,15 @@ export default async function ArticlePage({ params }: PageProps) {
         <div className="max-w-[900px] mx-auto px-6 py-8">
 
           {/* Back */}
-          <Link
-            href="/articles"
+          <IntlLink
+            href={editorialIssue ? issuePath(editorialIssue.issue_date) : '/articles'}
             className="inline-flex items-center gap-2 text-sm text-muted-foreground font-['JetBrains_Mono',monospace] tracking-[0.28px] mb-8 hover:text-primary transition-colors"
           >
             <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden>
               <path d="M10 3L5 8L10 13" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
             </svg>
             {tContent('back')}
-          </Link>
+          </IntlLink>
 
           <article>
             {usingFallback ? (
@@ -183,7 +236,7 @@ export default async function ArticlePage({ params }: PageProps) {
             ) : (
               <>
                 {/* Category tags */}
-                {tags.length > 0 && (
+                {!editorialIssue && tags.length > 0 && (
                   <div className="flex flex-wrap gap-2 mb-8">
                     {tags.map((tag: any) => (
                       <Link
@@ -201,6 +254,15 @@ export default async function ArticlePage({ params }: PageProps) {
                 )}
 
                 {/* Title */}
+                {editorialIssue && (
+                  <IntlLink
+                    href={issuePath(editorialIssue.issue_date)}
+                    className="mb-6 inline-flex min-h-9 items-center rounded-full px-5 py-1.5 text-[13px] uppercase tracking-[0.08em] no-underline transition-opacity hover:opacity-90"
+                    style={{ background: '#000', color: '#D2FE73', fontFamily: 'var(--font-aeonik), Aeonik, sans-serif', fontWeight: 400 }}
+                  >
+                    {tIssues('editorialOf', { month: issueMonthLabel(editorialIssue.issue_date, locale) })}
+                  </IntlLink>
+                )}
                 {singleLanguage && <LanguageNotice sourceLocale={sourceLocale} subtitleLocales={article.subtitle_locales} />}
                 <h1
                   className="font-heading text-foreground mb-6"
@@ -210,12 +272,12 @@ export default async function ArticlePage({ params }: PageProps) {
                 </h1>
 
                 {/* Excerpt */}
-                {t.excerpt && (
+                {!editorialIssue && t.excerpt && (
                   <p className="text-2xl text-muted-foreground leading-tight mb-8">{t.excerpt}</p>
                 )}
 
                 {/* Cover image */}
-                {article.cover_image_url && (
+                {!editorialIssue && article.cover_image_url && (
                   <figure className="mb-8">
                     <div className="rounded-2xl overflow-hidden shadow-[0px_4px_16px_0px_rgba(44,36,32,0.1),0px_8px_32px_0px_rgba(44,36,32,0.06)]">
                       <img
@@ -240,6 +302,7 @@ export default async function ArticlePage({ params }: PageProps) {
                 )}
 
                 {/* Author + meta bar */}
+                {!editorialIssue && (
                 <div className="flex items-center justify-between py-5 mb-6 border-b border-border">
                   {/* Author */}
                   <div className="flex items-center gap-3">
@@ -289,34 +352,9 @@ export default async function ArticlePage({ params }: PageProps) {
                   </div>
                 </div>
 
-                {/* Action bar */}
-                <div className="flex items-center gap-4 mb-10">
-                  <LikeButton
-                    contentId={article.id}
-                    initialIsLiked={isLiked}
-                    initialCount={article.likes_count ?? 0}
-                    isLoggedIn={!!user}
-                    className={actionButtonClass}
-                  />
-                  <BookmarkButton
-                    contentId={article.id}
-                    initialIsBookmarked={isBookmarked}
-                    isLoggedIn={!!user}
-                    className={actionButtonClass}
-                  />
-                  <ShareButton title={t.title} className={actionButtonClass} />
-                  {user && (navUserRole === 'admin' || user.id === author?.id) && (
-                    <Link
-                      href={`/dashboard/articles/${article.id}/edit`}
-                      className={actionButtonClass}
-                    >
-                      <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden>
-                        <path d="M9.5 1.5a1.414 1.414 0 012 2L4 11l-3 1 1-3 7.5-7.5z" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round"/>
-                      </svg>
-                      {tContent('edit')}
-                    </Link>
-                  )}
-                </div>
+                )}
+
+                {!editorialIssue && actionBar}
 
                 {/* Body */}
                 <BodyTranslationLoader
@@ -327,6 +365,36 @@ export default async function ArticlePage({ params }: PageProps) {
                   fallback={sourceBody}
                   initialContent={body}
                 />
+
+                {editorialIssue && (
+                  <>
+                    <div className="mt-10">{actionBar}</div>
+                    {issueItems.length > 0 && (
+                      <section className="mt-12" aria-label={tIssues('inThisIssue')}>
+                        <div className="flex items-end justify-between pb-3" style={{ borderBottom: '2px solid #000' }}>
+                          <h2 style={{ color: '#000' }}>{tIssues('inThisIssue')}</h2>
+                          <IntlLink
+                            href={issuePath(editorialIssue.issue_date)}
+                            className="shrink-0 text-sm hover:underline"
+                            style={{ color: '#6b6ad0', fontFamily: 'var(--font-aeonik), Aeonik, sans-serif', fontWeight: 500 }}
+                          >
+                            {tIssues('viewIssue')} →
+                          </IntlLink>
+                        </div>
+                        <div className="mt-6">
+                          {issueItems.map((item, i) => (
+                            <ArticleRow
+                              key={item.slug}
+                              item={item}
+                              first={i === 0}
+                              labels={{ title: '', viewAll: '', editorial: '', readMore: '', newBadge: tHome('latestNew') }}
+                            />
+                          ))}
+                        </div>
+                      </section>
+                    )}
+                  </>
+                )}
 
                 {/* About the Author */}
                 {author && (

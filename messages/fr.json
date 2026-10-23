@@ -422,7 +422,9 @@
     "back": "← Tous les numéros",
     "inThisIssue": "Dans ce numéro",
     "readEditorial": "Lire l’éditorial",
-    "draft": "Brouillon"
+    "draft": "Brouillon",
+    "editorialOf": "Éditorial du numéro de {month}",
+    "viewIssue": "Voir le numéro complet"
   },
   "creators": {
     "title": "Créateurs",

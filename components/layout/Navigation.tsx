@@ -188,6 +188,8 @@ export function Navigation({
           {/* Topics dropdown */}
           <div className="relative group">
             <button
+              type="button"
+              aria-haspopup="menu"
               style={{
                 ...navLinkStyle,
                 fontSize: 13,
@@ -209,19 +211,20 @@ export function Navigation({
                 <path d="M0 0l4.5 5L9 0H0z" />
               </svg>
             </button>
+            {/* The wrapper touches the button (its top padding is the visual gap), so the menu stays open while the mouse crosses it */}
             <div
-              className="absolute hidden group-hover:flex flex-col"
+              className="absolute hidden group-hover:block group-focus-within:block"
+              style={{ top: '100%', left: '50%', transform: 'translateX(-50%)', paddingTop: 12, zIndex: 200 }}
+            >
+            <div
+              className="flex flex-col"
               style={{
-                top: 'calc(100% + 12px)',
-                left: '50%',
-                transform: 'translateX(-50%)',
                 background: 'rgba(8,8,8,0.98)',
                 border: '1px solid rgba(255,255,255,0.1)',
                 borderRadius: 10,
                 padding: '6px 0',
                 minWidth: 200,
                 boxShadow: '0 12px 40px rgba(0,0,0,0.6)',
-                zIndex: 200,
               }}
             >
               {([['/creators', t('creators')], ['/issues', t('issues')]] as const).map(([href, label]) => (
@@ -272,6 +275,7 @@ export function Navigation({
                   {label}
                 </Link>
               ))}
+            </div>
             </div>
           </div>
         </nav>

@@ -422,7 +422,9 @@
     "back": "← All issues",
     "inThisIssue": "In this issue",
     "readEditorial": "Read the editorial",
-    "draft": "Draft"
+    "draft": "Draft",
+    "editorialOf": "Editorial of the {month} issue",
+    "viewIssue": "See the full issue"
   },
   "creators": {
     "title": "Creators",

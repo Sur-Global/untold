@@ -57,4 +57,24 @@ describe('Navigation', () => {
     expect(screen.queryByText('nav.dashboard')).not.toBeInTheDocument()
     expect(screen.queryByText('nav.createContent')).not.toBeInTheDocument()
   })
+
+  describe('"Explore" menu', () => {
+    it('offers Creators and Issues above the topics', () => {
+      render(<Navigation isLoggedIn={false} userRole={null} />)
+      const creators = screen.getAllByRole('link', { name: 'nav.creators' })[0]
+      const issues = screen.getAllByRole('link', { name: 'nav.issues' })[0]
+      expect(creators).toHaveAttribute('href', '/creators')
+      expect(issues).toHaveAttribute('href', '/issues')
+    })
+
+    it('opens with hover or keyboard focus, and its panel touches the button so it does not close on the way to an option', () => {
+      const { container } = render(<Navigation isLoggedIn={false} userRole={null} />)
+      const panel = container.querySelector('.group-hover\\:block') as HTMLElement
+      expect(panel).not.toBeNull()
+      expect(panel.className).toContain('group-focus-within:block')
+      // no empty strip between the button and the visible menu: the wrapper starts right at the button
+      expect(panel.style.top).toBe('100%')
+      expect(panel.style.paddingTop).toBe('12px')
+    })
+  })
 })

@@ -422,7 +422,9 @@
     "back": "← Todas as edições",
     "inThisIssue": "Nesta edição",
     "readEditorial": "Ler o editorial",
-    "draft": "Rascunho"
+    "draft": "Rascunho",
+    "editorialOf": "Editorial da edição de {month}",
+    "viewIssue": "Ver a edição completa"
   },
   "creators": {
     "title": "Criadores",

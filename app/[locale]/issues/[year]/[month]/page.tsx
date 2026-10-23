@@ -3,16 +3,15 @@ import { notFound } from 'next/navigation'
 import { getTranslations } from 'next-intl/server'
 import { createClient } from '@/lib/supabase/server'
 import { getNavProps } from '@/lib/nav'
-import { getTranslation } from '@/lib/content'
 import { formatDate } from '@/lib/format-date'
-import { isRecent } from '@/lib/editorial'
+import { loadIssueArticles, toIssueItems } from '@/lib/data/issue-articles'
 import { triggerListingTranslations } from '@/lib/trigger-listing-translations'
 import { editorialTexts } from '@/lib/data/issue-editorial'
 import { issueMonthName, issueYear } from '@/lib/issues'
 import { Navigation } from '@/components/layout/Navigation'
 import { Footer } from '@/components/layout/Footer'
 import { TranslationRefresher } from '@/components/TranslationRefresher'
-import { ArticleRow, EditorialCard, type LatestItem } from '@/components/home/LatestSection'
+import { ArticleRow, EditorialCard } from '@/components/home/LatestSection'
 import { Link } from '@/i18n/navigation'
 
 const aeonik = (weight: 300 | 400 | 500): React.CSSProperties => ({
@@ -50,18 +49,7 @@ export default async function IssuePage({ params }: { params: Promise<{ locale: 
     .maybeSingle()
   if (!issue) notFound()
 
-  const { data: rows } = await (supabase as any)
-    .from('content')
-    .select(`
-      id, slug, source_locale, single_language, published_at, read_time_minutes, cover_image_url,
-      profiles!author_id ( display_name, slug, avatar_url ),
-      content_translations ( title, excerpt, featured_summary, locale ),
-      content_tags ( tags ( names, slug ) )
-    `)
-    .eq('issue_id', issue.id)
-    .eq('type', 'article')
-    .eq('status', 'published')
-    .order('published_at', { ascending: false })
+  const rows = await loadIssueArticles(supabase, issue.id)
 
   const editorial = issue.editorial && issue.editorial.status === 'published' ? issue.editorial : null
   const articles = (rows ?? []).filter((r: any) => r.id !== editorial?.id)
@@ -69,20 +57,7 @@ export default async function IssuePage({ params }: { params: Promise<{ locale: 
   const text = editorial ? texts.get(editorial.id) : null
 
   const dateOf = (iso: string | null) => (iso ? formatDate(iso, locale, { day: 'numeric', month: 'short' }) : null)
-  const items: LatestItem[] = articles.map((r: any) => {
-    const trans = getTranslation(r.content_translations ?? [], locale)
-    const tag = r.content_tags?.[0]?.tags
-    return {
-      slug: r.slug,
-      title: trans?.title ?? 'Untitled',
-      coverImageUrl: r.cover_image_url ?? null,
-      categoryTag: tag ? (tag.names[locale] ?? tag.names['en'] ?? null) : null,
-      authorName: r.profiles?.display_name ?? null,
-      dateLabel: dateOf(r.published_at),
-      readTimeLabel: r.read_time_minutes ? tContent('readTime', { minutes: r.read_time_minutes }) : null,
-      isNew: isRecent(r.published_at),
-    }
-  })
+  const items = toIssueItems(articles, locale, (minutes) => tContent('readTime', { minutes }))
 
   const untranslated = [...(editorial ? [editorial] : []), ...articles]
     .filter((c: any) => !c.single_language && !(c.content_translations ?? []).some((tr: any) => tr.locale === locale))
