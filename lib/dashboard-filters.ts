@@ -1,7 +1,8 @@
 // Filters and order for "Mi contenido" (/dashboard): by kind of content, by status, by words in the title,
 // and by date or title. Everything lives in the address (?type=…&status=…&q=…&sort=…&limit=…).
+// The kinds are the content types plus "editorial": an editorial is stored as an article, but it is its own kind here.
 
-export const DASHBOARD_TYPES = ['article', 'video', 'podcast', 'pill', 'course'] as const
+export const DASHBOARD_TYPES = ['article', 'editorial', 'video', 'podcast', 'pill', 'course'] as const
 export type DashboardType = (typeof DASHBOARD_TYPES)[number]
 export type DashboardStatus = 'published' | 'draft'
 export type DashboardSort = 'newest' | 'oldest' | 'edited' | 'title'
@@ -11,7 +12,10 @@ const SORTS: DashboardSort[] = ['newest', 'oldest', 'edited', 'title']
 
 export type DashboardQuery = { type: '' | DashboardType; status: '' | DashboardStatus; q: string; sort: DashboardSort; limit: number }
 
-export type DashboardItem = { type: string; status: string; created_at: string; updated_at?: string | null }
+export type DashboardItem = { type: string; status: string; created_at: string; updated_at?: string | null; is_editorial?: boolean | null }
+
+/** The kind an item counts as: editorials are not "articles" */
+export const kindOf = (item: Pick<DashboardItem, 'type' | 'is_editorial'>): string => (item.is_editorial ? 'editorial' : item.type)
 
 const first = (v: string | string[] | undefined) => (Array.isArray(v) ? v[0] : v) ?? ''
 
@@ -39,7 +43,8 @@ export function dashboardCounts(items: DashboardItem[]) {
   let published = 0
   let draft = 0
   for (const item of items) {
-    types[item.type] = (types[item.type] ?? 0) + 1
+    const kind = kindOf(item)
+    types[kind] = (types[kind] ?? 0) + 1
     if (item.status === 'published') published++
     else draft++
   }
@@ -54,7 +59,7 @@ export function filterDashboardItems<T extends DashboardItem>(
 ): { shown: T[]; total: number } {
   const words = plain(query.q).split(/\s+/).filter(Boolean)
   const matches = items.filter((item) => {
-    if (query.type && item.type !== query.type) return false
+    if (query.type && kindOf(item) !== query.type) return false
     if (query.status && item.status !== query.status) return false
     if (words.length === 0) return true
     const title = plain(titleOf(item))

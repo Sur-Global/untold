@@ -15,12 +15,12 @@ import { DeleteContentButton } from './DeleteContentButton'
 import { ProfileNudge } from '@/components/profile/ProfileNudge'
 import { ViewContentLink } from '@/components/content/ViewContentLink'
 import { AuthorStarToggle } from './AuthorStarToggle'
-import type { ContentType } from '@/lib/supabase/types'
 import { DashboardFilters } from '@/components/dashboard/DashboardFilters'
-import { DASHBOARD_PAGE_SIZE, DASHBOARD_TYPES, dashboardCounts, filterDashboardItems, parseDashboardQuery } from '@/lib/dashboard-filters'
+import { DASHBOARD_PAGE_SIZE, DASHBOARD_TYPES, dashboardCounts, filterDashboardItems, kindOf, parseDashboardQuery } from '@/lib/dashboard-filters'
 
 const TYPE_KEY = {
   article: 'typeArticle',
+  editorial: 'typeEditorial',
   video: 'typeVideo',
   podcast: 'typePodcast',
   pill: 'typePill',
@@ -147,7 +147,7 @@ export default async function DashboardPage({
               sortEdited: t('sortEdited'),
               sortTitle: t('sortTitle'),
               clear: t('filterClear'),
-              types: { article: t('typeArticles'), video: t('typeVideos'), podcast: t('typePodcasts'), pill: t('typePills'), course: t('typeCourses') },
+              types: { article: t('typeArticles'), editorial: t('typeEditorials'), video: t('typeVideos'), podcast: t('typePodcasts'), pill: t('typePills'), course: t('typeCourses') },
             }}
           />
         )}
@@ -175,7 +175,7 @@ export default async function DashboardPage({
                   </p>
                 </div>
 
-                <TypeBadge label={t(TYPE_KEY[item.type as ContentType])} />
+                <TypeBadge label={t(TYPE_KEY[kindOf(item) as keyof typeof TYPE_KEY])} />
                 <StatusBadge status={item.status} label={item.status === 'published' ? t('published') : t('draft')} />
                 {item.status === 'published' && !item.is_curated && !item.is_editorial && (
                   <span

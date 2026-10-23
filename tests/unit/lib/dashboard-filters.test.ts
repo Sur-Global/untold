@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { dashboardCounts, filterDashboardItems, parseDashboardQuery, DASHBOARD_PAGE_SIZE, type DashboardQuery } from '@/lib/dashboard-filters'
+import { dashboardCounts, filterDashboardItems, kindOf, parseDashboardQuery, DASHBOARD_PAGE_SIZE, DASHBOARD_TYPES, type DashboardQuery } from '@/lib/dashboard-filters'
 
 const item = (id: string, type: string, status: string, created: string, extra: Record<string, any> = {}) => ({ id, type, status, created_at: created, updated_at: created, ...extra })
 const items = [
@@ -56,5 +56,28 @@ describe('filterDashboardItems', () => {
 describe('dashboardCounts', () => {
   it('counts each kind and status', () => {
     expect(dashboardCounts(items)).toEqual({ types: { article: 2, video: 1, pill: 1 }, published: 2, draft: 2 })
+  })
+})
+
+describe('editorials are their own kind, not articles', () => {
+  const withEditorial = [
+    ...items,
+    item('e', 'article', 'published', '2026-04-01T00:00:00Z', { title: 'Editorial de abril', is_editorial: true }),
+    item('f', 'article', 'draft', '2026-05-01T00:00:00Z', { title: 'Editorial de mayo', is_editorial: true }),
+  ]
+  it('an editorial counts as "editorial" and no longer as an article', () => {
+    expect(kindOf({ type: 'article', is_editorial: true })).toBe('editorial')
+    expect(kindOf({ type: 'article', is_editorial: false })).toBe('article')
+    expect(kindOf({ type: 'video' })).toBe('video')
+    expect(dashboardCounts(withEditorial).types).toEqual({ article: 2, editorial: 2, video: 1, pill: 1 })
+  })
+  it('the editorials filter shows only editorials, and the articles filter no longer shows them', () => {
+    expect(ids(filterDashboardItems(withEditorial, { ...base, type: 'editorial' }, titleOf))).toEqual(['f', 'e'])
+    expect(ids(filterDashboardItems(withEditorial, { ...base, type: 'article' }, titleOf))).toEqual(['a', 'c'])
+    expect(ids(filterDashboardItems(withEditorial, { ...base, type: 'editorial', status: 'published' }, titleOf))).toEqual(['e'])
+  })
+  it('is a kind the address can ask for, right after articles', () => {
+    expect(parseDashboardQuery({ type: 'editorial' }).type).toBe('editorial')
+    expect(DASHBOARD_TYPES.slice(0, 2)).toEqual(['article', 'editorial'])
   })
 })
