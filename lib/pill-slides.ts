@@ -25,6 +25,8 @@ export const SLIDE_LOGO_FILES: Record<SlideBrand, Record<LogoColor, string>> = {
   surglobal: { white: '/logo-slide-surglobal-white.png', black: '/logo-slide-surglobal-black.png' },
 }
 /** A light shadow under the white text on lilac, like the ones in the team's Figma designs (Y 2, blur 2, black 25% on a 1080 px slide) */
+/** The same shadow in pixels, for the downloadable picture */
+export const LILAC_TEXT_SHADOW_PX = '0 2px 2px rgba(0, 0, 0, 0.25)'
 export const LILAC_TEXT_SHADOW = '0 max(1px, 0.19cqw) max(1px, 0.19cqw) rgba(0, 0, 0, 0.25)'
 
 /** Where the text of a photo slide sits, how big it is and its colour */

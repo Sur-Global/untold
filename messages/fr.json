@@ -540,7 +540,11 @@
     "copied": "Lien copié",
     "email": "E-mail",
     "more": "Plus d’options",
-    "instagramHint": "Lien copié. Instagram ne permet pas de partager un lien depuis un site : collez-le dans votre story, votre publication ou un message.",
+    "downloadSlides": "Télécharger les planches",
+    "preparingSlides": "Préparation des planches…",
+    "instagramSlidesHint": "Les planches sont téléchargées. Publiez-les dans votre story ou votre publication Instagram.",
+    "slidesReady": "Planches prêtes : touchez de nouveau pour les partager.",
+    "slidesError": "Impossible de préparer les planches. Réessayez.",
     "close": "Fermer"
   },
   "footer": {

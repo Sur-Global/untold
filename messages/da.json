@@ -540,7 +540,11 @@
     "copied": "Link kopieret",
     "email": "E-mail",
     "more": "Flere muligheder",
-    "instagramHint": "Link kopieret. Instagram tillader ikke deling af links fra et websted: Indsæt det i din story, dit opslag eller en besked.",
+    "downloadSlides": "Download slides",
+    "preparingSlides": "Forbereder slides…",
+    "instagramSlidesHint": "Slidesene er downloadet. Upload dem til din Instagram-story eller dit opslag.",
+    "slidesReady": "Slides klar: tryk igen for at dele dem.",
+    "slidesError": "Slidesene kunne ikke forberedes. Prøv igen.",
     "close": "Luk"
   },
   "footer": {

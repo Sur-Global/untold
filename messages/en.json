@@ -540,7 +540,11 @@
     "copied": "Link copied",
     "email": "Email",
     "more": "More options",
-    "instagramHint": "Link copied. Instagram doesn’t allow sharing links from a website: paste it into your story, post or message.",
+    "downloadSlides": "Download slides",
+    "preparingSlides": "Preparing slides…",
+    "instagramSlidesHint": "The slides were downloaded. Upload them to your Instagram story or post.",
+    "slidesReady": "Slides ready: tap again to share them.",
+    "slidesError": "The slides could not be prepared. Please try again.",
     "close": "Close"
   },
   "footer": {

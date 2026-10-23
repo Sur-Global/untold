@@ -540,7 +540,11 @@
     "copied": "Link copiado",
     "email": "E-mail",
     "more": "Mais opções",
-    "instagramHint": "Link copiado. O Instagram não permite compartilhar links a partir de um site: cole-o no seu story, publicação ou mensagem.",
+    "downloadSlides": "Baixar lâminas",
+    "preparingSlides": "Preparando lâminas…",
+    "instagramSlidesHint": "Baixamos as lâminas. Envie-as para o seu story ou publicação do Instagram.",
+    "slidesReady": "Lâminas prontas: toque de novo para compartilhá-las.",
+    "slidesError": "Não foi possível preparar as lâminas. Tente de novo.",
     "close": "Fechar"
   },
   "footer": {

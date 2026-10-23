@@ -6,8 +6,9 @@ const title = 'Amazofuturismo: ¿qué futuro?'
 const byId = (links: ReturnType<typeof shareLinks>) => Object.fromEntries(links.map((l) => [l.id, l.href]))
 
 describe('shareLinks', () => {
-  it('lists the networks in the order the team chose, with email last', () => {
-    expect(shareLinks({ url, title }).map((l) => l.id)).toEqual(['bluesky', 'linkedin', 'instagram', 'whatsapp', 'facebook', 'telegram', 'reddit', 'threads', 'x', 'email'])
+  it('lists the networks in the order the team chose, with email last, and Instagram only when asked (content that is pictures)', () => {
+    expect(shareLinks({ url, title }).map((l) => l.id)).toEqual(['bluesky', 'linkedin', 'whatsapp', 'facebook', 'telegram', 'reddit', 'threads', 'x', 'email'])
+    expect(shareLinks({ url, title, instagram: true }).map((l) => l.id)).toEqual(['bluesky', 'linkedin', 'instagram', 'whatsapp', 'facebook', 'telegram', 'reddit', 'threads', 'x', 'email'])
   })
 
   it('builds each network’s own address, with the link and title encoded', () => {
@@ -26,8 +27,8 @@ describe('shareLinks', () => {
     expect(h.email).toBe(`mailto:?subject=${t}&body=${u}`)
   })
 
-  it('has no web address for Instagram: its button copies the link instead', () => {
-    expect(byId(shareLinks({ url, title })).instagram).toBeNull()
+  it('has no web address for Instagram: its button hands the slides over as pictures instead', () => {
+    expect(byId(shareLinks({ url, title, instagram: true })).instagram).toBeNull()
   })
 
   it('never lets a title break the address', () => {

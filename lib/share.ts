@@ -1,6 +1,6 @@
 // Links that share a page on the social networks, in the order they are shown. Instagram has no "share this
-// link" address on the web (and neither have TikTok or WeChat): its button copies the link and opens
-// Instagram, and on phones the device's own share sheet is used instead.
+// link" address on the web (and neither have TikTok or WeChat): it only makes sense for content that is pictures
+// (a carousel pill), whose button hands the slides over as pictures; everywhere else it is not offered.
 
 export type ShareTarget = 'bluesky' | 'linkedin' | 'instagram' | 'whatsapp' | 'facebook' | 'telegram' | 'reddit' | 'threads' | 'x' | 'email'
 
@@ -17,13 +17,11 @@ export function cleanShareUrl(href: string): string {
   }
 }
 
-export const INSTAGRAM_URL = 'https://www.instagram.com/'
-
-export function shareLinks({ url, title, emailLabel }: { url: string; title: string; emailLabel?: string }): ShareLink[] {
+export function shareLinks({ url, title, emailLabel, instagram = false }: { url: string; title: string; emailLabel?: string; instagram?: boolean }): ShareLink[] {
   const u = encodeURIComponent(url)
   const t = encodeURIComponent(title)
   const text = encodeURIComponent(`${title} ${url}`)
-  return [
+  const links: ShareLink[] = [
     { id: 'bluesky', label: 'Bluesky', href: `https://bsky.app/intent/compose?text=${text}` },
     { id: 'linkedin', label: 'LinkedIn', href: `https://www.linkedin.com/sharing/share-offsite/?url=${u}` },
     { id: 'instagram', label: 'Instagram', href: null },
@@ -35,4 +33,5 @@ export function shareLinks({ url, title, emailLabel }: { url: string; title: str
     { id: 'x', label: 'X', href: `https://twitter.com/intent/tweet?text=${t}&url=${u}` },
     { id: 'email', label: emailLabel ?? 'Email', href: `mailto:?subject=${t}&body=${u}` },
   ]
+  return instagram ? links : links.filter((link) => link.id !== 'instagram')
 }

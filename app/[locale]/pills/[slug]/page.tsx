@@ -85,6 +85,8 @@ export default async function PillPage({ params }: PageProps) {
   const { slides, translated: slidesTranslated } = localizedSlides(parseSlides(meta?.slides), meta?.slide_translations, contentLocale, sourceLocale)
   const needsSlides = isCarousel && contentLocale !== sourceLocale && !slidesTranslated
   const credits = slideCredits(slides)
+  // a carousel can be shared as pictures (Instagram) and downloaded
+  const slidesToShare = isCarousel && slides.length > 0 ? { slug: pill.slug, count: slides.length } : undefined
   const topics: { slug: string; name: string }[] = (pill.content_tags ?? [])
     .map((ct: any) => ct.tags)
     .filter(Boolean)
@@ -152,7 +154,7 @@ export default async function PillPage({ params }: PageProps) {
                 initialIsBookmarked={isBookmarked}
                 isLoggedIn={!!user}
               />
-              <ShareButton title={t.title} className="flex items-center gap-1.5 text-sm font-mono text-muted-foreground hover:text-primary transition-colors" />
+              <ShareButton title={t.title} slides={slidesToShare} className="flex items-center gap-1.5 text-sm font-mono text-muted-foreground hover:text-primary transition-colors" />
               <EditContentButton type="pill" contentId={pill.id} authorId={pill.author_id} userId={user?.id} role={navUserRole} className="flex items-center gap-1.5 text-sm font-mono text-muted-foreground hover:text-primary transition-colors" />
             </div>
           </div>
@@ -209,7 +211,7 @@ export default async function PillPage({ params }: PageProps) {
         )}
 
         <div className="rounded-2xl border border-black/10 bg-white p-5">
-          <ShareBar title={t.title} url={pillUrl} />
+          <ShareBar title={t.title} url={pillUrl} slides={slidesToShare} />
         </div>
       </main>
       <RelatedContent contentId={pill.id} type="pill" locale={locale} userId={user?.id} />

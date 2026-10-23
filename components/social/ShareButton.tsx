@@ -2,12 +2,15 @@
 
 import { useEffect, useRef, useState } from 'react'
 import { useTranslations } from 'next-intl'
-import { FaBluesky, FaEnvelope, FaFacebook, FaInstagram, FaLink, FaLinkedin, FaReddit, FaTelegram, FaThreads, FaWhatsapp, FaXTwitter } from 'react-icons/fa6'
-import { cleanShareUrl, INSTAGRAM_URL, shareLinks, type ShareTarget } from '@/lib/share'
+import { FaBluesky, FaDownload, FaEnvelope, FaFacebook, FaInstagram, FaLink, FaLinkedin, FaReddit, FaTelegram, FaThreads, FaWhatsapp, FaXTwitter } from 'react-icons/fa6'
+import { cleanShareUrl, shareLinks, type ShareTarget } from '@/lib/share'
+import { useSlideShare, type SlidesToShare } from '@/components/social/useSlideShare'
 
 interface ShareButtonProps {
   title: string
   className?: string
+  /** A carousel pill: its slides can be shared as pictures (Instagram) and downloaded */
+  slides?: SlidesToShare
 }
 
 const ICONS: Record<ShareTarget, React.ComponentType<{ size?: number; 'aria-hidden'?: boolean }>> = {
@@ -27,11 +30,11 @@ const itemClass = 'flex flex-col items-center gap-1.5 rounded-lg p-2 text-center
 const circleClass = 'flex size-11 items-center justify-center rounded-full bg-muted text-foreground'
 
 /** Share menu: the social networks people use most, copy link and, on phones, the device's own share sheet. */
-export function ShareButton({ title, className }: ShareButtonProps) {
+export function ShareButton({ title, className, slides }: ShareButtonProps) {
   const t = useTranslations('share')
   const [open, setOpen] = useState(false)
   const [copied, setCopied] = useState(false)
-  const [instagramHint, setInstagramHint] = useState(false)
+  const slideShare = useSlideShare(slides, title)
   const rootRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
@@ -69,21 +72,6 @@ export function ShareButton({ title, className }: ShareButtonProps) {
     window.setTimeout(() => setCopied(false), 2000)
   }
 
-  // Instagram has no web address for sharing: on a phone the device's share sheet lists Instagram; elsewhere
-  // the link is copied and Instagram is opened, so it can be pasted into a story, post or message.
-  const shareOnInstagram = async () => {
-    if (typeof navigator.share === 'function' && window.matchMedia?.('(pointer: coarse)')?.matches) {
-      setOpen(false)
-      void navigator.share({ title, url }).catch(() => {})
-      return
-    }
-    window.open(INSTAGRAM_URL, '_blank', 'noopener,noreferrer') // first, while the click still allows opening a tab
-    if (await copy()) {
-      setInstagramHint(true)
-      window.setTimeout(() => setInstagramHint(false), 8000)
-    }
-  }
-
   return (
     <div ref={rootRef} className="relative inline-block">
       <button
@@ -116,11 +104,11 @@ export function ShareButton({ title, className }: ShareButtonProps) {
               </button>
             </div>
             <div className="grid grid-cols-4 gap-1">
-              {shareLinks({ url, title, emailLabel: t('email') }).map(({ id, label, href }) => {
+              {shareLinks({ url, title, emailLabel: t('email'), instagram: !!slides }).map(({ id, label, href }) => {
                 const Icon = ICONS[id]
                 if (href === null) {
                   return (
-                    <button key={id} type="button" onClick={shareOnInstagram} className={itemClass}>
+                    <button key={id} type="button" onClick={slideShare.shareToInstagram} disabled={slideShare.busy} className={itemClass}>
                       <span className={circleClass}><Icon size={20} aria-hidden /></span>
                       {label}
                     </button>
@@ -144,6 +132,12 @@ export function ShareButton({ title, className }: ShareButtonProps) {
                 <span className={circleClass}><FaLink size={18} aria-hidden /></span>
                 {copied ? t('copied') : t('copyLink')}
               </button>
+              {slides && (
+                <button type="button" onClick={slideShare.download} disabled={slideShare.busy} className={itemClass}>
+                  <span className={circleClass}><FaDownload size={17} aria-hidden /></span>
+                  {slideShare.busy ? t('preparingSlides') : t('downloadSlides')}
+                </button>
+              )}
               {canShareNatively && (
                 <button
                   type="button"
@@ -158,7 +152,7 @@ export function ShareButton({ title, className }: ShareButtonProps) {
                 </button>
               )}
             </div>
-            {instagramHint && <p className="mt-2 rounded-lg bg-muted px-3 py-2 text-xs leading-snug text-foreground">{t('instagramHint')}</p>}
+            {slideShare.message && <p className="mt-2 rounded-lg bg-muted px-3 py-2 text-xs leading-snug text-foreground">{slideShare.message}</p>}
             <p className="sr-only" aria-live="polite">{copied ? t('copied') : ''}</p>
           </div>
         </>
