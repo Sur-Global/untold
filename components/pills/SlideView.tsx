@@ -59,11 +59,16 @@ function PhotoText({ slide, logoCount }: { slide: PillSlide; logoCount: number }
   const text = useRef<HTMLParagraphElement>(null)
   const base = TEXT_SIZE_CQW[slide.text_size]
 
+  // The logos are at the bottom right: the text keeps above them (and, at the bottom left, beside them)
+  const clearance = logoCount > 0 ? 5 + LOGO_HEIGHT * logoCount + LOGO_GAP * (logoCount - 1) + 3 : MARGIN
+  let top = MARGIN
   let right = MARGIN
   let bottom = MARGIN
-  if (logoCount > 0 && slide.text_y === 'bottom') {
-    if (slide.text_x === 'left') right = 32
-    else bottom = 5 + LOGO_HEIGHT * logoCount + LOGO_GAP * (logoCount - 1) + 3
+  if (logoCount > 0) {
+    if (slide.text_y === 'bottom' && slide.text_x === 'left') right = 32
+    else bottom = clearance
+    // a text in the middle keeps in the middle: the same room above as below
+    if (slide.text_y === 'middle') top = clearance
   }
 
   useLayoutEffect(() => {
@@ -81,13 +86,13 @@ function PhotoText({ slide, logoCount }: { slide: PillSlide; logoCount: number }
     }
     fit()
     document.fonts?.ready.then(fit)
-  }, [slide.text, base, slide.text_x, slide.text_y, logoCount, right, bottom])
+  }, [slide.text, base, slide.text_x, slide.text_y, logoCount, top, right, bottom])
 
   return (
     <div
       ref={box}
       className="absolute"
-      style={{ top: `${MARGIN}cqw`, left: `${MARGIN}cqw`, right: `${right}cqw`, bottom: `${bottom}cqw`, display: 'flex', flexDirection: 'column', justifyContent: FLEX[slide.text_y], alignItems: FLEX[slide.text_x] }}
+      style={{ top: `${top}cqw`, left: `${MARGIN}cqw`, right: `${right}cqw`, bottom: `${bottom}cqw`, display: 'flex', flexDirection: 'column', justifyContent: FLEX[slide.text_y], alignItems: FLEX[slide.text_x] }}
     >
       <p
         ref={text}

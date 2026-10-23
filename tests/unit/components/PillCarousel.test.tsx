@@ -115,12 +115,22 @@ describe('text over a photo', () => {
     const two = render(<SlideView slide={slide({ text: 'Hola', text_x: 'center', text_y: 'bottom', brands: ['untold', 'surglobal'] })} />)
     expect(parseFloat(textBox(two.container).style.bottom)).toBeCloseTo(17, 1)
     two.unmount()
+    // a long text at the top or in the middle must not reach them either
     const top = render(<SlideView slide={slide({ text: 'Hola', text_x: 'right', text_y: 'top', brands: ['untold'] })} />)
     expect(textBox(top.container).style.right).toBe('6cqw')
-    expect(textBox(top.container).style.bottom).toBe('6cqw')
+    expect(textBox(top.container).style.top).toBe('6cqw')
+    expect(parseFloat(textBox(top.container).style.bottom)).toBeCloseTo(11.7, 1)
     top.unmount()
+    const middle = render(<SlideView slide={slide({ text: 'Hola', text_x: 'center', text_y: 'middle', brands: ['untold'] })} />)
+    expect(parseFloat(textBox(middle.container).style.top)).toBeCloseTo(11.7, 1)
+    expect(parseFloat(textBox(middle.container).style.bottom)).toBeCloseTo(11.7, 1)
+    middle.unmount()
     const noLogo = render(<SlideView slide={slide({ text: 'Hola', text_x: 'left', text_y: 'bottom', brands: [] })} />)
     expect(textBox(noLogo.container).style.right).toBe('6cqw')
+    noLogo.unmount()
+    const noLogoMiddle = render(<SlideView slide={slide({ text: 'Hola', text_x: 'center', text_y: 'middle', brands: [] })} />)
+    expect(textBox(noLogoMiddle.container).style.top).toBe('6cqw')
+    expect(textBox(noLogoMiddle.container).style.bottom).toBe('6cqw')
   })
 
   it('shrinks the text until it fits when it is too long for its size (a translation can be longer)', () => {
