@@ -49,8 +49,9 @@ describe('the size of the text in the picture', () => {
     expect(size).toBeGreaterThanOrEqual(TEXT_SIZE_CQW.xl * 0.45)
   })
   it('lilac text keeps its size when short and shrinks when it is too long for the slide', () => {
-    expect(lilacTextSize('Comparte y súmate', regular)).toBe(5.2)
-    expect(lilacTextSize('Una frase bastante larga para llenar la lámina. '.repeat(30), regular)).toBeLessThan(5.2)
+    expect(lilacTextSize({ text: 'Comparte y súmate', text_size: 'm' }, regular)).toBe(5.2)
+    expect(lilacTextSize({ text: 'Comparte y súmate', text_size: 'l' }, regular)).toBe(6.4)
+    expect(lilacTextSize({ text: 'Una frase bastante larga para llenar la lámina. '.repeat(30), text_size: 'm' }, regular)).toBeLessThan(5.2)
   })
 })
 
@@ -65,6 +66,13 @@ describe('renderSlideImage', () => {
     expect(Math.abs(data[0] - 161)).toBeLessThan(4)
     expect(Math.abs(data[1] - 161)).toBeLessThan(4)
     expect(Math.abs(data[2] - 233)).toBeLessThan(4)
+  })
+  it('draws a white text slide on white with black text, and the black logo', async () => {
+    const jpeg = await renderSlideImage({ ...newSlide('text', ['untold']), text: 'Texto', text_bg: 'white' })
+    const { data } = await sharp(jpeg).raw().toBuffer({ resolveWithObject: true })
+    expect(data[0]).toBeGreaterThan(240)
+    expect(data[1]).toBeGreaterThan(240)
+    expect(data[2]).toBeGreaterThan(240)
   })
   it('uses a dark background when the picture cannot be read', async () => {
     const jpeg = await renderSlideImage({ ...newSlide('photo'), image_url: 'https://cdn/broken.png', text: 'Hola' })

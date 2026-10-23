@@ -1,16 +1,16 @@
 'use client'
 
 import { useLayoutEffect, useRef } from 'react'
-import { LILAC_TEXT_SHADOW, logoColorOf, SLIDE_BRANDS, SLIDE_LILAC, SLIDE_LOGO_FILES, TEXT_SIZE_CQW, textBand, type PillSlide } from '@/lib/pill-slides'
-import { bandStyle, fitSize, LILAC, LOGO_EDGE, LOGO_GAP, LOGO_WIDTH, parseSlideText, photoLineHeight, photoTextBox } from '@/lib/slide-layout'
+import { LILAC_TEXT_SHADOW, logoColorOf, SLIDE_BRANDS, SLIDE_LOGO_FILES, TEXT_BG_COLOR, TEXT_SIZE_CQW, textBand, type PillSlide } from '@/lib/pill-slides'
+import { bandStyle, fitSize, LILAC, lilacBox, LILAC_SIZE_CQW, lilacLetterSpacing, lilacLineHeight, lilacParagraphGap, LOGO_EDGE, LOGO_GAP, LOGO_WIDTH, parseSlideText, photoLineHeight, photoTextBox } from '@/lib/slide-layout'
 
 const aeonik: React.CSSProperties = { fontFamily: 'var(--font-aeonik), Aeonik, sans-serif' }
 const FLEX = { left: 'flex-start', top: 'flex-start', center: 'center', middle: 'center', right: 'flex-end', bottom: 'flex-end' } as const
 
 /** Text of a text slide: lines that start with "•", "-" or "*" become a list; the rest are paragraphs */
-function SlideText({ text }: { text: string }) {
+function SlideText({ text, base }: { text: string; base: number }) {
   return (
-    <div style={{ display: 'grid', gap: `${LILAC.paragraphGap}cqw`, width: '100%' }}>
+    <div style={{ display: 'grid', gap: `${lilacParagraphGap(base)}cqw`, width: '100%' }}>
       {parseSlideText(text).map((b, i) =>
         b.type === 'p' ? (
           <p key={i} style={{ margin: 0, fontSize: 'inherit', lineHeight: 'inherit', color: 'inherit' }}>{b.text}</p>
@@ -25,31 +25,39 @@ function SlideText({ text }: { text: string }) {
 }
 
 /**
- * The text of a lilac slide, in the middle of its box. When it is too long for the slide it shrinks until it fits.
+ * The text of a text slide, in the middle of its box: white on lilac or black on white, in the size and the alignment
+ * chosen. When it is too long for the slide it shrinks until it fits.
  */
-function LilacText({ text }: { text: string }) {
+function LilacText({ slide, logoCount }: { slide: PillSlide; logoCount: number }) {
   const box = useRef<HTMLDivElement>(null)
   const content = useRef<HTMLDivElement>(null)
+  const base = LILAC_SIZE_CQW[slide.text_size]
+  const onWhite = slide.text_bg === 'white'
+  const room = lilacBox(logoCount)
 
   useLayoutEffect(() => {
     const fit = () => {
       const area = box.current
       const inner = content.current
       if (!area || !inner) return
-      area.style.fontSize = `${fitSize(LILAC.size, (size) => { area.style.fontSize = `${size}cqw`; return inner.offsetHeight }, area.clientHeight)}cqw`
+      area.style.fontSize = `${fitSize(base, (size) => { area.style.fontSize = `${size}cqw`; return inner.offsetHeight }, area.clientHeight)}cqw`
     }
     fit()
     document.fonts?.ready.then(fit)
-  }, [text])
+  }, [slide.text, base, room.bottom])
 
   return (
     <div
       ref={box}
       className="absolute flex items-center"
-      style={{ top: `${LILAC.top}cqw`, left: `${LILAC.side}cqw`, right: `${LILAC.side}cqw`, bottom: `${LILAC.bottom}cqw`, color: '#fff', fontSize: `${LILAC.size}cqw`, lineHeight: LILAC.lineHeight, fontWeight: 400, textShadow: LILAC_TEXT_SHADOW }}
+      style={{
+        top: `${room.top}cqw`, left: `${room.side}cqw`, right: `${room.side}cqw`, bottom: `${room.bottom}cqw`,
+        letterSpacing: `${lilacLetterSpacing(base)}em`, color: onWhite ? '#000' : '#fff', fontSize: `${base}cqw`, lineHeight: lilacLineHeight(base), fontWeight: 400, textAlign: slide.text_x,
+        ...(onWhite ? {} : { textShadow: LILAC_TEXT_SHADOW }),
+      }}
     >
       <div ref={content} style={{ width: '100%' }}>
-        <SlideText text={text} />
+        <SlideText text={slide.text} base={base} />
       </div>
     </div>
   )
@@ -105,7 +113,7 @@ export function SlideView({ slide }: { slide: PillSlide }) {
   return (
     <div
       className="relative w-full overflow-hidden"
-      style={{ aspectRatio: '4 / 5', containerType: 'inline-size', background: slide.kind === 'text' ? SLIDE_LILAC : '#1a1a1a', ...aeonik }}
+      style={{ aspectRatio: '4 / 5', containerType: 'inline-size', background: slide.kind === 'text' ? TEXT_BG_COLOR[slide.text_bg] : '#1a1a1a', ...aeonik }}
       data-slide-kind={slide.kind}
     >
       {slide.kind !== 'text' && slide.image_url && (
@@ -116,7 +124,7 @@ export function SlideView({ slide }: { slide: PillSlide }) {
       {band && <div className="absolute inset-x-0" style={bandStyle(band)} aria-hidden />}
       {band && <PhotoText slide={slide} logoCount={logo ? slide.brands.length : 0} />}
 
-      {slide.kind === 'text' && <LilacText text={slide.text} />}
+      {slide.kind === 'text' && <LilacText slide={slide} logoCount={logo ? slide.brands.length : 0} />}
 
       {logo && (
         <div className="absolute flex flex-col items-end" style={{ right: `${LOGO_EDGE}cqw`, bottom: `${LOGO_EDGE}cqw`, gap: `${LOGO_GAP}cqw` }}>

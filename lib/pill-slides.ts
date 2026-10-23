@@ -34,14 +34,18 @@ export type TextX = 'left' | 'center' | 'right'
 export type TextY = 'top' | 'middle' | 'bottom'
 export type TextSize = 's' | 'm' | 'l' | 'xl'
 export type TextColor = 'white' | 'black'
+/** The background of a text slide: the brand's lilac (white text) or white (black text) */
+export type TextBg = 'lilac' | 'white'
 export const TEXT_XS: TextX[] = ['left', 'center', 'right']
 export const TEXT_YS: TextY[] = ['top', 'middle', 'bottom']
 export const TEXT_SIZES: TextSize[] = ['s', 'm', 'l', 'xl']
 export const TEXT_COLORS: TextColor[] = ['white', 'black']
+export const TEXT_BGS: TextBg[] = ['lilac', 'white']
+export const TEXT_BG_COLOR: Record<TextBg, string> = { lilac: SLIDE_LILAC, white: '#F9F9F9' }
 /** Font size of each size, in container-width units (cqw): 1cqw is 1% of the slide's width */
 export const TEXT_SIZE_CQW: Record<TextSize, number> = { s: 4.6, m: 6.4, l: 9, xl: 12.5 }
 /** How text over a photo looked before it could be moved: bottom left, medium, white */
-export const TEXT_DEFAULTS = { text_x: 'left', text_y: 'bottom', text_size: 'm', text_color: 'white' } as const satisfies Pick<PillSlide, 'text_x' | 'text_y' | 'text_size' | 'text_color'>
+export const TEXT_DEFAULTS = { text_x: 'left', text_y: 'bottom', text_size: 'm', text_color: 'white', text_bg: 'lilac' } as const satisfies Pick<PillSlide, 'text_x' | 'text_y' | 'text_size' | 'text_color' | 'text_bg'>
 
 export type PillSlide = {
   id: string
@@ -54,6 +58,8 @@ export type PillSlide = {
   text_y: TextY
   text_size: TextSize
   text_color: TextColor
+  /** the background of a text slide (a text slide's text is white on lilac and black on white) */
+  text_bg: TextBg
   /** the logos on the slide; none unless an admin or editor chose them */
   brands: SlideBrand[]
   logo: SlideLogo
@@ -104,6 +110,7 @@ export function parseSlides(raw: unknown): PillSlide[] {
       text_y: TEXT_YS.includes(s.text_y as TextY) ? (s.text_y as TextY) : TEXT_DEFAULTS.text_y,
       text_size: TEXT_SIZES.includes(s.text_size as TextSize) ? (s.text_size as TextSize) : TEXT_DEFAULTS.text_size,
       text_color: TEXT_COLORS.includes(s.text_color as TextColor) ? (s.text_color as TextColor) : TEXT_DEFAULTS.text_color,
+      text_bg: TEXT_BGS.includes(s.text_bg as TextBg) ? (s.text_bg as TextBg) : TEXT_DEFAULTS.text_bg,
       brands,
       logo,
       logo_color: s.logo_color === 'white' || s.logo_color === 'black' ? s.logo_color : null,
@@ -129,10 +136,10 @@ export function textBand(slide: PillSlide): { y: TextY; tone: 'dark' | 'light' }
   return { y: slide.text_y, tone: slide.text_color === 'white' ? 'dark' : 'light' }
 }
 
-/** The colour of the logos on a slide, or null when it has none: always white on lilac */
+/** The colour of the logos on a slide, or null when it has none: white on lilac, black on a white text slide */
 export function logoColorOf(slide: PillSlide): LogoColor | null {
   if (slide.brands.length === 0) return null
-  if (slide.kind === 'text') return 'white'
+  if (slide.kind === 'text') return slide.text_bg === 'white' ? 'black' : 'white'
   if (slide.logo === 'white' || slide.logo === 'black') return slide.logo
   return slide.logo_color ?? 'white'
 }

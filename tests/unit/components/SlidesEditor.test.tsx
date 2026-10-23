@@ -69,9 +69,19 @@ describe('SlidesEditor', () => {
       expect(screen.getByRole('radio', { name: 'textSize.l' })).toHaveAttribute('aria-checked', 'true')
       expect(screen.getByRole('radio', { name: 'textColor.black' })).toHaveAttribute('aria-checked', 'true')
     })
-    it('are not offered on lilac slides or finished images, which have no text over a photo', () => {
+    it('are not offered on text slides or finished images, which have no text over a photo', () => {
       render(<SlidesEditor slides={[slide('a', { kind: 'text', image_url: null }), slide('b', { kind: 'image' })]} onChange={vi.fn()} />)
       expect(screen.queryAllByRole('radio', { name: /^textPos\./ })).toHaveLength(0)
+    })
+    it('a text slide chooses its text size, its alignment and its background (lilac or white)', () => {
+      const onChange = vi.fn()
+      render(<SlidesEditor slides={[slide('a', { kind: 'text', image_url: null })]} onChange={onChange} />)
+      fireEvent.click(screen.getByRole('radio', { name: 'textSize.l' }))
+      expect(onChange).toHaveBeenLastCalledWith([expect.objectContaining({ text_size: 'l' })])
+      fireEvent.click(screen.getByRole('radio', { name: 'textAlign.center' }))
+      expect(onChange).toHaveBeenLastCalledWith([expect.objectContaining({ text_x: 'center' })])
+      fireEvent.click(screen.getByRole('radio', { name: 'textBg.white' }))
+      expect(onChange).toHaveBeenLastCalledWith([expect.objectContaining({ text_bg: 'white' })])
     })
   })
 

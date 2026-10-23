@@ -490,6 +490,16 @@
       "white": "Blanc",
       "black": "Noir"
     },
+    "textAlignLabel": "Alignement",
+    "textAlign": {
+      "left": "À gauche",
+      "center": "Centré"
+    },
+    "textBgLabel": "Fond",
+    "textBg": {
+      "lilac": "Lilas",
+      "white": "Blanc"
+    },
     "slideLogoColorLabel": "Couleur du logo",
     "logoAuto": "Automatique (blanc ou noir selon l’image)",
     "logoWhite": "Blanc",

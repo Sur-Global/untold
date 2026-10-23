@@ -2,7 +2,7 @@
 // downloadable picture is drawn with the same ones (1cqw = 10.8px on a 1080 px wide image).
 
 import type { CSSProperties } from 'react'
-import type { PillSlide, TextY } from '@/lib/pill-slides'
+import type { PillSlide, TextSize, TextY } from '@/lib/pill-slides'
 
 export const SLIDE_WIDTH_PX = 1080
 export const SLIDE_HEIGHT_PX = 1350
@@ -19,8 +19,17 @@ export const LOGO_EDGE = 5
 export const SHRINK_STEP = 0.94
 export const MIN_SCALE = 0.45
 
-/** The text of a lilac slide: its box (distance to the edges) and type */
-export const LILAC = { top: 9, side: 9, bottom: 20, size: 5.2, lineHeight: 1.45, paragraphGap: 2.2, listIndent: 4.5, itemGap: 1.2 }
+/** The text of a text slide: its box (distance to the edges) and the spacing of its paragraphs and lists */
+export const LILAC = { top: 9, side: 9, bottom: 20, paragraphGap: 2.2, listIndent: 4.5, itemGap: 1.2 }
+/** The room a text slide's text has: all the slide inside the margins, and above the logos when there are any */
+export const lilacBox = (logoCount: number) => ({ top: LILAC.top, side: LILAC.side, bottom: logoCount > 0 ? LILAC.bottom : LILAC.top })
+/** Big text is set a little tighter, as in the team's designs */
+export const lilacLetterSpacing = (base: number) => (base >= 6 ? -0.02 : 0)
+/** The sizes of the text of a text slide, in cqw (medium is how every text slide was before it had sizes) */
+export const LILAC_SIZE_CQW: Record<TextSize, number> = { s: 4.4, m: 5.2, l: 6.4, xl: 8 }
+/** Big text is set tight, like the team's designs, with a blank line between paragraphs */
+export const lilacLineHeight = (base: number) => (base >= 6 ? 1.15 : 1.45)
+export const lilacParagraphGap = (base: number) => (base >= 6 ? base * 1.15 : LILAC.paragraphGap)
 
 export type SlideTextBlock = { type: 'p'; text: string } | { type: 'ul'; items: string[] }
 

@@ -4,9 +4,9 @@ import { parse as parseFont, type Font } from 'opentype.js'
 import { readFile } from 'node:fs/promises'
 import { join } from 'node:path'
 import { fetchImageFromUrl } from '@/lib/safe-fetch-image'
-import { LILAC_TEXT_SHADOW_PX, logoColorOf, SLIDE_BRANDS, SLIDE_LILAC, SLIDE_LOGO_FILES, TEXT_SIZE_CQW, textBand, type LogoColor, type PillSlide, type SlideBrand } from '@/lib/pill-slides'
+import { LILAC_TEXT_SHADOW_PX, logoColorOf, SLIDE_BRANDS, SLIDE_LOGO_FILES, TEXT_BG_COLOR, TEXT_SIZE_CQW, textBand, type LogoColor, type PillSlide, type SlideBrand } from '@/lib/pill-slides'
 import {
-  bandStyle, CQW_PX, fitSize, LILAC, LOGO_EDGE, LOGO_GAP, LOGO_WIDTH, parseSlideText, photoLineHeight, photoTextBox, SLIDE_HEIGHT_PX, SLIDE_WIDTH_PX,
+  bandStyle, CQW_PX, fitSize, LILAC, lilacBox, LILAC_SIZE_CQW, lilacLetterSpacing, lilacLineHeight, lilacParagraphGap, LOGO_EDGE, LOGO_GAP, LOGO_WIDTH, parseSlideText, photoLineHeight, photoTextBox, SLIDE_HEIGHT_PX, SLIDE_WIDTH_PX,
 } from '@/lib/slide-layout'
 
 // The downloadable picture of a slide (1080 × 1350, the vertical format of Instagram), drawn with the same layout as the
@@ -63,19 +63,22 @@ export function photoTextSize(slide: PillSlide, logoCount: number, medium: Font)
   return fitSize(base, (size) => countLines(medium, text, px(size), width, -0.01 * px(size)) * px(size) * photoLineHeight(base), available)
 }
 
-/** The size (in cqw) the text of a lilac slide is drawn at */
-export function lilacTextSize(text: string, regular: Font): number {
-  const blocks = parseSlideText(text)
+/** The size (in cqw) the text of a text slide is drawn at: the one chosen, or smaller when it does not fit */
+export function lilacTextSize(slide: Pick<PillSlide, 'text' | 'text_size'>, regular: Font, logoCount = 0): number {
+  const blocks = parseSlideText(slide.text)
+  const base = LILAC_SIZE_CQW[slide.text_size]
   const width = SLIDE_WIDTH_PX - px(LILAC.side * 2)
-  const available = SLIDE_HEIGHT_PX - px(LILAC.top + LILAC.bottom)
-  return fitSize(LILAC.size, (size) => {
-    const lineHeight = px(size) * LILAC.lineHeight
+  const room = lilacBox(logoCount)
+  const available = SLIDE_HEIGHT_PX - px(room.top + room.bottom)
+  return fitSize(base, (size) => {
+    const spacing = lilacLetterSpacing(base) * px(size)
+    const lineHeight = px(size) * lilacLineHeight(base)
     const heights = blocks.map((block) =>
       block.type === 'p'
-        ? countLines(regular, block.text, px(size), width) * lineHeight
-        : block.items.reduce((sum, item) => sum + countLines(regular, item, px(size), width - px(LILAC.listIndent)) * lineHeight, 0) + px(LILAC.itemGap) * (block.items.length - 1),
+        ? countLines(regular, block.text, px(size), width, spacing) * lineHeight
+        : block.items.reduce((sum, item) => sum + countLines(regular, item, px(size), width - px(LILAC.listIndent), spacing) * lineHeight, 0) + px(LILAC.itemGap) * (block.items.length - 1),
     )
-    return heights.reduce((sum, h) => sum + h, 0) + px(LILAC.paragraphGap) * (blocks.length - 1)
+    return heights.reduce((sum, h) => sum + h, 0) + px(lilacParagraphGap(base)) * (blocks.length - 1)
   }, available)
 }
 
@@ -140,14 +143,16 @@ function Overlay({ slide, logos, textSize }: { slide: PillSlide; logos: Logo[]; 
       {slide.kind === 'text' && (
         <div
           style={{
-            position: 'absolute', top: px(LILAC.top), left: px(LILAC.side), right: px(LILAC.side), bottom: px(LILAC.bottom),
-            display: 'flex', alignItems: 'center', color: '#ffffff', fontSize: size, lineHeight: LILAC.lineHeight, fontWeight: 400, textShadow: LILAC_TEXT_SHADOW_PX,
+            position: 'absolute', top: px(lilacBox(logos.length).top), left: px(LILAC.side), right: px(LILAC.side), bottom: px(lilacBox(logos.length).bottom),
+            letterSpacing: lilacLetterSpacing(LILAC_SIZE_CQW[slide.text_size]) * size,
+            display: 'flex', alignItems: 'center', color: slide.text_bg === 'white' ? '#000000' : '#ffffff', fontSize: size, lineHeight: lilacLineHeight(LILAC_SIZE_CQW[slide.text_size]), fontWeight: 400,
+            ...(slide.text_bg === 'white' ? {} : { textShadow: LILAC_TEXT_SHADOW_PX }),
           }}
         >
-          <div style={{ display: 'flex', flexDirection: 'column', width: '100%', gap: px(LILAC.paragraphGap) }}>
+          <div style={{ display: 'flex', flexDirection: 'column', width: '100%', gap: px(lilacParagraphGap(LILAC_SIZE_CQW[slide.text_size])) }}>
             {parseSlideText(slide.text).map((block, i) =>
               block.type === 'p' ? (
-                <div key={i} style={{ display: 'flex' }}>{block.text}</div>
+                <div key={i} style={{ display: 'flex', justifyContent: FLEX[slide.text_x], textAlign: slide.text_x }}>{block.text}</div>
               ) : (
                 <div key={i} style={{ display: 'flex', flexDirection: 'column', gap: px(LILAC.itemGap) }}>
                   {block.items.map((item, j) => (
@@ -177,7 +182,7 @@ function Overlay({ slide, logos, textSize }: { slide: PillSlide; logos: Logo[]; 
 
 async function background(slide: PillSlide): Promise<Buffer> {
   const dark = () => sharp({ create: { width: SLIDE_WIDTH_PX, height: SLIDE_HEIGHT_PX, channels: 3, background: '#1a1a1a' } }).png().toBuffer()
-  if (slide.kind === 'text') return sharp({ create: { width: SLIDE_WIDTH_PX, height: SLIDE_HEIGHT_PX, channels: 3, background: SLIDE_LILAC } }).png().toBuffer()
+  if (slide.kind === 'text') return sharp({ create: { width: SLIDE_WIDTH_PX, height: SLIDE_HEIGHT_PX, channels: 3, background: TEXT_BG_COLOR[slide.text_bg] } }).png().toBuffer()
   if (!slide.image_url) return dark()
   try {
     // rotate() follows the picture's orientation, as the browser does
@@ -191,7 +196,7 @@ async function background(slide: PillSlide): Promise<Buffer> {
 export async function renderSlideImage(slide: PillSlide): Promise<Buffer> {
   const { regular, medium } = await loadFonts()
   const logos = await logosOf(slide)
-  const textSize = slide.kind === 'text' ? lilacTextSize(slide.text, regular.font) : textBand(slide) ? photoTextSize(slide, logos.length, medium.font) : 0
+  const textSize = slide.kind === 'text' ? lilacTextSize(slide, regular.font, logos.length) : textBand(slide) ? photoTextSize(slide, logos.length, medium.font) : 0
   const overlay = new ImageResponse(<Overlay slide={slide} logos={logos} textSize={textSize} />, {
     width: SLIDE_WIDTH_PX,
     height: SLIDE_HEIGHT_PX,

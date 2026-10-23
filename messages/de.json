@@ -490,6 +490,16 @@
       "white": "Weiß",
       "black": "Schwarz"
     },
+    "textAlignLabel": "Ausrichtung",
+    "textAlign": {
+      "left": "Linksbündig",
+      "center": "Zentriert"
+    },
+    "textBgLabel": "Hintergrund",
+    "textBg": {
+      "lilac": "Flieder",
+      "white": "Weiß"
+    },
     "slideLogoColorLabel": "Logofarbe",
     "logoAuto": "Automatisch (weiß oder schwarz, je nach Bild)",
     "logoWhite": "Weiß",

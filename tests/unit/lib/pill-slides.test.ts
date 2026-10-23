@@ -54,6 +54,21 @@ describe('text over a photo: place, size and colour', () => {
   })
 })
 
+describe('text slides: size, alignment and background', () => {
+  it('start lilac, medium and left, as before they could be changed', () => {
+    expect(newSlide('text')).toMatchObject({ text_bg: 'lilac', text_size: 'm', text_x: 'left' })
+    expect(parseSlides([{ kind: 'text' }])[0]).toMatchObject({ text_bg: 'lilac', text_size: 'm', text_x: 'left' })
+  })
+  it('keep a white background, and ignore any other', () => {
+    expect(parseSlides([{ kind: 'text', text_bg: 'white' }])[0].text_bg).toBe('white')
+    expect(parseSlides([{ kind: 'text', text_bg: 'pink' }])[0].text_bg).toBe('lilac')
+  })
+  it('have a black logo on white and a white one on lilac', () => {
+    expect(logoColorOf(slide({ kind: 'text', text_bg: 'white' }))).toBe('black')
+    expect(logoColorOf(slide({ kind: 'text', text_bg: 'lilac' }))).toBe('white')
+  })
+})
+
 describe('slidesProblem', () => {
   it('asks for at least two slides, none of them empty', () => {
     expect(slidesProblem([slide()])).toMatch(/at least 2/)

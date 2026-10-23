@@ -490,6 +490,16 @@
       "white": "Blanco",
       "black": "Negro"
     },
+    "textAlignLabel": "Alineación",
+    "textAlign": {
+      "left": "A la izquierda",
+      "center": "Centrado"
+    },
+    "textBgLabel": "Fondo",
+    "textBg": {
+      "lilac": "Lila",
+      "white": "Blanco"
+    },
     "slideLogoColorLabel": "Color del logo",
     "logoAuto": "Automático (blanco o negro según la imagen)",
     "logoWhite": "Blanco",

@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { bandStyle, fitSize, LOGO_GAP, LOGO_HEIGHT, MIN_SCALE, parseSlideText, photoLineHeight, photoTextBox } from '@/lib/slide-layout'
+import { bandStyle, fitSize, lilacBox, lilacLetterSpacing, lilacLineHeight, lilacParagraphGap, LILAC_SIZE_CQW, LOGO_GAP, LOGO_HEIGHT, MIN_SCALE, parseSlideText, photoLineHeight, photoTextBox } from '@/lib/slide-layout'
 
 describe('parseSlideText', () => {
   it('turns lines that start with a bullet or a dash into a list, and the rest into paragraphs', () => {
@@ -58,5 +58,21 @@ describe('photoLineHeight and bandStyle', () => {
     expect(bandStyle({ y: 'middle', tone: 'light' })).toMatchObject({ top: '22%', height: '56%' })
     expect(String(bandStyle({ y: 'top', tone: 'dark' }).background)).toContain('rgba(0,0,0,0.6)')
     expect(String(bandStyle({ y: 'top', tone: 'light' }).background)).toContain('rgba(255,255,255,0.7)')
+  })
+})
+
+describe('the text of a text slide', () => {
+  it('has the whole slide inside the margins when there are no logos, and keeps above them when there are', () => {
+    expect(lilacBox(0)).toEqual({ top: 9, side: 9, bottom: 9 })
+    expect(lilacBox(1)).toEqual({ top: 9, side: 9, bottom: 20 })
+  })
+  it('medium is the size text slides always had; large is set tighter, with a blank line between paragraphs', () => {
+    expect(LILAC_SIZE_CQW.m).toBe(5.2)
+    expect(lilacLineHeight(LILAC_SIZE_CQW.m)).toBe(1.45)
+    expect(lilacLineHeight(LILAC_SIZE_CQW.l)).toBeLessThan(1.45)
+    expect(lilacParagraphGap(LILAC_SIZE_CQW.m)).toBe(2.2)
+    expect(lilacParagraphGap(LILAC_SIZE_CQW.l)).toBeGreaterThan(5)
+    expect(lilacLetterSpacing(LILAC_SIZE_CQW.m)).toBe(0)
+    expect(lilacLetterSpacing(LILAC_SIZE_CQW.l)).toBeLessThan(0)
   })
 })

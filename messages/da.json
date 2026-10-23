@@ -490,6 +490,16 @@
       "white": "Hvid",
       "black": "Sort"
     },
+    "textAlignLabel": "Justering",
+    "textAlign": {
+      "left": "Venstre",
+      "center": "Centreret"
+    },
+    "textBgLabel": "Baggrund",
+    "textBg": {
+      "lilac": "Lilla",
+      "white": "Hvid"
+    },
     "slideLogoColorLabel": "Logofarve",
     "logoAuto": "Automatisk (hvid eller sort efter billedet)",
     "logoWhite": "Hvid",

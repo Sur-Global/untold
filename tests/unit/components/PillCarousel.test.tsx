@@ -35,6 +35,17 @@ describe('SlideView', () => {
     expect(paragraph.style.fontSize).toBe('inherit')
     expect(paragraph.style.lineHeight).toBe('inherit')
   })
+  it('a text slide can be white with black text and a black logo, bigger, and centred', () => {
+    const white = render(<SlideView slide={slide({ kind: 'text', image_url: null, text: 'Hola', text_bg: 'white', text_size: 'l', text_x: 'center', brands: ['surglobal'], logo_color: null })} />)
+    const root = white.container.firstChild as HTMLElement
+    expect(root.style.background).toMatch(/249, 249, 249|#f9f9f9/i)
+    const text = white.container.querySelector('[data-slide-kind="text"] > div.absolute') as HTMLElement
+    expect(text.style.color).toBe('rgb(0, 0, 0)')
+    expect(text.style.fontSize).toBe('6.4cqw')
+    expect(text.style.textAlign).toBe('center')
+    expect(text.style.textShadow).toBe('')
+    expect(white.container.querySelector('[data-logo="black"]')).toBeTruthy()
+  })
   it('puts a light shadow under the text on lilac, like the Figma designs', () => {
     const { container } = render(<SlideView slide={slides[1]} />)
     expect(container.innerHTML).toMatch(/text-shadow/)
