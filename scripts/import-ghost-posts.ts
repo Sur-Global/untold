@@ -12,6 +12,7 @@
 import { createClient } from '@supabase/supabase-js'
 import { JSDOM } from 'jsdom'
 import { randomUUID } from 'node:crypto'
+import { hostImage, isExternalImage } from './lib/host-image'
 
 const GHOST_URL = 'https://untoldmag.ghost.io'
 const GHOST_API_KEY = '2b1630029948b2da335b2b5c5e'
@@ -19,14 +20,15 @@ const SOURCE_LOCALE = 'es'
 const AUTHOR_EMAIL_DOMAIN = 'authors.untold.ink'
 const APPLY = process.argv.includes('--apply')
 
-/** Byline of each post → profile. Interviews ("Cartografías del Desvío") belong to the magazine's own profile. */
-const MAGAZINE_PROFILE_SLUG = 'untold'
+/** Who each post is by (name on the profile). For the "Cartografías del Desvío" interviews, the person interviewed. */
 const AUTHOR_BY_POST: Record<string, string> = {
   'justicia-linguistica-y-el-giro-pluriversal': 'Yecid Ortega',
   'la-mano-que-mueve-la-pluma': 'Carlos Fuller Maúrtua',
   'derecho-a-la-educacion-y-justicia-linguistica-en-comunidades-indigenas': 'Lorena Córdova-Hernández',
   'la-crisis-de-imaginacion-y-las-noticias-que-futuros-son-posibles': 'Mercedes Baltazar',
   'viejos-mitos-nuevas-amenazas': 'Javier Wong Q',
+  'cartografias-del-desvio-6': 'Zoila Ochoa Garay',
+  'cartografias-del-desvio-mara': 'Mara Gourd-Mercado',
 }
 
 /** Ghost tag slug → tag on the platform (names in every language; used only for tags that do not exist yet). */
@@ -56,7 +58,7 @@ interface GhostPost {
   tags: { slug: string; name: string }[]
 }
 
-async function fetchAllGhostPosts(): Promise<GhostPost[]> {
+export async function fetchAllGhostPosts(): Promise<GhostPost[]> {
   const all: GhostPost[] = []
   for (let page = 1; ; page++) {
     const url = `${GHOST_URL}/ghost/api/content/posts/?key=${GHOST_API_KEY}&include=tags&formats=html&limit=15&page=${page}&filter=status:published`
@@ -85,9 +87,13 @@ const toSuperscript = (n: string) => n.replace(/\d/g, (d) => SUPERSCRIPT[Number(
 
 function cleanHref(raw: string): string {
   // Ghost tags every outgoing link with ?ref=untold.ink — drop that tracking parameter
-  return raw
-    .replace(/([?&])ref=untold\.ink(&|$)/, (_m, lead, tail) => (tail === '&' ? lead : ''))
-    .replace(/[?&]$/, '')
+  try {
+    const url = new URL(raw)
+    if (url.searchParams.get('ref') === 'untold.ink') url.searchParams.delete('ref')
+    return url.toString()
+  } catch {
+    return raw
+  }
 }
 
 const sameStyles = (a: Styles, b: Styles) => JSON.stringify(a) === JSON.stringify(b)
@@ -141,7 +147,7 @@ function inlineOf(node: Node, styles: Styles, inLink: boolean, out: Inline[]): v
   for (const child of Array.from(el.childNodes)) inlineOf(child, next, inLink, out)
 }
 
-function inlineChildren(el: Element): Inline[] {
+export function inlineChildren(el: Element): Inline[] {
   const out: Inline[] = []
   for (const child of Array.from(el.childNodes)) inlineOf(child, {}, false, out)
   // trim the block's edges (and the spaces around line breaks)
@@ -155,7 +161,7 @@ const plain = (items: Inline[]) =>
   items.map((i) => (i.type === 'text' ? i.text : i.content.map((c) => c.text).join(''))).join('')
 
 /** Caption text: plain, with hyperlinks written as [label](url) like the editor's photo credit field. */
-const captionOf = (items: Inline[]) =>
+export const captionOf = (items: Inline[]) =>
   items
     .map((i) => (i.type === 'text' ? i.text : `[${i.content.map((c) => c.text).join('').trim()}](${i.href})`))
     .join('')
@@ -165,10 +171,13 @@ const captionOf = (items: Inline[]) =>
 const block = (type: string, props: Record<string, unknown> = {}, content?: Inline[], children: Block[] = []): Block => ({
   id: randomUUID(),
   type,
+  // A quote has no text alignment: an unknown prop makes the reader crash
   props:
-    ['paragraph', 'heading', 'bulletListItem', 'numberedListItem', 'toggleListItem', 'quote'].includes(type)
-      ? { textColor: 'default', textAlignment: 'left', backgroundColor: 'default', ...props }
-      : props,
+    type === 'quote'
+      ? { textColor: 'default', backgroundColor: 'default', ...props }
+      : ['paragraph', 'heading', 'bulletListItem', 'numberedListItem', 'toggleListItem'].includes(type)
+        ? { textColor: 'default', textAlignment: 'left', backgroundColor: 'default', ...props }
+        : props,
   ...(content ? { content } : {}),
   children,
 })
@@ -225,7 +234,7 @@ function toggleBlock(card: Element): Block {
   return block('toggleListItem', {}, title, children)
 }
 
-function convert(parent: Element): Block[] {
+export function convert(parent: Element): Block[] {
   const out: Block[] = []
   const kids = Array.from(parent.children)
   for (let i = 0; i < kids.length; i++) {
@@ -357,7 +366,10 @@ async function main() {
   console.log(APPLY ? '▶ WRITING to the database' : '▶ DRY RUN (nothing is written; add --apply to write)')
   const { data: existing } = await (sb as any).from('content').select('slug')
   const have = new Set((existing ?? []).map((r: any) => r.slug))
-  const posts = (await fetchAllGhostPosts()).filter((p) => !have.has(p.slug)).sort((a, b) => a.published_at.localeCompare(b.published_at))
+  // INCLUDE=slug,slug previews posts that are already on the platform (dry run only — a real run would overwrite them)
+  const include = new Set((process.env.INCLUDE ?? '').split(',').filter(Boolean))
+  if (APPLY && include.size) throw new Error('INCLUDE can only be used in a dry run')
+  const posts = (await fetchAllGhostPosts()).filter((p) => !have.has(p.slug) || include.has(p.slug)).sort((a, b) => a.published_at.localeCompare(b.published_at))
   console.log(`Posts to import: ${posts.length}`)
   if (!posts.length) return
 
@@ -379,8 +391,17 @@ async function main() {
     while (blocks[blocks.length - 1]?.type === 'divider') blocks.pop() // nothing follows it
     const card = readAuthorCard(doc)
     const isInterview = /^cartografias-del-desvio/.test(post.slug)
-    const authorName = isInterview ? null : AUTHOR_BY_POST[post.slug]
-    if (!isInterview && !authorName) throw new Error(`No author mapped for ${post.slug}`)
+    const authorName = AUTHOR_BY_POST[post.slug]
+    if (!authorName) throw new Error(`No author mapped for ${post.slug} — add it to AUTHOR_BY_POST`)
+
+    // The cover photo's credit ("Foto de portada: …", at the end of the text in Ghost) goes under the cover, in the credit field
+    let coverCredit: string | null = null
+    const creditIdx = blocks.findIndex((b) => b.type === 'paragraph' && /^(foto|imagen) de portada|^portada:/i.test(plain(b.content ?? []).trim()))
+    if (creditIdx >= 0) {
+      coverCredit = captionOf(blocks[creditIdx].content ?? [])
+      blocks.splice(creditIdx, 1)
+      while (blocks[blocks.length - 1]?.type === 'divider') blocks.pop()
+    }
 
     // The interview series shares its intro line (the first paragraph of the earlier excerpt)
     const excerpt = isInterview ? ((seriesTr?.excerpt ?? '').split('\n')[0].trim() || null) : makeExcerpt(post, blocks)
@@ -388,10 +409,11 @@ async function main() {
     const notes = blocks.filter((b) => b.type === 'numberedListItem').length
     const markers = (JSON.stringify(blocks).match(/[⁰¹²³⁴⁵⁶⁷⁸⁹]+/g) ?? []).length
     const srcLen = squash(sourceText(root)).length
-    const outLen = squash(blocks.map(blockText).join('')).length
+    const outLen = squash(blocks.map(blockText).join('') + (coverCredit ?? '').replace(/\[([^\]]*)\]\([^)]*\)/g, '$1')).length
 
     console.log(`\n══ ${post.title}  [${post.slug}]  ${post.published_at.slice(0, 10)}`)
-    console.log(`   author: ${isInterview ? 'Untold Magazine (interview)' : authorName}${card.heading && !isInterview ? `  | card: "${card.heading}" cta: ${card.ctaLabel ?? '-'} ${card.ctaUrl ?? ''}` : ''}`)
+    console.log(`   author: ${authorName}  | card: "${card.heading}" cta: ${card.ctaLabel ?? '-'} ${card.ctaUrl ?? ''}`)
+    console.log(`   cover credit: ${coverCredit ?? '-'}`)
     console.log(`   tags: ${post.tags.map((t) => TAGS[t.slug]?.slug ?? `?${t.slug}`).join(', ')}`)
     console.log(`   excerpt: ${excerpt}`)
     console.log(`   blocks: ${blocks.length} | images: ${images.length} (captions: ${images.filter((b) => b.props.caption).length}) | footnote markers: ${markers} / notes: ${notes}`)
@@ -407,10 +429,9 @@ async function main() {
 
     // ── author profile ─────────────────────────────────────────────────────
     let authorId: string
-    if (isInterview) authorId = profileBySlug.get(MAGAZINE_PROFILE_SLUG)!
-    else {
-      const slug = slugify(authorName!)
-      let id = profileBySlug.get(slug) ?? profileBySlug.get(slug.replace(/-q$/, '')) ?? null
+    {
+      const slug = slugify(authorName)
+      let id = profileBySlug.get(slug) ?? null
       if (!id) {
         const email = `${slug}@${AUTHOR_EMAIL_DOMAIN}`
         let userId = userByEmail.get(email)
@@ -421,7 +442,8 @@ async function main() {
         }
         const { error } = await (sb as any).from('profiles').upsert({
           id: userId, slug, display_name: authorName, role: 'author',
-          avatar_url: card.imageUrl, bio: card.bio,
+          avatar_url: isExternalImage(card.imageUrl) ? await hostImage(card.imageUrl, 'avatar', userId) : card.imageUrl,
+          bio: card.bio,
           bio_cta_label: card.ctaLabel, bio_cta_url: card.ctaUrl,
           profile_translations: {
             _source_bio_html: card.bioHtml, _source_bio_heading: card.heading,
@@ -434,6 +456,13 @@ async function main() {
         console.log(`   ✓ profile created: ${authorName} [${slug}]`)
       } else console.log(`   · profile exists: ${authorName}`)
       authorId = id
+    }
+
+    // ── photos: copy them into the platform's own storage ───────────────────
+    const coverUrl = isExternalImage(post.feature_image) ? await hostImage(post.feature_image, 'cover', authorId) : post.feature_image
+    for (const b of blocks) {
+      const photos = (function find(list: Block[]): Block[] { return list.flatMap((x) => [...(x.type === 'image' ? [x] : []), ...find(x.children)]) })([b])
+      for (const img of photos) if (isExternalImage(img.props.url as string)) img.props.url = await hostImage(img.props.url as string, 'content', authorId)
     }
 
     // ── tags ───────────────────────────────────────────────────────────────
@@ -464,8 +493,10 @@ async function main() {
     const { data: content, error } = await (sb as any).from('content').upsert({
       author_id: authorId, type: 'article', slug: post.slug, source_locale: SOURCE_LOCALE, status: 'published',
       is_curated: true, is_featured: post.featured ?? false,
-      cover_image_url: post.feature_image ?? null,
-      image_credits: post.feature_image_caption ? captionOf(inlineChildren(new JSDOM(`<p>${post.feature_image_caption}</p>`).window.document.querySelector('p')!)) : post.feature_image_alt || null,
+      cover_image_url: coverUrl ?? null,
+      image_credits: post.feature_image_caption
+        ? captionOf(inlineChildren(new JSDOM(`<p>${post.feature_image_caption}</p>`).window.document.querySelector('p')!))
+        : coverCredit ?? (post.feature_image_alt || null),
       read_time_minutes: post.reading_time || null, published_at: post.published_at,
     }, { onConflict: 'slug' }).select('id').single()
     if (error) throw new Error(`content ${post.slug}: ${error.message}`)
@@ -483,4 +514,5 @@ async function main() {
   console.log('\nDone.')
 }
 
-main().catch((e) => { console.error(e); process.exit(1) })
+// Other scripts reuse the converter above; only run the import when this file is the one being executed
+if (require.main === module) main().catch((e) => { console.error(e); process.exit(1) })
