@@ -513,11 +513,11 @@ export function AuthorContentTabs({ items, authorName, authorSlug, authorAvatarU
 
   const allTabs: { id: Tab; label: string; count: number }[] = [
     { id: 'all', label: t('tabAll'), count: items.length },
-    { id: 'editorial', label: t('tabEditorials'), count: editorials.length },
     { id: 'article', label: t('tabArticles'), count: articles.length },
     { id: 'video', label: t('tabVideos'), count: videos.length },
     { id: 'podcast', label: t('tabPodcasts'), count: podcasts.length },
     { id: 'pill', label: t('tabPills'), count: pills.length },
+    { id: 'editorial', label: t('tabEditorials'), count: editorials.length },
   ]
   const tabs = allTabs.filter(tab => tab.id === 'all' || tab.count > 0)
 
@@ -557,22 +557,22 @@ export function AuthorContentTabs({ items, authorName, authorSlug, authorAvatarU
             </div>
           </section>
         )}
-        {restEditorials.length > 0 && (
-          <section>
-            <h2 className="text-[24px] leading-[1.3] text-foreground mb-5">{t('sectionEditorials')}</h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-              {restEditorials.map((item) => (
-                <EditorialTile key={item.id} item={item} t={t} />
-              ))}
-            </div>
-          </section>
-        )}
         {rest.length > 0 && (
           <section>
             {(starred.length > 0 || restEditorials.length > 0) && <h2 className="text-[24px] leading-[1.3] text-foreground mb-5">{starred.length === 0 && rest.every((i) => i.type === 'article') ? t('sectionArticles') : t('tabAll')}</h2>}
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
               {rest.map((item) => (
                 <ContentTile key={item.id} item={item} canManage={canManage} t={t} />
+              ))}
+            </div>
+          </section>
+        )}
+        {restEditorials.length > 0 && (
+          <section>
+            <h2 className="text-[24px] leading-[1.3] text-foreground mb-5">{t('sectionEditorials')}</h2>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+              {restEditorials.map((item) => (
+                <EditorialTile key={item.id} item={item} t={t} />
               ))}
             </div>
           </section>
@@ -633,18 +633,6 @@ export function AuthorContentTabs({ items, authorName, authorSlug, authorAvatarU
           </section>
         )}
 
-        {/* Editorials of numbered issues */}
-        {showEditorials && listedEditorials.length > 0 && (
-          <section>
-            <h2 className="text-[28px] leading-[1.3] text-foreground mb-6">{t('sectionEditorials')}</h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-              {listedEditorials.map(item => (
-                <EditorialTile key={item.id} item={item} t={t} />
-              ))}
-            </div>
-          </section>
-        )}
-
         {/* Articles */}
         {showArticles && articles.length > 0 && (
           <section>
@@ -693,6 +681,18 @@ export function AuthorContentTabs({ items, authorName, authorSlug, authorAvatarU
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
               {pills.map(item => (
                 <PillCard key={item.id} item={item} {...cardProps} />
+              ))}
+            </div>
+          </section>
+        )}
+
+        {/* Editorials of numbered issues */}
+        {showEditorials && listedEditorials.length > 0 && (
+          <section>
+            <h2 className="text-[28px] leading-[1.3] text-foreground mb-6">{t('sectionEditorials')}</h2>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+              {listedEditorials.map(item => (
+                <EditorialTile key={item.id} item={item} t={t} />
               ))}
             </div>
           </section>

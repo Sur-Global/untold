@@ -47,6 +47,21 @@ describe('AuthorContentTabs: editorials of an author who is an editor', () => {
     expect(within(cards[0]).getByRole('link', { name: /Leer el editorial/ })).toHaveAttribute('href', '/articles/editorial-2')
   })
 
+  it('puts the editorials last, after the articles and the other content, in the page and in the tab bar', () => {
+    const video = { ...base, id: 'v1', type: 'video', slug: 'video-1', title: 'Video 1' }
+    render(<AuthorContentTabs items={[...many, video]} {...props} />)
+    const headings = screen.getAllByRole('heading', { level: 2 }).map((h) => h.textContent)
+    expect(headings).toEqual(['Artículos', 'Videos', 'Editoriales'])
+    const tabs = screen.getAllByRole('button').map((b) => b.textContent)
+    expect(tabs[tabs.length - 1]).toBe('Editoriales (2)')
+  })
+
+  it('also puts them last for an author with little content', () => {
+    render(<AuthorContentTabs items={[editorial(1, 'Octubre de 2025', '2025-10-01'), article(1)]} {...props} />)
+    const headings = screen.getAllByRole('heading', { level: 2 }).map((h) => h.textContent)
+    expect(headings).toEqual(['Artículos', 'Editoriales'])
+  })
+
   it('does not list the editorials among the articles', () => {
     render(<AuthorContentTabs items={many} {...props} />)
     fireEvent.click(screen.getByRole('button', { name: 'Artículos (3)' }))
