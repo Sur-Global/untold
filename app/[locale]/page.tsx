@@ -9,6 +9,7 @@ import { LatestSection, type LatestEditorial, type LatestItem } from '@/componen
 import { bodyExcerpt, isRecent } from '@/lib/editorial'
 import { formatDate } from '@/lib/format-date'
 import { issueLabel, issuePath } from '@/lib/issues'
+import { loadIssueArticles, toIssueItems } from '@/lib/data/issue-articles'
 import { getTranslation } from '@/lib/content'
 import { triggerListingTranslations } from '@/lib/trigger-listing-translations'
 import { triggerTagTranslations } from '@/lib/trigger-tag-translations'
@@ -214,7 +215,7 @@ export default async function HomePage({ params }: PageProps) {
       ? (supabase as any)
           .from('issues')
           .select(`
-            number, issue_date,
+            id, number, issue_date,
             editorial:content!issues_editorial_id_fkey (
               id, slug, source_locale, single_language, published_at, status,
               profiles!author_id ( display_name, slug, avatar_url ),
@@ -233,9 +234,16 @@ export default async function HomePage({ params }: PageProps) {
   // an editorial chosen for a numbered issue wins; otherwise the latest article marked ✎
   const editorialRow = issueWithEditorial?.editorial ?? (editorialRows ?? [])[0] ?? null
   const heroIds = new Set((heroPicks ?? []).map((i: any) => i.id))
-  const latestArticles = (latestRows ?? [])
-    .filter((i: any) => !heroIds.has(i.id) && i.id !== editorialRow?.id)
-    .slice(0, platform.latestSection.count)
+  // With an editorial from a numbered issue, the list is that issue's own articles (the ones ticked in
+  // Admin → Issues). Otherwise (or while the issue has none) it is simply the newest articles.
+  const issueArticleRows = issueWithEditorial
+    ? (await loadIssueArticles(supabase, issueWithEditorial.id, editorialRow?.id)).slice(0, 6)
+    : []
+  const latestArticles = issueArticleRows.length > 0
+    ? issueArticleRows
+    : (latestRows ?? [])
+        .filter((i: any) => !heroIds.has(i.id) && i.id !== editorialRow?.id)
+        .slice(0, platform.latestSection.count)
 
   // Batch bookmark resolution
   const allItems = [
@@ -373,7 +381,9 @@ export default async function HomePage({ params }: PageProps) {
 
   // "Lo más reciente" section data
   const dateOf = (iso: string | null) => (iso ? formatDate(iso, locale, { day: 'numeric', month: 'short' }) : null)
-  const latestItems: LatestItem[] = latestArticles.map((item: any) => {
+  const latestItems: LatestItem[] = issueArticleRows.length > 0
+    ? toIssueItems(issueArticleRows, locale, (minutes) => tContentHome('readTime', { minutes }))
+    : latestArticles.map((item: any) => {
     const p = getItemProps(item)
     return {
       slug: p.slug,

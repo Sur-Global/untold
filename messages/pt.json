@@ -449,5 +449,15 @@
     "podcast": "{count, plural, one {# podcast} other {# podcasts}}",
     "pill": "{count, plural, one {# pílula} other {# pílulas}}",
     "course": "{count, plural, one {# curso} other {# cursos}}"
+  },
+  "issuePanel": {
+    "title": "Edição da revista",
+    "inIssue": "Este artigo está na edição de {month}.",
+    "isEditorial": "É o seu editorial.",
+    "editIssue": "Editar esta edição",
+    "notInIssue": "Se este texto é o editorial de uma edição, vincule-o aos artigos que lhe correspondem.",
+    "createIssue": "Criar uma edição com este editorial",
+    "addToIssue": "Adicionar a uma edição existente",
+    "publishFirst": "Publique o artigo primeiro; depois você poderá vinculá-lo a uma edição."
   }
 }

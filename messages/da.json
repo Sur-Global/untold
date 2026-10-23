@@ -449,5 +449,15 @@
     "podcast": "{count, plural, one {# podcast} other {# podcasts}}",
     "pill": "{count, plural, one {# videnspille} other {# videnspiller}}",
     "course": "{count, plural, one {# kursus} other {# kurser}}"
+  },
+  "issuePanel": {
+    "title": "Magasinets udgave",
+    "inIssue": "Denne artikel hører til udgaven {month}.",
+    "isEditorial": "Det er dens leder.",
+    "editIssue": "Rediger denne udgave",
+    "notInIssue": "Hvis denne tekst er lederen i en udgave, så knyt den til de artikler, der hører til.",
+    "createIssue": "Opret en udgave med denne leder",
+    "addToIssue": "Føj til en eksisterende udgave",
+    "publishFirst": "Udgiv artiklen først; derefter kan du knytte den til en udgave."
   }
 }

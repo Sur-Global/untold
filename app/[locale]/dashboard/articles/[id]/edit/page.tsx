@@ -13,6 +13,9 @@ import { Table, TableRow, TableCell, TableHeader } from '@tiptap/extension-table
 import { ImageWithCredit } from '@/lib/tiptap/image-with-credit'
 import { getEnabledLocales } from '@/lib/data/enabled-locales'
 import type { EditorBlock } from '@/components/editor/RichTextEditorLazy'
+import { getTranslations } from 'next-intl/server'
+import { IssuePanel } from '@/components/content/IssuePanel'
+import { issueLabel } from '@/lib/issues'
 
 interface PageProps {
   params: Promise<{ locale: string; id: string }>
@@ -41,7 +44,7 @@ function convertBodyToEditable(rawBody: unknown): { body: EditorBlock[] | null; 
 }
 
 export default async function EditArticlePage({ params }: PageProps) {
-  const { id } = await params
+  const { id, locale } = await params
   const { user, profile } = await requireCreator()
   const supabase = await createClient()
 
@@ -49,7 +52,8 @@ export default async function EditArticlePage({ params }: PageProps) {
   const articleQuery = (supabase as any)
     .from('content')
     .select(`
-      id, slug, author_id, status, source_locale, single_language, subtitle_locales, cover_image_url, image_credits, feature_requested_at, declaration_accepted_at,
+      id, slug, author_id, status, is_editorial, source_locale, single_language, subtitle_locales, cover_image_url, image_credits, feature_requested_at, declaration_accepted_at,
+      issue:issues!content_issue_id_fkey ( id, issue_date ),
       profiles!author_id ( display_name, bio ),
       content_translations ( title, excerpt, featured_summary, body, locale, is_auto_translated ),
       content_tags ( tag_id, tags ( id, slug, names ) )
@@ -96,9 +100,33 @@ export default async function EditArticlePage({ params }: PageProps) {
 
   const author = Array.isArray(article.profiles) ? article.profiles[0] : article.profiles
 
+  // Editors and administrators can link the article to a numbered issue (never plain creators)
+  const tIssuePanel = isAdmin ? await getTranslations({ locale, namespace: 'issuePanel' }) : null
+  const issue = Array.isArray(article.issue) ? article.issue[0] : article.issue
+
   return (
     <>
       <Navigation {...navProps} />
+      {tIssuePanel && (
+        <div className="mx-auto max-w-[900px] px-6 pt-8">
+          <IssuePanel
+            articleId={id}
+            published={article.status === 'published'}
+            issue={issue ? { id: issue.id, monthLabel: issueLabel(issue.issue_date, locale).toLowerCase() } : null}
+            isEditorial={!!article.is_editorial}
+            labels={{
+              title: tIssuePanel('title'),
+              inIssue: tIssuePanel('inIssue'),
+              isEditorial: tIssuePanel('isEditorial'),
+              editIssue: tIssuePanel('editIssue'),
+              notInIssue: tIssuePanel('notInIssue'),
+              createIssue: tIssuePanel('createIssue'),
+              addToIssue: tIssuePanel('addToIssue'),
+              publishFirst: tIssuePanel('publishFirst'),
+            }}
+          />
+        </div>
+      )}
       <EditArticleForm
         id={id}
         status={article.status}

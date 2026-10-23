@@ -20,9 +20,11 @@
 - Pendientes de configuración (Sender, Vercel, claves): ver `docs/pending-setup-steps.md`.
 
 ## Cómo crear un número (para el manual)
+Atajo: al editar el artículo que será el editorial (solo lo ven editores y administradores) hay un cuadro **«Número de la revista»** con el botón «Crear un número con este editorial», que abre el formulario con ese artículo ya elegido como editorial.
+
 1. Escribe el **editorial** como un artículo normal (Crear → Artículo), firmado por quien lo escribe, y publícalo.
 2. Publica o ubica los artículos del número como siempre.
 3. Admin → **Issues** → **New issue**. Elige el mes (los números se identifican solo por mes y año; hay uno por mes).
 4. En la lista, marca **Editorial** en el editorial y **In this issue** en cada artículo del número (se puede buscar por título o autor).
-5. Marca **Published** y pulsa **Save issue**. El homepage muestra el editorial del número más reciente.
+5. Marca **Published** y pulsa **Save issue**. El homepage muestra el editorial del número más reciente publicado y, a su lado, **los artículos de ese número** (los que marcaste en el paso 4). Un número en borrador (por ejemplo diciembre 2026, ya creado con «Nombrar lo borrado») no se ve en la web hasta que lo publiques.
 En la web cada número se muestra con el mes grande y el año pequeño (Septiembre 2026).
