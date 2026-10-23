@@ -197,7 +197,8 @@
     "slugHint": "Lowercase letters, numbers and hyphens only.",
     "bioLabel": "Bio",
     "bioPlaceholder": "A short description of who you are…",
-    "locationLabel": "Location",
+    "locationLabel": "Country where you live",
+    "locationHelp": "Shown on your profile and under your articles, in the reader’s language. It does not change the countries you are from.",
     "websiteLabel": "Website",
     "contactEmailLabel": "Contact Email",
     "contactEmailHint": "Shown to admins/editors only — not your login email, and not published on your public page.",
@@ -216,10 +217,10 @@
     "ctaLabel": "Button text",
     "ctaUrl": "Button link",
     "ctaHint": "Shown on your author page only. The text is translated automatically into the other languages.",
-    "countryLabel": "Country",
+    "countryLabel": "Country you are from",
     "countryNone": "— Not set",
-    "countryHelp": "If you have dual nationality, give both countries: you will show under each on the Creators page.",
-    "countrySecondLabel": "Second country (dual nationality, optional)"
+    "countryHelp": "If you have dual nationality, give both countries: you will show under each on the Creators page. It does not change the country where you live.",
+    "countrySecondLabel": "Second country you are from (dual nationality, optional)"
   },
   "translating": {
     "heading": "Translating into {language}",
@@ -348,7 +349,7 @@
     "authorPhotoLabel": "Photo",
     "authorBioLabel": "Biography",
     "authorBioPlaceholder": "A short description of who they are…",
-    "authorLocationLabel": "Location",
+    "authorLocationLabel": "Country where they live",
     "authorWebsiteLabel": "Website",
     "authorEmailLabel": "Contact email (admins/editors only)",
     "authorLinksLabel": "Social links",

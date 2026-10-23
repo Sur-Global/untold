@@ -7,6 +7,7 @@ import { getTranslation } from '@/lib/content'
 import { triggerListingTranslations } from '@/lib/trigger-listing-translations'
 import { formatDate } from '@/lib/format-date'
 import { issueLabel } from '@/lib/issues'
+import { locationName } from '@/lib/countries'
 import { editorialTexts } from '@/lib/data/issue-editorial'
 import { sanitizeBioHtml } from '@/lib/sanitize-bio-html'
 import { Navigation } from '@/components/layout/Navigation'
@@ -51,7 +52,7 @@ export default async function AuthorPage({ params }: PageProps) {
 
   const { data: author } = await (supabase as any)
     .from('profiles')
-    .select('id, display_name, slug, avatar_url, bio, profile_translations, location, website, followers_count, following_count, role, created_at, social_bluesky, social_linkedin, social_instagram, social_medium, social_custom_url, bio_cta_label, bio_cta_url')
+    .select('id, display_name, slug, avatar_url, bio, profile_translations, location_country, website, followers_count, following_count, role, created_at, social_bluesky, social_linkedin, social_instagram, social_medium, social_custom_url, bio_cta_label, bio_cta_url')
     .eq('slug', slug)
     .single()
 
@@ -178,6 +179,8 @@ export default async function AuthorPage({ params }: PageProps) {
     }
   }
 
+  // the country they live in, named in the reader's language
+  const authorLocation = locationName(author.location_country, locale)
   const joinedDate = formatDate(author.created_at, locale, { month: 'long', year: 'numeric' })
 
   return (
@@ -262,13 +265,13 @@ export default async function AuthorPage({ params }: PageProps) {
                 className="flex flex-wrap justify-center sm:justify-start items-center gap-x-4 gap-y-1 mb-4"
                 style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 12, color: 'rgba(255,255,255,0.45)' }}
               >
-                {author.location && (
+                {authorLocation && (
                   <span className="flex items-center gap-1">
                     <svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5">
                       <path d="M8 1.5a4.5 4.5 0 0 1 4.5 4.5c0 3-4.5 8.5-4.5 8.5S3.5 9 3.5 6A4.5 4.5 0 0 1 8 1.5z"/>
                       <circle cx="8" cy="6" r="1.5"/>
                     </svg>
-                    {author.location}
+                    {authorLocation}
                   </span>
                 )}
                 {author.website && (

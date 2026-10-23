@@ -25,6 +25,7 @@ import { ArticleRow } from '@/components/home/LatestSection'
 import { loadIssueArticles, toIssueItems } from '@/lib/data/issue-articles'
 import { triggerListingTranslations } from '@/lib/trigger-listing-translations'
 import { issueMonthLabel } from '@/lib/issues'
+import { locationName } from '@/lib/countries'
 
 interface PageProps {
   params: Promise<{ locale: string; slug: string }>
@@ -65,7 +66,7 @@ export default async function ArticlePage({ params }: PageProps) {
     .from('content')
     .select(`
       id, slug, likes_count, published_at, cover_image_url, image_credits, source_locale, single_language, subtitle_locales,
-      profiles!author_id ( id, display_name, slug, avatar_url, bio, profile_translations, location, followers_count, role, social_bluesky, social_linkedin, social_instagram, social_medium, social_custom_url ),
+      profiles!author_id ( id, display_name, slug, avatar_url, bio, profile_translations, location_country, followers_count, role, social_bluesky, social_linkedin, social_instagram, social_medium, social_custom_url ),
       content_translations ( title, excerpt, featured_summary, body, locale ),
       content_tags ( tags ( slug, names ) )
     `)
@@ -95,6 +96,7 @@ export default async function ArticlePage({ params }: PageProps) {
   const issueRows = editorialIssue ? await loadIssueArticles(supabase, editorialIssue.id, article.id) : []
 
   const author = article.profiles
+  const authorLocation = locationName(author?.location_country, locale)
   const tags = article.content_tags?.map((ct: any) => ct.tags) ?? []
 
   const sourceLocale: string = article.source_locale ?? 'en'
@@ -417,9 +419,9 @@ export default async function ArticlePage({ params }: PageProps) {
                       >
                         {author.display_name}
                       </h3>
-                      {author.location && (
+                      {authorLocation && (
                         <p style={{ fontSize: 13, color: '#6b7280', fontFamily: 'var(--font-aeonik), Aeonik, sans-serif', marginTop: 4 }}>
-                          {author.location}
+                          {authorLocation}
                         </p>
                       )}
                     </Link>

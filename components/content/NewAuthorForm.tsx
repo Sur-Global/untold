@@ -1,11 +1,12 @@
 'use client'
 
 import { useState, useTransition } from 'react'
-import { useTranslations } from 'next-intl'
+import { useLocale, useTranslations } from 'next-intl'
 import { BlockNoteSchema } from '@blocknote/core'
 import { useCreateBlockNote } from '@blocknote/react'
 import { withMultiColumn } from '@blocknote/xl-multi-column'
 import { createAuthor, type AuthorOption } from '@/lib/actions/author'
+import { countryOptions } from '@/lib/countries'
 import { CoverImageInput } from '@/components/ui/CoverImageInput'
 import { RichTextEditor, type EditorBlock } from '@/components/editor/RichTextEditorLazy'
 
@@ -27,13 +28,14 @@ interface Props {
  */
 export function NewAuthorForm({ onCreated, onCancel }: Props) {
   const t = useTranslations('editor')
+  const locale = useLocale()
   const [isPending, startTransition] = useTransition()
   const [error, setError] = useState<string | null>(null)
 
   const [name, setName] = useState('')
   const [avatarUrl, setAvatarUrl] = useState('')
   const [bioBlocks, setBioBlocks] = useState<EditorBlock[] | null>(null)
-  const [location, setLocation] = useState('')
+  const [locationCountry, setLocationCountry] = useState('')
   const [website, setWebsite] = useState('')
   const [email, setEmail] = useState('')
   const [bluesky, setBluesky] = useState('')
@@ -52,7 +54,7 @@ export function NewAuthorForm({ onCreated, onCancel }: Props) {
       try {
         const bioHtml = bioBlocks ? htmlConverter.blocksToHTMLLossy(bioBlocks as any) : ''
         const author = await createAuthor({
-          displayName: name, bioHtml, avatarUrl, location, website, email,
+          displayName: name, bioHtml, avatarUrl, locationCountry, website, email,
           bluesky, linkedin, instagram, medium, customUrl, ctaLabel, ctaUrl,
         })
         onCreated(author)
@@ -99,7 +101,15 @@ export function NewAuthorForm({ onCreated, onCancel }: Props) {
       </div>
 
       <div className="grid gap-3 sm:grid-cols-2">
-        {text(t('authorLocationLabel'), location, setLocation, 'City, Country')}
+        <div>
+          <label className={labelClass}>{t('authorLocationLabel')}</label>
+          <select value={locationCountry} onChange={(e) => setLocationCountry(e.target.value)} className={fieldClass}>
+            <option value="">—</option>
+            {countryOptions(locale).map((c) => (
+              <option key={c.code} value={c.code}>{c.name}</option>
+            ))}
+          </select>
+        </div>
         {text(t('authorWebsiteLabel'), website, setWebsite, 'https://…', 'url')}
       </div>
       {text(t('authorEmailLabel'), email, setEmail, 'name@example.com', 'email')}

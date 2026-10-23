@@ -10,6 +10,7 @@ import { slugify } from '@/lib/utils'
 import { logActivity } from '@/lib/actions/activity-log'
 import { sanitizeBioHtml } from '@/lib/sanitize-bio-html'
 import { urlOrNull, emailOrNull, linkOrMailtoOrNull } from '@/lib/profile-fields'
+import { normalizeCountry } from '@/lib/countries'
 
 export interface AuthorOption {
   id: string
@@ -48,7 +49,8 @@ export interface NewAuthorInput {
   displayName: string
   bioHtml?: string
   avatarUrl?: string
-  location?: string
+  /** ISO code of the country they live in */
+  locationCountry?: string
   website?: string
   email?: string
   bluesky?: string
@@ -70,7 +72,7 @@ export async function createAuthor(input: NewAuthorInput): Promise<AuthorOption>
   const details = {
     bio: bioRaw ? sanitizeBioHtml(bioRaw) : null,
     avatar_url: input.avatarUrl?.trim() || null,
-    location: input.location?.trim() || null,
+    location_country: normalizeCountry(input.locationCountry),
     website: urlOrNull(input.website, 'Website'),
     email: emailOrNull(input.email),
     social_bluesky: urlOrNull(input.bluesky, 'BlueSky link'),

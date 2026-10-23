@@ -23,7 +23,8 @@ interface EditProfileFormProps {
   initialDisplayName: string
   initialSlug: string
   initialBio: string
-  initialLocation: string
+  /** the country they live in (ISO code), shown on their profile — separate from the countries they are from */
+  initialLocationCountry?: string
   /** up to two country codes (dual nationality) */
   initialCountries?: string[]
   initialWebsite: string
@@ -49,7 +50,7 @@ export function EditProfileForm({
   initialDisplayName,
   initialSlug,
   initialBio,
-  initialLocation,
+  initialLocationCountry = '',
   initialCountries = [],
   initialWebsite,
   initialAvatarUrl,
@@ -73,7 +74,7 @@ export function EditProfileForm({
   const [displayName, setDisplayName] = useState(initialDisplayName)
   const [slug, setSlug] = useState(initialSlug)
   const [bioBlocks, setBioBlocks] = useState<EditorBlock[] | null>(null)
-  const [location, setLocation] = useState(initialLocation)
+  const [locationCountry, setLocationCountry] = useState(initialLocationCountry)
   const [country, setCountry] = useState(initialCountries[0] ?? '')
   const [country2, setCountry2] = useState(initialCountries[1] ?? '')
   const [website, setWebsite] = useState(initialWebsite)
@@ -106,7 +107,7 @@ export function EditProfileForm({
     fd.set('display_name', displayName)
     fd.set('slug', slug)
     fd.set('bio', bioHtml)
-    fd.set('location', location)
+    fd.set('location_country', locationCountry)
     for (const code of [country, country2]) if (code) fd.append('countries', code)
     fd.set('website', website)
     fd.set('avatar_url', avatarUrl)
@@ -189,19 +190,19 @@ export function EditProfileForm({
         />
       </div>
 
-      {/* Location */}
+      {/* Where they live: shown on the profile, in the reader's language. Independent of the countries below. */}
       <div>
-        <label htmlFor="location" className={labelClass}>{t('locationLabel')}</label>
-        <input
-          id="location"
-          className={fieldClass}
-          value={location}
-          onChange={(e) => setLocation(e.target.value)}
-          placeholder="City, Country"
-        />
+        <label htmlFor="location_country" className={labelClass}>{t('locationLabel')}</label>
+        <select id="location_country" className={fieldClass} value={locationCountry} onChange={(e) => setLocationCountry(e.target.value)}>
+          <option value="">{t('countryNone')}</option>
+          {countryOptions(locale).map((c) => (
+            <option key={c.code} value={c.code}>{c.name}</option>
+          ))}
+        </select>
+        <p className="mt-1 text-xs text-muted-foreground">{t('locationHelp')}</p>
       </div>
 
-      {/* Country (filter of the Creators page) */}
+      {/* Countries they are from (filter of the Creators page) */}
       <div>
         <label htmlFor="country" className={labelClass}>{t('countryLabel')}</label>
         <select id="country" className={fieldClass} value={country} onChange={(e) => setCountry(e.target.value)}>

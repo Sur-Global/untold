@@ -6,6 +6,7 @@ import { createClient } from '@/lib/supabase/server'
 import { getTranslation } from '@/lib/content'
 import { LanguageNotice } from '@/components/content/LanguageNotice'
 import { formatDate } from '@/lib/format-date'
+import { locationName } from '@/lib/countries'
 import { getNavProps } from '@/lib/nav'
 import { Navigation } from '@/components/layout/Navigation'
 import { Footer } from '@/components/layout/Footer'
@@ -58,7 +59,7 @@ export default async function VideoPage({ params }: PageProps) {
       .from('content')
       .select(`
         id, slug, source_locale, single_language, subtitle_locales, likes_count, published_at,
-        profiles!author_id ( id, display_name, slug, avatar_url, bio, profile_translations, location, social_bluesky, social_linkedin, social_instagram, social_medium, social_custom_url ),
+        profiles!author_id ( id, display_name, slug, avatar_url, bio, profile_translations, location_country, social_bluesky, social_linkedin, social_instagram, social_medium, social_custom_url ),
         content_translations ( title, body, description, locale ),
         content_tags ( tags ( slug, names ) ),
         video_meta ( embed_url, thumbnail_url, duration, chapters, chapter_translations, transcript, transcript_translations )
@@ -81,6 +82,7 @@ export default async function VideoPage({ params }: PageProps) {
   const meta = Array.isArray(video.video_meta) ? video.video_meta[0] : video.video_meta ?? {}
 
   const author = video.profiles
+  const authorLocation = locationName(author?.location_country, locale)
   const tags = (video.content_tags ?? []).map((ct: any) => ct.tags).filter(Boolean)
   const chapters: VideoChapter[] = Array.isArray(meta?.chapters) ? meta.chapters : []
   const chapterTranslations = meta?.chapter_translations as Record<string, VideoChapter[]> | null
@@ -220,8 +222,8 @@ export default async function VideoPage({ params }: PageProps) {
                   <p className="text-sm font-semibold text-foreground group-hover:text-primary transition-colors">
                     {author.display_name}
                   </p>
-                  {author.location && (
-                    <p className="text-xs text-muted-foreground">{author.location}</p>
+                  {authorLocation && (
+                    <p className="text-xs text-muted-foreground">{authorLocation}</p>
                   )}
                 </div>
               </Link>
@@ -308,9 +310,9 @@ export default async function VideoPage({ params }: PageProps) {
                 >
                   {author.display_name}
                 </h3>
-                {author.location && (
+                {authorLocation && (
                   <p style={{ fontSize: 13, color: '#6b7280', fontFamily: 'var(--font-aeonik), Aeonik, sans-serif', marginTop: 4 }}>
-                    {author.location}
+                    {authorLocation}
                   </p>
                 )}
               </Link>

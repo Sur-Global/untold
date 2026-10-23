@@ -197,7 +197,8 @@
     "slugHint": "Kun små bogstaver, tal og bindestreger.",
     "bioLabel": "Biografi",
     "bioPlaceholder": "En kort beskrivelse af, hvem du er…",
-    "locationLabel": "Sted",
+    "locationLabel": "Land, hvor du bor",
+    "locationHelp": "Vises på din profil og under dine artikler, på læserens sprog. Det ændrer ikke dine oprindelseslande.",
     "websiteLabel": "Hjemmeside",
     "contactEmailLabel": "Kontakt-e-mail",
     "contactEmailHint": "Kun synlig for admins og redaktører — ikke din login-e-mail og ikke offentliggjort på din offentlige side.",
@@ -216,10 +217,10 @@
     "ctaLabel": "Knaptekst",
     "ctaUrl": "Knaplink",
     "ctaHint": "Vises kun på din forfattersiden. Teksten oversættes automatisk til de andre sprog.",
-    "countryLabel": "Land",
+    "countryLabel": "Oprindelsesland",
     "countryNone": "— Ikke angivet",
-    "countryHelp": "Hvis du har dobbelt statsborgerskab, angiv begge lande: Du vises under begge på siden Skabere.",
-    "countrySecondLabel": "Andet land (dobbelt statsborgerskab, valgfrit)"
+    "countryHelp": "Hvis du har dobbelt statsborgerskab, angiv begge lande: Du vises under begge på siden Skabere. Det ændrer ikke det land, hvor du bor.",
+    "countrySecondLabel": "Andet oprindelsesland (dobbelt statsborgerskab, valgfrit)"
   },
   "translating": {
     "heading": "Oversætter til {language}",
@@ -348,7 +349,7 @@
     "authorPhotoLabel": "Foto",
     "authorBioLabel": "Biografi",
     "authorBioPlaceholder": "En kort beskrivelse af, hvem de er…",
-    "authorLocationLabel": "Sted",
+    "authorLocationLabel": "Land, hvor personen bor",
     "authorWebsiteLabel": "Hjemmeside",
     "authorEmailLabel": "Kontakt-e-mail (kun admins/redaktører)",
     "authorLinksLabel": "Sociale medier",

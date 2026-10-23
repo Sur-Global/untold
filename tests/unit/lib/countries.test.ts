@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { COUNTRY_CODES, countryName, countryOptions, normalizeCountries, normalizeCountry } from '@/lib/countries'
+import { COUNTRY_CODES, countryName, countryOptions, locationName, normalizeCountries, normalizeCountry } from '@/lib/countries'
 
 describe('countries', () => {
   it('accepts a country code in any capitalisation, and nothing else', () => {
@@ -28,5 +28,13 @@ describe('countries', () => {
     expect(normalizeCountries(['PE', 'pe', 'XX', '', 'DE', 'ES', 'FR'])).toEqual(['PE', 'DE', 'ES'])
     expect(normalizeCountries('PE')).toEqual([])
     expect(normalizeCountries(null)).toEqual([])
+  })
+  it('names the country where a creator lives in the reader’s language, and nothing when it is not set', () => {
+    expect(locationName('DE', 'es')).toBe('Alemania')
+    expect(locationName('DE', 'en')).toBe('Germany')
+    expect(locationName('de', 'fr')).toBe('Allemagne')
+    expect(locationName('', 'es')).toBeNull()
+    expect(locationName(null, 'es')).toBeNull()
+    expect(locationName('Barcelona', 'es')).toBeNull()
   })
 })

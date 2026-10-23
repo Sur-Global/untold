@@ -33,6 +33,12 @@ export function countryName(code: string, locale: string): string {
   }
 }
 
+/** The country a creator lives in, in the reader's language; null when they have not set one */
+export function locationName(code: unknown, locale: string): string | null {
+  const country = normalizeCountry(code)
+  return country ? countryName(country, locale) : null
+}
+
 /** All countries, alphabetical in the reader's language (for a select) */
 export function countryOptions(locale: string): { code: string; name: string }[] {
   const collator = new Intl.Collator(locale)

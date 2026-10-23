@@ -7,7 +7,7 @@ import { sanitizeBioHtml } from '@/lib/sanitize-bio-html'
 import { logActivity } from '@/lib/actions/activity-log'
 import { urlOrNull, emailOrNull, linkOrMailtoOrNull } from '@/lib/profile-fields'
 import { assertUploadedAvatar } from '@/lib/avatar-url'
-import { normalizeCountries } from '@/lib/countries'
+import { normalizeCountries, normalizeCountry } from '@/lib/countries'
 
 export async function updateProfile(userId: string, formData: FormData) {
   const supabase = await createClient()
@@ -28,7 +28,8 @@ export async function updateProfile(userId: string, formData: FormData) {
   // called directly, bypassing the client editor.
   const bioRaw = (formData.get('bio') as string)?.trim() || null
   const bio = bioRaw ? sanitizeBioHtml(bioRaw) : null
-  const location = (formData.get('location') as string)?.trim() || null
+  // where they live (one country) and the countries they are from (one or two) are saved apart: neither changes the other
+  const location_country = normalizeCountry(formData.get('location_country'))
   const countries = normalizeCountries(formData.getAll('countries'))
   const website = urlOrNull(formData.get('website') as string | null, 'Website')
   const avatar_url = (formData.get('avatar_url') as string)?.trim() || null
@@ -77,7 +78,7 @@ export async function updateProfile(userId: string, formData: FormData) {
     .update({
       ...(profile_translations ? { profile_translations } : {}),
       bio_cta_label, bio_cta_url,
-      display_name, slug, bio, location, countries, website, avatar_url,
+      display_name, slug, bio, location_country, countries, website, avatar_url,
       email, social_bluesky, social_linkedin, social_instagram, social_medium, social_custom_url,
     })
     .eq('id', userId)
