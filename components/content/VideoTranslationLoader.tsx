@@ -35,10 +35,11 @@ const MAX_ATTEMPTS = 10
 const POLL_INTERVAL_MS = 4000
 
 function TranslatingBadge() {
+  const t = useTranslations('content')
   return (
     <div className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-primary/10 border border-primary/20 text-primary text-[11px] font-['JetBrains_Mono',monospace] w-fit">
       <span className="w-3 h-3 rounded-full border border-primary border-t-transparent animate-spin" />
-      Translating
+      {t('translatingShort')}
     </div>
   )
 }
@@ -156,7 +157,7 @@ export function VideoTranslationLoader({
       {chapters.length > 0 && (
         <div className="bg-card border border-primary/20 rounded-2xl p-6 mb-4">
           <div className="flex items-center justify-between mb-4">
-            <h3 className="font-heading text-2xl text-foreground">Chapters</h3>
+            <h3 className="font-heading text-2xl text-foreground">{t('chapters')}</h3>
             {needsChapters && !translatedChapters && <TranslatingBadge />}
           </div>
           <div className="flex flex-col gap-1">
@@ -189,7 +190,7 @@ export function VideoTranslationLoader({
           {needsTranscript && !translatedTranscript && (
             <div className="absolute top-[10px] right-[10px] z-10 flex items-center gap-1.5 px-3 py-1 rounded-full bg-primary/10 border border-primary/20 text-primary text-[11px] font-['JetBrains_Mono',monospace]">
               <span className="w-3 h-3 rounded-full border border-primary border-t-transparent animate-spin" />
-              Translating
+              {t('translatingShort')}
             </div>
           )}
           <TranscriptPanel transcript={displayTranscript ?? transcript} />

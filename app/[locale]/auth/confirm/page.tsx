@@ -8,7 +8,7 @@ export default async function ConfirmPage() {
       <div>
         <h1 className="text-3xl mb-4">UNTOLD</h1>
         <p className="text-muted-foreground">{t('confirmEmail')}</p>
-        <Link href="/" className="text-[#A0522D] hover:underline mt-4 inline-block">Back to home</Link>
+        <Link href="/" className="text-[#A0522D] hover:underline mt-4 inline-block">{t('backHome')}</Link>
       </div>
     </main>
   )

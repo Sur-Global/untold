@@ -2,6 +2,7 @@
 
 import { useState, useTransition } from 'react'
 import { toggleBookmark } from '@/lib/actions/social'
+import { useTranslations } from 'next-intl'
 
 interface BookmarkButtonProps {
   contentId: string
@@ -11,6 +12,7 @@ interface BookmarkButtonProps {
 }
 
 export function BookmarkButton({ contentId, initialIsBookmarked, isLoggedIn, className }: BookmarkButtonProps) {
+  const t = useTranslations('content')
   const [isBookmarked, setIsBookmarked] = useState(initialIsBookmarked)
   const [isPending, startTransition] = useTransition()
 
@@ -23,7 +25,7 @@ export function BookmarkButton({ contentId, initialIsBookmarked, isLoggedIn, cla
     <button
       onClick={handleClick}
       disabled={isPending || !isLoggedIn}
-      title={isLoggedIn ? (isBookmarked ? 'Remove bookmark' : 'Bookmark') : 'Sign in to bookmark'}
+      title={isLoggedIn ? (isBookmarked ? t('removeBookmark') : t('bookmark')) : t('signInToBookmark')}
       className={className ?? "flex items-center gap-1.5 text-sm font-mono text-muted-foreground hover:text-primary transition-colors disabled:opacity-50 disabled:cursor-not-allowed"}
     >
       <svg width="16" height="16" viewBox="0 0 16 16" fill={isBookmarked ? 'currentColor' : 'none'} stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden>

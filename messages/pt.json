@@ -17,7 +17,8 @@
     "home": "Início",
     "explore": "Explorar",
     "creators": "Criadores",
-    "issues": "Edições"
+    "issues": "Edições",
+    "openMenu": "Abrir o menu"
   },
   "home": {
     "title": "UNTOLD",
@@ -50,7 +51,9 @@
     "latestTitle": "Mais recentes",
     "latestEditorial": "Editorial",
     "latestReadMore": "Ler mais",
-    "latestNew": "Novo"
+    "latestNew": "Novo",
+    "placeholderTag": "Design de futuros",
+    "placeholderTitle": "Tecnologia decolonial: desenhando novos futuros"
   },
   "listings": {
     "videosDesc": "Assista a vídeos de jornalistas e criadores de todo o Sul Global.",
@@ -67,7 +70,15 @@
     "noResults": "Nenhum artigo corresponde à sua pesquisa.",
     "readMoreBy": "Ler mais de {name}",
     "tagCloudLabel": "Explore por tema",
-    "tagCloudAll": "Todos"
+    "tagCloudAll": "Todos",
+    "previous": "← Anterior",
+    "next": "Próxima →",
+    "pageOf": "Página {page} de {total}",
+    "noVideos": "Ainda não há vídeos.",
+    "noPodcasts": "Ainda não há podcasts.",
+    "noPills": "Ainda não há pílulas de conhecimento.",
+    "noCourses": "Ainda não há cursos.",
+    "articlesCount": "{count, plural, one {# artigo} other {# artigos}}"
   },
   "auth": {
     "loginTitle": "Bem-vindo de volta",
@@ -85,7 +96,8 @@
     "slugHint": "Sua URL pública: untold.ink/@{slug}",
     "saveProfile": "Salvar e continuar",
     "continueWith": "Continuar com {provider}",
-    "orDivider": "ou"
+    "orDivider": "ou",
+    "backHome": "Voltar ao início"
   },
   "errors": {
     "required": "Este campo é obrigatório",
@@ -115,7 +127,22 @@
     "edit": "Editar",
     "aboutName": "Sobre {name}",
     "comingSoon": "Em breve",
-    "description": "Descrição"
+    "description": "Descrição",
+    "knowledgePill": "Pílula de conhecimento",
+    "enrollSoonTitle": "A inscrição estará disponível em breve",
+    "enrollSoon": "Inscrever-me — Em breve",
+    "courseStudents": "Alunos",
+    "instructor": "Docente",
+    "openOn": "Abrir no {platform} ↗",
+    "viewFullTranscript": "Ver a transcrição completa",
+    "translatingShort": "Traduzindo",
+    "chapters": "Capítulos",
+    "signInToLike": "Entre para curtir",
+    "signInToBookmark": "Entre para salvar nos favoritos",
+    "signInToFollow": "Entre para seguir",
+    "bookmark": "Salvar nos favoritos",
+    "removeBookmark": "Remover dos favoritos",
+    "featured": "Destaque"
   },
   "search": {
     "placeholder": "Pesquisar artigos, vídeos, podcasts...",
@@ -131,7 +158,8 @@
   },
   "tag": {
     "heading": "#{tag}",
-    "contentCount": "{count} conteúdos"
+    "contentCount": "{count, plural, one {# conteúdo} other {# conteúdos}}",
+    "noContent": "Ainda não há conteúdo com esta etiqueta."
   },
   "create": {
     "pickType": "O que você está criando?",
@@ -507,5 +535,9 @@
     "createIssue": "Criar uma edição com este editorial",
     "addToIssue": "Adicionar a uma edição existente",
     "publishFirst": "Publique o artigo primeiro; depois você poderá vinculá-lo a uma edição."
+  },
+  "suspended": {
+    "title": "Conta suspensa",
+    "text": "Sua conta foi suspensa. Se você acha que é um engano, entre em contato."
   }
 }

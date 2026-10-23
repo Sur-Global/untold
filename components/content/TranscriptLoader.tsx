@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { TranscriptPanel } from './TranscriptPanel'
 import type { TranscriptCue } from '@/lib/transcript'
+import { useTranslations } from 'next-intl'
 
 interface TranscriptLoaderProps {
   transcript: TranscriptCue[]
@@ -15,6 +16,7 @@ const MAX_ATTEMPTS = 10
 const POLL_INTERVAL_MS = 4000
 
 export function TranscriptLoader({ transcript, isTranslating, contentId, locale }: TranscriptLoaderProps) {
+  const tContent = useTranslations('content')
   const [displayTranscript, setDisplayTranscript] = useState<TranscriptCue[]>(transcript)
   const [translating, setTranslating] = useState(isTranslating)
   const attemptsRef = useRef(0)
@@ -54,7 +56,7 @@ export function TranscriptLoader({ transcript, isTranslating, contentId, locale 
       {translating && (
         <div className="absolute top-[10px] right-[10px] z-10 flex items-center gap-1.5 px-3 py-1 rounded-full bg-primary/10 border border-primary/20 text-primary text-[11px] font-['JetBrains_Mono',monospace]">
           <span className="w-3 h-3 rounded-full border border-primary border-t-transparent animate-spin" />
-          Translating
+          {tContent('translatingShort')}
         </div>
       )}
       <TranscriptPanel transcript={displayTranscript} />

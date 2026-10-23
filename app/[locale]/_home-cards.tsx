@@ -1,5 +1,6 @@
 'use client'
 import { useState } from 'react'
+import { useTranslations } from 'next-intl'
 import { Link, useRouter } from '@/i18n/navigation'
 import { BookmarkButton } from '@/components/social/BookmarkButton'
 
@@ -125,6 +126,7 @@ export function LargeArticleCard({
   likesCount,
   isFeatured,
 }: LargeArticleCardProps) {
+  const tHome = useTranslations('home')
   const router = useRouter()
   return (
     <Link
@@ -155,7 +157,7 @@ export function LargeArticleCard({
                 fontSize: 11,
               }}
             >
-              ★ FEATURED
+              ★ {tHome('featuredBadge')}
             </span>
           )}
           {categoryTag && (
@@ -468,6 +470,7 @@ export function PodcastCard({
   authorSlug,
   authorAvatarUrl,
 }: PodcastCardProps) {
+  const tContent = useTranslations('content')
   return (
     <div
       className="flex flex-col rounded-2xl overflow-hidden"
@@ -505,7 +508,7 @@ export function PodcastCard({
               className="text-xs"
               style={{ color: '#666', fontFamily: 'var(--font-aeonik), Aeonik, sans-serif' }}
             >
-              Episode {episodeNumber}
+              {tContent('episode')} {episodeNumber}
             </p>
           )}
           <h3
@@ -592,6 +595,7 @@ export function HomePillCard({
   isBookmarked = false,
   isLoggedIn = false,
 }: HomePillCardProps) {
+  const tShare = useTranslations('share')
   const tagBg = accentColor ? `${accentColor}1a` : 'rgba(107,142,35,0.12)'
   const tagColor = accentColor ?? '#6B8E23'
   const tagBorder = accentColor ? `${accentColor}33` : 'rgba(107,142,35,0.25)'
@@ -665,8 +669,8 @@ export function HomePillCard({
             <button
               className="flex items-center justify-center rounded-lg transition-colors hover:bg-[#d4a574]/20"
               style={{ width: 28, height: 28, color: '#666', background: 'none', border: 'none', cursor: 'pointer' }}
-              aria-label="Share"
-              title="Share"
+              aria-label={tShare('button')}
+              title={tShare('button')}
             >
               <ShareIcon />
             </button>
@@ -754,6 +758,7 @@ export function CourseCard({
   authorAvatarUrl,
   viewProfileLabel,
 }: CourseCardProps) {
+  const tAuthor = useTranslations('author')
   const priceLabel =
     price == null
       ? null
@@ -888,7 +893,7 @@ export function CourseCard({
                     textDecoration: 'none',
                   }}
                 >
-                  {viewProfileLabel ?? 'View profile'}
+                  {viewProfileLabel ?? tAuthor('viewProfile')}
                 </Link>
               )}
             </div>

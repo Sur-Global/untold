@@ -2,6 +2,7 @@
 
 import { useState, useTransition } from 'react'
 import { toggleFollow } from '@/lib/actions/social'
+import { useTranslations } from 'next-intl'
 
 interface FollowButtonProps {
   profileId: string
@@ -10,6 +11,7 @@ interface FollowButtonProps {
 }
 
 export function FollowButton({ profileId, initialIsFollowing, isLoggedIn }: FollowButtonProps) {
+  const t = useTranslations('content')
   const [isFollowing, setIsFollowing] = useState(initialIsFollowing)
   const [isPending, startTransition] = useTransition()
 
@@ -22,7 +24,7 @@ export function FollowButton({ profileId, initialIsFollowing, isLoggedIn }: Foll
     <button
       onClick={handleClick}
       disabled={isPending || !isLoggedIn}
-      title={isLoggedIn ? undefined : 'Sign in to follow'}
+      title={isLoggedIn ? undefined : t('signInToFollow')}
       className="px-4 py-1.5 rounded-full text-sm font-mono font-semibold transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
       style={
         isFollowing

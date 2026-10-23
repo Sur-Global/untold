@@ -1,5 +1,6 @@
 'use client'
 import { getEmbedUrl, getPlatformLabel } from '@/lib/embed'
+import { useTranslations } from 'next-intl'
 
 interface EmbedPlayerProps {
   url: string
@@ -8,6 +9,7 @@ interface EmbedPlayerProps {
 }
 
 export function EmbedPlayer({ url, title, aspectRatio = '16/9' }: EmbedPlayerProps) {
+  const t = useTranslations('content')
   const embedUrl = getEmbedUrl(url)
   const platform = getPlatformLabel(url)
 
@@ -15,7 +17,7 @@ export function EmbedPlayer({ url, title, aspectRatio = '16/9' }: EmbedPlayerPro
     return (
       <div className="rounded-lg p-4 text-sm text-[#6B5F58]" style={{ background: 'rgba(44,36,32,0.04)', border: '1px solid rgba(139,69,19,0.12)' }}>
         <a href={url} target="_blank" rel="noopener noreferrer" className="text-[#A0522D] hover:underline">
-          Open on {platform} ↗
+          {t('openOn', { platform })}
         </a>
       </div>
     )

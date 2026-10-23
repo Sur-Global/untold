@@ -8,6 +8,8 @@ vi.mock('@/lib/actions/social', () => ({
 
 import { BookmarkButton } from '@/components/social/BookmarkButton'
 
+vi.mock('next-intl', () => ({ useTranslations: () => (key: string) => key }))
+
 describe('BookmarkButton', () => {
   it('renders a button', () => {
     render(

@@ -634,12 +634,12 @@ export default async function HomePage({ params }: PageProps) {
                     </div>
                     <div style={{ position: 'absolute', top: 16, right: 16 }}>
                       <span style={{ background: 'rgba(255,255,255,0.15)', backdropFilter: 'blur(8px)', WebkitBackdropFilter: 'blur(8px)', color: '#fff', fontSize: 11, padding: '4px 10px', borderRadius: 100, fontFamily: 'var(--font-aeonik), Aeonik, sans-serif' }}>
-                        Futures Design
+                        {t('placeholderTag')}
                       </span>
                     </div>
                     <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, padding: '16px 20px 22px' }}>
                       <h3 style={{ fontFamily: 'var(--font-aeonik), Aeonik, sans-serif', fontWeight: 500, fontSize: 18, color: '#fff', lineHeight: 1.3, margin: 0 }}>
-                        Decolonial technology: designing new futures
+                        {t('placeholderTitle')}
                       </h3>
                     </div>
                   </div>

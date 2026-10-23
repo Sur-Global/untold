@@ -17,7 +17,8 @@
     "home": "Home",
     "explore": "Explore",
     "creators": "Creators",
-    "issues": "Issues"
+    "issues": "Issues",
+    "openMenu": "Open menu"
   },
   "home": {
     "title": "UNTOLD",
@@ -50,7 +51,9 @@
     "latestTitle": "Latest",
     "latestEditorial": "Editorial",
     "latestReadMore": "Read more",
-    "latestNew": "New"
+    "latestNew": "New",
+    "placeholderTag": "Futures design",
+    "placeholderTitle": "Decolonial technology: designing new futures"
   },
   "listings": {
     "articlesDesc": "In-depth analysis, research and reflections on responsible technology, accessibility and decolonial thinking.",
@@ -67,7 +70,15 @@
     "noResults": "No articles match your search.",
     "readMoreBy": "Read more by {name}",
     "tagCloudLabel": "Browse by topic",
-    "tagCloudAll": "All"
+    "tagCloudAll": "All",
+    "previous": "← Previous",
+    "next": "Next →",
+    "pageOf": "Page {page} of {total}",
+    "noVideos": "No videos yet.",
+    "noPodcasts": "No podcasts yet.",
+    "noPills": "No knowledge pills yet.",
+    "noCourses": "No courses yet.",
+    "articlesCount": "{count, plural, one {# article} other {# articles}}"
   },
   "auth": {
     "loginTitle": "Welcome back",
@@ -85,7 +96,8 @@
     "slugHint": "Your public URL: untold.ink/@{slug}",
     "saveProfile": "Save and continue",
     "continueWith": "Continue with {provider}",
-    "orDivider": "or"
+    "orDivider": "or",
+    "backHome": "Back to home"
   },
   "errors": {
     "required": "This field is required",
@@ -115,7 +127,22 @@
     "edit": "Edit",
     "aboutName": "About {name}",
     "comingSoon": "Coming soon",
-    "description": "Description"
+    "description": "Description",
+    "knowledgePill": "Knowledge pill",
+    "enrollSoonTitle": "Enrollment coming soon",
+    "enrollSoon": "Enroll now — Coming soon",
+    "courseStudents": "Students",
+    "instructor": "Instructor",
+    "openOn": "Open on {platform} ↗",
+    "viewFullTranscript": "View full transcript",
+    "translatingShort": "Translating",
+    "chapters": "Chapters",
+    "signInToLike": "Sign in to like",
+    "signInToBookmark": "Sign in to bookmark",
+    "signInToFollow": "Sign in to follow",
+    "bookmark": "Bookmark",
+    "removeBookmark": "Remove bookmark",
+    "featured": "Featured"
   },
   "search": {
     "placeholder": "Search articles, videos, podcasts...",
@@ -131,7 +158,8 @@
   },
   "tag": {
     "heading": "#{tag}",
-    "contentCount": "{count} pieces of content"
+    "contentCount": "{count, plural, one {# piece of content} other {# pieces of content}}",
+    "noContent": "No content for this tag yet."
   },
   "create": {
     "pickType": "What are you creating?",
@@ -507,5 +535,9 @@
     "createIssue": "Create an issue with this editorial",
     "addToIssue": "Add to an existing issue",
     "publishFirst": "Publish the article first; then you can link it to an issue."
+  },
+  "suspended": {
+    "title": "Account suspended",
+    "text": "Your account has been suspended. If you believe this is a mistake, please contact us."
   }
 }

@@ -1,4 +1,5 @@
 import { notFound } from 'next/navigation'
+import { getTranslations } from 'next-intl/server'
 import { createClient } from '@/lib/supabase/server'
 import { getNavProps } from '@/lib/nav'
 import { getTranslation } from '@/lib/content'
@@ -13,6 +14,7 @@ interface PageProps {
 export default async function TagPage({ params }: PageProps) {
   const { locale, slug } = await params
   const supabase = await createClient()
+  const tTag = await getTranslations('tag')
 
   const tagPromise = (supabase as any)
     .from('tags')
@@ -70,7 +72,7 @@ export default async function TagPage({ params }: PageProps) {
       <main className="max-w-7xl mx-auto px-4 sm:px-6 py-16">
         <div className="mb-12">
           <h1 className="mb-2">#{tagLabel}</h1>
-          <p className="text-[#6B5F58] font-mono">{published.length} pieces of content</p>
+          <p className="text-[#6B5F58] font-mono">{tTag('contentCount', { count: published.length })}</p>
         </div>
 
         {published.length > 0 ? (
@@ -108,7 +110,7 @@ export default async function TagPage({ params }: PageProps) {
             })}
           </div>
         ) : (
-          <p className="text-center py-20 text-[#6B5F58]">No content for this tag yet.</p>
+          <p className="text-center py-20 text-[#6B5F58]">{tTag('noContent')}</p>
         )}
       </main>
       <Footer />

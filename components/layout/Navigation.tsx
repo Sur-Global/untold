@@ -370,7 +370,7 @@ export function Navigation({
             <SheetTrigger
               className="inline-flex items-center justify-center rounded-lg p-1.5 transition-colors hover:bg-white/10"
               style={{ color: '#FFFFFF' }}
-              aria-label="Open menu"
+              aria-label={t('openMenu')}
             >
               <Menu className="h-5 w-5" />
             </SheetTrigger>

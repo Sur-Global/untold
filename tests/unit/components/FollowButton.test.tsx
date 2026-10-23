@@ -7,6 +7,8 @@ vi.mock('@/lib/actions/social', () => ({
 
 import { FollowButton } from '@/components/social/FollowButton'
 
+vi.mock('next-intl', () => ({ useTranslations: () => (key: string) => key }))
+
 describe('FollowButton', () => {
   it('renders Follow when not following', () => {
     render(

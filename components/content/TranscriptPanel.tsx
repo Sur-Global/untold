@@ -2,12 +2,14 @@
 
 import { useState } from 'react'
 import type { TranscriptCue } from '@/lib/transcript'
+import { useTranslations } from 'next-intl'
 
 interface TranscriptPanelProps {
   transcript: TranscriptCue[]
 }
 
 export function TranscriptPanel({ transcript }: TranscriptPanelProps) {
+  const t = useTranslations('content')
   const [open, setOpen] = useState(false)
 
   return (
@@ -22,7 +24,7 @@ export function TranscriptPanel({ transcript }: TranscriptPanelProps) {
           className="font-medium text-sm tracking-[0.28px] text-foreground"
           style={{ fontFamily: "'JetBrains Mono', monospace" }}
         >
-          View full transcript
+          {t('viewFullTranscript')}
         </span>
         <svg
           width="20"

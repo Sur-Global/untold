@@ -17,7 +17,8 @@
     "home": "Forside",
     "explore": "Udforsk",
     "creators": "Skabere",
-    "issues": "Udgaver"
+    "issues": "Udgaver",
+    "openMenu": "Åbn menuen"
   },
   "home": {
     "title": "UNTOLD",
@@ -50,7 +51,9 @@
     "latestTitle": "Seneste",
     "latestEditorial": "Leder",
     "latestReadMore": "Læs mere",
-    "latestNew": "Nyt"
+    "latestNew": "Nyt",
+    "placeholderTag": "Fremtidsdesign",
+    "placeholderTitle": "Dekolonial teknologi: at designe nye fremtider"
   },
   "listings": {
     "videosDesc": "Se videoer fra journalister og skabere fra hele det Globale Syd.",
@@ -67,7 +70,15 @@
     "noResults": "Ingen artikler matcher din søgning.",
     "readMoreBy": "Læs mere af {name}",
     "tagCloudLabel": "Udforsk efter emne",
-    "tagCloudAll": "Alle"
+    "tagCloudAll": "Alle",
+    "previous": "← Forrige",
+    "next": "Næste →",
+    "pageOf": "Side {page} af {total}",
+    "noVideos": "Ingen videoer endnu.",
+    "noPodcasts": "Ingen podcasts endnu.",
+    "noPills": "Ingen videnspiller endnu.",
+    "noCourses": "Ingen kurser endnu.",
+    "articlesCount": "{count, plural, one {# artikel} other {# artikler}}"
   },
   "auth": {
     "loginTitle": "Velkommen tilbage",
@@ -85,7 +96,8 @@
     "slugHint": "Din offentlige URL: untold.ink/@{slug}",
     "saveProfile": "Gem og fortsæt",
     "continueWith": "Fortsæt med {provider}",
-    "orDivider": "eller"
+    "orDivider": "eller",
+    "backHome": "Tilbage til forsiden"
   },
   "errors": {
     "required": "Dette felt er påkrævet",
@@ -115,7 +127,22 @@
     "edit": "Rediger",
     "aboutName": "Om {name}",
     "comingSoon": "Kommer snart",
-    "description": "Beskrivelse"
+    "description": "Beskrivelse",
+    "knowledgePill": "Videnspille",
+    "enrollSoonTitle": "Tilmelding åbner snart",
+    "enrollSoon": "Tilmeld dig nu — Kommer snart",
+    "courseStudents": "Deltagere",
+    "instructor": "Underviser",
+    "openOn": "Åbn på {platform} ↗",
+    "viewFullTranscript": "Se hele transskriptionen",
+    "translatingShort": "Oversætter",
+    "chapters": "Kapitler",
+    "signInToLike": "Log ind for at synes godt om",
+    "signInToBookmark": "Log ind for at gemme",
+    "signInToFollow": "Log ind for at følge",
+    "bookmark": "Gem",
+    "removeBookmark": "Fjern fra gemte",
+    "featured": "Udvalgt"
   },
   "search": {
     "placeholder": "Søg artikler, videoer, podcasts...",
@@ -131,7 +158,8 @@
   },
   "tag": {
     "heading": "#{tag}",
-    "contentCount": "{count} indhold"
+    "contentCount": "{count, plural, one {# indhold} other {# indhold}}",
+    "noContent": "Intet indhold med dette emne endnu."
   },
   "create": {
     "pickType": "Hvad opretter du?",
@@ -507,5 +535,9 @@
     "createIssue": "Opret en udgave med denne leder",
     "addToIssue": "Føj til en eksisterende udgave",
     "publishFirst": "Udgiv artiklen først; derefter kan du knytte den til en udgave."
+  },
+  "suspended": {
+    "title": "Konto suspenderet",
+    "text": "Din konto er blevet suspenderet. Hvis du mener, det er en fejl, så kontakt os."
   }
 }

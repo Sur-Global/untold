@@ -34,6 +34,7 @@ export default async function PodcastsPage({ params, searchParams }: PageProps) 
     activeTag ? contentIdsForTag(supabase, activeTag) : Promise.resolve(null),
   ])
   const tListings = await getTranslations('listings')
+  const tNav = await getTranslations('nav')
 
   // ★ picks (admin/content) shown at the top of page 1; kept out of the main list below
   // the starred picks lead the page only when it is not filtered by topic
@@ -145,7 +146,7 @@ export default async function PodcastsPage({ params, searchParams }: PageProps) 
       <Navigation {...navProps} />
       <main className="max-w-7xl mx-auto px-4 sm:px-6 py-16">
         <div className="mb-12">
-          <h1 className="mb-2">Podcasts</h1>
+          <h1 className="mb-2">{tNav('podcasts')}</h1>
           <p className="text-[#6B5F58]">{tListings('podcastsDesc')}</p>
           <TagCloud tags={cloud} activeSlug={activeTag} basePath="/podcasts" label={tListings('tagCloudLabel')} allLabel={tListings('tagCloudAll')} />
         </div>
@@ -163,20 +164,20 @@ export default async function PodcastsPage({ params, searchParams }: PageProps) 
               <div className="flex justify-center gap-2 mt-12">
                 {page > 1 && (
                   <a href={pageHref(page - 1)} className="px-4 py-2 rounded font-mono text-sm border" style={{ borderColor: 'rgba(139,69,19,0.2)' }}>
-                    ← Previous
+                    {tListings('previous')}
                   </a>
                 )}
-                <span className="px-4 py-2 font-mono text-sm text-[#6B5F58]">Page {page} of {totalPages}</span>
+                <span className="px-4 py-2 font-mono text-sm text-[#6B5F58]">{tListings('pageOf', { page, total: totalPages })}</span>
                 {page < totalPages && (
                   <a href={pageHref(page + 1)} className="px-4 py-2 rounded font-mono text-sm border" style={{ borderColor: 'rgba(139,69,19,0.2)' }}>
-                    Next →
+                    {tListings('next')}
                   </a>
                 )}
               </div>
             )}
           </>
         ) : featuredItems.length > 0 ? null : (
-          <p className="text-center py-20 text-[#6B5F58]">No podcasts yet.</p>
+          <p className="text-center py-20 text-[#6B5F58]">{tListings('noPodcasts')}</p>
         )}
       </main>
       <Footer />

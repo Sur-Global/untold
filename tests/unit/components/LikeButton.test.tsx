@@ -8,6 +8,8 @@ vi.mock('@/lib/actions/social', () => ({
 
 import { LikeButton } from '@/components/social/LikeButton'
 
+vi.mock('next-intl', () => ({ useTranslations: () => (key: string) => key }))
+
 describe('LikeButton', () => {
   it('renders with initial count and like state', () => {
     render(

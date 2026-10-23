@@ -17,7 +17,8 @@
     "home": "Startseite",
     "explore": "Entdecken",
     "creators": "Kreative",
-    "issues": "Ausgaben"
+    "issues": "Ausgaben",
+    "openMenu": "Menü öffnen"
   },
   "home": {
     "title": "UNTOLD",
@@ -50,7 +51,9 @@
     "latestTitle": "Das Neueste",
     "latestEditorial": "Editorial",
     "latestReadMore": "Weiterlesen",
-    "latestNew": "Neu"
+    "latestNew": "Neu",
+    "placeholderTag": "Zukunftsdesign",
+    "placeholderTitle": "Dekoloniale Technologie: neue Zukünfte gestalten"
   },
   "listings": {
     "videosDesc": "Videos von Journalisten und Erstellern aus dem Globalen Süden ansehen.",
@@ -67,7 +70,15 @@
     "noResults": "Keine Artikel entsprechen Ihrer Suche.",
     "readMoreBy": "Mehr von {name} lesen",
     "tagCloudLabel": "Nach Thema stöbern",
-    "tagCloudAll": "Alle"
+    "tagCloudAll": "Alle",
+    "previous": "← Zurück",
+    "next": "Weiter →",
+    "pageOf": "Seite {page} von {total}",
+    "noVideos": "Noch keine Videos.",
+    "noPodcasts": "Noch keine Podcasts.",
+    "noPills": "Noch keine Wissenspillen.",
+    "noCourses": "Noch keine Kurse.",
+    "articlesCount": "{count, plural, one {# Artikel} other {# Artikel}}"
   },
   "auth": {
     "loginTitle": "Willkommen zurück",
@@ -85,7 +96,8 @@
     "slugHint": "Ihre öffentliche URL: untold.ink/@{slug}",
     "saveProfile": "Speichern und fortfahren",
     "continueWith": "Weiter mit {provider}",
-    "orDivider": "oder"
+    "orDivider": "oder",
+    "backHome": "Zurück zur Startseite"
   },
   "errors": {
     "required": "Dieses Feld ist erforderlich",
@@ -115,7 +127,22 @@
     "edit": "Bearbeiten",
     "aboutName": "Über {name}",
     "comingSoon": "Demnächst",
-    "description": "Beschreibung"
+    "description": "Beschreibung",
+    "knowledgePill": "Wissenspille",
+    "enrollSoonTitle": "Anmeldung bald möglich",
+    "enrollSoon": "Jetzt anmelden — Demnächst",
+    "courseStudents": "Teilnehmende",
+    "instructor": "Lehrperson",
+    "openOn": "Auf {platform} öffnen ↗",
+    "viewFullTranscript": "Vollständiges Transkript anzeigen",
+    "translatingShort": "Wird übersetzt",
+    "chapters": "Kapitel",
+    "signInToLike": "Melde dich an, um zu liken",
+    "signInToBookmark": "Melde dich an, um zu speichern",
+    "signInToFollow": "Melde dich an, um zu folgen",
+    "bookmark": "Speichern",
+    "removeBookmark": "Aus Gespeichertem entfernen",
+    "featured": "Empfohlen"
   },
   "search": {
     "placeholder": "Artikel, Videos, Podcasts suchen...",
@@ -131,7 +158,8 @@
   },
   "tag": {
     "heading": "#{tag}",
-    "contentCount": "{count} Inhalte"
+    "contentCount": "{count, plural, one {# Inhalt} other {# Inhalte}}",
+    "noContent": "Noch keine Inhalte für dieses Thema."
   },
   "create": {
     "pickType": "Was erstellen Sie?",
@@ -507,5 +535,9 @@
     "createIssue": "Ausgabe mit diesem Editorial erstellen",
     "addToIssue": "Zu einer bestehenden Ausgabe hinzufügen",
     "publishFirst": "Veröffentliche den Artikel zuerst; danach kannst du ihn mit einer Ausgabe verknüpfen."
+  },
+  "suspended": {
+    "title": "Konto gesperrt",
+    "text": "Dein Konto wurde gesperrt. Wenn du glaubst, dass es sich um einen Fehler handelt, kontaktiere uns bitte."
   }
 }

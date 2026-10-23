@@ -37,6 +37,7 @@ export default async function ArticlesPage({ params, searchParams }: PageProps) 
     getNavProps(),
   ])
   const { userId, ...navProps } = navData
+  const tNav = await getTranslations('nav')
 
   // Tag cloud: only the topics that published articles have
   const cloud = await loadTagCloud(supabase, 'article', locale)
@@ -236,7 +237,7 @@ export default async function ArticlesPage({ params, searchParams }: PageProps) 
                   letterSpacing: '-0.03em',
                 }}
               >
-                Articles
+                {tNav('articles')}
               </h1>
               <p
                 className="text-lg max-w-[745px] mx-auto leading-[1.56]"
@@ -300,7 +301,7 @@ export default async function ArticlesPage({ params, searchParams }: PageProps) 
                       className="text-sm"
                       style={{ color: '#999', fontFamily: 'var(--font-aeonik), Aeonik, sans-serif' }}
                     >
-                      {count} articles
+                      {tListings('articlesCount', { count })}
                     </p>
                   )
                 )}

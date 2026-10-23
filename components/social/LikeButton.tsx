@@ -2,6 +2,7 @@
 
 import { useState, useTransition } from 'react'
 import { toggleLike } from '@/lib/actions/social'
+import { useTranslations } from 'next-intl'
 
 interface LikeButtonProps {
   contentId: string
@@ -12,6 +13,7 @@ interface LikeButtonProps {
 }
 
 export function LikeButton({ contentId, initialIsLiked, initialCount, isLoggedIn, className }: LikeButtonProps) {
+  const t = useTranslations('content')
   const [isLiked, setIsLiked] = useState(initialIsLiked)
   const [count, setCount] = useState(initialCount)
   const [isPending, startTransition] = useTransition()
@@ -26,7 +28,7 @@ export function LikeButton({ contentId, initialIsLiked, initialCount, isLoggedIn
     <button
       onClick={handleClick}
       disabled={isPending || !isLoggedIn}
-      title={isLoggedIn ? undefined : 'Sign in to like'}
+      title={isLoggedIn ? undefined : t('signInToLike')}
       className={className ?? "flex items-center gap-1.5 text-sm font-mono text-muted-foreground hover:text-primary transition-colors disabled:opacity-50 disabled:cursor-not-allowed"}
     >
       <svg width="16" height="16" viewBox="0 0 16 16" fill={isLiked ? 'currentColor' : 'none'} stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden>

@@ -1,5 +1,6 @@
 import { notFound } from 'next/navigation'
 import { after } from 'next/server'
+import { getTranslations } from 'next-intl/server'
 import { createClient } from '@/lib/supabase/server'
 import { getTranslation } from '@/lib/content'
 import { LanguageNotice } from '@/components/content/LanguageNotice'
@@ -26,6 +27,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 export default async function PillPage({ params }: PageProps) {
   const { locale, slug } = await params
   const supabase = await createClient()
+  const tContent = await getTranslations('content')
 
   const { data: { user } } = await supabase.auth.getUser()
   let navUserRole = null
@@ -114,7 +116,7 @@ export default async function PillPage({ params }: PageProps) {
               className="text-xs font-mono uppercase tracking-wider px-2 py-0.5 rounded"
               style={{ background: `${accentColor}20`, color: accentColor }}
             >
-              Knowledge Pill
+              {tContent('knowledgePill')}
             </span>
             <div className="flex items-center gap-3">
               <LikeButton

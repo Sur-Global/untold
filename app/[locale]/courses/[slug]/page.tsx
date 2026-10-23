@@ -1,5 +1,6 @@
 import { notFound } from 'next/navigation'
 import { after } from 'next/server'
+import { getTranslations } from 'next-intl/server'
 import { createClient } from '@/lib/supabase/server'
 import { getTranslation } from '@/lib/content'
 import { LanguageNotice } from '@/components/content/LanguageNotice'
@@ -26,6 +27,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 export default async function CoursePage({ params }: PageProps) {
   const { locale, slug } = await params
   const supabase = await createClient()
+  const tContent = await getTranslations('content')
 
   const { data: { user } } = await supabase.auth.getUser()
   let navUserRole = null
@@ -159,18 +161,18 @@ export default async function CoursePage({ params }: PageProps) {
               disabled
               className="w-full py-3 rounded-lg font-mono text-sm font-semibold mb-4 cursor-not-allowed"
               style={{ background: 'rgba(139,69,19,0.3)', color: 'rgba(255,255,255,0.6)' }}
-              title="Enrollment coming soon"
+              title={tContent('enrollSoonTitle')}
             >
-              Enroll Now — Coming Soon
+              {tContent('enrollSoon')}
             </button>
 
             <div className="space-y-3 text-sm font-mono text-[#6B5F58]">
-              {meta?.duration && <div className="flex justify-between"><span>Duration</span><span>{meta.duration}</span></div>}
-              {meta?.students_count != null && <div className="flex justify-between"><span>Students</span><span>{meta.students_count}</span></div>}
-              {meta?.rating != null && <div className="flex justify-between"><span>Rating</span><span>★ {meta.rating.toFixed(1)}</span></div>}
+              {meta?.duration && <div className="flex justify-between"><span>{tContent('duration')}</span><span>{meta.duration}</span></div>}
+              {meta?.students_count != null && <div className="flex justify-between"><span>{tContent('courseStudents')}</span><span>{meta.students_count}</span></div>}
+              {meta?.rating != null && <div className="flex justify-between"><span>{tContent('rating')}</span><span>★ {meta.rating.toFixed(1)}</span></div>}
               {author && (
                 <div className="flex justify-between">
-                  <span>Instructor</span>
+                  <span>{tContent('instructor')}</span>
                   <span>{author.display_name}</span>
                 </div>
               )}

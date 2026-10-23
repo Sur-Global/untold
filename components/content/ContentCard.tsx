@@ -296,7 +296,7 @@ export function ContentCard({
           <span
             className="absolute top-[15px] right-[16px] text-base"
             style={{ color: '#F5C518', textShadow: '0 1px 2px rgba(0,0,0,0.4)', lineHeight: 1 }}
-            title="Featured"
+            title={tContent('featured')}
           >
             ★
           </span>
