@@ -8,14 +8,24 @@ const colorOf = (slug: string) => BORDERS[[...slug].reduce((n, ch) => n + ch.cha
  * The topics of a listing page as a cloud: bigger the more content they have. Each one filters the listing
  * (?tag=…); the chosen one is highlighted and clicking it again, or "All", shows everything.
  */
-export function TagCloud({ tags, activeSlug, basePath, label, allLabel }: {
+export function TagCloud({ tags, activeSlug, basePath, label, allLabel, keep = {} }: {
   tags: CloudTag[]
   activeSlug?: string
   basePath: string
   label: string
   allLabel: string
+  /** other filters of the page (search, order…) that the links must keep */
+  keep?: Record<string, string | undefined>
 }) {
   if (tags.length === 0) return null
+  // address of the listing with the page's other filters and, if given, a topic
+  const hrefFor = (tag?: string) => {
+    const params = new URLSearchParams()
+    for (const [key, value] of Object.entries(keep)) if (value) params.set(key, value)
+    if (tag) params.set('tag', tag)
+    const qs = params.toString()
+    return (qs ? `${basePath}?${qs}` : basePath) as any
+  }
   const counts = tags.map((t) => t.count)
   const [min, max] = [Math.min(...counts), Math.max(...counts)]
   const chip = (active: boolean, border: string): React.CSSProperties => ({
@@ -27,7 +37,7 @@ export function TagCloud({ tags, activeSlug, basePath, label, allLabel }: {
   return (
     <nav aria-label={label} className="mt-8 flex flex-wrap items-baseline justify-center gap-x-2 gap-y-2">
       {activeSlug && (
-        <Link href={basePath as any} scroll={false} className="rounded-full px-3 py-1 text-sm underline" style={{ color: '#6b6ad0', fontFamily: 'var(--font-aeonik), Aeonik, sans-serif' }}>
+        <Link href={hrefFor()} scroll={false} className="rounded-full px-3 py-1 text-sm underline" style={{ color: '#6b6ad0', fontFamily: 'var(--font-aeonik), Aeonik, sans-serif' }}>
           {allLabel}
         </Link>
       )}
@@ -36,7 +46,7 @@ export function TagCloud({ tags, activeSlug, basePath, label, allLabel }: {
         return (
           <Link
             key={tag.slug}
-            href={(active ? basePath : `${basePath}?tag=${encodeURIComponent(tag.slug)}`) as any}
+            href={hrefFor(active ? undefined : tag.slug)}
             scroll={false}
             aria-current={active ? 'true' : undefined}
             title={`${tag.count}`}

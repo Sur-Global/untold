@@ -3,14 +3,7 @@
 import { useRouter, usePathname, useSearchParams } from 'next/navigation'
 import { useCallback, useTransition, useState, useEffect, useRef } from 'react'
 
-export interface TagItem {
-  slug: string
-  name: string
-  colorIndex: number
-}
-
 interface ArticlesFilterProps {
-  tags: TagItem[]
   searchPlaceholder: string
   labelFeatured: string
   labelTrending: string
@@ -18,17 +11,7 @@ interface ArticlesFilterProps {
   labelAll: string
 }
 
-const TAG_COLORS = [
-  { text: '#000', border: 'rgba(0,0,0,0.18)' },
-  { text: '#000', border: 'rgba(169,168,233,0.55)' },
-  { text: '#000', border: 'rgba(210,254,115,0.7)' },
-  { text: '#000', border: 'rgba(0,0,0,0.18)' },
-  { text: '#000', border: 'rgba(169,168,233,0.55)' },
-  { text: '#000', border: 'rgba(210,254,115,0.7)' },
-]
-
 export function ArticlesFilter({
-  tags,
   searchPlaceholder,
   labelFeatured,
   labelTrending,
@@ -41,7 +24,6 @@ export function ArticlesFilter({
   const [, startTransition] = useTransition()
 
   const currentFilter = searchParams.get('filter') ?? 'all'
-  const currentTag = searchParams.get('tag') ?? ''
   const currentQ = searchParams.get('q') ?? ''
 
   const [inputValue, setInputValue] = useState(currentQ)
@@ -148,32 +130,6 @@ export function ArticlesFilter({
           )
         })}
       </div>
-
-      {/* Tag cloud */}
-      {tags.length > 0 && (
-        <div className="flex flex-wrap justify-center gap-2">
-          {tags.map((tag) => {
-            const color = TAG_COLORS[tag.colorIndex % TAG_COLORS.length]
-            const isActive = currentTag === tag.slug
-            return (
-              <button
-                key={tag.slug}
-                type="button"
-                onClick={() => updateParams({ tag: isActive ? null : tag.slug })}
-                className="h-[38px] px-4 rounded-full text-sm transition-colors"
-                style={{
-                  color: '#000',
-                  border: `1.5px solid ${isActive ? '#A9A8E9' : color.border}`,
-                  background: isActive ? '#A9A8E9' : 'white',
-                  fontFamily: 'var(--font-aeonik), Aeonik, sans-serif',
-                }}
-              >
-                {tag.name}
-              </button>
-            )
-          })}
-        </div>
-      )}
     </div>
   )
 }

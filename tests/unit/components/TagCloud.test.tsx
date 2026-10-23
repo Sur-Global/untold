@@ -33,4 +33,16 @@ describe('TagCloud', () => {
     const { container } = render(<TagCloud {...props} tags={[]} />)
     expect(container).toBeEmptyDOMElement()
   })
+
+  it('keeps the page\'s other filters (search, order) in every link', () => {
+    render(<TagCloud {...props} basePath="/articles" activeSlug="futuros" keep={{ q: 'ia', filter: 'recent' }} />)
+    expect(screen.getByRole('link', { name: 'diseño' })).toHaveAttribute('href', '/articles?q=ia&filter=recent&tag=diseno')
+    expect(screen.getByRole('link', { name: 'futuros' })).toHaveAttribute('href', '/articles?q=ia&filter=recent')
+    expect(screen.getByRole('link', { name: 'Todos' })).toHaveAttribute('href', '/articles?q=ia&filter=recent')
+  })
+
+  it('leaves out filters that are not set', () => {
+    render(<TagCloud {...props} basePath="/articles" keep={{ q: undefined, filter: undefined }} />)
+    expect(screen.getByRole('link', { name: 'diseño' })).toHaveAttribute('href', '/articles?tag=diseno')
+  })
 })

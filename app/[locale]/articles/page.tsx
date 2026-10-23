@@ -12,19 +12,13 @@ import { ContentCard } from '@/components/content/ContentCard'
 import { loadTagCloud } from '@/lib/data/tag-cloud'
 import { TranslationRefresher } from '@/components/TranslationRefresher'
 import { ArticlesFilter } from './ArticlesFilter'
-import type { TagItem } from './ArticlesFilter'
+import { TagCloud } from '@/components/content/TagCloud'
 import Link from 'next/link'
 import { FeaturedSection } from '@/components/content/FeaturedSection'
 import { PAGE_FEATURED_SLOTS } from '@/lib/featured-slots'
 
 const BASE_LIMIT = 12
 const LOAD_MORE_STEP = 12
-
-function tagColorIndex(slug: string): number {
-  let hash = 0
-  for (const ch of slug) hash = (hash * 31 + ch.charCodeAt(0)) & 0xffff
-  return Math.abs(hash) % 6
-}
 
 interface PageProps {
   params: Promise<{ locale: string }>
@@ -46,7 +40,6 @@ export default async function ArticlesPage({ params, searchParams }: PageProps) 
 
   // Tag cloud: only the topics that published articles have
   const cloud = await loadTagCloud(supabase, 'article', locale)
-  const tags: TagItem[] = cloud.map((t) => ({ slug: t.slug, name: t.name, colorIndex: tagColorIndex(t.slug) }))
 
   // Build filtered content IDs from search/tag
   let filteredIds: string[] | null = null
@@ -256,7 +249,6 @@ export default async function ArticlesPage({ params, searchParams }: PageProps) 
             {/* Interactive filters */}
             <Suspense>
               <ArticlesFilter
-                tags={tags}
                 searchPlaceholder={tListings('articlesSearch')}
                 labelAll={tSearch('filterAll')}
                 labelFeatured={tListings('filterFeatured')}
@@ -264,6 +256,14 @@ export default async function ArticlesPage({ params, searchParams }: PageProps) 
                 labelRecent={tListings('filterRecent')}
               />
             </Suspense>
+            <TagCloud
+              tags={cloud}
+              activeSlug={tag}
+              basePath="/articles"
+              label={tListings('tagCloudLabel')}
+              allLabel={tListings('tagCloudAll')}
+              keep={{ q: q?.trim() || undefined, filter }}
+            />
           </div>
         </div>
 
