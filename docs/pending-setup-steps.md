@@ -5,6 +5,8 @@ the site is live and works, but the items below are needed for newsletter sign-u
 
 **Step-by-step guide (Spanish, for Elsie): `docs/guia-configuracion-paso-a-paso.md`** — Sender, Vercel, Supabase SMTP and key rotation.
 
+**Reminders scheduled (Claude Code scheduled tasks):** Mon 2026-10-26 09:00 (Spanish) manual + editor training; Tue 2026-10-27 09:00 (English) rotate exposed keys + Supabase custom SMTP. If a reminder is missed (app closed), it runs on next launch.
+
 ## What is already live
 - Newsletter form (own design) at the bottom of the homepage and in a footer pop-up. It falls back to Sender's hosted form until `SENDER_API_TOKEN` is set in Vercel.
 - Feature requests: Admin → Requests queue, "Assign to editor" with instructions, email notifications (emails need the settings below).
@@ -58,7 +60,7 @@ the site is live and works, but the items below are needed for newsletter sign-u
 6. Mention Google Analytics as a provider in the privacy policy (section 5, "Who we share data with") — to be added by Elsie/lawyer.
 
 ## H. Decisions waiting for Elsie
-1. **Cover images** for pills / podcasts / videos (see the three options shown earlier):
+1. **Cover images** for pills / podcasts / videos — DECIDED 2026-10-23: option C, BUILT (a cover is never required; video 16:9 with the automatic YouTube/Vimeo picture, podcast square shown whole, pill any shape shown whole, designed card when there is no picture). Original options:
    A) cover required (16:9) for everything; B) never required, auto-designed card when missing; **C) recommended:** one format per type (video 16:9 auto from YouTube/Vimeo, podcast square 1:1, pill any shape shown whole) plus the auto-designed card when a photo is missing. Also: should the square cover be **required** for podcasts?
 2. **Incomplete creator profiles** — DECIDED 2026-10-23 (recommended option) and BUILT: a creator cannot publish without photo + real name (enforced in the database trigger `content_require_complete_profile`; admins/editors exempt) and gets two reminder emails (day 3 and day 10) from the daily job; needs the `CRON_SECRET` and Sender variables above. Original options:
    1) block the first publish without photo + real name; 2) two reminder emails (day 3 and day 10, then stop); 3) weekly digest to admins/editors listing incomplete profiles; 4) in-app notification inbox. Recommended: 1 + 2 (3 as an extra). Emails need a daily Vercel Cron job and working transactional email (section B/C).
