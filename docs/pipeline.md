@@ -6,7 +6,9 @@
 - Banners publicitarios del homepage (antes de Videos y después de Píldoras) — se cambian en Admin → **Advertising**.
 - Sección **Lo más reciente** en el homepage (tarjeta de editorial + lista de lo último).
 - **Números** de la revista (Admin → **Issues**, archivo público en `/issues`; cada tarjeta lleva directo a la página del editorial, que muestra el texto, los artículos del número y la tarjeta de quien firma; las direcciones `/issues/<año>/<mes>` redirigen allí): creados de marzo 2025 a septiembre 2026 (16 números, sin enero 2026), con sus editoriales y artículos. Se muestran solo por mes y año. Falta **enero 2026**: pendiente el enlace del boletín.
-- **Página de Creadores** (`/creators`): buscador, orden A–Z / más contenido / más recientes, filtros de país y tema, letras. En el menú dentro de «Explorar» y en el pie bajo «Contenido → Comunidad».
+- **Página de Creadores** (`/creators`): buscador, orden A–Z / más contenido / más recientes, filtros de país y tema, letras. En el menú dentro de «Explorar» y en el pie, bajo «Páginas» (y «Números» bajo «Contenido»), cada lista en orden alfabético.
+- Perfiles de creadores traducidos a mano a inglés, portugués y francés (biografía y texto del botón); etiquetas con nombre en los 6 idiomas; país de origen (uno o dos) y país donde vive (uno, se ve en el idioma del lector) separados.
+- Editoriales fuera de /articles (automático) y en una sección «Editoriales» al final de la página del creador; la foto del autor lleva a su perfil; «También te puede interesar» bajo cada contenido; menú de compartir con redes sociales y vista previa al compartir enlaces; leyenda de colocación del admin plegable.
 
 ## Próxima semana (recordar a Elsie el lunes 2026-10-26)
 1. **Escribir el manual de uso de la plataforma** para editores (empezar por: crear un número, marcar un editorial, subir un banner, publicar y colocar contenido ★ ⌂ ↑).
@@ -14,7 +16,6 @@
 3. **Cuando estén entrenados:** darles acceso a la pestaña **Issues** para que creen números ellos mismos (hoy solo la ve la administradora; el cambio es poner `adminOnly: false` en `components/admin/AdminTabs.tsx`, y los permisos de base de datos ya los permiten).
 
 ## Siguiente
-- **Países de los creadores:** el campo «País» ya existe en el perfil (solo 5 tienen país); proponer países a partir de las biografías para que Elsie los revise.
 - **Enero 2026:** crear en cuanto llegue el enlace del boletín; probablemente incluye «Resistir es acuerpar», «¿Y ahora, cómo innovamos?», la entrevista a Álex Hernández y «La sociedad del cansancio» (hoy sin número).
 - Que el traductor automático también traduzca los pies de foto.
 - Pendientes de configuración (Sender, Vercel, claves): ver `docs/pending-setup-steps.md`.
