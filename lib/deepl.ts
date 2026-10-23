@@ -14,7 +14,7 @@ export type SupportedLocale = typeof SUPPORTED_LOCALES[number]
 const DEEPL_TARGET_MAP: Record<SupportedLocale, string> = {
   en: 'EN-US',
   es: 'ES',
-  pt: 'PT',
+  pt: 'PT-BR', // always Brazilian Portuguese (plain 'PT' gives European)
   fr: 'FR',
   de: 'DE',
   da: 'DA',

@@ -39,6 +39,19 @@ describe('translateTexts', () => {
     expect(String(url)).not.toContain('api-free')
   })
 
+  it('always translates into Brazilian Portuguese, never European', async () => {
+    vi.mocked(fetch).mockResolvedValueOnce({
+      ok: true,
+      json: async () => ({ translations: [{ text: 'Olá' }] }),
+    } as Response)
+
+    const { translateTexts } = await import('@/lib/deepl')
+    await translateTexts(['Hello'], 'pt')
+
+    const [, init] = vi.mocked(fetch).mock.calls[0]
+    expect(JSON.stringify(init)).toContain('PT-BR')
+  })
+
   it('returns translated strings in order', async () => {
     vi.mocked(fetch).mockResolvedValueOnce({
       ok: true,
