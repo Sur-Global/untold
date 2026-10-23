@@ -112,7 +112,8 @@
     "credits": "Kreditering: ",
     "edit": "Rediger",
     "aboutName": "Om {name}",
-    "comingSoon": "Kommer snart"
+    "comingSoon": "Kommer snart",
+    "description": "Beskrivelse"
   },
   "search": {
     "placeholder": "Søg artikler, videoer, podcasts...",

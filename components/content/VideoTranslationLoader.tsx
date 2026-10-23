@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useRef, useState } from 'react'
+import { useTranslations } from 'next-intl'
 import { ArticleBody } from './ArticleBody'
 import { TranscriptPanel } from './TranscriptPanel'
 import type { TranscriptCue } from '@/lib/transcript'
@@ -69,6 +70,7 @@ export function VideoTranslationLoader({
   contentId,
   locale,
 }: VideoTranslationLoaderProps) {
+  const t = useTranslations('content')
   const [body, setBody] = useState(initialBody)
   const [translatedChapters, setTranslatedChapters] = useState(initialTranslatedChapters)
   const [translatedTranscript, setTranslatedTranscript] = useState(initialTranslatedTranscript)
@@ -127,7 +129,7 @@ export function VideoTranslationLoader({
       ) : (displayBody || legacyDescription) ? (
         <div className="bg-card border border-primary/20 rounded-2xl p-6 mb-4">
           <div className="flex items-center justify-between mb-4">
-            <h3 className="font-heading text-2xl text-foreground">Description</h3>
+            <h3 className="font-heading text-2xl text-foreground">{t('description')}</h3>
             {needsBody && !displayBody && <TranslatingBadge />}
           </div>
           <div className="text-[#5a4a42] text-base leading-[1.625]">
@@ -141,7 +143,7 @@ export function VideoTranslationLoader({
       ) : englishBody ? (
         <div className="bg-card border border-primary/20 rounded-2xl p-6 mb-4">
           <div className="flex items-center justify-between mb-4">
-            <h3 className="font-heading text-2xl text-foreground">Description</h3>
+            <h3 className="font-heading text-2xl text-foreground">{t('description')}</h3>
             <TranslatingBadge />
           </div>
           <div className="text-[#5a4a42] text-base leading-[1.625]">

@@ -112,7 +112,8 @@
     "credits": "Crédits : ",
     "edit": "Modifier",
     "aboutName": "À propos de {name}",
-    "comingSoon": "Bientôt disponible"
+    "comingSoon": "Bientôt disponible",
+    "description": "Description"
   },
   "search": {
     "placeholder": "Rechercher articles, vidéos, podcasts...",
