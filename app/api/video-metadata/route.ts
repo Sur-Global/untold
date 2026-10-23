@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { extractYouTubeId } from '@/lib/youtube'
 import { extractYouTubeTranscript, type TranscriptCue } from '@/lib/transcript'
+import { cleanImportedTitle } from '@/lib/clean-title'
 
 export interface VideoChapter {
   timestamp: string
@@ -210,13 +211,13 @@ export async function GET(req: NextRequest) {
         fetchYouTube(youtubeId, url),
         extractYouTubeTranscript(youtubeId),
       ])
-      return NextResponse.json({ ...meta, transcript: transcript ?? undefined })
+      return NextResponse.json({ ...meta, title: meta.title ? cleanImportedTitle(meta.title) : meta.title, transcript: transcript ?? undefined })
     }
 
     const vimeoId = extractVimeoId(url)
     if (vimeoId) {
       const meta = await fetchVimeo(url)
-      return NextResponse.json(meta)
+      return NextResponse.json({ ...meta, title: meta.title ? cleanImportedTitle(meta.title) : meta.title })
     }
 
     return NextResponse.json({ platform: 'unknown' } satisfies VideoMetadata)

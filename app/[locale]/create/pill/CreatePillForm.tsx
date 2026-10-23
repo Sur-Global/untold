@@ -14,6 +14,7 @@ import { ContentLanguageSelect } from '@/components/content/ContentLanguageSelec
 import { FeatureRequestField } from '@/components/content/FeatureRequestField'
 import { ResponsibilityDeclaration } from '@/components/content/ResponsibilityDeclaration'
 import { LanguageAvailabilityFields } from '@/components/content/LanguageAvailabilityFields'
+import { coverInputProps } from '@/lib/cover-formats'
 
 export function CreatePillForm() {
   const t = useTranslations('editor')
@@ -62,7 +63,7 @@ export function CreatePillForm() {
         </div>
       </div>
 
-      <CoverImageInput name="image_url" />
+      <CoverImageInput name="image_url" label={t('coverPillLabel')} sizeHint={t('coverPillHint')} {...coverInputProps('pill')} />
 
       <div className="space-y-2">
         <Label>{t('bodyLabel')}</Label>

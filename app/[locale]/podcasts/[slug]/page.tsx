@@ -14,6 +14,7 @@ import { LikeButton } from '@/components/social/LikeButton'
 import { BookmarkButton } from '@/components/social/BookmarkButton'
 import { ShareButton } from '@/components/social/ShareButton'
 import Link from 'next/link'
+import { EditContentButton } from '@/components/content/EditContentButton'
 
 interface PageProps {
   params: Promise<{ locale: string; slug: string }>
@@ -40,7 +41,7 @@ export default async function PodcastPage({ params }: PageProps) {
   const { data: podcast } = await (supabase as any)
     .from('content')
     .select(`
-      id, slug, source_locale, single_language, subtitle_locales, likes_count, published_at,
+      id, slug, author_id, source_locale, single_language, subtitle_locales, likes_count, published_at,
       profiles!author_id ( display_name, slug, avatar_url ),
       content_translations ( title, description, locale ),
       podcast_meta ( embed_url, cover_image_url, duration, episode_number )
@@ -141,6 +142,7 @@ export default async function PodcastPage({ params }: PageProps) {
                   isLoggedIn={!!user}
                 />
                 <ShareButton title={t.title} className="flex items-center gap-1.5 text-sm font-mono text-muted-foreground hover:text-primary transition-colors" />
+                <EditContentButton type="podcast" contentId={podcast.id} authorId={podcast.author_id} userId={user?.id} role={navUserRole} className="flex items-center gap-1.5 text-sm font-mono text-muted-foreground hover:text-primary transition-colors" />
               </div>
             </div>
           </div>

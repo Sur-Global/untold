@@ -28,6 +28,7 @@ import { loadIssueArticles, toIssueItems } from '@/lib/data/issue-articles'
 import { triggerListingTranslations } from '@/lib/trigger-listing-translations'
 import { issueMonthLabel } from '@/lib/issues'
 import { locationName } from '@/lib/countries'
+import { EditContentButton } from '@/components/content/EditContentButton'
 
 interface PageProps {
   params: Promise<{ locale: string; slug: string }>
@@ -185,17 +186,7 @@ export default async function ArticlePage({ params }: PageProps) {
       className={actionButtonClass}
     />
     <ShareButton title={t.title} className={actionButtonClass} />
-    {user && (navUserRole === 'admin' || user.id === author?.id) && (
-      <Link
-        href={`/dashboard/articles/${article.id}/edit`}
-        className={actionButtonClass}
-      >
-        <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden>
-          <path d="M9.5 1.5a1.414 1.414 0 012 2L4 11l-3 1 1-3 7.5-7.5z" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round"/>
-        </svg>
-        {tContent('edit')}
-      </Link>
-    )}
+    <EditContentButton type="article" contentId={article.id} authorId={author?.id} userId={user?.id} role={navUserRole} className={actionButtonClass} />
   </div>
   )
 

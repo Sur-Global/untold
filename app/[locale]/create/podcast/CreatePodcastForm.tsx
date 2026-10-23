@@ -11,6 +11,7 @@ import { AuthorPicker } from '@/components/content/AuthorPicker'
 import { ContentLanguageSelect } from '@/components/content/ContentLanguageSelect'
 import { ResponsibilityDeclaration } from '@/components/content/ResponsibilityDeclaration'
 import { LanguageAvailabilityFields } from '@/components/content/LanguageAvailabilityFields'
+import { coverInputProps } from '@/lib/cover-formats'
 
 export function CreatePodcastForm() {
   const t = useTranslations('editor')
@@ -52,7 +53,7 @@ export function CreatePodcastForm() {
         <Input id="description" name="description" placeholder={t('descriptionPlaceholder')} />
       </div>
 
-      <CoverImageInput name="cover_image_url" />
+      <CoverImageInput name="cover_image_url" label={t('coverPodcastLabel')} sizeHint={t('coverPodcastHint')} {...coverInputProps('podcast')} />
 
       <div className="space-y-2">
         <Label htmlFor="episode_number">{t('episodeNumberLabel')}</Label>

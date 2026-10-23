@@ -21,6 +21,7 @@ import { ShareButton } from '@/components/social/ShareButton'
 import type { TranscriptCue } from '@/lib/transcript'
 import Link from 'next/link'
 import { SocialLinks } from '@/components/author/SocialLinks'
+import { EditContentButton } from '@/components/content/EditContentButton'
 
 interface VideoChapter {
   timestamp: string
@@ -48,7 +49,7 @@ export default async function VideoPage({ params }: PageProps) {
     (supabase as any)
       .from('content')
       .select(`
-        id, slug, source_locale, single_language, subtitle_locales, likes_count, published_at,
+        id, slug, author_id, source_locale, single_language, subtitle_locales, likes_count, published_at,
         profiles!author_id ( id, display_name, slug, avatar_url, bio, profile_translations, location_country, social_bluesky, social_linkedin, social_instagram, social_medium, social_custom_url ),
         content_translations ( title, body, description, locale ),
         content_tags ( tags ( slug, names ) ),
@@ -257,6 +258,7 @@ export default async function VideoPage({ params }: PageProps) {
               className={actionButtonClass}
             />
             <ShareButton title={t.title} className={actionButtonClass} />
+            <EditContentButton type="video" contentId={video.id} authorId={video.author_id} userId={userId} role={navProps.userRole} className={actionButtonClass} />
           </div>
 
           {/* Description, chapters, and transcript — with lazy translation + loading states */}

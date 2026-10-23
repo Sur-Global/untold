@@ -6,6 +6,7 @@ import { languageLabel } from '@/lib/language-availability'
 import { Link } from '@/i18n/navigation'
 import type { ContentType } from '@/lib/supabase/types'
 import { BookmarkButton } from '@/components/social/BookmarkButton'
+import { AUTO_COVER_COLORS, readableTextColor } from '@/lib/cover-formats'
 
 const TYPE_PATHS: Record<ContentType, string> = {
   article: 'articles',
@@ -49,16 +50,18 @@ interface ContentCardProps {
 
 const TYPE_ICONS = { article: FileText, video: Video, podcast: Mic, pill: Zap, course: BookOpen } as const
 
-// Shown instead of a grey box when an item has no cover image
-function CoverPlaceholder({ type, accentColor }: { type: ContentType; accentColor?: string | null }) {
+// Shown when an item has no cover image: a designed card (colour, icon and kind of content), so nothing looks
+// empty. The title is not repeated: it is right below, in the card.
+function AutoCover({ type, label, accentColor }: { type: ContentType; label: string; accentColor?: string | null }) {
   const Icon = TYPE_ICONS[type]
-  const accent = accentColor || '#8b7355'
+  const background = (type === 'pill' && accentColor) || AUTO_COVER_COLORS[type] || '#000000'
+  const color = readableTextColor(background)
   return (
-    <div
-      className="flex h-full w-full items-center justify-center"
-      style={{ background: `linear-gradient(135deg, ${accent}33 0%, ${accent}1A 100%)`, color: accent }}
-    >
-      <Icon size={44} strokeWidth={1.4} aria-hidden style={{ opacity: 0.55 }} />
+    <div className="flex h-full w-full flex-col items-center justify-center gap-2" style={{ background, color }} data-auto-cover>
+      <Icon size={46} strokeWidth={1.3} aria-hidden />
+      <span className="text-xs uppercase tracking-[0.12em]" style={{ fontFamily: 'JetBrains Mono, monospace', opacity: 0.75 }}>
+        {label}
+      </span>
     </div>
   )
 }
@@ -180,23 +183,47 @@ export function ContentCard({
       <div className="relative overflow-hidden shrink-0" style={{ aspectRatio: '16 / 9' }}>
         <Link href={href} className="block h-full">
           {image ? (
-            <img
-              src={image}
-              alt={title}
-              className="w-full h-full object-cover transition-transform duration-700 ease-in-out group-hover:scale-[1.06]"
-              loading="lazy"
-            />
+            type === 'podcast' ? (
+              // podcast covers are square: shown whole, centred in the card's frame
+              <div className="flex h-full w-full items-center justify-center" style={{ background: 'rgba(139,115,85,0.18)' }}>
+                <img
+                  src={image}
+                  alt={title}
+                  className="h-full aspect-square object-cover transition-transform duration-700 ease-in-out group-hover:scale-[1.04]"
+                  loading="lazy"
+                />
+              </div>
+            ) : type === 'pill' ? (
+              // pill images can have any shape: shown whole, never cropped
+              <div className="flex h-full w-full items-center justify-center" style={{ background: `${accentColor || '#8b7355'}22` }}>
+                <img
+                  src={image}
+                  alt={title}
+                  className="max-h-full max-w-full object-contain transition-transform duration-700 ease-in-out group-hover:scale-[1.04]"
+                  loading="lazy"
+                />
+              </div>
+            ) : (
+              <img
+                src={image}
+                alt={title}
+                className="w-full h-full object-cover transition-transform duration-700 ease-in-out group-hover:scale-[1.06]"
+                loading="lazy"
+              />
+            )
           ) : (
-            <CoverPlaceholder type={type} accentColor={accentColor} />
+            <AutoCover type={type} label={tCreate(type)} accentColor={accentColor} />
           )}
-          {/* Gradient overlay */}
-          <div
-            className="absolute inset-0"
-            style={{
-              background:
-                'linear-gradient(to top, rgba(44,36,32,0.6) 0%, rgba(44,36,32,0.1) 50%, rgba(0,0,0,0) 100%)',
-            }}
-          />
+          {/* Gradient overlay (only over a photo: an automatic card is already designed) */}
+          {image && (
+            <div
+              className="absolute inset-0"
+              style={{
+                background:
+                  'linear-gradient(to top, rgba(44,36,32,0.6) 0%, rgba(44,36,32,0.1) 50%, rgba(0,0,0,0) 100%)',
+              }}
+            />
+          )}
           {/* Play button overlay for videos */}
           {type === 'video' && (
             <div className="absolute inset-0 flex items-center justify-center">

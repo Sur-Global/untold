@@ -46,6 +46,8 @@ interface CoverImageInputProps {
   label?: string
   /** shape of the preview box, e.g. '5/1' for a wide banner (default 16/9) */
   previewAspect?: string
+  /** how the picture sits in the preview: cropped to fill (default) or shown whole */
+  previewFit?: 'cover' | 'contain'
   /** replaces the default “best size” hint under the upload box */
   sizeHint?: string
   /** profile photos only: the person the photo belongs to (an editor may upload it for somebody else) */
@@ -59,6 +61,7 @@ export function CoverImageInput({
   uploadType = 'cover',
   label,
   previewAspect = '16/9',
+  previewFit = 'cover',
   sizeHint,
   ownerId,
   onChange,
@@ -157,7 +160,7 @@ export function CoverImageInput({
             }}
             className="group"
           >
-            <img src={url} alt={fieldLabel} style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
+            <img src={url} alt={fieldLabel} style={{ width: '100%', height: '100%', objectFit: previewFit, display: 'block' }} />
             <div
               className="absolute inset-0 flex items-center justify-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity"
               style={{ background: 'rgba(44,36,32,0.5)' }}

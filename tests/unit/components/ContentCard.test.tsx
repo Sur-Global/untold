@@ -63,4 +63,28 @@ describe('ContentCard', () => {
     render(<ContentCard {...base} authorSlug={null} type="article" />)
     expect(screen.getByText('J').closest('a')).toBeNull()
   })
+
+  it('designs a card (colour, icon, kind of content) when there is no cover picture, without repeating the title', () => {
+    const { container } = render(<ContentCard {...base} type="video" />)
+    const auto = container.querySelector('[data-auto-cover]')
+    expect(auto).toBeTruthy()
+    expect(auto).toHaveTextContent('create.video')
+    expect(auto).not.toHaveTextContent('Test Title')
+    expect(container.querySelector('img[alt="Test Title"]')).toBeNull()
+    expect(screen.getAllByText('Test Title')).toHaveLength(1)
+  })
+
+  it('shows a podcast cover whole as a square, and a pill image without cropping', () => {
+    const podcast = render(<ContentCard {...base} type="podcast" coverImageUrl="https://cdn/podcast.webp" />)
+    expect(podcast.container.querySelector('img[alt="Test Title"]')).toHaveClass('aspect-square')
+    expect(podcast.container.querySelector('[data-auto-cover]')).toBeNull()
+    podcast.unmount()
+    const pill = render(<ContentCard {...base} type="pill" coverImageUrl="https://cdn/pill.png" accentColor="#6B8E23" />)
+    expect(pill.container.querySelector('img[alt="Test Title"]')).toHaveClass('object-contain')
+  })
+
+  it('crops a video cover to 16:9 like before', () => {
+    const { container } = render(<ContentCard {...base} type="video" coverImageUrl="https://cdn/video.webp" />)
+    expect(container.querySelector('img[alt="Test Title"]')).toHaveClass('object-cover')
+  })
 })

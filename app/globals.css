@@ -125,6 +125,11 @@
   --sidebar-ring: oklch(0.72 0.1 290);
 }
 
+/* Primary action buttons (Publish, Save, Create) — same rust gradient as the article form's Publish */
+.gradient-rust {
+  background: linear-gradient(175.88deg, #8b4513 0%, #a0522d 100%);
+}
+
 @keyframes card-shine {
   from { transform: translateX(-120%) skewX(-18deg); }
   to   { transform: translateX(280%) skewX(-18deg); }

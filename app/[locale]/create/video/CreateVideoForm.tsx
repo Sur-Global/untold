@@ -1,9 +1,12 @@
 'use client'
 
 import { useRef, useState, useTransition } from 'react'
-import { useTranslations } from 'next-intl'
+import { useTranslations, useLocale } from 'next-intl'
 import { createVideo } from '@/lib/actions/video'
-import type { VideoMetadata } from '@/app/api/video-metadata/route'
+import type { VideoChapter, VideoMetadata } from '@/app/api/video-metadata/route'
+import { RichTextEditor } from '@/components/editor/RichTextEditorLazy'
+import type { EditorBlock } from '@/components/editor/RichTextEditorLazy'
+import { TagsInput, type Tag } from '@/components/ui/TagsInput'
 import { AuthorPicker } from '@/components/content/AuthorPicker'
 import { ContentLanguageSelect } from '@/components/content/ContentLanguageSelect'
 import { FeatureRequestField } from '@/components/content/FeatureRequestField'
@@ -23,6 +26,7 @@ async function fetchVideoMetadata(url: string): Promise<VideoMetadata | null> {
 export function CreateVideoForm() {
   const t = useTranslations('editor')
   const td = useTranslations('dashboard')
+  const locale = useLocale()
   const formRef = useRef<HTMLFormElement>(null)
   const [isPending, startTransition] = useTransition()
   // Which submit button was pressed (draft vs publish)
@@ -35,6 +39,11 @@ export function CreateVideoForm() {
   const [title, setTitle] = useState('')
   const [thumbnailUrl, setThumbnailUrl] = useState('')
   const [duration, setDuration] = useState('')
+  const [body, setBody] = useState<EditorBlock[] | null>(null)
+  // Bumped when the description is filled from the video, so the editor remounts with it
+  const [bodyKey, setBodyKey] = useState(0)
+  const [tags, setTags] = useState<Tag[]>([])
+  const [chapters, setChapters] = useState<VideoChapter[]>([])
   const [extracting, setExtracting] = useState(false)
   const [extracted, setExtracted] = useState(false)
 
@@ -45,8 +54,27 @@ export function CreateVideoForm() {
     setExtracting(false)
     if (!meta) return
     if (meta.title) setTitle(meta.title)
+    // Fill the description from the video's, unless one was already written
+    if (meta.description && !body?.length) {
+      const blocks = meta.description
+        .split(/\n\n+/)
+        .map((text) => text.trim())
+        .filter(Boolean)
+        .map((text) => ({
+          id: crypto.randomUUID(),
+          type: 'paragraph',
+          props: { textColor: 'default', backgroundColor: 'default', textAlignment: 'left' },
+          content: [{ type: 'text', text, styles: {} }],
+          children: [],
+        })) as EditorBlock[]
+      if (blocks.length > 0) {
+        setBody(blocks)
+        setBodyKey((k) => k + 1)
+      }
+    }
     if (meta.thumbnailUrl) setThumbnailUrl(meta.thumbnailUrl)
     if (meta.duration) setDuration(meta.duration)
+    if (meta.chapters?.length) setChapters(meta.chapters)
     setExtracted(true)
   }
 
@@ -58,6 +86,9 @@ export function CreateVideoForm() {
     fd.set('embed_url', embedUrl)
     fd.set('thumbnail_url', thumbnailUrl)
     fd.set('duration', duration)
+    if (body) fd.set('body', JSON.stringify(body))
+    fd.set('tag_ids', JSON.stringify(tags.map((tag) => tag.id)))
+    fd.set('chapters', JSON.stringify(chapters))
     fd.set('publish', String(publishRef.current))
     startTransition(() => createVideo(fd))
   }
@@ -111,6 +142,19 @@ export function CreateVideoForm() {
           required
           className="w-full h-[50px] px-4 rounded-[10px] border border-primary/20 bg-white text-foreground text-base outline-none focus:border-primary/50 transition-colors placeholder:text-muted-foreground"
         />
+      </div>
+
+      {/* Description */}
+      <div className="space-y-2">
+        <label className="block text-sm font-semibold text-foreground">{t('descriptionLabel')}</label>
+        <div className="rounded-[10px] border border-primary/20 overflow-hidden">
+          <RichTextEditor key={bodyKey} value={body} onChange={setBody} placeholder={t('bodyPlaceholder')} locale={locale} />
+        </div>
+      </div>
+
+      <div className="space-y-2">
+        <label className="block text-sm font-semibold text-foreground">{t('topicCategoryLabel')}</label>
+        <TagsInput value={tags} onChange={setTags} placeholder={t('topicCategoryPlaceholder')} />
       </div>
 
       {/* Thumbnail preview (if extracted) */}

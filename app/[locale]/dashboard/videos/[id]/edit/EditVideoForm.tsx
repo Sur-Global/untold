@@ -17,6 +17,7 @@ import { ViewContentLink } from '@/components/content/ViewContentLink'
 import { ResponsibilityDeclaration } from '@/components/content/ResponsibilityDeclaration'
 import { LanguageAvailabilityFields } from '@/components/content/LanguageAvailabilityFields'
 import { AVAILABILITY_MARKER } from '@/lib/language-availability'
+import { coverInputProps } from '@/lib/cover-formats'
 type LayoutStyle = 'standard' | 'wide' | 'sidebar' | 'card'
 
 interface EditVideoFormProps {
@@ -536,7 +537,9 @@ export function EditVideoForm({
             name="thumbnail_url"
             defaultValue={thumbnailUrl}
             onChange={setThumbnailUrl}
-            label={t('videoThumbnailLabel')}
+            label={t('coverVideoLabel')}
+            sizeHint={t('coverVideoHint')}
+            {...coverInputProps('video')}
           />
         )}
       </div>

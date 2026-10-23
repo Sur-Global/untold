@@ -12,6 +12,7 @@ import { BodyTranslationLoader } from '@/components/content/BodyTranslationLoade
 import { LikeButton } from '@/components/social/LikeButton'
 import { BookmarkButton } from '@/components/social/BookmarkButton'
 import { ShareButton } from '@/components/social/ShareButton'
+import { EditContentButton } from '@/components/content/EditContentButton'
 
 interface PageProps {
   params: Promise<{ locale: string; slug: string }>
@@ -38,7 +39,7 @@ export default async function CoursePage({ params }: PageProps) {
   const { data: course } = await (supabase as any)
     .from('content')
     .select(`
-      id, slug, source_locale, single_language, subtitle_locales, cover_image_url, likes_count, published_at,
+      id, slug, author_id, source_locale, single_language, subtitle_locales, cover_image_url, likes_count, published_at,
       profiles!author_id ( display_name, slug, avatar_url ),
       content_translations ( title, description, locale ),
       course_meta ( price, currency, duration, students_count, rating )
@@ -138,6 +139,7 @@ export default async function CoursePage({ params }: PageProps) {
                 isLoggedIn={!!user}
               />
               <ShareButton title={t.title} className="flex items-center gap-1.5 text-sm font-mono text-muted-foreground hover:text-primary transition-colors" />
+              <EditContentButton type="course" contentId={course.id} authorId={course.author_id} userId={user?.id} role={navUserRole} className="flex items-center gap-1.5 text-sm font-mono text-muted-foreground hover:text-primary transition-colors" />
             </div>
           </div>
 

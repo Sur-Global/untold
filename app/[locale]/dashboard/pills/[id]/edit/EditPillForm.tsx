@@ -15,6 +15,7 @@ import { FeatureRequestField } from '@/components/content/FeatureRequestField'
 import { ViewContentLink } from '@/components/content/ViewContentLink'
 import { ResponsibilityDeclaration } from '@/components/content/ResponsibilityDeclaration'
 import { LanguageAvailabilityFields } from '@/components/content/LanguageAvailabilityFields'
+import { coverInputProps } from '@/lib/cover-formats'
 
 interface EditPillFormProps {
   id: string
@@ -79,7 +80,7 @@ export function EditPillForm({
         </div>
       </div>
 
-      <CoverImageInput name="image_url" defaultValue={initialImageUrl} />
+      <CoverImageInput name="image_url" defaultValue={initialImageUrl} label={t('coverPillLabel')} sizeHint={t('coverPillHint')} {...coverInputProps('pill')} />
 
       <div className="space-y-2">
         <Label>{t('bodyLabel')}</Label>

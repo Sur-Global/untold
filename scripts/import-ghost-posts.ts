@@ -13,6 +13,7 @@ import { createClient } from '@supabase/supabase-js'
 import { JSDOM } from 'jsdom'
 import { randomUUID } from 'node:crypto'
 import { hostImage, isExternalImage } from './lib/host-image'
+import { cleanImportedTitle } from '../lib/clean-title'
 
 const GHOST_URL = 'https://untoldmag.ghost.io'
 const GHOST_API_KEY = '2b1630029948b2da335b2b5c5e'
@@ -512,7 +513,7 @@ async function main() {
     if (error) throw new Error(`content ${post.slug}: ${error.message}`)
 
     const { error: trErr } = await (sb as any).from('content_translations').upsert(
-      { content_id: content.id, locale: SOURCE_LOCALE, title: post.title, excerpt, body: blocks, is_auto_translated: false },
+      { content_id: content.id, locale: SOURCE_LOCALE, title: cleanImportedTitle(post.title), excerpt, body: blocks, is_auto_translated: false },
       { onConflict: 'content_id,locale' },
     )
     if (trErr) throw new Error(`translation ${post.slug}: ${trErr.message}`)

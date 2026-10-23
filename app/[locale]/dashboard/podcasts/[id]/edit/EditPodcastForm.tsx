@@ -12,6 +12,7 @@ import { AuthorPicker } from '@/components/content/AuthorPicker'
 import { ViewContentLink } from '@/components/content/ViewContentLink'
 import { ResponsibilityDeclaration } from '@/components/content/ResponsibilityDeclaration'
 import { LanguageAvailabilityFields } from '@/components/content/LanguageAvailabilityFields'
+import { coverInputProps } from '@/lib/cover-formats'
 
 interface EditPodcastFormProps {
   id: string
@@ -95,7 +96,7 @@ export function EditPodcastForm({
         />
       </div>
 
-      <CoverImageInput name="cover_image_url" defaultValue={initialCoverImageUrl} />
+      <CoverImageInput name="cover_image_url" defaultValue={initialCoverImageUrl} label={t('coverPodcastLabel')} sizeHint={t('coverPodcastHint')} {...coverInputProps('podcast')} />
 
       <div className="space-y-2">
         <Label htmlFor="episode_number">{t('episodeNumberLabel')}</Label>

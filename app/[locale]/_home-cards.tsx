@@ -607,11 +607,12 @@ export function HomePillCard({
     >
       {/* Optional cover image */}
       {coverImageUrl && (
-        <Link href={`/pills/${slug}`} className="block shrink-0" style={{ textDecoration: 'none' }}>
+        <Link href={`/pills/${slug}`} className="block shrink-0" style={{ textDecoration: 'none', background: `${accentColor || '#8b7355'}22` }}>
+          {/* pill images can have any shape: shown whole, never cropped */}
           <img
             src={coverImageUrl}
             alt={title}
-            className="w-full object-cover"
+            className="w-full object-contain"
             style={{ height: 160 }}
             loading="lazy"
           />

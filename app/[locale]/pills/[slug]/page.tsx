@@ -12,6 +12,7 @@ import { BodyTranslationLoader } from '@/components/content/BodyTranslationLoade
 import { LikeButton } from '@/components/social/LikeButton'
 import { BookmarkButton } from '@/components/social/BookmarkButton'
 import { ShareButton } from '@/components/social/ShareButton'
+import { EditContentButton } from '@/components/content/EditContentButton'
 
 interface PageProps {
   params: Promise<{ locale: string; slug: string }>
@@ -38,7 +39,7 @@ export default async function PillPage({ params }: PageProps) {
   const { data: pill } = await (supabase as any)
     .from('content')
     .select(`
-      id, slug, source_locale, single_language, subtitle_locales, likes_count, published_at,
+      id, slug, author_id, source_locale, single_language, subtitle_locales, likes_count, published_at,
       profiles!author_id ( display_name, slug ),
       content_translations ( title, body, locale ),
       pill_meta ( accent_color, image_url )
@@ -128,12 +129,13 @@ export default async function PillPage({ params }: PageProps) {
                 isLoggedIn={!!user}
               />
               <ShareButton title={t.title} className="flex items-center gap-1.5 text-sm font-mono text-muted-foreground hover:text-primary transition-colors" />
+              <EditContentButton type="pill" contentId={pill.id} authorId={pill.author_id} userId={user?.id} role={navUserRole} className="flex items-center gap-1.5 text-sm font-mono text-muted-foreground hover:text-primary transition-colors" />
             </div>
           </div>
           {singleLanguage && <LanguageNotice sourceLocale={sourceLocale} subtitleLocales={pill.subtitle_locales} />}
           <h1 className="mb-4" style={{ color: '#2C2420' }}>{t.title}</h1>
           {meta?.image_url && (
-            <img src={meta.image_url} alt="" className="w-full rounded-xl object-cover max-h-48" />
+            <img src={meta.image_url} alt="" className="mx-auto h-auto max-h-96 w-auto max-w-full rounded-xl object-contain" />
           )}
         </div>
 
