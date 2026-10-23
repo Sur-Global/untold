@@ -635,5 +635,39 @@
   "suspended": {
     "title": "Cuenta suspendida",
     "text": "Tu cuenta ha sido suspendida. Si crees que es un error, escríbenos."
+  },
+  "translationEditor": {
+    "title": "Traducciones",
+    "intro": "El traductor automático puede equivocarse. Aquí puedes corregir cada idioma: lo que guardes queda protegido y no se vuelve a traducir solo.",
+    "original": "Original",
+    "status": {
+      "auto": "Automática",
+      "manual": "Corregida a mano",
+      "review": "Revisar",
+      "pending": "Sin traducir"
+    },
+    "titleLabel": "Título",
+    "summaryLabel": "Descripción",
+    "bodyLabel": "Texto",
+    "slidesLabel": "Texto de las láminas",
+    "slideLabel": "Lámina {n}",
+    "save": "Guardar traducción",
+    "saving": "Guardando…",
+    "saved": "Traducción guardada. Queda protegida: no se volverá a traducir sola.",
+    "translateAgain": "Volver a traducir automáticamente",
+    "translateNow": "Traducir ahora",
+    "translating": "Traduciendo…",
+    "translateAgainConfirm": "Se descartará lo que corregiste en este idioma y se traducirá de nuevo automáticamente. ¿Continuar?",
+    "translated": "Traducción automática lista.",
+    "reviewNotice": "El original cambió después de que corrigieras esta traducción. Revísala y guárdala, o márcala como revisada.",
+    "markReviewed": "Está bien: marcar como revisada",
+    "reviewed": "Marcada como revisada.",
+    "pendingNotice": "Todavía no hay traducción en este idioma. Se crea sola cuando alguien visita la página en ese idioma; también puedes crearla ahora o escribirla tú.",
+    "autoNotice": "Traducción automática. Si encuentras un error, corrígelo aquí y guárdalo.",
+    "manualNotice": "Corregida a mano: el traductor automático no la cambia.",
+    "shortOnlyNote": "Este contenido está marcado como disponible solo en su idioma original: en los demás idiomas solo se traducen el título y una descripción corta.",
+    "error": "No se pudo completar la acción. Inténtalo de nuevo.",
+    "emptyTitle": "Escribe el título antes de guardar.",
+    "tabsLabel": "Idiomas de traducción"
   }
 }

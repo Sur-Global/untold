@@ -15,6 +15,7 @@ import { saveLanguageAvailability } from '@/lib/save-language-availability'
 import { publishNewContent } from '@/lib/publish-new-content'
 import { resolveAuthorId, requestedAuthorId } from '@/lib/resolve-author'
 import { logActivity } from '@/lib/actions/activity-log'
+import { markTranslationsStale, saveSourceText } from '@/lib/translation-sync'
 
 export async function createVideo(formData: FormData) {
   const { user, profile } = await requireCreator()
@@ -143,12 +144,7 @@ export async function updateVideo(id: string, formData: FormData) {
   await syncFeatureRequest(id, featureRequest)
   after(() => notifyFeatureRequest(id))
 
-  await (supabase as any)
-    .from('content_translations')
-    .upsert(
-      { content_id: id, locale: sourceLocale, title, body },
-      { onConflict: 'content_id,locale' }
-    )
+  await markTranslationsStale(supabase, id, sourceLocale, await saveSourceText(supabase, id, sourceLocale, { title, body }))
 
   const chapters = chaptersRaw ? JSON.parse(chaptersRaw) : []
 

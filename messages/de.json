@@ -635,5 +635,39 @@
   "suspended": {
     "title": "Konto gesperrt",
     "text": "Dein Konto wurde gesperrt. Wenn du glaubst, dass es sich um einen Fehler handelt, kontaktiere uns bitte."
+  },
+  "translationEditor": {
+    "title": "Übersetzungen",
+    "intro": "Die automatische Übersetzung kann Fehler machen. Hier kannst du jede Sprache korrigieren: Was du speicherst, ist geschützt und wird nicht von allein neu übersetzt.",
+    "original": "Original",
+    "status": {
+      "auto": "Automatisch",
+      "manual": "Von Hand korrigiert",
+      "review": "Prüfen",
+      "pending": "Nicht übersetzt"
+    },
+    "titleLabel": "Titel",
+    "summaryLabel": "Beschreibung",
+    "bodyLabel": "Text",
+    "slidesLabel": "Text der Folien",
+    "slideLabel": "Folie {n}",
+    "save": "Übersetzung speichern",
+    "saving": "Wird gespeichert …",
+    "saved": "Übersetzung gespeichert. Sie ist geschützt: Sie wird nicht von allein neu übersetzt.",
+    "translateAgain": "Wieder automatisch übersetzen",
+    "translateNow": "Jetzt übersetzen",
+    "translating": "Wird übersetzt …",
+    "translateAgainConfirm": "Was du in dieser Sprache korrigiert hast, wird verworfen und automatisch neu übersetzt. Fortfahren?",
+    "translated": "Automatische Übersetzung fertig.",
+    "reviewNotice": "Das Original hat sich geändert, nachdem du diese Übersetzung korrigiert hast. Prüfe und speichere sie oder markiere sie als geprüft.",
+    "markReviewed": "Passt: als geprüft markieren",
+    "reviewed": "Als geprüft markiert.",
+    "pendingNotice": "Für diese Sprache gibt es noch keine Übersetzung. Sie entsteht von allein, wenn jemand die Seite in dieser Sprache besucht; du kannst sie auch jetzt erstellen oder selbst schreiben.",
+    "autoNotice": "Automatische Übersetzung. Wenn du einen Fehler findest, korrigiere ihn hier und speichere.",
+    "manualNotice": "Von Hand korrigiert: Die automatische Übersetzung ändert sie nicht.",
+    "shortOnlyNote": "Dieser Inhalt ist als nur in der Originalsprache verfügbar markiert: In den anderen Sprachen werden nur der Titel und eine kurze Beschreibung übersetzt.",
+    "error": "Die Aktion konnte nicht abgeschlossen werden. Bitte versuche es erneut.",
+    "emptyTitle": "Schreibe den Titel, bevor du speicherst.",
+    "tabsLabel": "Übersetzungssprachen"
   }
 }

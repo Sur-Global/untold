@@ -74,6 +74,7 @@ export interface Database {
           description: string | null;
           body: Record<string, unknown> | null;
           is_auto_translated: boolean;
+          needs_review?: boolean;
           created_at: string;
         };
         Insert: Omit<

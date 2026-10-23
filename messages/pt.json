@@ -635,5 +635,39 @@
   "suspended": {
     "title": "Conta suspensa",
     "text": "Sua conta foi suspensa. Se você acha que é um engano, entre em contato."
+  },
+  "translationEditor": {
+    "title": "Traduções",
+    "intro": "O tradutor automático pode errar. Aqui você pode corrigir cada idioma: o que você salvar fica protegido e não é traduzido de novo sozinho.",
+    "original": "Original",
+    "status": {
+      "auto": "Automática",
+      "manual": "Corrigida à mão",
+      "review": "Revisar",
+      "pending": "Sem tradução"
+    },
+    "titleLabel": "Título",
+    "summaryLabel": "Descrição",
+    "bodyLabel": "Texto",
+    "slidesLabel": "Texto das lâminas",
+    "slideLabel": "Lâmina {n}",
+    "save": "Salvar tradução",
+    "saving": "Salvando…",
+    "saved": "Tradução salva. Ela fica protegida: não será traduzida de novo sozinha.",
+    "translateAgain": "Traduzir automaticamente de novo",
+    "translateNow": "Traduzir agora",
+    "translating": "Traduzindo…",
+    "translateAgainConfirm": "O que você corrigiu neste idioma será descartado e traduzido de novo automaticamente. Continuar?",
+    "translated": "Tradução automática pronta.",
+    "reviewNotice": "O original mudou depois que você corrigiu esta tradução. Revise e salve, ou marque como revisada.",
+    "markReviewed": "Está certa: marcar como revisada",
+    "reviewed": "Marcada como revisada.",
+    "pendingNotice": "Ainda não há tradução neste idioma. Ela é criada sozinha quando alguém visita a página nesse idioma; você também pode criá-la agora ou escrevê-la.",
+    "autoNotice": "Tradução automática. Se encontrar um erro, corrija aqui e salve.",
+    "manualNotice": "Corrigida à mão: o tradutor automático não a altera.",
+    "shortOnlyNote": "Este conteúdo está marcado como disponível apenas no idioma original: nos outros idiomas só o título e uma descrição curta são traduzidos.",
+    "error": "Não foi possível concluir a ação. Tente de novo.",
+    "emptyTitle": "Escreva o título antes de salvar.",
+    "tabsLabel": "Idiomas de tradução"
   }
 }

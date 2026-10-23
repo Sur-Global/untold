@@ -635,5 +635,39 @@
   "suspended": {
     "title": "Compte suspendu",
     "text": "Votre compte a été suspendu. Si vous pensez qu’il s’agit d’une erreur, contactez-nous."
+  },
+  "translationEditor": {
+    "title": "Traductions",
+    "intro": "Le traducteur automatique peut se tromper. Ici vous pouvez corriger chaque langue : ce que vous enregistrez est protégé et n’est plus retraduit tout seul.",
+    "original": "Original",
+    "status": {
+      "auto": "Automatique",
+      "manual": "Corrigée à la main",
+      "review": "À revoir",
+      "pending": "Non traduit"
+    },
+    "titleLabel": "Titre",
+    "summaryLabel": "Description",
+    "bodyLabel": "Texte",
+    "slidesLabel": "Texte des planches",
+    "slideLabel": "Planche {n}",
+    "save": "Enregistrer la traduction",
+    "saving": "Enregistrement…",
+    "saved": "Traduction enregistrée. Elle est protégée : elle ne sera plus retraduite toute seule.",
+    "translateAgain": "Retraduire automatiquement",
+    "translateNow": "Traduire maintenant",
+    "translating": "Traduction…",
+    "translateAgainConfirm": "Ce que vous avez corrigé dans cette langue sera supprimé et retraduit automatiquement. Continuer ?",
+    "translated": "Traduction automatique prête.",
+    "reviewNotice": "L’original a changé après votre correction. Relisez la traduction et enregistrez-la, ou marquez-la comme revue.",
+    "markReviewed": "C’est bon : marquer comme revue",
+    "reviewed": "Marquée comme revue.",
+    "pendingNotice": "Il n’y a pas encore de traduction dans cette langue. Elle se crée toute seule quand quelqu’un visite la page dans cette langue ; vous pouvez aussi la créer maintenant ou l’écrire vous-même.",
+    "autoNotice": "Traduction automatique. Si vous trouvez une erreur, corrigez-la ici et enregistrez.",
+    "manualNotice": "Corrigée à la main : le traducteur automatique ne la modifie pas.",
+    "shortOnlyNote": "Ce contenu est marqué comme disponible uniquement dans sa langue d’origine : dans les autres langues, seuls le titre et une courte description sont traduits.",
+    "error": "Impossible de terminer l’action. Réessayez.",
+    "emptyTitle": "Écrivez le titre avant d’enregistrer.",
+    "tabsLabel": "Langues de traduction"
   }
 }

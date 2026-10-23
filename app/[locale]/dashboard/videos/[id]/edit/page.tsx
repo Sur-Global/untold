@@ -8,6 +8,8 @@ import { Footer } from '@/components/layout/Footer'
 import { getNavProps } from '@/lib/nav'
 import { EditVideoForm } from './EditVideoForm'
 import { tagDisplayName } from '@/lib/tag-name'
+import { TranslationsPanel } from '@/components/translations/TranslationsPanel'
+import { loadTranslationEditor } from '@/lib/data/translation-editor'
 
 interface PageProps {
   params: Promise<{ locale: string; id: string }>
@@ -37,6 +39,9 @@ export default async function EditVideoPage({ params }: PageProps) {
   ])
 
   if (!content) notFound()
+
+  // The translations of this content, to correct by hand
+  const translationEditor = await loadTranslationEditor(supabase, id)
 
   const sourceLocale = content.source_locale ?? 'en'
   const tr = content.content_translations?.find((r: any) => r.locale === sourceLocale) ?? content.content_translations?.[0]
@@ -81,6 +86,7 @@ export default async function EditVideoPage({ params }: PageProps) {
           initialTags={initialTags}
           initialFeatureRequested={!!content.feature_requested_at}
         />
+        {translationEditor && <TranslationsPanel data={translationEditor} />}
       </main>
       <Footer />
     </>

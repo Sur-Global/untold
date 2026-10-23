@@ -635,5 +635,39 @@
   "suspended": {
     "title": "Konto suspenderet",
     "text": "Din konto er blevet suspenderet. Hvis du mener, det er en fejl, så kontakt os."
+  },
+  "translationEditor": {
+    "title": "Oversættelser",
+    "intro": "Den automatiske oversætter kan lave fejl. Her kan du rette hvert sprog: det du gemmer er beskyttet og oversættes ikke igen af sig selv.",
+    "original": "Original",
+    "status": {
+      "auto": "Automatisk",
+      "manual": "Rettet i hånden",
+      "review": "Gennemgå",
+      "pending": "Ikke oversat"
+    },
+    "titleLabel": "Titel",
+    "summaryLabel": "Beskrivelse",
+    "bodyLabel": "Tekst",
+    "slidesLabel": "Slidenes tekst",
+    "slideLabel": "Slide {n}",
+    "save": "Gem oversættelse",
+    "saving": "Gemmer…",
+    "saved": "Oversættelsen er gemt. Den er beskyttet: den oversættes ikke igen af sig selv.",
+    "translateAgain": "Oversæt automatisk igen",
+    "translateNow": "Oversæt nu",
+    "translating": "Oversætter…",
+    "translateAgainConfirm": "Det du har rettet på dette sprog kasseres og oversættes automatisk igen. Fortsæt?",
+    "translated": "Automatisk oversættelse klar.",
+    "reviewNotice": "Originalen er ændret, efter du rettede denne oversættelse. Gennemgå og gem den, eller markér den som gennemgået.",
+    "markReviewed": "Den er fin: markér som gennemgået",
+    "reviewed": "Markeret som gennemgået.",
+    "pendingNotice": "Der er endnu ingen oversættelse på dette sprog. Den oprettes af sig selv, når nogen besøger siden på det sprog; du kan også oprette den nu eller skrive den selv.",
+    "autoNotice": "Automatisk oversættelse. Hvis du finder en fejl, ret den her og gem.",
+    "manualNotice": "Rettet i hånden: den automatiske oversætter ændrer den ikke.",
+    "shortOnlyNote": "Dette indhold er markeret som kun tilgængeligt på originalsproget: på de andre sprog oversættes kun titlen og en kort beskrivelse.",
+    "error": "Handlingen kunne ikke gennemføres. Prøv igen.",
+    "emptyTitle": "Skriv titlen, før du gemmer.",
+    "tabsLabel": "Oversættelsessprog"
   }
 }

@@ -8,6 +8,8 @@ import { Footer } from '@/components/layout/Footer'
 import { getNavProps } from '@/lib/nav'
 import { Link } from '@/i18n/navigation'
 import { EditCourseForm } from './EditCourseForm'
+import { TranslationsPanel } from '@/components/translations/TranslationsPanel'
+import { loadTranslationEditor } from '@/lib/data/translation-editor'
 
 interface EditCoursePageProps {
   params: Promise<{ locale: string; id: string }>
@@ -38,6 +40,9 @@ export default async function EditCoursePage({ params }: EditCoursePageProps) {
 
   if (!content) notFound()
 
+  // The translations of this content, to correct by hand
+  const translationEditor = await loadTranslationEditor(supabase, id)
+
   const sourceLocale = content.source_locale ?? 'en'
   const tr = content.content_translations?.find((r: any) => r.locale === sourceLocale) ?? content.content_translations?.[0]
   const meta = Array.isArray(content.course_meta) ? content.course_meta[0] : content.course_meta ?? {}
@@ -64,6 +69,7 @@ export default async function EditCoursePage({ params }: EditCoursePageProps) {
           initialCurrency={meta?.currency ?? 'USD'}
           initialDuration={meta?.duration ?? ''}
         />
+        {translationEditor && <TranslationsPanel data={translationEditor} />}
       </main>
       <Footer />
     </>

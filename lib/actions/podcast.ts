@@ -16,6 +16,7 @@ import { publishNewContent } from '@/lib/publish-new-content'
 import { resolveAuthorId, requestedAuthorId } from '@/lib/resolve-author'
 import { logActivity } from '@/lib/actions/activity-log'
 import { publishErrorMessage } from '@/lib/profile-complete'
+import { markTranslationsStale, saveSourceText } from '@/lib/translation-sync'
 
 export async function createPodcast(formData: FormData) {
   const { user, profile } = await requireCreator('podcast')
@@ -115,12 +116,7 @@ export async function updatePodcast(id: string, formData: FormData) {
   await saveLanguageAvailability(supabase, id, sourceLocale, formData)
   await recordDeclaration(supabase, id, formData)
 
-  await (supabase as any)
-    .from('content_translations')
-    .upsert(
-      { content_id: id, locale: sourceLocale, title, description, body: null },
-      { onConflict: 'content_id,locale' }
-    )
+  await markTranslationsStale(supabase, id, sourceLocale, await saveSourceText(supabase, id, sourceLocale, { title, description, body: null }))
 
   await (supabase as any)
     .from('podcast_meta')

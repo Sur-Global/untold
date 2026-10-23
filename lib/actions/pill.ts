@@ -20,6 +20,8 @@ import { publishErrorMessage } from '@/lib/profile-complete'
 import { firstSlideImage, parseSlides } from '@/lib/pill-slides'
 import { assertShortText, readPillFormat } from '@/lib/pill-form'
 import { normalizeAccent } from '@/lib/pill-accent'
+import { markTranslationsStale } from '@/lib/translation-sync'
+import { keepLocales } from '@/lib/pill-slides'
 
 async function syncTags(supabase: any, contentId: string, formData: FormData, replace: boolean) {
   const raw = formData.get('tag_ids') as string | null
@@ -150,6 +152,7 @@ export async function updatePill(id: string, formData: FormData) {
   if (format === 'text') assertShortText(bodyJson)
   const titleChanged = currentEn?.title !== title
   const bodyChanged = JSON.stringify(currentEn?.body ?? null) !== JSON.stringify(bodyJson)
+  const descriptionChanged = (currentEn?.excerpt ?? null) !== description
 
   await (supabase as any)
     .from('content_translations')
@@ -158,31 +161,27 @@ export async function updatePill(id: string, formData: FormData) {
       { onConflict: 'content_id,locale' }
     )
 
-  const descriptionChanged = (currentEn?.excerpt ?? null) !== description
-  if (titleChanged || bodyChanged || descriptionChanged) {
-    const staleFields: Record<string, null> = {}
-    if (titleChanged) staleFields.title = null
-    if (bodyChanged) staleFields.body = null
-    if (descriptionChanged) staleFields.excerpt = null
-    await (supabase as any)
-      .from('content_translations')
-      .update(staleFields)
-      .eq('content_id', id)
-      .neq('locale', sourceLocale)
-      // Versions someone edited by hand are theirs — only automatic translations are refreshed
-      .or('is_auto_translated.is.null,is_auto_translated.eq.true')
-  }
-
   // The translated texts of the slides are only valid for the texts they were made from
   const slideTexts = (list: unknown) => JSON.stringify(parseSlides(list).map((x) => [x.id, x.text]))
   const slidesTextChanged = slideTexts(currentMeta?.slides) !== slideTexts(slides)
+
+  // Automatic translations are emptied where the original changed (the translator makes them again); those corrected
+  // by hand are kept, and flagged to be reviewed
+  await markTranslationsStale(supabase, id, sourceLocale, { title: titleChanged, body: bodyChanged, excerpt: descriptionChanged, slides: slidesTextChanged })
+
+  let slideTranslations = currentMeta?.slide_translations ?? null
+  if (slidesTextChanged) {
+    const { data: manual } = await (supabase as any)
+      .from('content_translations')
+      .select('locale')
+      .eq('content_id', id)
+      .eq('is_auto_translated', false)
+    slideTranslations = keepLocales(slideTranslations, (manual ?? []).map((row: any) => row.locale))
+  }
   await (supabase as any)
     .from('pill_meta')
     .upsert(
-      {
-        content_id: id, accent_color: accentColor, image_url: imageUrl, format, slides,
-        slide_translations: slidesTextChanged ? null : (currentMeta?.slide_translations ?? null),
-      },
+      { content_id: id, accent_color: accentColor, image_url: imageUrl, format, slides, slide_translations: slideTranslations },
       { onConflict: 'content_id' }
     )
 

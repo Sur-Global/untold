@@ -635,5 +635,39 @@
   "suspended": {
     "title": "Account suspended",
     "text": "Your account has been suspended. If you believe this is a mistake, please contact us."
+  },
+  "translationEditor": {
+    "title": "Translations",
+    "intro": "The automatic translator can make mistakes. Here you can correct each language: what you save is protected and is not translated again on its own.",
+    "original": "Original",
+    "status": {
+      "auto": "Automatic",
+      "manual": "Corrected by hand",
+      "review": "Review",
+      "pending": "Not translated"
+    },
+    "titleLabel": "Title",
+    "summaryLabel": "Description",
+    "bodyLabel": "Text",
+    "slidesLabel": "Text of the slides",
+    "slideLabel": "Slide {n}",
+    "save": "Save translation",
+    "saving": "Saving…",
+    "saved": "Translation saved. It is protected: it will not be translated again on its own.",
+    "translateAgain": "Translate automatically again",
+    "translateNow": "Translate now",
+    "translating": "Translating…",
+    "translateAgainConfirm": "What you corrected in this language will be discarded and translated automatically again. Continue?",
+    "translated": "Automatic translation ready.",
+    "reviewNotice": "The original changed after you corrected this translation. Review it and save it, or mark it as reviewed.",
+    "markReviewed": "It is fine: mark as reviewed",
+    "reviewed": "Marked as reviewed.",
+    "pendingNotice": "There is no translation in this language yet. It is made on its own when someone visits the page in that language; you can also make it now or write it yourself.",
+    "autoNotice": "Automatic translation. If you find a mistake, correct it here and save it.",
+    "manualNotice": "Corrected by hand: the automatic translator does not change it.",
+    "shortOnlyNote": "This content is marked as only available in its original language: in the other languages only the title and a short description are translated.",
+    "error": "The action could not be completed. Please try again.",
+    "emptyTitle": "Write the title before saving.",
+    "tabsLabel": "Translation languages"
   }
 }

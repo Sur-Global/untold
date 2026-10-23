@@ -192,3 +192,12 @@ export function blocksTextLength(body: unknown): number {
   walk(body)
   return total
 }
+
+/** The translated slide texts of only some languages (those corrected by hand survive a change of the original); null when none */
+export function keepLocales(
+  translations: Record<string, { id: string; text: string }[]> | null | undefined,
+  locales: string[],
+): Record<string, { id: string; text: string }[]> | null {
+  const kept = Object.fromEntries(Object.entries(translations ?? {}).filter(([locale]) => locales.includes(locale)))
+  return Object.keys(kept).length > 0 ? kept : null
+}
