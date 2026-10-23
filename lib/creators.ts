@@ -1,7 +1,7 @@
 // Filtering and ordering for the Creators page (/creators). Pure functions: the page loads every creator
 // once and these narrow the list down from the address (?q=…&sort=…&country=…&tag=…&letter=…).
 
-export const CONTENT_KINDS = ['article', 'video', 'podcast', 'pill', 'course'] as const
+export const CONTENT_KINDS = ['article', 'editorial', 'video', 'podcast', 'pill', 'course'] as const
 export type ContentKind = (typeof CONTENT_KINDS)[number]
 
 export type Creator = {

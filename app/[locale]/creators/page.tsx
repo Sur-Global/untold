@@ -37,12 +37,12 @@ export default async function CreatorsPage({
   const [t, supabase, navData] = await Promise.all([getTranslations('creators'), createClient(), getNavProps()])
   const { userId: _userId, ...navProps } = navData
 
-  // Everything published on the general pages, with its topics: who published what and when
+  // Everything published on the general pages (plus issue editorials, which live under Issues), with its topics
   const { data: rows } = await (supabase as any)
     .from('content')
-    .select('author_id, type, published_at, content_tags ( tags ( slug, names ) )')
+    .select('author_id, type, is_editorial, published_at, content_tags ( tags ( slug, names ) )')
     .eq('status', 'published')
-    .eq('is_curated', true)
+    .or('is_curated.eq.true,is_editorial.eq.true')
     .limit(5000)
 
   type Acc = { counts: Record<ContentKind, number>; last: string | null; tags: Set<string> }
@@ -51,8 +51,9 @@ export default async function CreatorsPage({
   const topicCreators = new Map<string, Set<string>>()
   for (const row of rows ?? []) {
     if (!row.author_id) continue
-    const acc = byAuthor.get(row.author_id) ?? { counts: { article: 0, video: 0, podcast: 0, pill: 0, course: 0 }, last: null, tags: new Set<string>() }
-    if (row.type in acc.counts) acc.counts[row.type as ContentKind]++
+    const acc = byAuthor.get(row.author_id) ?? { counts: { article: 0, editorial: 0, video: 0, podcast: 0, pill: 0, course: 0 }, last: null, tags: new Set<string>() }
+    const kind = row.is_editorial ? 'editorial' : row.type
+    if (kind in acc.counts) acc.counts[kind as ContentKind]++
     if (row.published_at && (!acc.last || row.published_at > acc.last)) acc.last = row.published_at
     for (const ct of row.content_tags ?? []) {
       const tag = ct.tags

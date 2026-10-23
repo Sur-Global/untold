@@ -6,6 +6,8 @@ import { createClient } from '@/lib/supabase/server'
 import { getTranslation } from '@/lib/content'
 import { triggerListingTranslations } from '@/lib/trigger-listing-translations'
 import { formatDate } from '@/lib/format-date'
+import { issueLabel } from '@/lib/issues'
+import { editorialTexts } from '@/lib/data/issue-editorial'
 import { sanitizeBioHtml } from '@/lib/sanitize-bio-html'
 import { Navigation } from '@/components/layout/Navigation'
 import { Footer } from '@/components/layout/Footer'
@@ -69,7 +71,7 @@ export default async function AuthorPage({ params }: PageProps) {
   const { data: content } = await (supabase as any)
     .from('content')
     .select(`
-      id, type, slug, is_featured, is_author_featured, cover_image_url, likes_count, published_at,
+      id, type, slug, is_featured, is_author_featured, is_editorial, source_locale, cover_image_url, likes_count, published_at,
       content_translations ( title, excerpt, featured_summary, description, locale ),
       content_tags ( tags ( slug, names ) ),
       video_meta ( thumbnail_url, duration ),
@@ -80,6 +82,18 @@ export default async function AuthorPage({ params }: PageProps) {
     .eq('status', 'published')
     .order('published_at', { ascending: false })
     .limit(50)
+
+  // Editorials of numbered issues get their own section on the profile, labelled with the issue's month
+  const editorialRows = (content ?? []).filter((item: any) => item.is_editorial)
+  const [editorialIssues, editorialTextById] = editorialRows.length
+    ? await Promise.all([
+        (supabase as any).from('issues').select('editorial_id, issue_date').in('editorial_id', editorialRows.map((r: any) => r.id)),
+        editorialTexts(supabase as any, editorialRows, locale),
+      ])
+    : [{ data: [] }, new Map()]
+  const issueDateByEditorial = new Map<string, string>(
+    ((editorialIssues as any).data ?? []).map((i: any) => [i.editorial_id as string, i.issue_date as string]),
+  )
 
   const items = (content ?? []).map((item: any) => {
     const t = getTranslation(item.content_translations ?? [], locale)
@@ -95,11 +109,14 @@ export default async function AuthorPage({ params }: PageProps) {
       slug: item.slug,
       isFeatured: item.is_featured ?? false,
       isAuthorFeatured: item.is_author_featured ?? false,
+      isEditorial: item.is_editorial ?? false,
+      issueDate: issueDateByEditorial.get(item.id) ?? null,
+      issueLabel: issueDateByEditorial.has(item.id) ? issueLabel(issueDateByEditorial.get(item.id)!, locale) : null,
       coverImageUrl: item.cover_image_url ?? null,
       likesCount: item.likes_count ?? 0,
       publishedAt: item.published_at ?? null,
       title: t?.title ?? '(Untitled)',
-      excerpt: t?.excerpt || t?.featured_summary || null,
+      excerpt: item.is_editorial ? (editorialTextById.get(item.id)?.excerpt || null) : (t?.excerpt || t?.featured_summary || null),
       description: t?.description ?? null,
       tags,
       thumbnailUrl: item.video_meta?.thumbnail_url ?? null,

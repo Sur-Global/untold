@@ -56,7 +56,7 @@ export default async function DashboardPage({ params }: { params: Promise<{ loca
   const itemsPromise = (supabase as any)
     .from('content')
     .select(`
-      id, type, slug, status, created_at, is_curated, declaration_accepted_at, source_locale, is_author_featured,
+      id, type, slug, status, created_at, is_curated, is_editorial, declaration_accepted_at, source_locale, is_author_featured,
       content_translations ( title, locale )
     `)
     .eq('author_id', user.id)
@@ -124,7 +124,7 @@ export default async function DashboardPage({ params }: { params: Promise<{ loca
 
                 <TypeBadge label={t(TYPE_KEY[item.type as ContentType])} />
                 <StatusBadge status={item.status} label={item.status === 'published' ? t('published') : t('draft')} />
-                {item.status === 'published' && !item.is_curated && (
+                {item.status === 'published' && !item.is_curated && !item.is_editorial && (
                   <span
                     className="text-xs px-2 py-0.5 rounded-full"
                     style={{ background: 'rgba(120,113,108,0.12)', color: '#44403c' }}

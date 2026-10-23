@@ -3,7 +3,7 @@ import { availableLetters, filterCreators, fold, initialOf, parseCreatorQuery, p
 
 const make = (name: string, extra: Partial<Creator> = {}): Creator => ({
   id: name, slug: fold(name).replace(/\s+/g, '-'), name, avatarUrl: null, bio: '', countries: [],
-  counts: { article: 1, video: 0, podcast: 0, pill: 0, course: 0 }, total: 1, lastPublishedAt: '2026-01-01T00:00:00Z', tags: [], ...extra,
+  counts: { article: 1, editorial: 0, video: 0, podcast: 0, pill: 0, course: 0 }, total: 1, lastPublishedAt: '2026-01-01T00:00:00Z', tags: [], ...extra,
 })
 const list = [
   make('Álex Hernández', { countries: ['PE'], total: 2, lastPublishedAt: '2026-02-01T00:00:00Z', tags: ['salud', 'trabajo'] }),

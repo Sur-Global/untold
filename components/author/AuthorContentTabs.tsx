@@ -7,7 +7,7 @@ import { LikeButton } from '@/components/social/LikeButton'
 import { BookmarkButton } from '@/components/social/BookmarkButton'
 import { toggleAuthorFeatured } from '@/lib/actions/author'
 
-type Tab = 'all' | 'article' | 'video' | 'podcast' | 'pill'
+type Tab = 'all' | 'editorial' | 'article' | 'video' | 'podcast' | 'pill'
 
 interface ContentItem {
   id: string
@@ -15,6 +15,10 @@ interface ContentItem {
   slug: string
   isFeatured: boolean
   isAuthorFeatured?: boolean
+  /** Editorial of a numbered issue: shown in its own section, not among the articles */
+  isEditorial?: boolean
+  issueDate?: string | null
+  issueLabel?: string | null
   coverImageUrl: string | null
   likesCount: number
   publishedAt: string | null
@@ -396,6 +400,30 @@ function PillCard({ item, authorName, authorSlug, authorAvatarUrl, isLoggedIn, t
 }
 
 
+/** Editorial of an issue: a dark, text-first card labelled with the issue's month, so it is not mistaken for an article. */
+function EditorialTile({ item, t }: { item: ContentItem; t: ReturnType<typeof useTranslations> }) {
+  return (
+    <article className="flex flex-col rounded-[16px] p-6" style={{ background: '#000', color: '#fff' }}>
+      <p className="mb-3 text-[11px] uppercase tracking-[0.08em]" style={{ color: '#A9A8E9' }}>
+        {t('editorialKicker')}{item.issueLabel ? ` · ${item.issueLabel}` : ''}
+      </p>
+      <h3 className="mb-3 text-[20px] leading-[1.2]">
+        <Link href={`/articles/${item.slug}`} className="no-underline" style={{ color: '#fff' }}>
+          {item.title}
+        </Link>
+      </h3>
+      {item.excerpt && <p className="line-clamp-4 text-sm leading-relaxed" style={{ color: '#C9C4BD' }}>{item.excerpt}</p>}
+      <Link
+        href={`/articles/${item.slug}`}
+        className="mt-5 inline-flex h-10 w-fit items-center rounded-full px-5 text-sm text-black no-underline transition-opacity hover:opacity-90"
+        style={{ background: '#D2FE73' }}
+      >
+        {t('readEditorial')} →
+      </Link>
+    </article>
+  )
+}
+
 const TYPE_PATH: Record<string, string> = { article: 'articles', video: 'videos', podcast: 'podcasts', pill: 'pills' }
 
 function itemImage(item: ContentItem): string | null {
@@ -474,13 +502,18 @@ export function AuthorContentTabs({ items, authorName, authorSlug, authorAvatarU
   const [activeTab, setActiveTab] = useState<Tab>('all')
 
   const starred = items.filter((i) => i.isAuthorFeatured)
-  const articles = items.filter(i => i.type === 'article')
+  // newest issue first
+  const editorials = items
+    .filter(i => i.isEditorial)
+    .sort((a, b) => (b.issueDate ?? b.publishedAt ?? '').localeCompare(a.issueDate ?? a.publishedAt ?? ''))
+  const articles = items.filter(i => i.type === 'article' && !i.isEditorial)
   const videos = items.filter(i => i.type === 'video')
   const podcasts = items.filter(i => i.type === 'podcast')
   const pills = items.filter(i => i.type === 'pill')
 
   const allTabs: { id: Tab; label: string; count: number }[] = [
     { id: 'all', label: t('tabAll'), count: items.length },
+    { id: 'editorial', label: t('tabEditorials'), count: editorials.length },
     { id: 'article', label: t('tabArticles'), count: articles.length },
     { id: 'video', label: t('tabVideos'), count: videos.length },
     { id: 'podcast', label: t('tabPodcasts'), count: podcasts.length },
@@ -488,6 +521,7 @@ export function AuthorContentTabs({ items, authorName, authorSlug, authorAvatarU
   ]
   const tabs = allTabs.filter(tab => tab.id === 'all' || tab.count > 0)
 
+  const showEditorials = activeTab === 'all' || activeTab === 'editorial'
   const showArticles = activeTab === 'all' || activeTab === 'article'
   const showVideos = activeTab === 'all' || activeTab === 'video'
   const showPodcasts = activeTab === 'all' || activeTab === 'podcast'
@@ -499,6 +533,9 @@ export function AuthorContentTabs({ items, authorName, authorSlug, authorAvatarU
     ? articles.filter((a) => !(activeTab === 'all' && a.isAuthorFeatured))
     : articles.slice(1)
 
+  // starred editorials already lead the "all" tab, so they are not listed twice there
+  const listedEditorials = editorials.filter((e) => !(activeTab === 'all' && e.isAuthorFeatured))
+
   const cardProps = { authorName, authorSlug, authorAvatarUrl, isLoggedIn, t }
 
   // Authors with little content get a compact, contained layout instead of a
@@ -506,7 +543,8 @@ export function AuthorContentTabs({ items, authorName, authorSlug, authorAvatarU
   const compact = items.length <= 4
 
   if (compact && items.length > 0) {
-    const rest = items.filter((i) => !i.isAuthorFeatured)
+    const rest = items.filter((i) => !i.isAuthorFeatured && !i.isEditorial)
+    const restEditorials = editorials.filter((i) => !i.isAuthorFeatured)
     return (
       <div className="max-w-[1000px] mx-auto px-6 py-12 flex flex-col gap-10">
         {starred.length > 0 && (
@@ -519,9 +557,19 @@ export function AuthorContentTabs({ items, authorName, authorSlug, authorAvatarU
             </div>
           </section>
         )}
+        {restEditorials.length > 0 && (
+          <section>
+            <h2 className="text-[24px] leading-[1.3] text-foreground mb-5">{t('sectionEditorials')}</h2>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+              {restEditorials.map((item) => (
+                <EditorialTile key={item.id} item={item} t={t} />
+              ))}
+            </div>
+          </section>
+        )}
         {rest.length > 0 && (
           <section>
-            {starred.length > 0 && <h2 className="text-[24px] leading-[1.3] text-foreground mb-5">{t('tabAll')}</h2>}
+            {(starred.length > 0 || restEditorials.length > 0) && <h2 className="text-[24px] leading-[1.3] text-foreground mb-5">{starred.length === 0 && rest.every((i) => i.type === 'article') ? t('sectionArticles') : t('tabAll')}</h2>}
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
               {rest.map((item) => (
                 <ContentTile key={item.id} item={item} canManage={canManage} t={t} />
@@ -580,6 +628,18 @@ export function AuthorContentTabs({ items, authorName, authorSlug, authorAvatarU
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
               {starred.map((item, i) => (
                 <ContentTile key={item.id} item={item} large={i === 0 && starred.length > 2} canManage={canManage} t={t} />
+              ))}
+            </div>
+          </section>
+        )}
+
+        {/* Editorials of numbered issues */}
+        {showEditorials && listedEditorials.length > 0 && (
+          <section>
+            <h2 className="text-[28px] leading-[1.3] text-foreground mb-6">{t('sectionEditorials')}</h2>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+              {listedEditorials.map(item => (
+                <EditorialTile key={item.id} item={item} t={t} />
               ))}
             </div>
           </section>
