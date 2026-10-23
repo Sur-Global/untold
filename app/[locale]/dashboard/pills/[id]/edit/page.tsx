@@ -1,5 +1,6 @@
 import { notFound } from 'next/navigation'
 import { getTranslations } from 'next-intl/server'
+import { parseSlides } from '@/lib/pill-slides'
 import { requireCreator } from '@/lib/require-creator'
 import { isEditorRole } from '@/lib/require-editor'
 import { createClient } from '@/lib/supabase/server'
@@ -14,7 +15,7 @@ interface EditPillPageProps {
 }
 
 export default async function EditPillPage({ params }: EditPillPageProps) {
-  const { id } = await params
+  const { id, locale } = await params
   const { user, profile } = await requireCreator()
   const supabase = await createClient()
 
@@ -22,8 +23,9 @@ export default async function EditPillPage({ params }: EditPillPageProps) {
     .from('content')
     .select(`
       id, slug, author_id, status, source_locale, single_language, subtitle_locales, feature_requested_at, declaration_accepted_at,
-      content_translations ( title, body, locale ),
-      pill_meta ( accent_color, image_url )
+      content_translations ( title, body, excerpt, locale ),
+      pill_meta ( accent_color, image_url, format, slides ),
+      content_tags ( tags ( id, slug, names ) )
     `)
     .eq('id', id)
     .eq('type', 'pill')
@@ -63,6 +65,10 @@ export default async function EditPillPage({ params }: EditPillPageProps) {
           initialBody={initialBody}
           initialAccentColor={meta?.accent_color ?? '#C45D3A'}
           initialImageUrl={meta?.image_url ?? ''}
+          initialFormat={meta?.format === 'carousel' ? 'carousel' : 'text'}
+          initialSlides={parseSlides(meta?.slides)}
+          initialDescription={tr?.excerpt ?? ''}
+          initialTags={(content.content_tags ?? []).filter((ct: any) => ct.tags).map((ct: any) => ({ id: ct.tags.id, slug: ct.tags.slug, name: ct.tags.names?.[locale] ?? ct.tags.names?.en ?? ct.tags.slug }))}
         />
       </main>
       <Footer />

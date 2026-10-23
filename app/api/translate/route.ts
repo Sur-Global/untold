@@ -4,6 +4,7 @@ import { getEnabledLocalesForJobs } from '@/lib/data/enabled-locales'
 import { translateTexts, SUPPORTED_LOCALES, DeepLQuotaExceededError, type SupportedLocale } from '@/lib/deepl'
 import { extractTextNodes, injectTextNodes } from '@/lib/tiptap-translate'
 import { extractBlockNoteTextNodes, injectBlockNoteTextNodes } from '@/lib/blocknote-translate'
+import { parseSlides } from '@/lib/pill-slides'
 
 export async function POST(req: NextRequest) {
   const secret = req.headers.get('x-translate-secret')
@@ -88,7 +89,7 @@ export async function POST(req: NextRequest) {
       const fieldValues: string[] = []
 
       if (source.title) { fieldNames.push('title'); fieldValues.push(source.title) }
-      if (content.type === 'article' && source.excerpt) {
+      if (['article', 'pill'].includes(content.type) && source.excerpt) {
         fieldNames.push('excerpt'); fieldValues.push(source.excerpt)
       }
       if (['video', 'podcast', 'course'].includes(content.type) && source.description) {
@@ -192,6 +193,28 @@ export async function POST(req: NextRequest) {
           }
         } catch (err) {
           console.error(`Video meta translation failed for locale ${targetLocale}:`, err)
+        }
+      }
+
+      // Carousel pills: translate the text of each slide
+      if (content.type === 'pill') {
+        try {
+          const { data: pillMeta } = await (supabase as any)
+            .from('pill_meta')
+            .select('slides, slide_translations')
+            .eq('content_id', contentId)
+            .maybeSingle()
+          const slides = parseSlides(pillMeta?.slides).filter((sl) => sl.text)
+          if (slides.length > 0) {
+            const texts = await translateTexts(slides.map((sl) => sl.text), targetLocale, sourceLocale)
+            const existingSlideTrans = (pillMeta?.slide_translations as Record<string, unknown>) ?? {}
+            await (supabase as any)
+              .from('pill_meta')
+              .update({ slide_translations: { ...existingSlideTrans, [targetLocale]: slides.map((sl, i) => ({ id: sl.id, text: texts[i] })) } })
+              .eq('content_id', contentId)
+          }
+        } catch (err) {
+          console.error(`Slide translation failed for locale ${targetLocale}:`, err)
         }
       }
 

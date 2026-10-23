@@ -1,27 +1,30 @@
 'use client'
 
 import { useRef, useState, useTransition } from 'react'
-import { useTranslations, useLocale } from 'next-intl'
+import { useTranslations } from 'next-intl'
 import { createPill } from '@/lib/actions/pill'
-import { RichTextEditor } from '@/components/editor/RichTextEditorLazy'
 import type { EditorBlock } from '@/components/editor/RichTextEditorLazy'
+import type { Tag } from '@/components/ui/TagsInput'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { CoverImageInput } from '@/components/ui/CoverImageInput'
+import { PillContentFields, type PillFormat } from '@/components/pills/PillContentFields'
+import type { PillSlide } from '@/lib/pill-slides'
 import { AuthorPicker } from '@/components/content/AuthorPicker'
 import { ContentLanguageSelect } from '@/components/content/ContentLanguageSelect'
 import { FeatureRequestField } from '@/components/content/FeatureRequestField'
 import { ResponsibilityDeclaration } from '@/components/content/ResponsibilityDeclaration'
 import { LanguageAvailabilityFields } from '@/components/content/LanguageAvailabilityFields'
-import { coverInputProps } from '@/lib/cover-formats'
 
 export function CreatePillForm() {
   const t = useTranslations('editor')
   const td = useTranslations('dashboard')
-  const locale = useLocale()
   const formRef = useRef<HTMLFormElement>(null)
   const [body, setBody] = useState<EditorBlock[] | null>(null)
+  const [format, setFormat] = useState<PillFormat>('text')
+  const [slides, setSlides] = useState<PillSlide[]>([])
+  const [description, setDescription] = useState('')
+  const [tags, setTags] = useState<Tag[]>([])
   const [isPending, startTransition] = useTransition()
   // Which submit button was pressed (draft vs publish)
   const publishRef = useRef(false)
@@ -33,7 +36,11 @@ export function CreatePillForm() {
     e.preventDefault()
     if (!formRef.current) return
     const fd = new FormData(formRef.current)
-    if (body) fd.set('body', JSON.stringify(body))
+    if (body && format === 'text') fd.set('body', JSON.stringify(body))
+    fd.set('format', format)
+    fd.set('slides', JSON.stringify(slides))
+    fd.set('description', description)
+    fd.set('tag_ids', JSON.stringify(tags.map((tag) => tag.id)))
     fd.set('publish', String(publishRef.current))
     startTransition(() => createPill(fd))
   }
@@ -63,12 +70,18 @@ export function CreatePillForm() {
         </div>
       </div>
 
-      <CoverImageInput name="image_url" label={t('coverPillLabel')} sizeHint={t('coverPillHint')} {...coverInputProps('pill')} />
-
-      <div className="space-y-2">
-        <Label>{t('bodyLabel')}</Label>
-        <RichTextEditor value={body} onChange={setBody} placeholder={t('bodyPlaceholder')} locale={locale} videos="none" />
-      </div>
+      <PillContentFields
+        format={format}
+        onFormatChange={setFormat}
+        slides={slides}
+        onSlidesChange={setSlides}
+        description={description}
+        onDescriptionChange={setDescription}
+        body={body}
+        onBodyChange={setBody}
+        tags={tags}
+        onTagsChange={setTags}
+      />
 
       <FeatureRequestField />
 

@@ -17,6 +17,16 @@ import { resolveAuthorId, requestedAuthorId } from '@/lib/resolve-author'
 import { logActivity } from '@/lib/actions/activity-log'
 import { stripNewMediaBlocks } from '@/lib/body-policy'
 import { publishErrorMessage } from '@/lib/profile-complete'
+import { firstSlideImage, parseSlides } from '@/lib/pill-slides'
+import { assertShortText, readPillFormat } from '@/lib/pill-form'
+
+async function syncTags(supabase: any, contentId: string, formData: FormData, replace: boolean) {
+  const raw = formData.get('tag_ids') as string | null
+  if (raw === null && replace) return // an old form that does not send tags: leave them as they are
+  const ids: string[] = raw ? (() => { try { return JSON.parse(raw) } catch { return [] } })() : []
+  if (replace) await supabase.from('content_tags').delete().eq('content_id', contentId)
+  if (ids.length > 0) await supabase.from('content_tags').insert(ids.map((tag_id: string) => ({ content_id: contentId, tag_id })))
+}
 
 export async function createPill(formData: FormData) {
   const { user, profile } = await requireCreator()
@@ -31,7 +41,11 @@ export async function createPill(formData: FormData) {
   const title = (formData.get('title') as string).trim()
   const body = formData.get('body') as string | null
   const accentColor = (formData.get('accent_color') as string)?.trim() || '#C45D3A'
-  const imageUrl = (formData.get('image_url') as string)?.trim() || null
+  const { format, slides, description } = await readPillFormat(formData, formData.get('publish') === 'true')
+  const bodyJson = format === 'text' && body ? stripNewMediaBlocks((() => { try { return JSON.parse(body) } catch { return null } })()) : null
+  if (format === 'text') assertShortText(bodyJson)
+  // the cover of a carousel is its first picture
+  const imageUrl = (format === 'carousel' ? firstSlideImage(slides) : null) ?? ((formData.get('image_url') as string)?.trim() || null)
   const featureRequested = readFeatureRequest(formData) === true
 
   const slug = `${slugify(title)}-${Date.now().toString(36)}`
@@ -61,7 +75,8 @@ export async function createPill(formData: FormData) {
       locale: sourceLocale,
       title,
       // Knowledge pills can't contain videos, audio or files, whatever the editor sent
-      body: body ? stripNewMediaBlocks((() => { try { return JSON.parse(body) } catch { return null } })()) : null,
+      body: bodyJson,
+      excerpt: description,
     })
 
   if (translationError) throw new Error(translationError.message ?? 'Failed to save pill translation')
@@ -72,9 +87,13 @@ export async function createPill(formData: FormData) {
       content_id: content.id,
       accent_color: accentColor,
       image_url: imageUrl,
+      format,
+      slides,
     })
 
   if (metaError) throw new Error(metaError.message ?? 'Failed to save pill metadata')
+
+  await syncTags(supabase, content.id, formData, false)
 
   await logActivity({ entityType: 'pill', entityId: content.id, entityLabel: title, action: authorId === user.id ? 'created' : 'created_on_behalf' })
 
@@ -95,7 +114,8 @@ export async function updatePill(id: string, formData: FormData) {
   const title = (formData.get('title') as string).trim()
   const body = formData.get('body') as string | null
   const accentColor = (formData.get('accent_color') as string)?.trim() || '#C45D3A'
-  const imageUrl = (formData.get('image_url') as string)?.trim() || null
+  const { format, slides, description } = await readPillFormat(formData, false)
+  const imageUrl = (format === 'carousel' ? firstSlideImage(slides) : null) ?? ((formData.get('image_url') as string)?.trim() || null)
 
   const newAuthorId = await requestedAuthorId(supabase, formData, profile.role)
 
@@ -118,27 +138,30 @@ export async function updatePill(id: string, formData: FormData) {
 
   const { data: currentEn } = await (supabase as any)
     .from('content_translations')
-    .select('title, body')
+    .select('title, body, excerpt')
     .eq('content_id', id)
     .eq('locale', sourceLocale)
     .single()
 
   // Media blocks already in the stored body are kept; new ones are dropped (pills allow none)
-  const bodyJson = stripNewMediaBlocks(rawBodyJson, currentEn?.body)
+  const bodyJson = format === 'text' ? stripNewMediaBlocks(rawBodyJson, currentEn?.body) : null
+  if (format === 'text') assertShortText(bodyJson)
   const titleChanged = currentEn?.title !== title
   const bodyChanged = JSON.stringify(currentEn?.body ?? null) !== JSON.stringify(bodyJson)
 
   await (supabase as any)
     .from('content_translations')
     .upsert(
-      { content_id: id, locale: sourceLocale, title, body: bodyJson },
+      { content_id: id, locale: sourceLocale, title, body: bodyJson, excerpt: description },
       { onConflict: 'content_id,locale' }
     )
 
-  if (titleChanged || bodyChanged) {
+  const descriptionChanged = (currentEn?.excerpt ?? null) !== description
+  if (titleChanged || bodyChanged || descriptionChanged) {
     const staleFields: Record<string, null> = {}
     if (titleChanged) staleFields.title = null
     if (bodyChanged) staleFields.body = null
+    if (descriptionChanged) staleFields.excerpt = null
     await (supabase as any)
       .from('content_translations')
       .update(staleFields)
@@ -148,12 +171,21 @@ export async function updatePill(id: string, formData: FormData) {
       .or('is_auto_translated.is.null,is_auto_translated.eq.true')
   }
 
+  // The translated texts of the slides are only valid for the texts they were made from
+  const { data: currentMeta } = await (supabase as any).from('pill_meta').select('slides, slide_translations').eq('content_id', id).maybeSingle()
+  const slideTexts = (list: unknown) => JSON.stringify(parseSlides(list).map((x) => [x.id, x.text]))
+  const slidesTextChanged = slideTexts(currentMeta?.slides) !== slideTexts(slides)
   await (supabase as any)
     .from('pill_meta')
     .upsert(
-      { content_id: id, accent_color: accentColor, image_url: imageUrl },
+      {
+        content_id: id, accent_color: accentColor, image_url: imageUrl, format, slides,
+        slide_translations: slidesTextChanged ? null : (currentMeta?.slide_translations ?? null),
+      },
       { onConflict: 'content_id' }
     )
+
+  await syncTags(supabase, id, formData, true)
 
   await logActivity({ entityType: 'pill', entityId: id, entityLabel: title, action: 'updated' })
 

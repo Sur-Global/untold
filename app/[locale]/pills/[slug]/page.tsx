@@ -14,6 +14,12 @@ import { LikeButton } from '@/components/social/LikeButton'
 import { BookmarkButton } from '@/components/social/BookmarkButton'
 import { ShareButton } from '@/components/social/ShareButton'
 import { EditContentButton } from '@/components/content/EditContentButton'
+import { Link } from '@/i18n/navigation'
+import { PillCarousel } from '@/components/pills/PillCarousel'
+import { ShareBar } from '@/components/social/ShareBar'
+import { TranslationRefresher } from '@/components/TranslationRefresher'
+import { localizedSlides, parseSlides, slideCredits } from '@/lib/pill-slides'
+import { localizedPath, siteUrl } from '@/lib/content-metadata'
 
 interface PageProps {
   params: Promise<{ locale: string; slug: string }>
@@ -43,8 +49,9 @@ export default async function PillPage({ params }: PageProps) {
     .select(`
       id, slug, author_id, source_locale, single_language, subtitle_locales, likes_count, published_at,
       profiles!author_id ( display_name, slug ),
-      content_translations ( title, body, locale ),
-      pill_meta ( accent_color, image_url )
+      content_translations ( title, body, excerpt, locale ),
+      pill_meta ( accent_color, image_url, format, slides, slide_translations ),
+      content_tags ( tags ( slug, names ) )
     `)
     .eq('slug', slug)
     .eq('type', 'pill')
@@ -70,7 +77,18 @@ export default async function PillPage({ params }: PageProps) {
   const body = usingFallback ? null : (t.body as Record<string, unknown> | null)
   const needsBody = contentLocale !== sourceLocale && !!sourceBody && (usingFallback || !body)
 
-  if (needsBody) {
+  // Carousel pills: the slides (their texts in the reader's language, where translated)
+  const isCarousel = meta?.format === 'carousel'
+  const { slides, translated: slidesTranslated } = localizedSlides(parseSlides(meta?.slides), meta?.slide_translations, contentLocale, sourceLocale)
+  const needsSlides = isCarousel && contentLocale !== sourceLocale && !slidesTranslated
+  const credits = slideCredits(slides)
+  const topics: { slug: string; name: string }[] = (pill.content_tags ?? [])
+    .map((ct: any) => ct.tags)
+    .filter(Boolean)
+    .map((tag: any) => ({ slug: tag.slug, name: tag.names?.[locale] ?? tag.names?.en ?? tag.slug }))
+  const pillUrl = `${siteUrl()}${localizedPath(locale, `/pills/${slug}`)}`
+
+  if (needsBody || needsSlides) {
     after(async () => {
       try {
         await fetch(`${process.env.NEXT_PUBLIC_SITE_URL}/api/translate`, {
@@ -104,6 +122,7 @@ export default async function PillPage({ params }: PageProps) {
 
   return (
     <>
+      <TranslationRefresher pending={needsSlides} />
       <Navigation {...navProps} />
       <main className="max-w-2xl mx-auto px-4 sm:px-6 py-16">
         {/* Pill header with accent color */}
@@ -136,19 +155,58 @@ export default async function PillPage({ params }: PageProps) {
           </div>
           {singleLanguage && <LanguageNotice sourceLocale={sourceLocale} subtitleLocales={pill.subtitle_locales} />}
           <h1 className="mb-4" style={{ color: '#2C2420' }}>{t.title}</h1>
-          {meta?.image_url && (
-            <img src={meta.image_url} alt="" className="mx-auto h-auto max-h-96 w-auto max-w-full rounded-xl object-contain" />
+          {isCarousel ? (
+            <PillCarousel slides={slides} label={t.title} />
+          ) : (
+            meta?.image_url && (
+              <img src={meta.image_url} alt="" className="mx-auto h-auto max-h-96 w-auto max-w-full rounded-xl object-contain" />
+            )
           )}
         </div>
 
-        <BodyTranslationLoader
-          contentId={pill.id}
-          locale={locale}
-          isTranslating={needsBody}
-          field="body"
-          fallback={sourceBody}
-          initialContent={body}
-        />
+        {isCarousel ? (
+          <div className="mb-8 space-y-4">
+            {t.excerpt && <p className="text-base leading-relaxed text-[#2C2420]">{t.excerpt}</p>}
+            {credits.length > 0 && (
+              <div className="text-sm text-[#6B5F58]">
+                <p className="mb-1 font-medium text-[#2C2420]">{tContent('imageCredits')}</p>
+                <ul className="space-y-0.5">
+                  {credits.map((c) => (
+                    <li key={c.number}>{tContent('creditSlide', { n: c.number, credit: c.credit })}</li>
+                  ))}
+                </ul>
+              </div>
+            )}
+          </div>
+        ) : (
+          <BodyTranslationLoader
+            contentId={pill.id}
+            locale={locale}
+            isTranslating={needsBody}
+            field="body"
+            fallback={sourceBody}
+            initialContent={body}
+          />
+        )}
+
+        {topics.length > 0 && (
+          <div className="mb-8 flex flex-wrap gap-2">
+            {topics.map((topic) => (
+              <Link
+                key={topic.slug}
+                href={`/tag/${topic.slug}` as any}
+                className="rounded-full px-3 py-1 text-sm text-black no-underline transition-colors hover:bg-[#A9A8E9]/40"
+                style={{ border: '1.5px solid rgba(169,168,233,0.6)', background: '#fff' }}
+              >
+                {topic.name}
+              </Link>
+            ))}
+          </div>
+        )}
+
+        <div className="rounded-2xl border border-black/10 bg-white p-5">
+          <ShareBar title={t.title} url={pillUrl} />
+        </div>
       </main>
       <RelatedContent contentId={pill.id} type="pill" locale={locale} userId={user?.id} />
       <Footer />

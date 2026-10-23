@@ -1,21 +1,21 @@
 'use client'
 
 import { useRef, useState, useTransition } from 'react'
-import { useTranslations, useLocale } from 'next-intl'
+import { useTranslations } from 'next-intl'
 import { updatePill } from '@/lib/actions/pill'
 import { publishContent, unpublishContent, deleteContent } from '@/lib/actions/content'
-import { RichTextEditor } from '@/components/editor/RichTextEditorLazy'
 import type { EditorBlock } from '@/components/editor/RichTextEditorLazy'
+import type { Tag } from '@/components/ui/TagsInput'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { CoverImageInput } from '@/components/ui/CoverImageInput'
+import { PillContentFields, type PillFormat } from '@/components/pills/PillContentFields'
+import type { PillSlide } from '@/lib/pill-slides'
 import { AuthorPicker } from '@/components/content/AuthorPicker'
 import { FeatureRequestField } from '@/components/content/FeatureRequestField'
 import { ViewContentLink } from '@/components/content/ViewContentLink'
 import { ResponsibilityDeclaration } from '@/components/content/ResponsibilityDeclaration'
 import { LanguageAvailabilityFields } from '@/components/content/LanguageAvailabilityFields'
-import { coverInputProps } from '@/lib/cover-formats'
 
 interface EditPillFormProps {
   id: string
@@ -29,14 +29,18 @@ interface EditPillFormProps {
   initialBody: EditorBlock[] | null
   initialAccentColor: string
   initialImageUrl: string
+  initialFormat?: PillFormat
+  initialSlides?: PillSlide[]
+  initialDescription?: string
+  initialTags?: Tag[]
 }
 
 export function EditPillForm({
   id, status, initialAuthorId, slug, initialSingleLanguage = false, initialDeclared = false, initialFeatureRequested = false, initialTitle, initialBody, initialAccentColor, initialImageUrl,
+  initialFormat = 'text', initialSlides = [], initialDescription = '', initialTags = [],
 }: EditPillFormProps) {
   const t = useTranslations('editor')
   const td = useTranslations('dashboard')
-  const locale = useLocale()
   const formRef = useRef<HTMLFormElement>(null)
   const [declared, setDeclared] = useState(initialDeclared)
   const publishNow = () =>
@@ -46,13 +50,21 @@ export function EditPillForm({
       await publishContent(id, fd)
     })
   const [body, setBody] = useState<EditorBlock[] | null>(initialBody)
+  const [format, setFormat] = useState<PillFormat>(initialFormat)
+  const [slides, setSlides] = useState<PillSlide[]>(initialSlides)
+  const [description, setDescription] = useState(initialDescription)
+  const [tags, setTags] = useState<Tag[]>(initialTags)
   const [isPending, startTransition] = useTransition()
 
   const handleSave = (e: React.FormEvent) => {
     e.preventDefault()
     if (!formRef.current) return
     const fd = new FormData(formRef.current)
-    if (body) fd.set('body', JSON.stringify(body))
+    if (body && format === 'text') fd.set('body', JSON.stringify(body))
+    fd.set('format', format)
+    fd.set('slides', JSON.stringify(slides))
+    fd.set('description', description)
+    fd.set('tag_ids', JSON.stringify(tags.map((tag) => tag.id)))
     startTransition(() => updatePill(id, fd))
   }
 
@@ -80,12 +92,19 @@ export function EditPillForm({
         </div>
       </div>
 
-      <CoverImageInput name="image_url" defaultValue={initialImageUrl} label={t('coverPillLabel')} sizeHint={t('coverPillHint')} {...coverInputProps('pill')} />
-
-      <div className="space-y-2">
-        <Label>{t('bodyLabel')}</Label>
-        <RichTextEditor value={body} onChange={setBody} placeholder={t('bodyPlaceholder')} locale={locale} videos="none" />
-      </div>
+      <PillContentFields
+        format={format}
+        onFormatChange={setFormat}
+        slides={slides}
+        onSlidesChange={setSlides}
+        description={description}
+        onDescriptionChange={setDescription}
+        body={body}
+        onBodyChange={setBody}
+        tags={tags}
+        onTagsChange={setTags}
+        initialImageUrl={initialImageUrl}
+      />
 
       <FeatureRequestField defaultChecked={initialFeatureRequested} />
 

@@ -8,6 +8,7 @@ import { requireCreator } from '@/lib/require-creator'
 import { requireDeclaration } from '@/lib/declaration'
 import { notifyFeatureRequest } from '@/lib/feature-request'
 import { isEditorRole } from '@/lib/require-editor'
+import { parseSlides, slidesProblem } from '@/lib/pill-slides'
 import { logActivity, getContentLogInfo } from '@/lib/actions/activity-log'
 import { publishErrorMessage } from '@/lib/profile-complete'
 
@@ -16,6 +17,13 @@ export async function publishContent(id: string, formData: FormData) {
   const supabase = await createClient()
   // Publishing needs the creator's "I take responsibility" confirmation (recorded the first time)
   await requireDeclaration(supabase, id, formData)
+
+  // A carousel pill needs its slides complete before it can go public
+  const { data: pillMeta } = await (supabase as any).from('pill_meta').select('format, slides').eq('content_id', id).maybeSingle()
+  if (pillMeta?.format === 'carousel') {
+    const problem = slidesProblem(parseSlides(pillMeta.slides))
+    if (problem) throw new Error(problem)
+  }
 
   const query = (supabase as any)
     .from('content')

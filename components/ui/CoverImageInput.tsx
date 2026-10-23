@@ -9,7 +9,7 @@ import { Label } from '@/components/ui/label'
 const MAX_DIMENSION = 2400
 const SAFE_BYTES = 3 * 1024 * 1024
 
-async function prepareImage(file: File): Promise<File> {
+export async function prepareImage(file: File): Promise<File> {
   if (!file.type.startsWith('image/') || file.type === 'image/gif' || file.type === 'image/svg+xml') return file
   try {
     const bitmap = await createImageBitmap(file, { imageOrientation: 'from-image' })
