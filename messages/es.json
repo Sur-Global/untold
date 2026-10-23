@@ -14,7 +14,11 @@
     "search": "Buscar",
     "topics": "Temas",
     "adminDashboard": "Administración",
-    "home": "Inicio"
+    "home": "Inicio",
+    "explore": "Explorar",
+    "creators": "Creadores",
+    "issues": "Números",
+    "community": "Comunidad"
   },
   "home": {
     "title": "UNTOLD",
@@ -212,7 +216,10 @@
     "ctaTitle": "Botón de acción (opcional)",
     "ctaLabel": "Texto del botón",
     "ctaUrl": "Enlace del botón",
-    "ctaHint": "Se muestra solo en tu página de autor. El texto se traduce automáticamente a los demás idiomas."
+    "ctaHint": "Se muestra solo en tu página de autor. El texto se traduce automáticamente a los demás idiomas.",
+    "countryLabel": "País",
+    "countryNone": "— Sin indicar",
+    "countryHelp": "Se usa para filtrar en la página de Creadores."
   },
   "translating": {
     "heading": "Traduciendo al {language}",
@@ -417,5 +424,29 @@
     "inThisIssue": "En este número",
     "readEditorial": "Leer el editorial",
     "draft": "Borrador"
+  },
+  "creators": {
+    "title": "Creadores",
+    "description": "Las personas que escriben, filman y conversan en UNTOLD, desde el Sur Global.",
+    "searchPlaceholder": "Buscar por nombre",
+    "searchLabel": "Buscar creadores",
+    "sortLabel": "Ordenar",
+    "sortAz": "A–Z",
+    "sortContent": "Más contenido",
+    "sortRecent": "Más recientes",
+    "countryLabel": "País",
+    "countryAll": "Todos los países",
+    "topicLabel": "Tema",
+    "topicAll": "Todos los temas",
+    "letterLabel": "Inicial",
+    "letterAll": "Todas",
+    "noResults": "Ningún creador coincide con esos filtros.",
+    "clear": "Quitar filtros",
+    "results": "{count, plural, one {# creador} other {# creadores}}",
+    "article": "{count, plural, one {# artículo} other {# artículos}}",
+    "video": "{count, plural, one {# video} other {# videos}}",
+    "podcast": "{count, plural, one {# podcast} other {# podcasts}}",
+    "pill": "{count, plural, one {# píldora} other {# píldoras}}",
+    "course": "{count, plural, one {# curso} other {# cursos}}"
   }
 }

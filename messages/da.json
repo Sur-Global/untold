@@ -14,7 +14,11 @@
     "search": "Søg",
     "topics": "Emner",
     "adminDashboard": "Administration",
-    "home": "Forside"
+    "home": "Forside",
+    "explore": "Udforsk",
+    "creators": "Skabere",
+    "issues": "Udgaver",
+    "community": "Fællesskab"
   },
   "home": {
     "title": "UNTOLD",
@@ -212,7 +216,10 @@
     "ctaTitle": "Handlingsknap (valgfri)",
     "ctaLabel": "Knaptekst",
     "ctaUrl": "Knaplink",
-    "ctaHint": "Vises kun på din forfattersiden. Teksten oversættes automatisk til de andre sprog."
+    "ctaHint": "Vises kun på din forfattersiden. Teksten oversættes automatisk til de andre sprog.",
+    "countryLabel": "Land",
+    "countryNone": "— Ikke angivet",
+    "countryHelp": "Bruges til at filtrere på siden Skabere."
   },
   "translating": {
     "heading": "Oversætter til {language}",
@@ -417,5 +424,29 @@
     "inThisIssue": "I denne udgave",
     "readEditorial": "Læs lederen",
     "draft": "Kladde"
+  },
+  "creators": {
+    "title": "Skabere",
+    "description": "De mennesker, der skriver, filmer og samtaler på UNTOLD, fra det globale syd.",
+    "searchPlaceholder": "Søg efter navn",
+    "searchLabel": "Søg efter skabere",
+    "sortLabel": "Sortér",
+    "sortAz": "A–Z",
+    "sortContent": "Mest indhold",
+    "sortRecent": "Seneste",
+    "countryLabel": "Land",
+    "countryAll": "Alle lande",
+    "topicLabel": "Tema",
+    "topicAll": "Alle temaer",
+    "letterLabel": "Forbogstav",
+    "letterAll": "Alle",
+    "noResults": "Ingen skabere matcher disse filtre.",
+    "clear": "Ryd filtre",
+    "results": "{count, plural, one {# skaber} other {# skabere}}",
+    "article": "{count, plural, one {# artikel} other {# artikler}}",
+    "video": "{count, plural, one {# video} other {# videoer}}",
+    "podcast": "{count, plural, one {# podcast} other {# podcasts}}",
+    "pill": "{count, plural, one {# videnspille} other {# videnspiller}}",
+    "course": "{count, plural, one {# kursus} other {# kurser}}"
   }
 }

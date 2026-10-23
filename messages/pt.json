@@ -14,7 +14,11 @@
     "search": "Pesquisar",
     "topics": "Tópicos",
     "adminDashboard": "Administração",
-    "home": "Início"
+    "home": "Início",
+    "explore": "Explorar",
+    "creators": "Criadores",
+    "issues": "Edições",
+    "community": "Comunidade"
   },
   "home": {
     "title": "UNTOLD",
@@ -212,7 +216,10 @@
     "ctaTitle": "Botão de ação (opcional)",
     "ctaLabel": "Texto do botão",
     "ctaUrl": "Link do botão",
-    "ctaHint": "Aparece apenas na sua página de autor. O texto é traduzido automaticamente para os outros idiomas."
+    "ctaHint": "Aparece apenas na sua página de autor. O texto é traduzido automaticamente para os outros idiomas.",
+    "countryLabel": "País",
+    "countryNone": "— Não informado",
+    "countryHelp": "Usado para filtrar na página de Criadores."
   },
   "translating": {
     "heading": "Traduzindo para {language}",
@@ -417,5 +424,29 @@
     "inThisIssue": "Nesta edição",
     "readEditorial": "Ler o editorial",
     "draft": "Rascunho"
+  },
+  "creators": {
+    "title": "Criadores",
+    "description": "As pessoas que escrevem, filmam e conversam na UNTOLD, a partir do Sul Global.",
+    "searchPlaceholder": "Buscar por nome",
+    "searchLabel": "Buscar criadores",
+    "sortLabel": "Ordenar",
+    "sortAz": "A–Z",
+    "sortContent": "Mais conteúdo",
+    "sortRecent": "Mais recentes",
+    "countryLabel": "País",
+    "countryAll": "Todos os países",
+    "topicLabel": "Tema",
+    "topicAll": "Todos os temas",
+    "letterLabel": "Inicial",
+    "letterAll": "Todas",
+    "noResults": "Nenhum criador corresponde a esses filtros.",
+    "clear": "Limpar filtros",
+    "results": "{count, plural, one {# criador} other {# criadores}}",
+    "article": "{count, plural, one {# artigo} other {# artigos}}",
+    "video": "{count, plural, one {# vídeo} other {# vídeos}}",
+    "podcast": "{count, plural, one {# podcast} other {# podcasts}}",
+    "pill": "{count, plural, one {# pílula} other {# pílulas}}",
+    "course": "{count, plural, one {# curso} other {# cursos}}"
   }
 }

@@ -14,7 +14,11 @@
     "search": "Suchen",
     "topics": "Themen",
     "adminDashboard": "Verwaltung",
-    "home": "Startseite"
+    "home": "Startseite",
+    "explore": "Entdecken",
+    "creators": "Kreative",
+    "issues": "Ausgaben",
+    "community": "Community"
   },
   "home": {
     "title": "UNTOLD",
@@ -212,7 +216,10 @@
     "ctaTitle": "Aktions-Button (optional)",
     "ctaLabel": "Button-Text",
     "ctaUrl": "Button-Link",
-    "ctaHint": "Wird nur auf deiner Autorenseite angezeigt. Der Text wird automatisch in die anderen Sprachen übersetzt."
+    "ctaHint": "Wird nur auf deiner Autorenseite angezeigt. Der Text wird automatisch in die anderen Sprachen übersetzt.",
+    "countryLabel": "Land",
+    "countryNone": "— Nicht angegeben",
+    "countryHelp": "Wird zum Filtern auf der Seite der Kreativen verwendet."
   },
   "translating": {
     "heading": "Übersetzung ins {language}",
@@ -417,5 +424,29 @@
     "inThisIssue": "In dieser Ausgabe",
     "readEditorial": "Editorial lesen",
     "draft": "Entwurf"
+  },
+  "creators": {
+    "title": "Kreative",
+    "description": "Die Menschen, die auf UNTOLD schreiben, filmen und sich austauschen, aus dem Globalen Süden.",
+    "searchPlaceholder": "Nach Namen suchen",
+    "searchLabel": "Kreative suchen",
+    "sortLabel": "Sortieren",
+    "sortAz": "A–Z",
+    "sortContent": "Meiste Inhalte",
+    "sortRecent": "Neueste",
+    "countryLabel": "Land",
+    "countryAll": "Alle Länder",
+    "topicLabel": "Thema",
+    "topicAll": "Alle Themen",
+    "letterLabel": "Anfangsbuchstabe",
+    "letterAll": "Alle",
+    "noResults": "Kein Kreativer entspricht diesen Filtern.",
+    "clear": "Filter zurücksetzen",
+    "results": "{count, plural, one {# Kreativer} other {# Kreative}}",
+    "article": "{count, plural, one {# Artikel} other {# Artikel}}",
+    "video": "{count, plural, one {# Video} other {# Videos}}",
+    "podcast": "{count, plural, one {# Podcast} other {# Podcasts}}",
+    "pill": "{count, plural, one {# Wissenshäppchen} other {# Wissenshäppchen}}",
+    "course": "{count, plural, one {# Kurs} other {# Kurse}}"
   }
 }

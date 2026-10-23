@@ -43,6 +43,11 @@ export async function Footer({ flushTop = false }: { flushTop?: boolean } = {}) 
     { href: '/courses' as const, label: tNav('courses') },
   ]
 
+  const communityLinks = [
+    { href: '/creators' as const, label: tNav('creators') },
+    { href: '/issues' as const, label: tNav('issues') },
+  ]
+
   const gridCols =
     footerPages.length > 0 ? 'md:grid-cols-4' : 'md:grid-cols-3'
 
@@ -76,6 +81,25 @@ export async function Footer({ flushTop = false }: { flushTop?: boolean } = {}) 
             </p>
             <ul className="space-y-3 text-sm" style={{ color: '#78716C' }}>
               {exploreLinks.map(({ href, label }) => (
+                <li key={href}>
+                  <Link
+                    href={href}
+                    className="transition-colors hover:text-[#A9A8E9]"
+                    style={aeonikRegularBody}
+                  >
+                    {label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+            <p
+              className="mb-4 mt-8 text-sm"
+              style={{ ...aeonikRegular, color: '#A8A29E' }}
+            >
+              {tNav('community')}
+            </p>
+            <ul className="space-y-3 text-sm" style={{ color: '#78716C' }}>
+              {communityLinks.map(({ href, label }) => (
                 <li key={href}>
                   <Link
                     href={href}

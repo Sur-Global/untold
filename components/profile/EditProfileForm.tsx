@@ -2,13 +2,14 @@
 
 import { useRef, useState, useTransition } from 'react'
 import { useRouter } from 'next/navigation'
-import { useTranslations } from 'next-intl'
+import { useLocale, useTranslations } from 'next-intl'
 import { BlockNoteSchema } from '@blocknote/core'
 import { useCreateBlockNote } from '@blocknote/react'
 import { withMultiColumn } from '@blocknote/xl-multi-column'
 import { updateProfile } from '@/lib/actions/profile'
 import { slugify } from '@/lib/utils'
 import { CoverImageInput } from '@/components/ui/CoverImageInput'
+import { countryOptions } from '@/lib/countries'
 import { RichTextEditor, type EditorBlock } from '@/components/editor/RichTextEditorLazy'
 
 // Separate schema instance used only to convert the bio's blocks to HTML at
@@ -23,6 +24,7 @@ interface EditProfileFormProps {
   initialSlug: string
   initialBio: string
   initialLocation: string
+  initialCountry?: string
   initialWebsite: string
   initialAvatarUrl: string
   initialEmail?: string
@@ -47,6 +49,7 @@ export function EditProfileForm({
   initialSlug,
   initialBio,
   initialLocation,
+  initialCountry = '',
   initialWebsite,
   initialAvatarUrl,
   initialEmail = '',
@@ -61,6 +64,7 @@ export function EditProfileForm({
 }: EditProfileFormProps) {
   const router = useRouter()
   const t = useTranslations('dashboard')
+  const locale = useLocale()
   const [isPending, startTransition] = useTransition()
   const [error, setError] = useState<string | null>(null)
   const [success, setSuccess] = useState(false)
@@ -69,6 +73,7 @@ export function EditProfileForm({
   const [slug, setSlug] = useState(initialSlug)
   const [bioBlocks, setBioBlocks] = useState<EditorBlock[] | null>(null)
   const [location, setLocation] = useState(initialLocation)
+  const [country, setCountry] = useState(initialCountry)
   const [website, setWebsite] = useState(initialWebsite)
   const [avatarUrl, setAvatarUrl] = useState(initialAvatarUrl)
   const [email, setEmail] = useState(initialEmail)
@@ -100,6 +105,7 @@ export function EditProfileForm({
     fd.set('slug', slug)
     fd.set('bio', bioHtml)
     fd.set('location', location)
+    fd.set('country', country)
     fd.set('website', website)
     fd.set('avatar_url', avatarUrl)
     fd.set('email', email)
@@ -190,6 +196,18 @@ export function EditProfileForm({
           onChange={(e) => setLocation(e.target.value)}
           placeholder="City, Country"
         />
+      </div>
+
+      {/* Country (filter of the Creators page) */}
+      <div>
+        <label htmlFor="country" className={labelClass}>{t('countryLabel')}</label>
+        <select id="country" className={fieldClass} value={country} onChange={(e) => setCountry(e.target.value)}>
+          <option value="">{t('countryNone')}</option>
+          {countryOptions(locale).map((c) => (
+            <option key={c.code} value={c.code}>{c.name}</option>
+          ))}
+        </select>
+        <p className="mt-1 text-xs text-muted-foreground">{t('countryHelp')}</p>
       </div>
 
       {/* Website */}

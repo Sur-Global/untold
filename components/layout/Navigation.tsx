@@ -204,7 +204,7 @@ export function Navigation({
                 whiteSpace: 'nowrap',
               }}
             >
-              {t('topics')}
+              {t('explore')}
               <svg width="9" height="5" viewBox="0 0 9 5" fill="currentColor" aria-hidden>
                 <path d="M0 0l4.5 5L9 0H0z" />
               </svg>
@@ -224,6 +224,38 @@ export function Navigation({
                 zIndex: 200,
               }}
             >
+              {([['/creators', t('creators')], ['/issues', t('issues')]] as const).map(([href, label]) => (
+                <Link
+                  key={href}
+                  href={href}
+                  className="block hover:text-[#A9A8E9] transition-colors"
+                  style={{
+                    fontFamily: 'var(--font-aeonik), Aeonik, sans-serif',
+                    fontSize: 13,
+                    color: 'rgba(255,255,255,0.85)',
+                    textDecoration: 'none',
+                    padding: '9px 20px',
+                  }}
+                >
+                  {label}
+                </Link>
+              ))}
+              {topicLinks.length > 0 && (
+                <p
+                  style={{
+                    fontFamily: 'var(--font-aeonik), Aeonik, sans-serif',
+                    fontSize: 10,
+                    letterSpacing: '0.1em',
+                    textTransform: 'uppercase',
+                    color: 'rgba(255,255,255,0.3)',
+                    padding: '10px 20px 4px',
+                    marginTop: 4,
+                    borderTop: '1px solid rgba(255,255,255,0.08)',
+                  }}
+                >
+                  {t('topics')}
+                </p>
+              )}
               {topicLinks.map(({ slug, label }) => (
                 <Link
                   key={slug}
@@ -383,6 +415,17 @@ export function Navigation({
                       {t('search')}
                     </Link>
                   )}
+                  {/* Creators and issues */}
+                  {([['/creators', t('creators')], ['/issues', t('issues')]] as const).map(([href, label]) => (
+                    <Link
+                      key={href}
+                      href={href}
+                      className="py-3.5 text-sm transition-opacity hover:opacity-70"
+                      style={{ color: '#FFFFFF', textDecoration: 'none', borderBottom: '1px solid rgba(255,255,255,0.08)' }}
+                    >
+                      {label}
+                    </Link>
+                  ))}
                   {/* Topics section */}
                   <div style={{ marginTop: 8, paddingTop: 8, borderTop: '1px solid rgba(255,255,255,0.08)' }}>
                     <p style={{ fontSize: 10, color: 'rgba(255,255,255,0.3)', fontFamily: 'var(--font-aeonik), Aeonik, sans-serif', letterSpacing: '0.1em', textTransform: 'uppercase', paddingBottom: 6 }}>

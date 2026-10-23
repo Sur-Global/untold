@@ -14,7 +14,11 @@
     "search": "Search",
     "topics": "Topics",
     "adminDashboard": "Admin",
-    "home": "Home"
+    "home": "Home",
+    "explore": "Explore",
+    "creators": "Creators",
+    "issues": "Issues",
+    "community": "Community"
   },
   "home": {
     "title": "UNTOLD",
@@ -212,7 +216,10 @@
     "ctaTitle": "Call-to-action button (optional)",
     "ctaLabel": "Button text",
     "ctaUrl": "Button link",
-    "ctaHint": "Shown on your author page only. The text is translated automatically into the other languages."
+    "ctaHint": "Shown on your author page only. The text is translated automatically into the other languages.",
+    "countryLabel": "Country",
+    "countryNone": "— Not set",
+    "countryHelp": "Used to filter on the Creators page."
   },
   "translating": {
     "heading": "Translating into {language}",
@@ -417,5 +424,29 @@
     "inThisIssue": "In this issue",
     "readEditorial": "Read the editorial",
     "draft": "Draft"
+  },
+  "creators": {
+    "title": "Creators",
+    "description": "The people who write, film and converse on UNTOLD, from the Global South.",
+    "searchPlaceholder": "Search by name",
+    "searchLabel": "Search creators",
+    "sortLabel": "Sort",
+    "sortAz": "A–Z",
+    "sortContent": "Most content",
+    "sortRecent": "Most recent",
+    "countryLabel": "Country",
+    "countryAll": "All countries",
+    "topicLabel": "Topic",
+    "topicAll": "All topics",
+    "letterLabel": "Initial",
+    "letterAll": "All",
+    "noResults": "No creator matches those filters.",
+    "clear": "Clear filters",
+    "results": "{count, plural, one {# creator} other {# creators}}",
+    "article": "{count, plural, one {# article} other {# articles}}",
+    "video": "{count, plural, one {# video} other {# videos}}",
+    "podcast": "{count, plural, one {# podcast} other {# podcasts}}",
+    "pill": "{count, plural, one {# pill} other {# pills}}",
+    "course": "{count, plural, one {# course} other {# courses}}"
   }
 }

@@ -14,7 +14,11 @@
     "search": "Rechercher",
     "topics": "Sujets",
     "adminDashboard": "Administration",
-    "home": "Accueil"
+    "home": "Accueil",
+    "explore": "Explorer",
+    "creators": "Créateurs",
+    "issues": "Numéros",
+    "community": "Communauté"
   },
   "home": {
     "title": "UNTOLD",
@@ -212,7 +216,10 @@
     "ctaTitle": "Bouton d'action (facultatif)",
     "ctaLabel": "Texte du bouton",
     "ctaUrl": "Lien du bouton",
-    "ctaHint": "Affiché uniquement sur votre page d'auteur. Le texte est traduit automatiquement dans les autres langues."
+    "ctaHint": "Affiché uniquement sur votre page d'auteur. Le texte est traduit automatiquement dans les autres langues.",
+    "countryLabel": "Pays",
+    "countryNone": "— Non renseigné",
+    "countryHelp": "Sert à filtrer sur la page des Créateurs."
   },
   "translating": {
     "heading": "Traduction en {language}",
@@ -417,5 +424,29 @@
     "inThisIssue": "Dans ce numéro",
     "readEditorial": "Lire l’éditorial",
     "draft": "Brouillon"
+  },
+  "creators": {
+    "title": "Créateurs",
+    "description": "Les personnes qui écrivent, filment et dialoguent sur UNTOLD, depuis le Sud global.",
+    "searchPlaceholder": "Rechercher par nom",
+    "searchLabel": "Rechercher des créateurs",
+    "sortLabel": "Trier",
+    "sortAz": "A–Z",
+    "sortContent": "Plus de contenu",
+    "sortRecent": "Plus récents",
+    "countryLabel": "Pays",
+    "countryAll": "Tous les pays",
+    "topicLabel": "Thème",
+    "topicAll": "Tous les thèmes",
+    "letterLabel": "Initiale",
+    "letterAll": "Toutes",
+    "noResults": "Aucun créateur ne correspond à ces filtres.",
+    "clear": "Effacer les filtres",
+    "results": "{count, plural, one {# créateur} other {# créateurs}}",
+    "article": "{count, plural, one {# article} other {# articles}}",
+    "video": "{count, plural, one {# vidéo} other {# vidéos}}",
+    "podcast": "{count, plural, one {# podcast} other {# podcasts}}",
+    "pill": "{count, plural, one {# pilule} other {# pilules}}",
+    "course": "{count, plural, one {# cours} other {# cours}}"
   }
 }

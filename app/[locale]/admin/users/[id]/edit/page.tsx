@@ -22,7 +22,7 @@ export default async function AdminEditUserPage({ params }: PageProps) {
     getNavProps(),
     (supabase as any)
       .from('profiles')
-      .select('display_name, slug, bio, location, website, avatar_url, role, email, social_bluesky, social_linkedin, social_instagram, social_medium, social_custom_url, bio_cta_label, bio_cta_url')
+      .select('display_name, slug, bio, location, country, website, avatar_url, role, email, social_bluesky, social_linkedin, social_instagram, social_medium, social_custom_url, bio_cta_label, bio_cta_url')
       .eq('id', id)
       .single(),
   ])
@@ -55,6 +55,7 @@ export default async function AdminEditUserPage({ params }: PageProps) {
               initialSlug={profile.slug ?? ''}
               initialBio={profile.bio ?? ''}
               initialLocation={profile.location ?? ''}
+              initialCountry={profile.country ?? ''}
               initialWebsite={profile.website ?? ''}
               initialAvatarUrl={profile.avatar_url ?? ''}
               initialEmail={profile.email ?? fallbackEmail}
