@@ -117,7 +117,7 @@ export default async function IssuePage({ params }: { params: Promise<{ locale: 
                 </span>
               )}
             </h1>
-            <p className="mt-2 text-lg capitalize" style={{ ...aeonik(300), color: '#555' }}>
+            <p className="mt-2 text-lg first-letter:uppercase" style={{ ...aeonik(300), color: '#555' }}>
               {issueMonthLabel(issue.issue_date, locale)}
             </p>
           </div>
