@@ -4,7 +4,7 @@ import { createClient } from '@/lib/supabase/server'
 import { getNavProps } from '@/lib/nav'
 import { triggerListingTranslations } from '@/lib/trigger-listing-translations'
 import { editorialTexts } from '@/lib/data/issue-editorial'
-import { issueLabel, issueMonthLabel, issuePath, issueYear, toRoman } from '@/lib/issues'
+import { issueLabel, issueMonthName, issuePath, issueYear } from '@/lib/issues'
 import { Navigation } from '@/components/layout/Navigation'
 import { Footer } from '@/components/layout/Footer'
 import { TranslationRefresher } from '@/components/TranslationRefresher'
@@ -79,20 +79,17 @@ export default async function IssuesPage({ params }: { params: Promise<{ locale:
             return (
               <Link
                 key={issue.id}
-                href={issuePath(issue.issue_date, issue.number)}
-                aria-label={issueLabel(t('one'), issue.number, issue.issue_date, locale)}
+                href={issuePath(issue.issue_date)}
+                aria-label={issueLabel(issue.issue_date, locale)}
                 className="grid gap-6 rounded-2xl border border-black/10 bg-white p-6 no-underline transition-shadow hover:shadow-lg md:grid-cols-[1fr_2.2fr] md:p-8"
                 style={{ color: '#000' }}
               >
-                <div className="rounded-xl p-6" style={{ background: '#000', color: '#fff' }}>
-                  <p className="text-xs uppercase tracking-[0.08em]" style={{ ...aeonik(300), color: '#A9A8E9' }}>
-                    {t('one')}
+                <div className="flex flex-col justify-center rounded-xl p-6" style={{ background: '#000', color: '#fff' }}>
+                  <p style={{ ...aeonik(500), fontSize: 'clamp(30px, 3.4vw, 40px)', lineHeight: 1, letterSpacing: '-0.03em', color: '#D2FE73', overflowWrap: 'anywhere' }}>
+                    {issueMonthName(issue.issue_date, locale)}
                   </p>
-                  <p className="mt-1" style={{ ...aeonik(500), fontSize: 64, lineHeight: 1, letterSpacing: '-0.04em', color: '#D2FE73' }}>
-                    {toRoman(issue.number)}
-                  </p>
-                  <p className="mt-3 text-sm" style={{ ...aeonik(300), color: '#C9C4BD' }}>
-                    {issueYear(issue.issue_date)} · {issueMonthLabel(issue.issue_date, locale).replace(/\s*\d{4}$/, '').replace(/ de$/, '')}
+                  <p className="mt-2" style={{ ...aeonik(300), fontSize: 16, color: '#C9C4BD' }}>
+                    {issueYear(issue.issue_date)}
                   </p>
                 </div>
                 <div className="flex flex-col justify-center">

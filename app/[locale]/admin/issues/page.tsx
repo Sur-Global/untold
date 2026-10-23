@@ -1,4 +1,3 @@
-import { getTranslations } from 'next-intl/server'
 import { Link } from '@/i18n/navigation'
 import { requireEditor } from '@/lib/require-editor'
 import { createClient } from '@/lib/supabase/server'
@@ -12,7 +11,6 @@ export default async function AdminIssuesPage({ params }: { params: Promise<{ lo
   await requireEditor()
   const { locale } = await params
   const supabase = await createClient()
-  const t = await getTranslations({ locale, namespace: 'issues' })
 
   const { data: issues } = await (supabase as any)
     .from('issues')
@@ -61,7 +59,7 @@ export default async function AdminIssuesPage({ params }: { params: Promise<{ lo
                 const trans = getTranslation(issue.editorial?.content_translations ?? [], locale)
                 return (
                   <tr key={issue.id} className={adminTableRow}>
-                    <td className="px-6 py-3 font-medium text-foreground">{issueLabel(t('one'), issue.number, issue.issue_date, locale)}</td>
+                    <td className="px-6 py-3 font-medium text-foreground">{issueLabel(issue.issue_date, locale)}</td>
                     <td className="px-6 py-3 text-muted-foreground">
                       {trans ? (
                         <>

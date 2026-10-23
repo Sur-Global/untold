@@ -415,7 +415,6 @@
   },
   "issues": {
     "title": "Udgaver",
-    "one": "Udgave",
     "all": "Alle udgaver",
     "description": "Hver udgave af magasinet, med sin leder og de artikler, den består af.",
     "articles": "{count, plural, one {# artikel} other {# artikler}}",

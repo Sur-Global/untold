@@ -415,7 +415,6 @@
   },
   "issues": {
     "title": "Issues",
-    "one": "Issue",
     "all": "All issues",
     "description": "Every issue of the magazine, with its editorial and the articles in it.",
     "articles": "{count, plural, one {# article} other {# articles}}",

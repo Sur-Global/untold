@@ -415,7 +415,6 @@
   },
   "issues": {
     "title": "Ausgaben",
-    "one": "Ausgabe",
     "all": "Alle Ausgaben",
     "description": "Jede Ausgabe des Magazins, mit ihrem Editorial und den Artikeln, die sie enthält.",
     "articles": "{count, plural, one {# Artikel} other {# Artikel}}",

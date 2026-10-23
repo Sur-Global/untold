@@ -5,8 +5,8 @@ export type PickerArticle = {
   title: string
   authorName: string | null
   publishedAt: string | null
-  /** the issue it belongs to now, if any */
-  issueNumber: number | null
+  /** the issue it belongs to now, if any (e.g. "Jun 2026") */
+  issueLabel: string | null
 }
 
 /** The published articles an admin can put in an issue, newest first */
@@ -15,7 +15,7 @@ export async function loadPickerArticles(supabase: SupabaseClient): Promise<Pick
     .from('content')
     .select(`
       id, source_locale, published_at,
-      issue:issues!content_issue_id_fkey ( number ),
+      issue:issues!content_issue_id_fkey ( issue_date ),
       profiles!author_id ( display_name ),
       content_translations ( title, locale )
     `)
@@ -32,7 +32,7 @@ export async function loadPickerArticles(supabase: SupabaseClient): Promise<Pick
       title,
       authorName: r.profiles?.display_name ?? null,
       publishedAt: r.published_at ?? null,
-      issueNumber: r.issue?.number ?? null,
+      issueLabel: r.issue?.issue_date ? new Intl.DateTimeFormat('en', { month: 'short', year: 'numeric', timeZone: 'UTC' }).format(new Date(`${r.issue.issue_date}T00:00:00Z`)) : null,
     }
   })
 }

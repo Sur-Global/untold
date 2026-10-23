@@ -8,7 +8,7 @@ import { formatDate } from '@/lib/format-date'
 import { isRecent } from '@/lib/editorial'
 import { triggerListingTranslations } from '@/lib/trigger-listing-translations'
 import { editorialTexts } from '@/lib/data/issue-editorial'
-import { issueMonthLabel, toRoman } from '@/lib/issues'
+import { issueMonthName, issueYear } from '@/lib/issues'
 import { Navigation } from '@/components/layout/Navigation'
 import { Footer } from '@/components/layout/Footer'
 import { TranslationRefresher } from '@/components/TranslationRefresher'
@@ -20,11 +20,11 @@ const aeonik = (weight: 300 | 400 | 500): React.CSSProperties => ({
   fontWeight: weight,
 })
 
-export default async function IssuePage({ params }: { params: Promise<{ locale: string; year: string; number: string }> }) {
-  const { locale, year: yearParam, number: numberParam } = await params
-  const number = Number(numberParam)
+export default async function IssuePage({ params }: { params: Promise<{ locale: string; year: string; month: string }> }) {
+  const { locale, year: yearParam, month: monthParam } = await params
+  const month = Number(monthParam)
   const year = Number(yearParam)
-  if (!Number.isInteger(number) || number < 1 || !Number.isInteger(year) || year < 2000 || year > 2200) notFound()
+  if (!Number.isInteger(month) || month < 1 || month > 12 || !Number.isInteger(year) || year < 2000 || year > 2200) notFound()
 
   const [t, tHome, tContent, supabase, navData] = await Promise.all([
     getTranslations('issues'),
@@ -46,9 +46,7 @@ export default async function IssuePage({ params }: { params: Promise<{ locale: 
         content_translations ( title, excerpt, featured_summary, locale )
       )
     `)
-    .eq('number', number)
-    .gte('issue_date', `${year}-01-01`)
-    .lte('issue_date', `${year}-12-31`)
+    .eq('issue_date', `${year}-${String(month).padStart(2, '0')}-01`)
     .maybeSingle()
   if (!issue) notFound()
 
@@ -110,16 +108,16 @@ export default async function IssuePage({ params }: { params: Promise<{ locale: 
               {t('back')}
             </Link>
             <h1 className="mt-4 text-foreground" style={{ ...aeonik(500), fontSize: 'clamp(36px, 6vw, 56px)', lineHeight: 1.1, letterSpacing: '-0.03em' }}>
-              {t('one')} {toRoman(issue.number)}
+              {issueMonthName(issue.issue_date, locale)}
+              <span className="ml-3 align-baseline" style={{ ...aeonik(300), fontSize: '0.5em', letterSpacing: '-0.01em', color: '#777' }}>
+                {issueYear(issue.issue_date)}
+              </span>
               {issue.status === 'draft' && (
                 <span className="ml-3 rounded-full bg-amber-100 px-3 py-1 align-middle text-sm text-amber-800" style={aeonik(400)}>
                   {t('draft')}
                 </span>
               )}
             </h1>
-            <p className="mt-2 text-lg first-letter:uppercase" style={{ ...aeonik(300), color: '#555' }}>
-              {issueMonthLabel(issue.issue_date, locale)}
-            </p>
           </div>
         </div>
 

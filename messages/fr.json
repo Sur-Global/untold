@@ -415,7 +415,6 @@
   },
   "issues": {
     "title": "Numéros",
-    "one": "Numéro",
     "all": "Tous les numéros",
     "description": "Chaque numéro de la revue, avec son éditorial et les articles qui le composent.",
     "articles": "{count, plural, one {# article} other {# articles}}",

@@ -4,13 +4,12 @@ import { revalidatePath } from 'next/cache'
 import { createClient } from '@/lib/supabase/server'
 import { requireEditor } from '@/lib/require-editor'
 import { logActivity } from '@/lib/actions/activity-log'
-import { monthToDate, toRoman } from '@/lib/issues'
+import { issueMonthLabel, monthToDate } from '@/lib/issues'
 
 export type SaveIssueInput = {
   /** empty when creating a new issue */
   id?: string | null
-  number: number
-  /** "2026-10" */
+  /** "2026-10" — an issue is identified by its month and year (one per month) */
   month: string
   published: boolean
   /** an article: written as usual, then chosen here as this issue's editorial */
@@ -23,17 +22,17 @@ export type SaveIssueResult = { ok: true; id: string } | { ok: false; error: str
 
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i
 
-const duplicateMessage = (number: number, date: string) => `Issue ${toRoman(number)} of ${date.slice(0, 4)} already exists.`
+const duplicateMessage = (date: string) => `There is already an issue for ${issueMonthLabel(date, 'en')}.`
 
 // Expected problems are returned, not thrown: in production Next.js replaces the message of a thrown
 // server-action error with a generic one.
 export async function saveIssue(input: SaveIssueInput): Promise<SaveIssueResult> {
   await requireEditor()
 
-  const number = Number(input.number)
-  if (!Number.isInteger(number) || number < 1) return { ok: false, error: 'The issue number must be a whole number, 1 or higher.' }
   const issueDate = monthToDate(input.month ?? '')
   if (!issueDate) return { ok: false, error: 'Choose the month of the issue.' }
+  // the stored number simply mirrors the month, which is what keeps it to one issue per month
+  const number = Number(issueDate.slice(5, 7))
   const editorialId = input.editorialId || null
   if (editorialId && !UUID.test(editorialId)) return { ok: false, error: 'The editorial is not valid.' }
   const articleIds = [...new Set([...(input.articleIds ?? []), ...(editorialId ? [editorialId] : [])])]
@@ -45,10 +44,10 @@ export async function saveIssue(input: SaveIssueInput): Promise<SaveIssueResult>
   let id = input.id ?? null
   if (id) {
     const { error } = await (supabase as any).from('issues').update(row).eq('id', id)
-    if (error) return { ok: false, error: error.code === '23505' ? duplicateMessage(number, issueDate) : error.message }
+    if (error) return { ok: false, error: error.code === '23505' ? duplicateMessage(issueDate) : error.message }
   } else {
     const { data, error } = await (supabase as any).from('issues').insert(row).select('id').single()
-    if (error) return { ok: false, error: error.code === '23505' ? duplicateMessage(number, issueDate) : error.message }
+    if (error) return { ok: false, error: error.code === '23505' ? duplicateMessage(issueDate) : error.message }
     id = data.id as string
   }
 
@@ -64,7 +63,7 @@ export async function saveIssue(input: SaveIssueInput): Promise<SaveIssueResult>
   // The editorial is also marked ✎, so the homepage works with or without the issue
   if (editorialId) await (supabase as any).from('content').update({ is_editorial: true }).eq('id', editorialId)
 
-  await logActivity({ entityType: 'issue', entityId: id, entityLabel: `Issue ${toRoman(number)} · ${issueDate.slice(0, 4)}`, action: input.id ? 'updated' : 'created' })
+  await logActivity({ entityType: 'issue', entityId: id, entityLabel: `Issue ${issueMonthLabel(issueDate, 'en')}`, action: input.id ? 'updated' : 'created' })
 
   revalidatePath('/', 'layout')
   return { ok: true, id: id! }

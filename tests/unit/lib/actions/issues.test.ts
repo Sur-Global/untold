@@ -30,7 +30,7 @@ function makeDb(opts: { insertResult?: { data?: any; error?: any }; updateIssueE
   return calls
 }
 
-const base = { number: 14, month: '2026-10', published: true, editorialId: ID(1), articleIds: [ID(2), ID(3)] }
+const base = { month: '2026-10', published: true, editorialId: ID(1), articleIds: [ID(2), ID(3)] }
 
 describe('saveIssue', () => {
   beforeEach(() => vi.clearAllMocks())
@@ -40,7 +40,8 @@ describe('saveIssue', () => {
     const result = await saveIssue(base)
     expect(result).toEqual({ ok: true, id: ID(99) })
     const insert = calls.find((c) => c.table === 'issues' && c.op === 'insert')!
-    expect(insert.args[0]).toEqual({ number: 14, issue_date: '2026-10-01', status: 'published', editorial_id: ID(1) })
+    // the stored number mirrors the month: that is what allows only one issue per month
+    expect(insert.args[0]).toEqual({ number: 10, issue_date: '2026-10-01', status: 'published', editorial_id: ID(1) })
     const assign = calls.filter((c) => c.table === 'content' && c.op === 'update')
     expect(assign.map((a) => a.args[0])).toContainEqual({ issue_id: ID(99) })
     expect(assign.map((a) => a.args[0])).toContainEqual({ is_editorial: true })
@@ -59,20 +60,19 @@ describe('saveIssue', () => {
 
   it('saves a draft with no editorial and no articles', async () => {
     const calls = makeDb()
-    const result = await saveIssue({ number: 15, month: '2026-11', published: false, editorialId: null, articleIds: [] })
+    const result = await saveIssue({ month: '2026-11', published: false, editorialId: null, articleIds: [] })
     expect(result.ok).toBe(true)
     expect(calls.find((c) => c.op === 'insert')!.args[0]).toMatchObject({ status: 'draft', editorial_id: null })
     expect(calls.some((c) => c.op === 'not')).toBe(false)
   })
 
-  it('explains a duplicate issue number', async () => {
+  it('explains that the month already has an issue', async () => {
     makeDb({ insertResult: { data: null, error: { code: '23505', message: 'duplicate key' } } })
-    expect(await saveIssue(base)).toEqual({ ok: false, error: 'Issue XIV of 2026 already exists.' })
+    expect(await saveIssue(base)).toEqual({ ok: false, error: 'There is already an issue for October 2026.' })
   })
 
-  it('rejects a bad number, month or article id before touching the database', async () => {
+  it('rejects a bad month or article id before touching the database', async () => {
     const calls = makeDb()
-    expect((await saveIssue({ ...base, number: 0 })).ok).toBe(false)
     expect((await saveIssue({ ...base, month: '' })).ok).toBe(false)
     expect((await saveIssue({ ...base, articleIds: ['not-an-id'] })).ok).toBe(false)
     expect(calls).toHaveLength(0)

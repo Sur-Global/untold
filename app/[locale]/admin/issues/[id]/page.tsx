@@ -21,7 +21,6 @@ export default async function EditIssuePage({ params }: { params: Promise<{ id: 
     <IssueForm
       initial={{
         id: issue.id,
-        number: issue.number,
         month: dateToMonth(issue.issue_date),
         published: issue.status === 'published',
         editorialId: issue.editorial_id ?? null,

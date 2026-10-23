@@ -4,13 +4,13 @@ import { useMemo, useState, useTransition } from 'react'
 import { useRouter } from '@/i18n/navigation'
 import { saveIssue, deleteIssue } from '@/lib/actions/issues'
 import type { PickerArticle } from '@/lib/data/issue-picker'
+import { issueMonthLabel } from '@/lib/issues'
 import { AdminPanel } from '@/components/admin/AdminPanel'
 import { AdminPageHeader } from '@/components/admin/AdminPageHeader'
 import { adminPrimaryButton, adminGhostButton } from '@/components/admin/admin-ui'
 
 export type IssueFormInitial = {
   id: string | null
-  number: number
   /** "2026-10" */
   month: string
   published: boolean
@@ -29,7 +29,6 @@ const labelClass = 'mb-1 block text-xs font-medium text-muted-foreground'
 
 export function IssueForm({ initial, articles }: Props) {
   const router = useRouter()
-  const [number, setNumber] = useState(String(initial.number))
   const [month, setMonth] = useState(initial.month)
   const [published, setPublished] = useState(initial.published)
   const [editorialId, setEditorialId] = useState<string | null>(initial.editorialId)
@@ -42,7 +41,7 @@ export function IssueForm({ initial, articles }: Props) {
   const visible = useMemo(() => {
     const q = query.trim().toLowerCase()
     return articles.filter((a) => {
-      if (onlyFree && a.issueNumber !== null && !selected.has(a.id)) return false
+      if (onlyFree && a.issueLabel !== null && !selected.has(a.id)) return false
       return !q || a.title.toLowerCase().includes(q) || (a.authorName ?? '').toLowerCase().includes(q)
     })
   }, [articles, query, onlyFree, selected])
@@ -67,7 +66,6 @@ export function IssueForm({ initial, articles }: Props) {
     startTransition(async () => {
       const result = await saveIssue({
         id: initial.id,
-        number: Number(number),
         month,
         published,
         editorialId,
@@ -90,8 +88,8 @@ export function IssueForm({ initial, articles }: Props) {
   return (
     <div className="space-y-8">
       <AdminPageHeader
-        title={initial.id ? `Edit issue ${initial.number}` : 'New issue'}
-        description="Set the number and month, choose which article is the editorial and tick the articles that belong to this issue. The issue appears on the site only when it is published."
+        title={initial.id ? `Edit issue · ${issueMonthLabel(`${initial.month}-01`, 'en')}` : 'New issue'}
+        description="Choose the month of the issue, pick which article is the editorial and tick the articles that belong to it. There is one issue per month. The issue appears on the site only when it is published."
       >
         <button type="button" onClick={() => router.push('/admin/issues')} className={adminGhostButton}>
           Cancel
@@ -107,13 +105,7 @@ export function IssueForm({ initial, articles }: Props) {
       )}
 
       <AdminPanel bodyClassName="p-6">
-        <div className="grid gap-5 sm:grid-cols-3">
-          <div>
-            <label htmlFor="issue-number" className={labelClass}>
-              Issue number
-            </label>
-            <input id="issue-number" type="number" min={1} step={1} className={fieldClass} value={number} onChange={(e) => setNumber(e.target.value)} />
-          </div>
+        <div className="grid gap-5 sm:grid-cols-2">
           <div>
             <label htmlFor="issue-month" className={labelClass}>
               Month of the issue
@@ -174,8 +166,8 @@ export function IssueForm({ initial, articles }: Props) {
                     {[a.authorName, a.publishedAt ? new Date(a.publishedAt).toLocaleDateString() : null].filter(Boolean).join(' · ')}
                   </span>
                 </span>
-                {a.issueNumber !== null && !inThis && (
-                  <span className="shrink-0 rounded-md bg-muted px-2 py-0.5 text-xs text-muted-foreground">in issue {a.issueNumber}</span>
+                {a.issueLabel !== null && !inThis && (
+                  <span className="shrink-0 rounded-md bg-muted px-2 py-0.5 text-xs text-muted-foreground">in issue {a.issueLabel}</span>
                 )}
               </li>
             )

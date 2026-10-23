@@ -18,23 +18,24 @@ export function issueMonthLabel(date: string, locale: string): string {
   return new Intl.DateTimeFormat(locale, { month: 'long', year: 'numeric', timeZone: 'UTC' }).format(new Date(`${date.slice(0, 10)}T00:00:00Z`))
 }
 
-/** 7 → "VII" (the magazine writes its issue numbers in Roman numerals: 2026 – VII) */
-export function toRoman(n: number): string {
-  if (!Number.isInteger(n) || n < 1 || n > 3999) return String(n)
-  const table: [number, string][] = [[1000, 'M'], [900, 'CM'], [500, 'D'], [400, 'CD'], [100, 'C'], [90, 'XC'], [50, 'L'], [40, 'XL'], [10, 'X'], [9, 'IX'], [5, 'V'], [4, 'IV'], [1, 'I']]
-  let rest = n
-  let out = ''
-  for (const [value, symbol] of table) while (rest >= value) { out += symbol; rest -= value }
-  return out
-}
+/** "septiembre" → "Septiembre" */
+const capitalize = (text: string, locale: string) => text.charAt(0).toLocaleUpperCase(locale) + text.slice(1)
 
 /** The year of an issue, from its date */
 export const issueYear = (date: string): number => Number(date.slice(0, 4))
 
-/** "Número VII · octubre de 2026" */
-export function issueLabel(word: string, number: number, date: string, locale: string): string {
-  return `${word} ${toRoman(number)} · ${issueMonthLabel(date, locale)}`
+/** The month of an issue, 1–12 */
+export const issueMonth = (date: string): number => Number(date.slice(5, 7))
+
+/** "Septiembre" — the month alone, in the reader's language */
+export function issueMonthName(date: string, locale: string): string {
+  return capitalize(new Intl.DateTimeFormat(locale, { month: 'long', timeZone: 'UTC' }).format(new Date(`${date.slice(0, 10)}T00:00:00Z`)), locale)
 }
 
-/** Numbers restart every year, so an issue's address has both: /issues/2026/7 */
-export const issuePath = (date: string, number: number) => `/issues/${issueYear(date)}/${number}`
+/** "Septiembre de 2026" / "September 2026" */
+export function issueLabel(date: string, locale: string): string {
+  return capitalize(issueMonthLabel(date, locale), locale)
+}
+
+/** Issues are one per month, so an issue's address is its year and month: /issues/2026/9 */
+export const issuePath = (date: string) => `/issues/${issueYear(date)}/${issueMonth(date)}`

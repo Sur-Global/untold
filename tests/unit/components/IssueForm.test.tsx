@@ -8,21 +8,21 @@ vi.mock('@/i18n/navigation', () => ({ useRouter: () => ({ push }) }))
 vi.mock('@/lib/actions/issues', () => ({ saveIssue: vi.fn(), deleteIssue: vi.fn() }))
 
 const articles = [
-  { id: 'a1', title: 'Viejos mitos, nuevas amenazas', authorName: 'Javier Wong Q', publishedAt: '2026-09-13T10:00:00Z', issueNumber: null },
-  { id: 'a2', title: 'La mano que mueve la pluma', authorName: 'Carlos Fuller Maúrtua', publishedAt: '2026-09-04T10:00:00Z', issueNumber: 6 },
-  { id: 'a3', title: 'Justicia lingüística y el giro pluriversal', authorName: 'Yecid Ortega', publishedAt: '2026-08-13T10:00:00Z', issueNumber: null },
+  { id: 'a1', title: 'Viejos mitos, nuevas amenazas', authorName: 'Javier Wong Q', publishedAt: '2026-09-13T10:00:00Z', issueLabel: null },
+  { id: 'a2', title: 'La mano que mueve la pluma', authorName: 'Carlos Fuller Maúrtua', publishedAt: '2026-09-04T10:00:00Z', issueLabel: 'Jun 2026' },
+  { id: 'a3', title: 'Justicia lingüística y el giro pluriversal', authorName: 'Yecid Ortega', publishedAt: '2026-08-13T10:00:00Z', issueLabel: null },
 ]
-const initial = { id: null, number: 8, month: '2026-10', published: false, editorialId: null, articleIds: [] as string[] }
+const initial = { id: null, month: '2026-10', published: false, editorialId: null, articleIds: [] as string[] }
 
 describe('IssueForm (Admin → Issues)', () => {
   beforeEach(() => vi.clearAllMocks())
 
-  it('starts with the suggested number and month, and lists the articles with the issue they are in', () => {
+  it('asks only for the month (no issue number), and lists the articles with the issue they are in', () => {
     render(<IssueForm initial={initial} articles={articles} />)
-    expect(screen.getByLabelText('Issue number')).toHaveValue(8)
+    expect(screen.queryByLabelText('Issue number')).not.toBeInTheDocument()
     expect(screen.getByLabelText('Month of the issue')).toHaveValue('2026-10')
     expect(screen.getByText('Viejos mitos, nuevas amenazas')).toBeInTheDocument()
-    expect(screen.getByText('in issue 6')).toBeInTheDocument()
+    expect(screen.getByText('in issue Jun 2026')).toBeInTheDocument()
   })
 
   it('finds articles by title or author', () => {
@@ -49,7 +49,7 @@ describe('IssueForm (Admin → Issues)', () => {
     fireEvent.click(screen.getAllByRole('button', { name: 'Save issue' })[0])
     await waitFor(() => expect(saveIssue).toHaveBeenCalled())
     expect(vi.mocked(saveIssue).mock.calls[0][0]).toEqual({
-      id: null, number: 8, month: '2026-10', published: true, editorialId: 'a1', articleIds: expect.arrayContaining(['a1', 'a3']),
+      id: null, month: '2026-10', published: true, editorialId: 'a1', articleIds: expect.arrayContaining(['a1', 'a3']),
     })
     await waitFor(() => expect(push).toHaveBeenCalledWith('/admin/issues'))
   })
@@ -64,10 +64,10 @@ describe('IssueForm (Admin → Issues)', () => {
   })
 
   it('shows the reason when saving fails and stays on the page', async () => {
-    vi.mocked(saveIssue).mockResolvedValue({ ok: false, error: 'Issue 8 already exists.' })
+    vi.mocked(saveIssue).mockResolvedValue({ ok: false, error: 'There is already an issue for October 2026.' })
     render(<IssueForm initial={initial} articles={articles} />)
     fireEvent.click(screen.getAllByRole('button', { name: 'Save issue' })[0])
-    expect(await screen.findByText('Issue 8 already exists.')).toBeInTheDocument()
+    expect(await screen.findByText('There is already an issue for October 2026.')).toBeInTheDocument()
     expect(push).not.toHaveBeenCalled()
   })
 })

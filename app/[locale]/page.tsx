@@ -38,7 +38,7 @@ export default async function HomePage({ params }: PageProps) {
   const tListings = await getTranslations('listings')
   const tContentHome = await getTranslations('content')
   const platform = await getPlatformSettings()
-  const [banners, tBanners, tIssues] = await Promise.all([getHomeBanners(), getTranslations('banners'), getTranslations('issues')])
+  const [banners, tBanners] = await Promise.all([getHomeBanners(), getTranslations('banners')])
   const bannerCopy = (slot: 'top' | 'bottom') => ({
     adLabel: tBanners('adLabel'),
     eyebrow: tBanners(`${slot}.eyebrow`),
@@ -409,7 +409,7 @@ export default async function HomePage({ params }: PageProps) {
       authorAvatarUrl: editorialRow.profiles?.avatar_url ?? null,
       dateLabel: dateOf(editorialRow.published_at),
       issue: issueWithEditorial
-        ? { label: issueLabel(tIssues('one'), issueWithEditorial.number, issueWithEditorial.issue_date, locale), href: issuePath(issueWithEditorial.issue_date, issueWithEditorial.number) }
+        ? { label: issueLabel(issueWithEditorial.issue_date, locale), href: issuePath(issueWithEditorial.issue_date) }
         : null,
     }
   }
