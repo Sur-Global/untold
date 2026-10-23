@@ -24,15 +24,18 @@ describe('cornerBrightness', () => {
 })
 
 describe('resolveLogoColors', () => {
-  const base: PillSlide = { id: 'a', kind: 'photo', image_url: null, text: '', credit: '', logo: 'auto', logo_color: null }
+  const base: PillSlide = { id: 'a', kind: 'photo', image_url: null, text: '', credit: '', brands: ['untold'], logo: 'auto', logo_color: null }
   it('leaves text slides and chosen colours as they are, and uses white when the picture cannot be read', async () => {
     const out = await resolveLogoColors([
       { ...base, kind: 'text', logo: 'white' },
       { ...base, logo: 'black' },
       { ...base, image_url: 'http://not-https.example/a.png' },
+      { ...base, brands: [], logo_color: 'black' },
     ])
     expect(out[0].logo_color).toBeNull()
     expect(out[1].logo_color).toBeNull()
     expect(out[2].logo_color).toBe('white')
+    // no logo, no colour
+    expect(out[3].logo_color).toBeNull()
   })
 })

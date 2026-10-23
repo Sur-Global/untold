@@ -3,6 +3,7 @@ import { useState } from 'react'
 import { useTranslations } from 'next-intl'
 import { Link, useRouter } from '@/i18n/navigation'
 import { BookmarkButton } from '@/components/social/BookmarkButton'
+import { readableTextColor } from '@/lib/cover-formats'
 
 // ─── Shared helpers ────────────────────────────────────────────────────────────
 
@@ -596,9 +597,10 @@ export function HomePillCard({
   isLoggedIn = false,
 }: HomePillCardProps) {
   const tShare = useTranslations('share')
-  const tagBg = accentColor ? `${accentColor}1a` : 'rgba(107,142,35,0.12)'
-  const tagColor = accentColor ?? '#6B8E23'
-  const tagBorder = accentColor ? `${accentColor}33` : 'rgba(107,142,35,0.25)'
+  // The chip is the pill's brand colour, with the text colour that reads best on it
+  const tagBg = accentColor ?? 'rgba(107,142,35,0.12)'
+  const tagColor = accentColor ? readableTextColor(accentColor) : '#6B8E23'
+  const tagBorder = accentColor ? 'rgba(0,0,0,0.12)' : 'rgba(107,142,35,0.25)'
 
   return (
     <div

@@ -63,11 +63,12 @@ export default async function EditPillPage({ params }: EditPillPageProps) {
           initialFeatureRequested={!!content.feature_requested_at}
           initialTitle={tr?.title ?? ''}
           initialBody={initialBody}
-          initialAccentColor={meta?.accent_color ?? '#C45D3A'}
+          initialAccentColor={meta?.accent_color ?? ''}
           initialImageUrl={meta?.image_url ?? ''}
           initialFormat={meta?.format === 'carousel' ? 'carousel' : 'text'}
           initialSlides={parseSlides(meta?.slides)}
           initialDescription={tr?.excerpt ?? ''}
+          brandLogos={isEditorRole(profile.role)}
           initialTags={(content.content_tags ?? []).filter((ct: any) => ct.tags).map((ct: any) => ({ id: ct.tags.id, slug: ct.tags.slug, name: ct.tags.names?.[locale] ?? ct.tags.names?.en ?? ct.tags.slug }))}
         />
       </main>

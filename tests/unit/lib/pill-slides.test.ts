@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest'
 import { blocksTextLength, firstSlideImage, localizedSlides, logoColorOf, MAX_SLIDES, newSlide, parseSlides, slideCredits, slidesProblem, SLIDE_TEXT_MAX, type PillSlide } from '@/lib/pill-slides'
 
-const slide = (extra: Partial<PillSlide> = {}): PillSlide => ({ id: 's1', kind: 'photo', image_url: 'https://cdn/a.webp', text: 'Hola', credit: '', logo: 'auto', logo_color: null, ...extra })
+const slide = (extra: Partial<PillSlide> = {}): PillSlide => ({ id: 's1', kind: 'photo', image_url: 'https://cdn/a.webp', text: 'Hola', credit: '', brands: ['untold'], logo: 'auto', logo_color: null, ...extra })
 
 describe('parseSlides', () => {
   it('reads slides from the JSON of a form and cleans them', () => {
@@ -22,10 +22,17 @@ describe('parseSlides', () => {
     expect(parseSlides([{ kind: 'text', text: 'x'.repeat(SLIDE_TEXT_MAX + 50) }])[0].text).toHaveLength(SLIDE_TEXT_MAX)
     expect(parseSlides(Array.from({ length: MAX_SLIDES + 5 }, () => ({ kind: 'text' })))).toHaveLength(MAX_SLIDES)
   })
-  it('gives sensible defaults to the logo: automatic on photos, none on finished images', () => {
-    expect(parseSlides([{ kind: 'photo' }])[0].logo).toBe('auto')
-    expect(parseSlides([{ kind: 'image' }])[0].logo).toBe('none')
-    expect(newSlide('text').logo).toBe('white')
+  it('gives sensible defaults to the logos: none, with the automatic colour (white on lilac)', () => {
+    const [photo, image, text] = parseSlides([{ kind: 'photo' }, { kind: 'image' }, { kind: 'text' }])
+    expect([photo.brands, image.brands, text.brands]).toEqual([[], [], []])
+    expect([photo.logo, image.logo, text.logo]).toEqual(['auto', 'auto', 'white'])
+    expect(newSlide('photo').brands).toEqual([])
+    expect(newSlide('photo', ['untold']).brands).toEqual(['untold'])
+  })
+  it('keeps the logos chosen (UNTOLD and / or SurGlobal, nothing else), and reads the old way of saving them', () => {
+    expect(parseSlides([{ kind: 'photo', brands: ['surglobal', 'untold', 'other', 'untold'] }])[0].brands).toEqual(['untold', 'surglobal'])
+    expect(parseSlides([{ kind: 'photo', logo: 'white' }])[0].brands).toEqual(['untold'])
+    expect(parseSlides([{ kind: 'photo', logo: 'none' }])[0]).toMatchObject({ brands: [], logo: 'auto' })
   })
 })
 
@@ -42,7 +49,8 @@ describe('logoColorOf', () => {
   it('is always white on lilac, follows the choice, and uses the automatic colour on photos', () => {
     expect(logoColorOf(slide({ kind: 'text', logo: 'black' }))).toBe('white')
     expect(logoColorOf(slide({ logo: 'black' }))).toBe('black')
-    expect(logoColorOf(slide({ logo: 'none' }))).toBeNull()
+    expect(logoColorOf(slide({ brands: [] }))).toBeNull()
+    expect(logoColorOf(slide({ kind: 'text', brands: [] }))).toBeNull()
     expect(logoColorOf(slide({ logo: 'auto', logo_color: 'black' }))).toBe('black')
     expect(logoColorOf(slide({ logo: 'auto', logo_color: null }))).toBe('white')
   })

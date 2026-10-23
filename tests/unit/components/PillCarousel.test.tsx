@@ -10,7 +10,7 @@ vi.mock('next-intl', () => ({
     Object.entries(values ?? {}).reduce((text, [k, v]) => text.replace(`{${k}}`, String(v)), messages[key] ?? key),
 }))
 
-const slide = (extra: Partial<PillSlide>): PillSlide => ({ id: 'a', kind: 'photo', image_url: 'https://cdn/a.webp', text: '', credit: '', logo: 'auto', logo_color: 'white', ...extra })
+const slide = (extra: Partial<PillSlide>): PillSlide => ({ id: 'a', kind: 'photo', image_url: 'https://cdn/a.webp', text: '', credit: '', brands: ['untold'], logo: 'auto', logo_color: 'white', ...extra })
 const slides: PillSlide[] = [
   slide({ id: 'a', text: 'Crisis climática', logo_color: 'white' }),
   slide({ id: 'b', kind: 'text', image_url: null, text: 'La humanidad ha explotado el planeta.\n- Infórmate\n- Muévete', logo: 'white' }),
@@ -25,16 +25,28 @@ describe('SlideView', () => {
   })
   it('puts the text on the brand lilac with the white logo, and turns “-” lines into a list', () => {
     const { container } = render(<SlideView slide={slides[1]} />)
-    expect((container.firstChild as HTMLElement).style.background).toMatch(/169, 168, 233|#a9a8e9/i)
+    expect((container.firstChild as HTMLElement).style.background).toMatch(/161, 161, 233|#a1a1e9/i)
     expect(container.querySelector('[data-logo="white"]')).toBeTruthy()
     expect(screen.getAllByRole('listitem').map((li) => li.textContent)).toEqual(['Infórmate', 'Muévete'])
+  })
+  it('puts a light shadow under the text on lilac, like the Figma designs', () => {
+    const { container } = render(<SlideView slide={slides[1]} />)
+    expect(container.innerHTML).toMatch(/text-shadow/)
   })
   it('uses the black logo on a light picture and none when the slide has no logo', () => {
     const light = render(<SlideView slide={slides[2]} />)
     expect(light.container.querySelector('[data-logo="black"]')).toHaveAttribute('src', '/logo-slide-black.png')
     light.unmount()
-    const none = render(<SlideView slide={slide({ kind: 'image', logo: 'none' })} />)
+    const none = render(<SlideView slide={slide({ kind: 'image', brands: [] })} />)
     expect(none.container.querySelector('[data-logo]')).toBeNull()
+  })
+  it('shows the SurGlobal logo, or both logos with SurGlobal above UNTOLD', () => {
+    const sg = render(<SlideView slide={slide({ brands: ['surglobal'], logo_color: 'black' })} />)
+    expect(sg.container.querySelector('[data-brand="surglobal"]')).toHaveAttribute('src', '/logo-slide-surglobal-black.png')
+    expect(sg.container.querySelector('[data-brand="untold"]')).toBeNull()
+    sg.unmount()
+    const both = render(<SlideView slide={slide({ brands: ['untold', 'surglobal'] })} />)
+    expect([...both.container.querySelectorAll('[data-brand]')].map((img) => img.getAttribute('data-brand'))).toEqual(['surglobal', 'untold'])
   })
 })
 

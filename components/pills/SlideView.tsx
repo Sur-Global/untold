@@ -1,4 +1,4 @@
-import { logoColorOf, SLIDE_LILAC, type PillSlide } from '@/lib/pill-slides'
+import { LILAC_TEXT_SHADOW, logoColorOf, SLIDE_BRANDS, SLIDE_LILAC, SLIDE_LOGO_FILES, type PillSlide } from '@/lib/pill-slides'
 
 const aeonik: React.CSSProperties = { fontFamily: 'var(--font-aeonik), Aeonik, sans-serif' }
 
@@ -32,7 +32,7 @@ function SlideText({ text }: { text: string }) {
 
 /**
  * One slide of a carousel pill, always 4:5. Sizes follow the width of the slide (container units), so the same
- * slide looks right big, in a thumbnail in the editor or in a card. The logo sits in the bottom right corner.
+ * slide looks right big, in a thumbnail in the editor or in a card. The logos (when an admin or editor chose them) sit in the bottom right corner.
  */
 export function SlideView({ slide }: { slide: PillSlide }) {
   const logo = logoColorOf(slide)
@@ -60,21 +60,18 @@ export function SlideView({ slide }: { slide: PillSlide }) {
       )}
 
       {slide.kind === 'text' && (
-        <div className="absolute inset-0 flex items-center" style={{ padding: '9cqw 9cqw 20cqw', color: '#fff', fontSize: '5.2cqw', lineHeight: 1.45, fontWeight: 400 }}>
+        <div className="absolute inset-0 flex items-center" style={{ padding: '9cqw 9cqw 20cqw', color: '#fff', fontSize: '5.2cqw', lineHeight: 1.45, fontWeight: 400, textShadow: LILAC_TEXT_SHADOW }}>
           <SlideText text={slide.text} />
         </div>
       )}
 
       {logo && (
-        // eslint-disable-next-line @next/next/no-img-element
-        <img
-          src={logo === 'white' ? '/logo-slide-white.png' : '/logo-slide-black.png'}
-          alt=""
-          aria-hidden
-          className="absolute"
-          style={{ right: '5cqw', bottom: '5cqw', width: '24cqw', height: 'auto' }}
-          data-logo={logo}
-        />
+        <div className="absolute flex flex-col items-end" style={{ right: '5cqw', bottom: '5cqw', gap: '1.6cqw' }}>
+          {SLIDE_BRANDS.filter((brand) => slide.brands.includes(brand)).map((brand) => (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img key={brand} src={SLIDE_LOGO_FILES[brand][logo]} alt="" aria-hidden style={{ width: '24cqw', height: 'auto' }} data-logo={logo} data-brand={brand} />
+          ))}
+        </div>
       )}
     </div>
   )

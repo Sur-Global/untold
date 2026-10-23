@@ -19,6 +19,7 @@ import { stripNewMediaBlocks } from '@/lib/body-policy'
 import { publishErrorMessage } from '@/lib/profile-complete'
 import { firstSlideImage, parseSlides } from '@/lib/pill-slides'
 import { assertShortText, readPillFormat } from '@/lib/pill-form'
+import { normalizeAccent } from '@/lib/pill-accent'
 
 async function syncTags(supabase: any, contentId: string, formData: FormData, replace: boolean) {
   const raw = formData.get('tag_ids') as string | null
@@ -40,8 +41,8 @@ export async function createPill(formData: FormData) {
 
   const title = (formData.get('title') as string).trim()
   const body = formData.get('body') as string | null
-  const accentColor = (formData.get('accent_color') as string)?.trim() || '#C45D3A'
-  const { format, slides, description } = await readPillFormat(formData, formData.get('publish') === 'true')
+  const accentColor = normalizeAccent(formData.get('accent_color'))
+  const { format, slides, description } = await readPillFormat(formData, formData.get('publish') === 'true', { canBrand: isEditorRole(profile.role) })
   const bodyJson = format === 'text' && body ? stripNewMediaBlocks((() => { try { return JSON.parse(body) } catch { return null } })()) : null
   if (format === 'text') assertShortText(bodyJson)
   // the cover of a carousel is its first picture
@@ -113,8 +114,9 @@ export async function updatePill(id: string, formData: FormData) {
 
   const title = (formData.get('title') as string).trim()
   const body = formData.get('body') as string | null
-  const accentColor = (formData.get('accent_color') as string)?.trim() || '#C45D3A'
-  const { format, slides, description } = await readPillFormat(formData, false)
+  const accentColor = normalizeAccent(formData.get('accent_color'))
+  const { data: currentMeta } = await (supabase as any).from('pill_meta').select('slides, slide_translations').eq('content_id', id).maybeSingle()
+  const { format, slides, description } = await readPillFormat(formData, false, { canBrand: isEditorRole(profile.role), existing: currentMeta?.slides })
   const imageUrl = (format === 'carousel' ? firstSlideImage(slides) : null) ?? ((formData.get('image_url') as string)?.trim() || null)
 
   const newAuthorId = await requestedAuthorId(supabase, formData, profile.role)
@@ -172,7 +174,6 @@ export async function updatePill(id: string, formData: FormData) {
   }
 
   // The translated texts of the slides are only valid for the texts they were made from
-  const { data: currentMeta } = await (supabase as any).from('pill_meta').select('slides, slide_translations').eq('content_id', id).maybeSingle()
   const slideTexts = (list: unknown) => JSON.stringify(parseSlides(list).map((x) => [x.id, x.text]))
   const slidesTextChanged = slideTexts(currentMeta?.slides) !== slideTexts(slides)
   await (supabase as any)

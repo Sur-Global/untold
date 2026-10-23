@@ -9,6 +9,7 @@ import type { Tag } from '@/components/ui/TagsInput'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { AccentColorPicker } from '@/components/pills/AccentColorPicker'
 import { PillContentFields, type PillFormat } from '@/components/pills/PillContentFields'
 import type { PillSlide } from '@/lib/pill-slides'
 import { AuthorPicker } from '@/components/content/AuthorPicker'
@@ -33,11 +34,12 @@ interface EditPillFormProps {
   initialSlides?: PillSlide[]
   initialDescription?: string
   initialTags?: Tag[]
+  brandLogos?: boolean
 }
 
 export function EditPillForm({
   id, status, initialAuthorId, slug, initialSingleLanguage = false, initialDeclared = false, initialFeatureRequested = false, initialTitle, initialBody, initialAccentColor, initialImageUrl,
-  initialFormat = 'text', initialSlides = [], initialDescription = '', initialTags = [],
+  initialFormat = 'text', initialSlides = [], initialDescription = '', initialTags = [], brandLogos = false,
 }: EditPillFormProps) {
   const t = useTranslations('editor')
   const td = useTranslations('dashboard')
@@ -78,19 +80,7 @@ export function EditPillForm({
         <Input id="title" name="title" defaultValue={initialTitle} placeholder={t('titlePlaceholder')} required className="text-xl font-semibold" />
       </div>
 
-      <div className="space-y-2">
-        <Label>{t('accentColorLabel')}</Label>
-        <div className="flex items-center gap-3">
-          <input
-            id="accent_color"
-            name="accent_color"
-            type="color"
-            defaultValue={initialAccentColor || '#C45D3A'}
-            className="w-10 h-10 rounded cursor-pointer border border-[rgba(139,69,19,0.2)]"
-          />
-          <span className="text-sm text-[#6B5F58]">{t('pickAccentColorHint')}</span>
-        </div>
-      </div>
+      <AccentColorPicker defaultValue={initialAccentColor} />
 
       <PillContentFields
         format={format}
@@ -104,6 +94,7 @@ export function EditPillForm({
         tags={tags}
         onTagsChange={setTags}
         initialImageUrl={initialImageUrl}
+        brandLogos={brandLogos}
       />
 
       <FeatureRequestField defaultChecked={initialFeatureRequested} />

@@ -20,6 +20,8 @@ import { ShareBar } from '@/components/social/ShareBar'
 import { TranslationRefresher } from '@/components/TranslationRefresher'
 import { localizedSlides, parseSlides, slideCredits } from '@/lib/pill-slides'
 import { localizedPath, siteUrl } from '@/lib/content-metadata'
+import { normalizeAccent } from '@/lib/pill-accent'
+import { readableTextColor } from '@/lib/cover-formats'
 
 interface PageProps {
   params: Promise<{ locale: string; slug: string }>
@@ -68,7 +70,7 @@ export default async function PillPage({ params }: PageProps) {
   if (!t) notFound()
 
   const meta = pill.pill_meta
-  const accentColor = meta?.accent_color ?? '#6B8E23'
+  const accentColor = normalizeAccent(meta?.accent_color)
   const sourceLocale: string = pill.source_locale ?? 'en'
   const sourceTranslation = (pill.content_translations ?? []).find((tr: any) => tr.locale === sourceLocale)
   const sourceBody = sourceTranslation?.body as Record<string, unknown> | null
@@ -133,7 +135,7 @@ export default async function PillPage({ params }: PageProps) {
           <div className="flex items-center justify-between mb-4">
             <span
               className="text-xs font-mono uppercase tracking-wider px-2 py-0.5 rounded"
-              style={{ background: `${accentColor}20`, color: accentColor }}
+              style={{ background: accentColor, color: readableTextColor(accentColor), border: '1px solid rgba(0,0,0,0.12)' }}
             >
               {tContent('knowledgePill')}
             </span>
@@ -166,7 +168,7 @@ export default async function PillPage({ params }: PageProps) {
 
         {isCarousel ? (
           <div className="mb-8 space-y-4">
-            {t.excerpt && <p className="text-base leading-relaxed text-[#2C2420]">{t.excerpt}</p>}
+            {t.excerpt && <p className="whitespace-pre-line text-base leading-relaxed text-[#2C2420]">{t.excerpt}</p>}
             {credits.length > 0 && (
               <div className="text-sm text-[#6B5F58]">
                 <p className="mb-1 font-medium text-[#2C2420]">{tContent('imageCredits')}</p>

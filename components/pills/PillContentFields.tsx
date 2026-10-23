@@ -1,12 +1,13 @@
 'use client'
 
+import { useLayoutEffect, useRef } from 'react'
 import { useLocale, useTranslations } from 'next-intl'
 import { Label } from '@/components/ui/label'
 import { CoverImageInput } from '@/components/ui/CoverImageInput'
 import { TagsInput, type Tag } from '@/components/ui/TagsInput'
 import { RichTextEditor, type EditorBlock } from '@/components/editor/RichTextEditorLazy'
 import { SlidesEditor } from '@/components/pills/SlidesEditor'
-import { blocksTextLength, PILL_TEXT_MAX_CHARS, type PillSlide } from '@/lib/pill-slides'
+import { blocksTextLength, PILL_DESCRIPTION_MAX, PILL_TEXT_MAX_CHARS, type PillSlide } from '@/lib/pill-slides'
 import { coverInputProps } from '@/lib/cover-formats'
 
 export type PillFormat = 'text' | 'carousel'
@@ -23,6 +24,20 @@ interface Props {
   tags: Tag[]
   onTagsChange: (tags: Tag[]) => void
   initialImageUrl?: string
+  /** Admins and editors can put the UNTOLD / SurGlobal logo on the slides */
+  brandLogos?: boolean
+}
+
+/** A text box that grows with what is written, so the whole text is always visible (no scrolling inside it) */
+function GrowingTextarea(props: React.TextareaHTMLAttributes<HTMLTextAreaElement>) {
+  const ref = useRef<HTMLTextAreaElement>(null)
+  useLayoutEffect(() => {
+    const box = ref.current
+    if (!box) return
+    box.style.height = 'auto'
+    box.style.height = `${box.scrollHeight}px`
+  }, [props.value])
+  return <textarea ref={ref} {...props} style={{ overflow: 'hidden', resize: 'none', ...props.style }} />
 }
 
 /**
@@ -30,7 +45,7 @@ interface Props {
  * carousel of slides with a description. Tags are asked for in both.
  */
 export function PillContentFields({
-  format, onFormatChange, slides, onSlidesChange, description, onDescriptionChange, body, onBodyChange, tags, onTagsChange, initialImageUrl,
+  format, onFormatChange, slides, onSlidesChange, description, onDescriptionChange, body, onBodyChange, tags, onTagsChange, initialImageUrl, brandLogos = false,
 }: Props) {
   const t = useTranslations('editor')
   const locale = useLocale()
@@ -65,20 +80,23 @@ export function PillContentFields({
         <>
           <div className="space-y-2">
             <Label>{t('slidesLabel')}</Label>
-            <SlidesEditor slides={slides} onChange={onSlidesChange} />
+            <SlidesEditor slides={slides} onChange={onSlidesChange} brandLogos={brandLogos} />
           </div>
           <div className="space-y-2">
             <Label htmlFor="description">{t('carouselDescriptionLabel')}</Label>
-            <textarea
+            <GrowingTextarea
               id="description"
               value={description}
-              maxLength={600}
+              maxLength={PILL_DESCRIPTION_MAX}
               rows={3}
               onChange={(e) => onDescriptionChange(e.target.value)}
               placeholder={t('carouselDescriptionPlaceholder')}
               className="w-full rounded-[10px] border border-primary/20 bg-white px-4 py-3 text-base outline-none focus:border-primary/50"
             />
             <p className="text-xs text-muted-foreground">{t('carouselDescriptionHint')}</p>
+            <p className="text-xs font-medium text-foreground" aria-live="polite" data-description-counter>
+              {t('descriptionCharsLeft', { count: PILL_DESCRIPTION_MAX - description.length })}
+            </p>
           </div>
         </>
       ) : (

@@ -5,11 +5,15 @@ import { useTranslations } from 'next-intl'
 import { ArrowDown, ArrowUp, ImagePlus, Trash2 } from 'lucide-react'
 import { CoverImageInput, prepareImage } from '@/components/ui/CoverImageInput'
 import { Button } from '@/components/ui/button'
-import { MAX_SLIDES, newSlide, SLIDE_CREDIT_MAX, SLIDE_TEXT_MAX, type PillSlide, type SlideKind, type SlideLogo } from '@/lib/pill-slides'
+import { MAX_SLIDES, newSlide, SLIDE_CREDIT_MAX, SLIDE_TEXT_MAX, type PillSlide, type SlideBrand, type SlideKind, type SlideLogo } from '@/lib/pill-slides'
 import { SlideView } from '@/components/pills/SlideView'
 
 const fieldClass = 'w-full rounded-[10px] border border-primary/20 bg-white px-3 py-2 text-sm text-foreground outline-none focus:border-primary/50'
 const labelClass = 'mb-1 block text-xs font-semibold text-foreground'
+const BRAND_CHOICES: { brand: SlideBrand; name: string }[] = [
+  { brand: 'untold', name: 'UNTOLD' },
+  { brand: 'surglobal', name: 'SurGlobal' },
+]
 
 /** Uploads one picture the way the cover inputs do (shrunk first, then hosted by us) and gives back its address */
 async function uploadPicture(file: File): Promise<string> {
@@ -24,8 +28,11 @@ async function uploadPicture(file: File): Promise<string> {
   return (await res.json()).url as string
 }
 
-/** The slides of a carousel pill: add, reorder, remove, and fill in the picture, text, credit and logo of each. */
-export function SlidesEditor({ slides, onChange }: { slides: PillSlide[]; onChange: (slides: PillSlide[]) => void }) {
+/**
+ * The slides of a carousel pill: add, reorder, remove, and fill in the picture, text and credit of each.
+ * `brandLogos` (admins and editors only) also shows the choice of the UNTOLD and / or SurGlobal logo; everyone else sees no logo option.
+ */
+export function SlidesEditor({ slides, onChange, brandLogos = false }: { slides: PillSlide[]; onChange: (slides: PillSlide[]) => void; brandLogos?: boolean }) {
   const t = useTranslations('editor')
   const manyInput = useRef<HTMLInputElement>(null)
   const [progress, setProgress] = useState<{ done: number; total: number } | null>(null)
@@ -39,11 +46,19 @@ export function SlidesEditor({ slides, onChange }: { slides: PillSlide[]; onChan
     ;[next[index], next[target]] = [next[target], next[index]]
     onChange(next)
   }
+  // Admins and editors start every picture and text slide with the UNTOLD logo; the rest start with none
+  const startBrands = (kind: SlideKind): SlideBrand[] => (brandLogos && kind !== 'image' ? ['untold'] : [])
   const changeKind = (slide: PillSlide, kind: SlideKind) => {
     const fresh = newSlide(kind)
     update(slide.id, { kind, logo: fresh.logo, logo_color: null, image_url: kind === 'text' ? null : slide.image_url })
   }
-  const add = (kind: SlideKind) => slides.length < MAX_SLIDES && onChange([...slides, newSlide(kind)])
+  const toggleBrand = (slide: PillSlide, brand: SlideBrand, on: boolean) => {
+    const chosen = new Set(slide.brands)
+    if (on) chosen.add(brand)
+    else chosen.delete(brand)
+    update(slide.id, { brands: BRAND_CHOICES.map((c) => c.brand).filter((b) => chosen.has(b)), logo_color: null })
+  }
+  const add = (kind: SlideKind) => slides.length < MAX_SLIDES && onChange([...slides, newSlide(kind, startBrands(kind))])
 
   const addMany = async (files: FileList | null) => {
     if (!files || files.length === 0) return
@@ -54,7 +69,7 @@ export function SlidesEditor({ slides, onChange }: { slides: PillSlide[]; onChan
     for (let i = 0; i < list.length; i++) {
       setProgress({ done: i, total: list.length })
       try {
-        created.push({ ...newSlide('photo'), image_url: await uploadPicture(list[i]) })
+        created.push({ ...newSlide('photo', startBrands('photo')), image_url: await uploadPicture(list[i]) })
       } catch (err) {
         setError(err instanceof Error ? err.message : 'Upload failed')
         break
@@ -122,35 +137,45 @@ export function SlidesEditor({ slides, onChange }: { slides: PillSlide[]; onChan
             )}
 
             {slide.kind !== 'text' && (
-              <div className="grid gap-3 sm:grid-cols-2">
-                <div>
-                  <label className={labelClass} htmlFor={`slide-credit-${slide.id}`}>{t('slideCreditLabel')}</label>
-                  <input
-                    id={`slide-credit-${slide.id}`}
-                    value={slide.credit}
-                    maxLength={SLIDE_CREDIT_MAX}
-                    onChange={(e) => update(slide.id, { credit: e.target.value })}
-                    placeholder={t('slideCreditPlaceholder')}
-                    className={fieldClass}
-                  />
-                </div>
-                <div>
-                  <label className={labelClass} htmlFor={`slide-logo-${slide.id}`}>{t('slideLogoLabel')}</label>
-                  <select
-                    id={`slide-logo-${slide.id}`}
-                    value={slide.logo}
-                    onChange={(e) => update(slide.id, { logo: e.target.value as SlideLogo, logo_color: null })}
-                    className={fieldClass}
-                  >
-                    <option value="auto">{t('logoAuto')}</option>
-                    <option value="white">{t('logoWhite')}</option>
-                    <option value="black">{t('logoBlack')}</option>
-                    <option value="none">{t('logoNone')}</option>
-                  </select>
-                </div>
+              <div>
+                <label className={labelClass} htmlFor={`slide-credit-${slide.id}`}>{t('slideCreditLabel')}</label>
+                <input
+                  id={`slide-credit-${slide.id}`}
+                  value={slide.credit}
+                  maxLength={SLIDE_CREDIT_MAX}
+                  onChange={(e) => update(slide.id, { credit: e.target.value })}
+                  placeholder={t('slideCreditPlaceholder')}
+                  className={fieldClass}
+                />
               </div>
             )}
-            {slide.kind === 'text' && <p className="text-xs text-muted-foreground">{t('slideLogoLilacNote')}</p>}
+
+            {brandLogos && (
+              <fieldset>
+                <legend className={labelClass}>{t('slideLogoLabel')}</legend>
+                <div className="flex flex-wrap items-center gap-x-5 gap-y-2">
+                  {BRAND_CHOICES.map(({ brand, name }) => (
+                    <label key={brand} className="flex items-center gap-2 text-sm">
+                      <input type="checkbox" checked={slide.brands.includes(brand)} onChange={(e) => toggleBrand(slide, brand, e.target.checked)} />
+                      {name}
+                    </label>
+                  ))}
+                  {slide.kind !== 'text' && slide.brands.length > 0 && (
+                    <select
+                      aria-label={t('slideLogoColorLabel')}
+                      value={slide.logo}
+                      onChange={(e) => update(slide.id, { logo: e.target.value as SlideLogo, logo_color: null })}
+                      className="h-9 rounded-[10px] border border-primary/20 bg-white px-3 text-sm"
+                    >
+                      <option value="auto">{t('logoAuto')}</option>
+                      <option value="white">{t('logoWhite')}</option>
+                      <option value="black">{t('logoBlack')}</option>
+                    </select>
+                  )}
+                </div>
+                {slide.kind === 'text' && slide.brands.length > 0 && <p className="mt-1 text-xs text-muted-foreground">{t('slideLogoLilacNote')}</p>}
+              </fieldset>
+            )}
           </div>
         </div>
       ))}

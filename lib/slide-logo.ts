@@ -28,10 +28,11 @@ export async function cornerBrightness(image: Buffer): Promise<number> {
   return (0.2126 * r + 0.7152 * g + 0.0722 * b) / 255
 }
 
-/** Chooses the logo colour of every slide set to "automatic", looking at its picture. Anything that fails stays white. */
+/** Chooses the logo colour of every slide with logos set to "automatic", looking at its picture. Anything that fails stays white. */
 export async function resolveLogoColors(slides: PillSlide[]): Promise<PillSlide[]> {
   return Promise.all(
     slides.map(async (slide) => {
+      if (slide.brands.length === 0) return { ...slide, logo_color: null }
       if (slide.kind === 'text' || slide.logo !== 'auto' || !slide.image_url) return { ...slide, logo_color: slide.logo === 'auto' ? 'white' : slide.logo_color }
       try {
         const brightness = await cornerBrightness(await fetchImageFromUrl(slide.image_url))

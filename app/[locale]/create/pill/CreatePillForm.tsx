@@ -8,6 +8,7 @@ import type { Tag } from '@/components/ui/TagsInput'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { AccentColorPicker } from '@/components/pills/AccentColorPicker'
 import { PillContentFields, type PillFormat } from '@/components/pills/PillContentFields'
 import type { PillSlide } from '@/lib/pill-slides'
 import { AuthorPicker } from '@/components/content/AuthorPicker'
@@ -16,7 +17,7 @@ import { FeatureRequestField } from '@/components/content/FeatureRequestField'
 import { ResponsibilityDeclaration } from '@/components/content/ResponsibilityDeclaration'
 import { LanguageAvailabilityFields } from '@/components/content/LanguageAvailabilityFields'
 
-export function CreatePillForm() {
+export function CreatePillForm({ brandLogos = false }: { brandLogos?: boolean }) {
   const t = useTranslations('editor')
   const td = useTranslations('dashboard')
   const formRef = useRef<HTMLFormElement>(null)
@@ -56,19 +57,7 @@ export function CreatePillForm() {
         <Input id="title" name="title" placeholder={t('titlePlaceholder')} required className="text-xl font-semibold" />
       </div>
 
-      <div className="space-y-2">
-        <Label>{t('accentColorLabel')}</Label>
-        <div className="flex items-center gap-3">
-          <input
-            id="accent_color"
-            name="accent_color"
-            type="color"
-            defaultValue="#C45D3A"
-            className="w-10 h-10 rounded cursor-pointer border border-[rgba(139,69,19,0.2)]"
-          />
-          <span className="text-sm text-[#6B5F58]">{t('pickAccentColorHint')}</span>
-        </div>
-      </div>
+      <AccentColorPicker />
 
       <PillContentFields
         format={format}
@@ -81,6 +70,7 @@ export function CreatePillForm() {
         onBodyChange={setBody}
         tags={tags}
         onTagsChange={setTags}
+        brandLogos={brandLogos}
       />
 
       <FeatureRequestField />

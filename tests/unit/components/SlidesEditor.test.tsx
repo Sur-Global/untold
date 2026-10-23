@@ -7,18 +7,18 @@ vi.mock('next-intl', () => ({
   useTranslations: () => (key: string, values?: Record<string, unknown>) => (values ? `${key} ${Object.values(values).join(' ')}` : key),
 }))
 
-const slide = (id: string, extra: Partial<PillSlide> = {}): PillSlide => ({ id, kind: 'photo', image_url: `https://cdn/${id}.webp`, text: `Texto ${id}`, credit: '', logo: 'auto', logo_color: null, ...extra })
+const slide = (id: string, extra: Partial<PillSlide> = {}): PillSlide => ({ id, kind: 'photo', image_url: `https://cdn/${id}.webp`, text: `Texto ${id}`, credit: '', brands: [], logo: 'auto', logo_color: null, ...extra })
 
 describe('SlidesEditor', () => {
   it('adds a photo slide, a text slide on lilac and a finished image', () => {
     const onChange = vi.fn()
     render(<SlidesEditor slides={[]} onChange={onChange} />)
     fireEvent.click(screen.getByRole('button', { name: 'addPhotoSlide' }))
-    expect(onChange).toHaveBeenLastCalledWith([expect.objectContaining({ kind: 'photo', logo: 'auto' })])
+    expect(onChange).toHaveBeenLastCalledWith([expect.objectContaining({ kind: 'photo', logo: 'auto', brands: [] })])
     fireEvent.click(screen.getByRole('button', { name: 'addTextSlide' }))
-    expect(onChange).toHaveBeenLastCalledWith([expect.objectContaining({ kind: 'text', logo: 'white' })])
+    expect(onChange).toHaveBeenLastCalledWith([expect.objectContaining({ kind: 'text', logo: 'white', brands: [] })])
     fireEvent.click(screen.getByRole('button', { name: 'addImageSlide' }))
-    expect(onChange).toHaveBeenLastCalledWith([expect.objectContaining({ kind: 'image', logo: 'none' })])
+    expect(onChange).toHaveBeenLastCalledWith([expect.objectContaining({ kind: 'image', brands: [] })])
   })
 
   it('edits the text and the credit of a slide', () => {
@@ -50,13 +50,49 @@ describe('SlidesEditor', () => {
     expect(onChange).toHaveBeenLastCalledWith([expect.objectContaining({ kind: 'text', image_url: null, logo: 'white' })])
   })
 
-  it('lets the person choose the logo colour of a photo', () => {
-    const onChange = vi.fn()
-    render(<SlidesEditor slides={[slide('a')]} onChange={onChange} />)
-    const select = screen.getByLabelText('slideLogoLabel')
-    expect(within(select).getAllByRole('option').map((o) => o.getAttribute('value'))).toEqual(['auto', 'white', 'black', 'none'])
-    fireEvent.change(select, { target: { value: 'black' } })
-    expect(onChange).toHaveBeenLastCalledWith([expect.objectContaining({ logo: 'black', logo_color: null })])
+  it('shows no logo option to a regular creator', () => {
+    render(<SlidesEditor slides={[slide('a'), slide('b', { kind: 'text', image_url: null })]} onChange={vi.fn()} />)
+    expect(screen.queryByText('slideLogoLabel')).toBeNull()
+    expect(screen.queryByRole('checkbox')).toBeNull()
+    expect(screen.queryByLabelText('slideLogoColorLabel')).toBeNull()
+  })
+
+  describe('for admins and editors', () => {
+    it('starts picture and text slides with the UNTOLD logo, and finished images with none', () => {
+      const onChange = vi.fn()
+      render(<SlidesEditor slides={[]} onChange={onChange} brandLogos />)
+      fireEvent.click(screen.getByRole('button', { name: 'addPhotoSlide' }))
+      expect(onChange).toHaveBeenLastCalledWith([expect.objectContaining({ kind: 'photo', brands: ['untold'] })])
+      fireEvent.click(screen.getByRole('button', { name: 'addTextSlide' }))
+      expect(onChange).toHaveBeenLastCalledWith([expect.objectContaining({ kind: 'text', brands: ['untold'] })])
+      fireEvent.click(screen.getByRole('button', { name: 'addImageSlide' }))
+      expect(onChange).toHaveBeenLastCalledWith([expect.objectContaining({ kind: 'image', brands: [] })])
+    })
+
+    it('chooses the UNTOLD and / or SurGlobal logo of a slide', () => {
+      const onChange = vi.fn()
+      render(<SlidesEditor slides={[slide('a', { brands: ['untold'] })]} onChange={onChange} brandLogos />)
+      expect(screen.getByRole('checkbox', { name: 'UNTOLD' })).toBeChecked()
+      expect(screen.getByRole('checkbox', { name: 'SurGlobal' })).not.toBeChecked()
+      fireEvent.click(screen.getByRole('checkbox', { name: 'SurGlobal' }))
+      expect(onChange).toHaveBeenLastCalledWith([expect.objectContaining({ brands: ['untold', 'surglobal'], logo_color: null })])
+      fireEvent.click(screen.getByRole('checkbox', { name: 'UNTOLD' }))
+      expect(onChange).toHaveBeenLastCalledWith([expect.objectContaining({ brands: [] })])
+    })
+
+    it('lets them choose the logo colour of a picture that has a logo, but not of lilac slides', () => {
+      const onChange = vi.fn()
+      const { rerender } = render(<SlidesEditor slides={[slide('a', { brands: ['untold'] })]} onChange={onChange} brandLogos />)
+      const select = screen.getByLabelText('slideLogoColorLabel')
+      expect(within(select).getAllByRole('option').map((o) => o.getAttribute('value'))).toEqual(['auto', 'white', 'black'])
+      fireEvent.change(select, { target: { value: 'black' } })
+      expect(onChange).toHaveBeenLastCalledWith([expect.objectContaining({ logo: 'black', logo_color: null })])
+      rerender(<SlidesEditor slides={[slide('a', { brands: [] })]} onChange={onChange} brandLogos />)
+      expect(screen.queryByLabelText('slideLogoColorLabel')).toBeNull()
+      rerender(<SlidesEditor slides={[slide('a', { kind: 'text', image_url: null, logo: 'white', brands: ['untold'] })]} onChange={onChange} brandLogos />)
+      expect(screen.queryByLabelText('slideLogoColorLabel')).toBeNull()
+      expect(screen.getByText('slideLogoLilacNote')).toBeInTheDocument()
+    })
   })
 
   it('stops adding slides at the limit', () => {
