@@ -5,7 +5,8 @@
 ## Hecho esta semana
 - Banners publicitarios del homepage (antes de Videos y después de Píldoras) — se cambian en Admin → **Advertising**.
 - Sección **Lo más reciente** en el homepage (tarjeta de editorial + lista de lo último).
-- **Números** de la revista (Admin → **Issues**, archivo público en `/issues`): creados el V, VI y VII de 2026 con sus editoriales y artículos.
+- **Números** de la revista (Admin → **Issues**, archivo público en `/issues`): creados 2025 I–X (marzo–diciembre) y 2026 II–VII, con sus editoriales y artículos. Falta **2026 I (enero)**: pendiente el enlace del boletín.
+- **Página de Creadores** (`/creators`): buscador, orden A–Z / más contenido / más recientes, filtros de país y tema, letras. En el menú dentro de «Explorar» y en el pie bajo «Contenido → Comunidad».
 
 ## Próxima semana (recordar a Elsie el lunes 2026-10-26)
 1. **Escribir el manual de uso de la plataforma** para editores (empezar por: crear un número, marcar un editorial, subir un banner, publicar y colocar contenido ★ ⌂ ↑).
@@ -13,8 +14,8 @@
 3. **Cuando estén entrenados:** darles acceso a la pestaña **Issues** para que creen números ellos mismos (hoy solo la ve la administradora; el cambio es poner `adminOnly: false` en `components/admin/AdminTabs.tsx`, y los permisos de base de datos ya los permiten).
 
 ## Siguiente
-- **Página de Creadores** (menú superior + pie): decidir nombre, dónde va en el menú y filtros (ver opciones en la conversación). Para filtrar por país hace falta un campo «país» en los perfiles.
-- Crear los números anteriores (I–IV de 2026), si quieren tenerlos en el archivo.
+- **Países de los creadores:** el campo «País» ya existe en el perfil (solo 5 tienen país); proponer países a partir de las biografías para que Elsie los revise.
+- **Número I de 2026 (enero):** crear en cuanto llegue el enlace del boletín; probablemente incluye «Resistir es acuerpar», «¿Y ahora, cómo innovamos?», la entrevista a Álex Hernández y «La sociedad del cansancio» (hoy sin número).
 - Que el traductor automático también traduzca los pies de foto.
 - Pendientes de configuración (Sender, Vercel, claves): ver `docs/pending-setup-steps.md`.
 
