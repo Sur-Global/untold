@@ -19,7 +19,7 @@ function SlideText({ text }: { text: string }) {
     <div style={{ display: 'grid', gap: '2.2cqw' }}>
       {blocks.map((b, i) =>
         b.type === 'p' ? (
-          <p key={i} style={{ margin: 0 }}>{b.text}</p>
+          <p key={i} style={{ margin: 0, fontSize: 'inherit', lineHeight: 'inherit', color: 'inherit' }}>{b.text}</p>
         ) : (
           <ul key={i} style={{ margin: 0, paddingLeft: '4.5cqw', display: 'grid', gap: '1.2cqw', listStyle: 'disc' }}>
             {b.items.map((item, j) => <li key={j}>{item}</li>)}

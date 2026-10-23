@@ -29,6 +29,12 @@ describe('SlideView', () => {
     expect(container.querySelector('[data-logo="white"]')).toBeTruthy()
     expect(screen.getAllByRole('listitem').map((li) => li.textContent)).toEqual(['Infórmate', 'Muévete'])
   })
+  it('writes the paragraphs of a lilac slide at the same size as its lists (the page’s own paragraph size does not apply)', () => {
+    const { container } = render(<SlideView slide={slide({ kind: 'text', image_url: null, text: 'Un párrafo\n- Un punto' })} />)
+    const paragraph = container.querySelector('[data-slide-kind="text"] p') as HTMLElement
+    expect(paragraph.style.fontSize).toBe('inherit')
+    expect(paragraph.style.lineHeight).toBe('inherit')
+  })
   it('puts a light shadow under the text on lilac, like the Figma designs', () => {
     const { container } = render(<SlideView slide={slides[1]} />)
     expect(container.innerHTML).toMatch(/text-shadow/)
