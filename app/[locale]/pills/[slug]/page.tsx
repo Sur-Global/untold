@@ -14,6 +14,7 @@ import { LikeButton } from '@/components/social/LikeButton'
 import { BookmarkButton } from '@/components/social/BookmarkButton'
 import { ShareButton } from '@/components/social/ShareButton'
 import { EditContentButton } from '@/components/content/EditContentButton'
+import { AuthorByline } from '@/components/content/AuthorByline'
 import { Link } from '@/i18n/navigation'
 import { PillCarousel } from '@/components/pills/PillCarousel'
 import { ShareBar } from '@/components/social/ShareBar'
@@ -50,7 +51,7 @@ export default async function PillPage({ params }: PageProps) {
     .from('content')
     .select(`
       id, slug, author_id, source_locale, single_language, subtitle_locales, likes_count, published_at,
-      profiles!author_id ( display_name, slug ),
+      profiles!author_id ( display_name, slug, avatar_url ),
       content_translations ( title, body, excerpt, locale ),
       pill_meta ( accent_color, image_url, format, slides, slide_translations ),
       content_tags ( tags ( slug, names ) )
@@ -157,6 +158,7 @@ export default async function PillPage({ params }: PageProps) {
           </div>
           {singleLanguage && <LanguageNotice sourceLocale={sourceLocale} subtitleLocales={pill.subtitle_locales} />}
           <h1 className="mb-4" style={{ color: '#2C2420' }}>{t.title}</h1>
+          {pill.profiles && <AuthorByline author={pill.profiles} publishedAt={pill.published_at} locale={locale} />}
           {isCarousel ? (
             <PillCarousel slides={slides} label={t.title} />
           ) : (
