@@ -125,4 +125,46 @@ describe('POST /api/upload', () => {
       expect((await res.json()).url).toMatch(/\.webp$/)
     })
   })
+  describe('profile photos for somebody else', () => {
+    const OWNER = '11111111-2222-4333-8444-555555555555'
+    const signedIn = (role: string) =>
+      vi.mocked(createClient).mockResolvedValue({
+        auth: { getUser: vi.fn().mockResolvedValue({ data: { user: { id: 'user-1' } }, error: null }) },
+        from: vi.fn(() => ({
+          select: vi.fn().mockReturnThis(),
+          eq: vi.fn().mockReturnThis(),
+          single: vi.fn().mockResolvedValue({ data: { role, suspended_at: null } }),
+        })),
+      } as any)
+    const post = (ownerId?: string) => {
+      const fd = new FormData()
+      fd.append('file', makeFile('me.png', 'image/png', 100))
+      fd.append('type', 'avatar')
+      if (ownerId) fd.append('ownerId', ownerId)
+      return POST(new NextRequest('http://localhost/api/upload', { method: 'POST', body: fd }))
+    }
+
+    it('are stored under the id of their owner, so two photos uploaded by the same editor never overwrite each other', async () => {
+      signedIn('admin')
+      const storage = makeStorageMock()
+      vi.mocked(createServiceRoleClient).mockReturnValue(storage as any)
+      const res = await post(OWNER)
+      expect(res.status).toBe(200)
+      const uploaded = storage.storage.from.mock.results[0].value.upload.mock.calls[0][0] as string
+      expect(uploaded).toBe(`${OWNER}.webp`)
+    })
+
+    it('are refused for an ordinary creator', async () => {
+      signedIn('author')
+      expect((await post(OWNER)).status).toBe(403)
+    })
+
+    it('go under the uploader’s own id when no owner is given', async () => {
+      signedIn('author')
+      const storage = makeStorageMock()
+      vi.mocked(createServiceRoleClient).mockReturnValue(storage as any)
+      expect((await post()).status).toBe(200)
+      expect(storage.storage.from.mock.results[0].value.upload.mock.calls[0][0]).toBe('user-1.webp')
+    })
+  })
 })

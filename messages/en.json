@@ -219,7 +219,8 @@
     "ctaHint": "Shown on your author page only. The text is translated automatically into the other languages.",
     "countryLabel": "Country",
     "countryNone": "— Not set",
-    "countryHelp": "Used to filter on the Creators page."
+    "countryHelp": "If you have dual nationality, give both countries: you will show under each on the Creators page.",
+    "countrySecondLabel": "Second country (dual nationality, optional)"
   },
   "translating": {
     "heading": "Translating into {language}",

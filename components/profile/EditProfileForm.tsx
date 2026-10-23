@@ -24,7 +24,8 @@ interface EditProfileFormProps {
   initialSlug: string
   initialBio: string
   initialLocation: string
-  initialCountry?: string
+  /** up to two country codes (dual nationality) */
+  initialCountries?: string[]
   initialWebsite: string
   initialAvatarUrl: string
   initialEmail?: string
@@ -49,7 +50,7 @@ export function EditProfileForm({
   initialSlug,
   initialBio,
   initialLocation,
-  initialCountry = '',
+  initialCountries = [],
   initialWebsite,
   initialAvatarUrl,
   initialEmail = '',
@@ -73,7 +74,8 @@ export function EditProfileForm({
   const [slug, setSlug] = useState(initialSlug)
   const [bioBlocks, setBioBlocks] = useState<EditorBlock[] | null>(null)
   const [location, setLocation] = useState(initialLocation)
-  const [country, setCountry] = useState(initialCountry)
+  const [country, setCountry] = useState(initialCountries[0] ?? '')
+  const [country2, setCountry2] = useState(initialCountries[1] ?? '')
   const [website, setWebsite] = useState(initialWebsite)
   const [avatarUrl, setAvatarUrl] = useState(initialAvatarUrl)
   const [email, setEmail] = useState(initialEmail)
@@ -105,7 +107,7 @@ export function EditProfileForm({
     fd.set('slug', slug)
     fd.set('bio', bioHtml)
     fd.set('location', location)
-    fd.set('country', country)
+    for (const code of [country, country2]) if (code) fd.append('countries', code)
     fd.set('website', website)
     fd.set('avatar_url', avatarUrl)
     fd.set('email', email)
@@ -137,6 +139,7 @@ export function EditProfileForm({
         <CoverImageInput
           name="avatar_url"
           uploadType="avatar"
+          ownerId={userId}
           defaultValue={avatarUrl}
           onChange={setAvatarUrl}
         />
@@ -202,6 +205,13 @@ export function EditProfileForm({
       <div>
         <label htmlFor="country" className={labelClass}>{t('countryLabel')}</label>
         <select id="country" className={fieldClass} value={country} onChange={(e) => setCountry(e.target.value)}>
+          <option value="">{t('countryNone')}</option>
+          {countryOptions(locale).map((c) => (
+            <option key={c.code} value={c.code}>{c.name}</option>
+          ))}
+        </select>
+        <label htmlFor="country2" className={`${labelClass} mt-3`}>{t('countrySecondLabel')}</label>
+        <select id="country2" className={fieldClass} value={country2} onChange={(e) => setCountry2(e.target.value)}>
           <option value="">{t('countryNone')}</option>
           {countryOptions(locale).map((c) => (
             <option key={c.code} value={c.code}>{c.name}</option>

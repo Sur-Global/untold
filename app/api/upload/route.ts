@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
 import { processAndStoreImage } from '@/lib/image-upload'
-import { isActiveAdmin } from '@/lib/is-admin'
+import { isActiveAdmin, isActiveEditor } from '@/lib/is-admin'
 
 const MAX_BYTES = 5 * 1024 * 1024
 
@@ -36,9 +36,20 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: 'File too large — max 5 MB' }, { status: 413 })
   }
 
+  // A profile photo is stored under the id of the person it belongs to. Editors and admins may upload one for
+  // somebody else (Admin → Users); anyone else only for themselves.
+  const requestedOwner = formData.get('ownerId')
+  let ownerId = user.id
+  if (type === 'avatar' && typeof requestedOwner === 'string' && requestedOwner && requestedOwner !== user.id) {
+    if (!/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(requestedOwner) || !(await isActiveEditor(supabase, user.id))) {
+      return NextResponse.json({ error: 'You can only upload your own photo' }, { status: 403 })
+    }
+    ownerId = requestedOwner
+  }
+
   try {
     const buffer = Buffer.from(await file.arrayBuffer())
-    return NextResponse.json({ url: await processAndStoreImage(buffer, type, user.id) })
+    return NextResponse.json({ url: await processAndStoreImage(buffer, type, ownerId) })
   } catch (err) {
     if (err instanceof Error && err.message === 'Storage upload failed') {
       return NextResponse.json({ error: 'Storage upload failed' }, { status: 500 })

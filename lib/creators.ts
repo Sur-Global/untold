@@ -11,8 +11,8 @@ export type Creator = {
   avatarUrl: string | null
   /** short plain-text biography, already in the reader's language when available */
   bio: string
-  /** ISO code like "PE", or null when unknown */
-  country: string | null
+  /** ISO codes like ["PE", "DE"] (dual nationality): the creator shows under each one; empty when unknown */
+  countries: string[]
   counts: Record<ContentKind, number>
   total: number
   /** when the creator last published something */
@@ -63,7 +63,7 @@ export function filterCreators(creators: Creator[], query: CreatorQuery, locale:
   const needle = fold(query.q)
   const out = creators.filter((c) => {
     if (needle && !fold(c.name).includes(needle)) return false
-    if (query.country && c.country !== query.country) return false
+    if (query.country && !c.countries.includes(query.country)) return false
     if (query.tag && !c.tags.includes(query.tag)) return false
     if (query.letter && initialOf(c.name) !== query.letter) return false
     return true

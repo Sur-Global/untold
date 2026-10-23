@@ -67,7 +67,7 @@ export default async function CreatorsPage({
   const { data: profiles } = byAuthor.size
     ? await (supabase as any)
         .from('profiles')
-        .select('id, slug, display_name, avatar_url, bio, country, profile_translations, suspended_at')
+        .select('id, slug, display_name, avatar_url, bio, countries, profile_translations, suspended_at')
         .in('id', [...byAuthor.keys()])
     : { data: [] }
 
@@ -82,7 +82,7 @@ export default async function CreatorsPage({
         name: p.display_name,
         avatarUrl: p.avatar_url ?? null,
         bio: plainBio(translated || p.bio),
-        country: p.country ?? null,
+        countries: p.countries ?? [],
         counts: acc.counts,
         total: CONTENT_KINDS.reduce((n, k) => n + acc.counts[k], 0),
         lastPublishedAt: acc.last,
@@ -91,7 +91,7 @@ export default async function CreatorsPage({
     })
 
   // Choices offered by the filters: only what at least one creator has
-  const countries = [...new Set(creators.map((c) => c.country).filter((c): c is string => !!c))]
+  const countries = [...new Set(creators.flatMap((c) => c.countries))]
     .map((code) => ({ code, name: countryName(code, locale) }))
     .sort((a, b) => a.name.localeCompare(b.name, locale))
   const topics = [...topicCreators.entries()]
@@ -162,7 +162,7 @@ export default async function CreatorsPage({
                   slug={c.slug}
                   name={c.name}
                   avatarUrl={c.avatarUrl}
-                  country={c.country ? countryName(c.country, locale) : null}
+                  country={c.countries.length > 0 ? c.countries.map((code) => countryName(code, locale)).join(' · ') : null}
                   bio={c.bio}
                   countsLabel={countsLabel(c)}
                 />

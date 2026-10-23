@@ -219,7 +219,8 @@
     "ctaHint": "Affiché uniquement sur votre page d'auteur. Le texte est traduit automatiquement dans les autres langues.",
     "countryLabel": "Pays",
     "countryNone": "— Non renseigné",
-    "countryHelp": "Sert à filtrer sur la page des Créateurs."
+    "countryHelp": "Si vous avez la double nationalité, indiquez les deux pays : vous apparaîtrez sous chacun sur la page des Créateurs.",
+    "countrySecondLabel": "Deuxième pays (double nationalité, facultatif)"
   },
   "translating": {
     "heading": "Traduction en {language}",

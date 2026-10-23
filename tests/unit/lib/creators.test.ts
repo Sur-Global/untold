@@ -2,15 +2,15 @@ import { describe, it, expect } from 'vitest'
 import { availableLetters, filterCreators, fold, initialOf, parseCreatorQuery, plainBio, type Creator } from '@/lib/creators'
 
 const make = (name: string, extra: Partial<Creator> = {}): Creator => ({
-  id: name, slug: fold(name).replace(/\s+/g, '-'), name, avatarUrl: null, bio: '', country: null,
+  id: name, slug: fold(name).replace(/\s+/g, '-'), name, avatarUrl: null, bio: '', countries: [],
   counts: { article: 1, video: 0, podcast: 0, pill: 0, course: 0 }, total: 1, lastPublishedAt: '2026-01-01T00:00:00Z', tags: [], ...extra,
 })
 const list = [
-  make('Álex Hernández', { country: 'PE', total: 2, lastPublishedAt: '2026-02-01T00:00:00Z', tags: ['salud', 'trabajo'] }),
-  make('Zoila Ochoa Garay', { country: 'PE', total: 1, lastPublishedAt: '2026-08-13T00:00:00Z', tags: ['lenguas'] }),
-  make('Beatriz Ricci', { country: 'AR', total: 5, lastPublishedAt: '2025-09-01T00:00:00Z', tags: ['diseno'] }),
+  make('Álex Hernández', { countries: ['PE'], total: 2, lastPublishedAt: '2026-02-01T00:00:00Z', tags: ['salud', 'trabajo'] }),
+  make('Zoila Ochoa Garay', { countries: ['PE', 'DE'], total: 1, lastPublishedAt: '2026-08-13T00:00:00Z', tags: ['lenguas'] }),
+  make('Beatriz Ricci', { countries: ['AR'], total: 5, lastPublishedAt: '2025-09-01T00:00:00Z', tags: ['diseno'] }),
   make('Ángela Agurto', { total: 3, lastPublishedAt: '2026-02-02T00:00:00Z', tags: ['trabajo'] }),
-  make('Óscar Bodí Pons', { country: 'ES', total: 1 }),
+  make('Óscar Bodí Pons', { countries: ['ES'], total: 1 }),
 ]
 const q = (over: Record<string, string> = {}) => parseCreatorQuery(over)
 const names = (cs: Creator[]) => cs.map((c) => c.name)
@@ -56,6 +56,8 @@ describe('filterCreators', () => {
   })
   it('filters by country, topic and initial, and combines them', () => {
     expect(names(filterCreators(list, q({ country: 'PE' }), 'es'))).toEqual(['Álex Hernández', 'Zoila Ochoa Garay'])
+    // dual nationality: Zoila shows under both of her countries
+    expect(names(filterCreators(list, q({ country: 'DE' }), 'es'))).toEqual(['Zoila Ochoa Garay'])
     expect(names(filterCreators(list, q({ tag: 'trabajo' }), 'es'))).toEqual(['Álex Hernández', 'Ángela Agurto'])
     expect(names(filterCreators(list, q({ letter: 'A' }), 'es'))).toEqual(['Álex Hernández', 'Ángela Agurto'])
     expect(names(filterCreators(list, q({ country: 'PE', tag: 'trabajo' }), 'es'))).toEqual(['Álex Hernández'])

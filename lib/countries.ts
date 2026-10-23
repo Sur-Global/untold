@@ -18,6 +18,12 @@ export function normalizeCountry(raw: unknown): string | null {
   return CODE_SET.has(value) ? value : null
 }
 
+/** Up to three valid country codes, without repeats (dual nationality shows under each country) */
+export function normalizeCountries(raw: unknown): string[] {
+  const list = Array.isArray(raw) ? raw : []
+  return [...new Set(list.map(normalizeCountry).filter((c): c is string => !!c))].slice(0, 3)
+}
+
 /** "PE" → "Perú" / "Peru" / "Pérou", depending on the reader's language */
 export function countryName(code: string, locale: string): string {
   try {

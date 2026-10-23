@@ -219,7 +219,8 @@
     "ctaHint": "Vises kun på din forfattersiden. Teksten oversættes automatisk til de andre sprog.",
     "countryLabel": "Land",
     "countryNone": "— Ikke angivet",
-    "countryHelp": "Bruges til at filtrere på siden Skabere."
+    "countryHelp": "Hvis du har dobbelt statsborgerskab, angiv begge lande: Du vises under begge på siden Skabere.",
+    "countrySecondLabel": "Andet land (dobbelt statsborgerskab, valgfrit)"
   },
   "translating": {
     "heading": "Oversætter til {language}",

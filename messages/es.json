@@ -219,7 +219,8 @@
     "ctaHint": "Se muestra solo en tu página de autor. El texto se traduce automáticamente a los demás idiomas.",
     "countryLabel": "País",
     "countryNone": "— Sin indicar",
-    "countryHelp": "Se usa para filtrar en la página de Creadores."
+    "countryHelp": "Si tienes doble nacionalidad, indica los dos países: aparecerás bajo ambos en la página de Creadores.",
+    "countrySecondLabel": "Segundo país (doble nacionalidad, opcional)"
   },
   "translating": {
     "heading": "Traduciendo al {language}",

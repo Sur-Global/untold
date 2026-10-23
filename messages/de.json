@@ -219,7 +219,8 @@
     "ctaHint": "Wird nur auf deiner Autorenseite angezeigt. Der Text wird automatisch in die anderen Sprachen übersetzt.",
     "countryLabel": "Land",
     "countryNone": "— Nicht angegeben",
-    "countryHelp": "Wird zum Filtern auf der Seite der Kreativen verwendet."
+    "countryHelp": "Bei doppelter Staatsbürgerschaft gib beide Länder an: Du erscheinst auf der Seite der Kreativen unter beiden.",
+    "countrySecondLabel": "Zweites Land (Doppelstaatsbürgerschaft, optional)"
   },
   "translating": {
     "heading": "Übersetzung ins {language}",

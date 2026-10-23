@@ -48,6 +48,8 @@ interface CoverImageInputProps {
   previewAspect?: string
   /** replaces the default “best size” hint under the upload box */
   sizeHint?: string
+  /** profile photos only: the person the photo belongs to (an editor may upload it for somebody else) */
+  ownerId?: string
   onChange?: (url: string) => void
 }
 
@@ -58,6 +60,7 @@ export function CoverImageInput({
   label,
   previewAspect = '16/9',
   sizeHint,
+  ownerId,
   onChange,
 }: CoverImageInputProps) {
   const [url, setUrl] = useState(defaultValue ?? '')
@@ -76,6 +79,7 @@ export function CoverImageInput({
       const fd = new FormData()
       fd.append('file', await prepareImage(file))
       fd.append('type', uploadType)
+      if (ownerId && uploadType === 'avatar') fd.append('ownerId', ownerId)
       const res = await fetch('/api/upload', { method: 'POST', body: fd })
       if (!res.ok) {
         const body = await res.json().catch(() => ({}))
