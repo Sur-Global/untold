@@ -464,6 +464,30 @@
     "slideCreditLabel": "Billedkredit",
     "slideCreditPlaceholder": "Fotograf, kilde",
     "slideLogoLabel": "Logoer",
+    "textPositionLabel": "Tekstens placering",
+    "textSizeLabel": "Størrelse",
+    "textColorLabel": "Tekstfarve",
+    "textPos": {
+      "topLeft": "Øverst til venstre",
+      "topCenter": "Øverst i midten",
+      "topRight": "Øverst til højre",
+      "middleLeft": "Midt til venstre",
+      "middleCenter": "I midten",
+      "middleRight": "Midt til højre",
+      "bottomLeft": "Nederst til venstre",
+      "bottomCenter": "Nederst i midten",
+      "bottomRight": "Nederst til højre"
+    },
+    "textSize": {
+      "s": "Lille",
+      "m": "Mellem",
+      "l": "Stor",
+      "xl": "Meget stor"
+    },
+    "textColor": {
+      "white": "Hvid",
+      "black": "Sort"
+    },
     "slideLogoColorLabel": "Logofarve",
     "logoAuto": "Automatisk (hvid eller sort efter billedet)",
     "logoWhite": "Hvid",

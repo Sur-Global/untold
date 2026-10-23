@@ -1,13 +1,13 @@
 import { render, screen, fireEvent, within } from '@testing-library/react'
 import { describe, it, expect, vi } from 'vitest'
 import { SlidesEditor } from '@/components/pills/SlidesEditor'
-import { MAX_SLIDES, type PillSlide } from '@/lib/pill-slides'
+import { MAX_SLIDES, type PillSlide, TEXT_DEFAULTS } from '@/lib/pill-slides'
 
 vi.mock('next-intl', () => ({
   useTranslations: () => (key: string, values?: Record<string, unknown>) => (values ? `${key} ${Object.values(values).join(' ')}` : key),
 }))
 
-const slide = (id: string, extra: Partial<PillSlide> = {}): PillSlide => ({ id, kind: 'photo', image_url: `https://cdn/${id}.webp`, text: `Texto ${id}`, credit: '', brands: [], logo: 'auto', logo_color: null, ...extra })
+const slide = (id: string, extra: Partial<PillSlide> = {}): PillSlide => ({ id, kind: 'photo', image_url: `https://cdn/${id}.webp`, text: `Texto ${id}`, credit: '', ...TEXT_DEFAULTS, brands: [], logo: 'auto', logo_color: null, ...extra })
 
 describe('SlidesEditor', () => {
   it('adds a photo slide, a text slide on lilac and a finished image', () => {
@@ -48,6 +48,31 @@ describe('SlidesEditor', () => {
     render(<SlidesEditor slides={[slide('a')]} onChange={onChange} />)
     fireEvent.change(screen.getByLabelText('slideKindLabel'), { target: { value: 'text' } })
     expect(onChange).toHaveBeenLastCalledWith([expect.objectContaining({ kind: 'text', image_url: null, logo: 'white' })])
+  })
+
+  describe('the place, size and colour of the text over a photo', () => {
+    it('are chosen for photo slides, by anyone', () => {
+      const onChange = vi.fn()
+      render(<SlidesEditor slides={[slide('a')]} onChange={onChange} />)
+      expect(screen.getAllByRole('radio', { name: /^textPos\./ })).toHaveLength(9)
+      fireEvent.click(screen.getByRole('radio', { name: 'textPos.topRight' }))
+      expect(onChange).toHaveBeenLastCalledWith([expect.objectContaining({ text_x: 'right', text_y: 'top' })])
+      fireEvent.click(screen.getByRole('radio', { name: 'textSize.xl' }))
+      expect(onChange).toHaveBeenLastCalledWith([expect.objectContaining({ text_size: 'xl' })])
+      fireEvent.click(screen.getByRole('radio', { name: 'textColor.black' }))
+      expect(onChange).toHaveBeenLastCalledWith([expect.objectContaining({ text_color: 'black' })])
+    })
+    it('show what the slide has now', () => {
+      render(<SlidesEditor slides={[slide('a', { text_x: 'center', text_y: 'middle', text_size: 'l', text_color: 'black' })]} onChange={vi.fn()} />)
+      expect(screen.getByRole('radio', { name: 'textPos.middleCenter' })).toHaveAttribute('aria-checked', 'true')
+      expect(screen.getByRole('radio', { name: 'textPos.bottomLeft' })).toHaveAttribute('aria-checked', 'false')
+      expect(screen.getByRole('radio', { name: 'textSize.l' })).toHaveAttribute('aria-checked', 'true')
+      expect(screen.getByRole('radio', { name: 'textColor.black' })).toHaveAttribute('aria-checked', 'true')
+    })
+    it('are not offered on lilac slides or finished images, which have no text over a photo', () => {
+      render(<SlidesEditor slides={[slide('a', { kind: 'text', image_url: null }), slide('b', { kind: 'image' })]} onChange={vi.fn()} />)
+      expect(screen.queryAllByRole('radio', { name: /^textPos\./ })).toHaveLength(0)
+    })
   })
 
   it('shows no logo option to a regular creator', () => {

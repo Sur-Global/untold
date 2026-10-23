@@ -1,15 +1,19 @@
 import sharp from 'sharp'
 import { fetchImageFromUrl } from '@/lib/safe-fetch-image'
-import type { LogoColor, PillSlide } from '@/lib/pill-slides'
+import { textBand, type LogoColor, type PillSlide } from '@/lib/pill-slides'
 
 /** Above this brightness (0 black … 1 white) of the logo's corner the logo is black; otherwise white */
 export const LIGHT_BACKGROUND_THRESHOLD = 0.6
-/** Text over a photo sits on a darkening band, which makes the corner look darker than the picture is */
+/** A dark band under white text at the bottom makes the corner look darker than the picture is; a light one under black text, lighter */
 const TEXT_BAND_DARKENING = 0.72
+const TEXT_BAND_LIGHTENING = 0.5
 
-/** White logo on dark pictures, black logo on light ones */
-export function logoColorForBrightness(brightness: number, hasTextOverPhoto: boolean): LogoColor {
-  const seen = hasTextOverPhoto ? brightness * TEXT_BAND_DARKENING : brightness
+/**
+ * White logo on dark pictures, black logo on light ones. `band` is the band under the text when it reaches the
+ * bottom corner where the logo sits (only a text at the bottom does).
+ */
+export function logoColorForBrightness(brightness: number, band: 'dark' | 'light' | null = null): LogoColor {
+  const seen = band === 'dark' ? brightness * TEXT_BAND_DARKENING : band === 'light' ? brightness + (1 - brightness) * TEXT_BAND_LIGHTENING : brightness
   return seen > LIGHT_BACKGROUND_THRESHOLD ? 'black' : 'white'
 }
 
@@ -36,7 +40,8 @@ export async function resolveLogoColors(slides: PillSlide[]): Promise<PillSlide[
       if (slide.kind === 'text' || slide.logo !== 'auto' || !slide.image_url) return { ...slide, logo_color: slide.logo === 'auto' ? 'white' : slide.logo_color }
       try {
         const brightness = await cornerBrightness(await fetchImageFromUrl(slide.image_url))
-        return { ...slide, logo_color: logoColorForBrightness(brightness, slide.kind === 'photo' && !!slide.text) }
+        const band = textBand(slide)
+        return { ...slide, logo_color: logoColorForBrightness(brightness, band?.y === 'bottom' ? band.tone : null) }
       } catch {
         return { ...slide, logo_color: 'white' as const }
       }

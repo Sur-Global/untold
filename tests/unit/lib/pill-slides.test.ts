@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest'
-import { blocksTextLength, firstSlideImage, localizedSlides, logoColorOf, MAX_SLIDES, newSlide, parseSlides, slideCredits, slidesProblem, SLIDE_TEXT_MAX, type PillSlide } from '@/lib/pill-slides'
+import { blocksTextLength, firstSlideImage, localizedSlides, logoColorOf, MAX_SLIDES, newSlide, parseSlides, slideCredits, slidesProblem, SLIDE_TEXT_MAX, type PillSlide, TEXT_DEFAULTS, textBand } from '@/lib/pill-slides'
 
-const slide = (extra: Partial<PillSlide> = {}): PillSlide => ({ id: 's1', kind: 'photo', image_url: 'https://cdn/a.webp', text: 'Hola', credit: '', brands: ['untold'], logo: 'auto', logo_color: null, ...extra })
+const slide = (extra: Partial<PillSlide> = {}): PillSlide => ({ id: 's1', kind: 'photo', image_url: 'https://cdn/a.webp', text: 'Hola', credit: '', ...TEXT_DEFAULTS, brands: ['untold'], logo: 'auto', logo_color: null, ...extra })
 
 describe('parseSlides', () => {
   it('reads slides from the JSON of a form and cleans them', () => {
@@ -33,6 +33,24 @@ describe('parseSlides', () => {
     expect(parseSlides([{ kind: 'photo', brands: ['surglobal', 'untold', 'other', 'untold'] }])[0].brands).toEqual(['untold', 'surglobal'])
     expect(parseSlides([{ kind: 'photo', logo: 'white' }])[0].brands).toEqual(['untold'])
     expect(parseSlides([{ kind: 'photo', logo: 'none' }])[0]).toMatchObject({ brands: [], logo: 'auto' })
+  })
+})
+
+describe('text over a photo: place, size and colour', () => {
+  it('starts bottom left, medium and white, as before it could be moved', () => {
+    expect(newSlide('photo')).toMatchObject({ text_x: 'left', text_y: 'bottom', text_size: 'm', text_color: 'white' })
+    expect(parseSlides([{ kind: 'photo' }])[0]).toMatchObject({ text_x: 'left', text_y: 'bottom', text_size: 'm', text_color: 'white' })
+  })
+  it('keeps the nine places, four sizes and two colours, and ignores anything else', () => {
+    expect(parseSlides([{ kind: 'photo', text_x: 'right', text_y: 'top', text_size: 'xl', text_color: 'black' }])[0]).toMatchObject({ text_x: 'right', text_y: 'top', text_size: 'xl', text_color: 'black' })
+    expect(parseSlides([{ kind: 'photo', text_x: 'diagonal', text_y: 'under', text_size: 'huge', text_color: 'red' }])[0]).toMatchObject({ text_x: 'left', text_y: 'bottom', text_size: 'm', text_color: 'white' })
+  })
+  it('has a soft band behind the text that is dark under white text and light under black text, only when there is text over a photo', () => {
+    expect(textBand(slide({ text_y: 'top' }))).toEqual({ y: 'top', tone: 'dark' })
+    expect(textBand(slide({ text_color: 'black', text_y: 'middle' }))).toEqual({ y: 'middle', tone: 'light' })
+    expect(textBand(slide({ text: '' }))).toBeNull()
+    expect(textBand(slide({ kind: 'text' }))).toBeNull()
+    expect(textBand(slide({ kind: 'image' }))).toBeNull()
   })
 })
 

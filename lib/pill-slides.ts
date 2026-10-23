@@ -27,12 +27,31 @@ export const SLIDE_LOGO_FILES: Record<SlideBrand, Record<LogoColor, string>> = {
 /** A light shadow under the white text on lilac, like the ones in the team's Figma designs (Y 2, blur 2, black 25% on a 1080 px slide) */
 export const LILAC_TEXT_SHADOW = '0 max(1px, 0.19cqw) max(1px, 0.19cqw) rgba(0, 0, 0, 0.25)'
 
+/** Where the text of a photo slide sits, how big it is and its colour */
+export type TextX = 'left' | 'center' | 'right'
+export type TextY = 'top' | 'middle' | 'bottom'
+export type TextSize = 's' | 'm' | 'l' | 'xl'
+export type TextColor = 'white' | 'black'
+export const TEXT_XS: TextX[] = ['left', 'center', 'right']
+export const TEXT_YS: TextY[] = ['top', 'middle', 'bottom']
+export const TEXT_SIZES: TextSize[] = ['s', 'm', 'l', 'xl']
+export const TEXT_COLORS: TextColor[] = ['white', 'black']
+/** Font size of each size, in container-width units (cqw): 1cqw is 1% of the slide's width */
+export const TEXT_SIZE_CQW: Record<TextSize, number> = { s: 4.6, m: 6.4, l: 9, xl: 12.5 }
+/** How text over a photo looked before it could be moved: bottom left, medium, white */
+export const TEXT_DEFAULTS = { text_x: 'left', text_y: 'bottom', text_size: 'm', text_color: 'white' } as const satisfies Pick<PillSlide, 'text_x' | 'text_y' | 'text_size' | 'text_color'>
+
 export type PillSlide = {
   id: string
   kind: SlideKind
   image_url: string | null
   text: string
   credit: string
+  /** where the text over a photo sits, its size and colour */
+  text_x: TextX
+  text_y: TextY
+  text_size: TextSize
+  text_color: TextColor
   /** the logos on the slide; none unless an admin or editor chose them */
   brands: SlideBrand[]
   logo: SlideLogo
@@ -47,7 +66,7 @@ const newId = () => (globalThis.crypto?.randomUUID ? globalThis.crypto.randomUUI
 
 /** A blank slide of a kind (what the editor adds), with the logos it starts with */
 export function newSlide(kind: SlideKind, brands: SlideBrand[] = []): PillSlide {
-  return { id: newId(), kind, image_url: null, text: '', credit: '', brands, logo: kind === 'text' ? 'white' : 'auto', logo_color: null }
+  return { id: newId(), kind, image_url: null, text: '', credit: '', ...TEXT_DEFAULTS, brands, logo: kind === 'text' ? 'white' : 'auto', logo_color: null }
 }
 
 /** Cleans what comes from a form (or the database) into valid slides: unknown kinds are dropped, texts are limited */
@@ -79,6 +98,10 @@ export function parseSlides(raw: unknown): PillSlide[] {
       image_url: kind === 'text' ? null : url,
       text: typeof s.text === 'string' ? s.text.trim().slice(0, SLIDE_TEXT_MAX) : '',
       credit: typeof s.credit === 'string' ? s.credit.trim().slice(0, SLIDE_CREDIT_MAX) : '',
+      text_x: TEXT_XS.includes(s.text_x as TextX) ? (s.text_x as TextX) : TEXT_DEFAULTS.text_x,
+      text_y: TEXT_YS.includes(s.text_y as TextY) ? (s.text_y as TextY) : TEXT_DEFAULTS.text_y,
+      text_size: TEXT_SIZES.includes(s.text_size as TextSize) ? (s.text_size as TextSize) : TEXT_DEFAULTS.text_size,
+      text_color: TEXT_COLORS.includes(s.text_color as TextColor) ? (s.text_color as TextColor) : TEXT_DEFAULTS.text_color,
       brands,
       logo,
       logo_color: s.logo_color === 'white' || s.logo_color === 'black' ? s.logo_color : null,
@@ -93,6 +116,15 @@ export function slidesProblem(slides: PillSlide[]): string | null {
   const empty = slides.findIndex((s) => (s.kind === 'text' ? !s.text : !s.image_url))
   if (empty >= 0) return `Slide ${empty + 1} is empty: ${slides[empty].kind === 'text' ? 'write its text' : 'add its picture'}`
   return null
+}
+
+/**
+ * The soft band behind the text of a photo slide, so it can be read: dark under white text, light under black text,
+ * at the top, the middle or the bottom of the slide, following the text. Null when there is no text.
+ */
+export function textBand(slide: PillSlide): { y: TextY; tone: 'dark' | 'light' } | null {
+  if (slide.kind !== 'photo' || !slide.text) return null
+  return { y: slide.text_y, tone: slide.text_color === 'white' ? 'dark' : 'light' }
 }
 
 /** The colour of the logos on a slide, or null when it has none: always white on lilac */

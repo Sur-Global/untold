@@ -464,6 +464,30 @@
     "slideCreditLabel": "Crédito da imagem",
     "slideCreditPlaceholder": "Autor(a), fonte",
     "slideLogoLabel": "Logos",
+    "textPositionLabel": "Posição do texto",
+    "textSizeLabel": "Tamanho",
+    "textColorLabel": "Cor do texto",
+    "textPos": {
+      "topLeft": "Em cima, à esquerda",
+      "topCenter": "Em cima, ao centro",
+      "topRight": "Em cima, à direita",
+      "middleLeft": "No meio, à esquerda",
+      "middleCenter": "No centro",
+      "middleRight": "No meio, à direita",
+      "bottomLeft": "Embaixo, à esquerda",
+      "bottomCenter": "Embaixo, ao centro",
+      "bottomRight": "Embaixo, à direita"
+    },
+    "textSize": {
+      "s": "Pequeno",
+      "m": "Médio",
+      "l": "Grande",
+      "xl": "Muito grande"
+    },
+    "textColor": {
+      "white": "Branco",
+      "black": "Preto"
+    },
     "slideLogoColorLabel": "Cor do logo",
     "logoAuto": "Automático (branco ou preto, conforme a imagem)",
     "logoWhite": "Branco",

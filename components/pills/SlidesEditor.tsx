@@ -7,6 +7,7 @@ import { CoverImageInput, prepareImage } from '@/components/ui/CoverImageInput'
 import { Button } from '@/components/ui/button'
 import { MAX_SLIDES, newSlide, SLIDE_CREDIT_MAX, SLIDE_TEXT_MAX, type PillSlide, type SlideBrand, type SlideKind, type SlideLogo } from '@/lib/pill-slides'
 import { SlideView } from '@/components/pills/SlideView'
+import { TextPlacement } from '@/components/pills/TextPlacement'
 
 const fieldClass = 'w-full rounded-[10px] border border-primary/20 bg-white px-3 py-2 text-sm text-foreground outline-none focus:border-primary/50'
 const labelClass = 'mb-1 block text-xs font-semibold text-foreground'
@@ -135,6 +136,8 @@ export function SlidesEditor({ slides, onChange, brandLogos = false }: { slides:
                 {slide.kind === 'text' && <p className="mt-1 text-xs text-muted-foreground">{t('slideListHint')}</p>}
               </div>
             )}
+
+            {slide.kind === 'photo' && <TextPlacement slide={slide} onChange={(changes) => update(slide.id, changes)} />}
 
             {slide.kind !== 'text' && (
               <div>

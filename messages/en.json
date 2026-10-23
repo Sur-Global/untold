@@ -464,6 +464,30 @@
     "slideCreditLabel": "Picture credit",
     "slideCreditPlaceholder": "Author, source",
     "slideLogoLabel": "Logos",
+    "textPositionLabel": "Text position",
+    "textSizeLabel": "Size",
+    "textColorLabel": "Text colour",
+    "textPos": {
+      "topLeft": "Top left",
+      "topCenter": "Top centre",
+      "topRight": "Top right",
+      "middleLeft": "Middle left",
+      "middleCenter": "Centre",
+      "middleRight": "Middle right",
+      "bottomLeft": "Bottom left",
+      "bottomCenter": "Bottom centre",
+      "bottomRight": "Bottom right"
+    },
+    "textSize": {
+      "s": "Small",
+      "m": "Medium",
+      "l": "Large",
+      "xl": "Extra large"
+    },
+    "textColor": {
+      "white": "White",
+      "black": "Black"
+    },
     "slideLogoColorLabel": "Logo colour",
     "logoAuto": "Automatic (white or black, depending on the picture)",
     "logoWhite": "White",
