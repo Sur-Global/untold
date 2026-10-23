@@ -3,6 +3,8 @@ import { createClient } from '@/lib/supabase/server'
 import { SubscribeSection } from '@/components/layout/SubscribeSection'
 import { getNavProps } from '@/lib/nav'
 import { getPlatformSettings } from '@/lib/data/platform-settings'
+import { getHomeBanners } from '@/lib/data/home-banners'
+import { AdBanner } from '@/components/home/AdBanner'
 import { getTranslation } from '@/lib/content'
 import { triggerListingTranslations } from '@/lib/trigger-listing-translations'
 import { triggerTagTranslations } from '@/lib/trigger-tag-translations'
@@ -32,6 +34,14 @@ export default async function HomePage({ params }: PageProps) {
   const tListings = await getTranslations('listings')
   const tContentHome = await getTranslations('content')
   const platform = await getPlatformSettings()
+  const [banners, tBanners] = await Promise.all([getHomeBanners(), getTranslations('banners')])
+  const bannerCopy = (slot: 'top' | 'bottom') => ({
+    adLabel: tBanners('adLabel'),
+    eyebrow: tBanners(`${slot}.eyebrow`),
+    title: tBanners(`${slot}.title`),
+    text: tBanners(`${slot}.text`),
+    cta: tBanners(`${slot}.cta`),
+  })
   const featuredArticleLimit = platform.featuredContent.count
   const toSentenceCase = (s: string) =>
     s ? s.charAt(0).toUpperCase() + s.slice(1).toLowerCase() : s
@@ -633,6 +643,9 @@ export default async function HomePage({ params }: PageProps) {
             </section>
           )}
 
+          {/* Advertising banner 1 — before the videos (Admin → Advertising) */}
+          <AdBanner slot="top" banner={banners.top} copy={bannerCopy('top')} houseLink="/create" />
+
           {/* Videos */}
           {platform.featuredSections.videos && (
             <section>
@@ -747,6 +760,9 @@ export default async function HomePage({ params }: PageProps) {
               )}
             </section>
           )}
+
+          {/* Advertising banner 2 — after the knowledge pills (Admin → Advertising) */}
+          <AdBanner slot="bottom" banner={banners.bottom} copy={bannerCopy('bottom')} houseLink="https://surglobal.io" />
 
           {/* Courses & Training */}
           {platform.featuredSections.courses && (

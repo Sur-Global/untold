@@ -1,11 +1,12 @@
 import sharp from 'sharp'
 import { createServiceRoleClient } from '@/lib/supabase/service-role'
 
-export type ImageKind = 'cover' | 'avatar' | 'content'
+export type ImageKind = 'cover' | 'avatar' | 'content' | 'banner'
 
 /**
  * Resizes an image to what the site needs and stores it as WebP:
  *   cover / content — up to 1200px wide, never enlarged
+ *   banner          — up to 2000px wide (advertising banners carry text, so they stay sharp on big screens)
  *   avatar          — 512×512 square, cropped around the most interesting part (faces)
  * Returns the public URL.
  */
@@ -17,6 +18,10 @@ export async function processAndStoreImage(buffer: Buffer, kind: ImageKind, user
   if (kind === 'cover') {
     processed = await sharp(buffer).rotate().resize({ width: 1200, withoutEnlargement: true }).webp({ quality: 80 }).toBuffer()
     storagePath = `covers/${userId}/${crypto.randomUUID()}.webp`
+    bucket = 'content-images'
+  } else if (kind === 'banner') {
+    processed = await sharp(buffer).rotate().resize({ width: 2000, withoutEnlargement: true }).webp({ quality: 85 }).toBuffer()
+    storagePath = `banners/${userId}/${crypto.randomUUID()}.webp`
     bucket = 'content-images'
   } else if (kind === 'content') {
     processed = await sharp(buffer).rotate().resize({ width: 1200, withoutEnlargement: true }).webp({ quality: 82 }).toBuffer()

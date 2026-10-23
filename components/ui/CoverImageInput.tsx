@@ -42,8 +42,12 @@ async function prepareImage(file: File): Promise<File> {
 interface CoverImageInputProps {
   name: string
   defaultValue?: string | null
-  uploadType?: 'cover' | 'avatar'
+  uploadType?: 'cover' | 'avatar' | 'banner'
   label?: string
+  /** shape of the preview box, e.g. '5/1' for a wide banner (default 16/9) */
+  previewAspect?: string
+  /** replaces the default “best size” hint under the upload box */
+  sizeHint?: string
   onChange?: (url: string) => void
 }
 
@@ -52,6 +56,8 @@ export function CoverImageInput({
   defaultValue,
   uploadType = 'cover',
   label,
+  previewAspect = '16/9',
+  sizeHint,
   onChange,
 }: CoverImageInputProps) {
   const [url, setUrl] = useState(defaultValue ?? '')
@@ -142,7 +148,7 @@ export function CoverImageInput({
               position: 'relative',
               ...(isAvatar
                 ? { width: 96, height: 96, borderRadius: '50%', overflow: 'hidden', margin: 12 }
-                : { aspectRatio: '16/9' }),
+                : { aspectRatio: previewAspect }),
               background: '#2c2420',
             }}
             className="group"
@@ -197,7 +203,7 @@ export function CoverImageInput({
                 </div>
                 <div style={{ fontSize: 11, color: '#9a8f87', fontFamily: 'JetBrains Mono, monospace' }}>
                   JPEG · PNG · WebP · large photos are resized automatically
-                  {!isAvatar && <><br />Best: horizontal 16:9 (e.g. 1600×900) so nothing gets cropped</>}
+                  {!isAvatar && <><br />{sizeHint ?? 'Best: horizontal 16:9 (e.g. 1600×900) so nothing gets cropped'}</>}
                 </div>
               </>
             )}

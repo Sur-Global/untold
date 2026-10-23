@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
 import { processAndStoreImage } from '@/lib/image-upload'
+import { isActiveAdmin } from '@/lib/is-admin'
 import { fetchImageFromUrl, ImageFetchError } from '@/lib/safe-fetch-image'
 
 // Re-hosts a photo the creator pasted as a link: downloads it, resizes it and stores it with our
@@ -13,8 +14,11 @@ export async function POST(request: NextRequest) {
   const body = await request.json().catch(() => null)
   const url = typeof body?.url === 'string' ? body.url.trim() : ''
   const type = body?.type
-  if (!url || (type !== 'cover' && type !== 'avatar' && type !== 'content')) {
+  if (!url || (type !== 'cover' && type !== 'avatar' && type !== 'content' && type !== 'banner')) {
     return NextResponse.json({ error: 'Invalid request' }, { status: 400 })
+  }
+  if (type === 'banner' && !(await isActiveAdmin(supabase, user.id))) {
+    return NextResponse.json({ error: 'Only administrators can upload banners' }, { status: 403 })
   }
 
   try {

@@ -386,5 +386,20 @@
     "topicTechnology": "Technology",
     "topicEducation": "Education",
     "topicResponsibleAI": "Responsible AI"
+  },
+  "banners": {
+    "adLabel": "Advertisement",
+    "top": {
+      "eyebrow": "Write on UNTOLD",
+      "title": "Have a story from the Global South? Tell it here.",
+      "text": "Articles, videos and knowledge pills: create your profile and share your view with a community that thinks from the South.",
+      "cta": "Publish on UNTOLD"
+    },
+    "bottom": {
+      "eyebrow": "A creation of SurGlobal",
+      "title": "Thinking the future from the Global South",
+      "text": "UNTOLD comes from SurGlobal. Get to know the organization behind this platform.",
+      "cta": "Discover SurGlobal"
+    }
   }
 }

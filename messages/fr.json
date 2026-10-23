@@ -386,5 +386,20 @@
     "topicTechnology": "Technologie",
     "topicEducation": "Éducation",
     "topicResponsibleAI": "IA responsable"
+  },
+  "banners": {
+    "adLabel": "Publicité",
+    "top": {
+      "eyebrow": "Écrivez sur UNTOLD",
+      "title": "Vous avez une histoire du Sud global ? Racontez-la ici.",
+      "text": "Articles, vidéos et pilules de connaissance : créez votre profil et partagez votre regard avec une communauté qui pense depuis le Sud.",
+      "cta": "Publier sur UNTOLD"
+    },
+    "bottom": {
+      "eyebrow": "Une création de SurGlobal",
+      "title": "Penser l’avenir depuis le Sud global",
+      "text": "UNTOLD est née de SurGlobal. Découvrez l’organisation derrière cette plateforme.",
+      "cta": "Découvrir SurGlobal"
+    }
   }
 }

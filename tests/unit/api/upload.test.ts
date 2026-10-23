@@ -100,4 +100,29 @@ describe('POST /api/upload', () => {
     const res = await POST(makeRequest(makeFile('avatar.png', 'image/png', 100), 'avatar'))
     expect(res.status).toBe(200)
   })
+  describe('advertising banners', () => {
+    const signedIn = (role: string | null) =>
+      vi.mocked(createClient).mockResolvedValue({
+        auth: { getUser: vi.fn().mockResolvedValue({ data: { user: { id: 'user-1' } }, error: null }) },
+        from: vi.fn(() => ({
+          select: vi.fn().mockReturnThis(),
+          eq: vi.fn().mockReturnThis(),
+          single: vi.fn().mockResolvedValue({ data: role ? { role, suspended_at: null } : null }),
+        })),
+      } as any)
+
+    it('are refused for anyone who is not an administrator', async () => {
+      signedIn('author')
+      const res = await POST(makeRequest(makeFile('ad.png', 'image/png', 100), 'banner'))
+      expect(res.status).toBe(403)
+    })
+
+    it('are accepted from an administrator and stored as WebP', async () => {
+      signedIn('admin')
+      vi.mocked(createServiceRoleClient).mockReturnValue(makeStorageMock() as any)
+      const res = await POST(makeRequest(makeFile('ad.png', 'image/png', 100), 'banner'))
+      expect(res.status).toBe(200)
+      expect((await res.json()).url).toMatch(/\.webp$/)
+    })
+  })
 })

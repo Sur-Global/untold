@@ -386,5 +386,20 @@
     "topicTechnology": "Tecnologia",
     "topicEducation": "Educação",
     "topicResponsibleAI": "IA responsável"
+  },
+  "banners": {
+    "adLabel": "Publicidade",
+    "top": {
+      "eyebrow": "Escreva na UNTOLD",
+      "title": "Tem uma história do Sul Global? Conte-a aqui.",
+      "text": "Artigos, vídeos e pílulas de conhecimento: crie seu perfil e compartilhe sua visão com uma comunidade que pensa a partir do Sul.",
+      "cta": "Publicar na UNTOLD"
+    },
+    "bottom": {
+      "eyebrow": "Uma criação da SurGlobal",
+      "title": "Pensar o futuro a partir do Sul Global",
+      "text": "A UNTOLD nasce da SurGlobal. Conheça a organização que impulsiona esta plataforma.",
+      "cta": "Conhecer a SurGlobal"
+    }
   }
 }

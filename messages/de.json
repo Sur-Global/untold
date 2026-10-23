@@ -386,5 +386,20 @@
     "topicTechnology": "Technologie",
     "topicEducation": "Bildung",
     "topicResponsibleAI": "Verantwortungsvolle KI"
+  },
+  "banners": {
+    "adLabel": "Anzeige",
+    "top": {
+      "eyebrow": "Schreibe auf UNTOLD",
+      "title": "Hast du eine Geschichte aus dem Globalen Süden? Erzähl sie hier.",
+      "text": "Artikel, Videos und Wissenshäppchen: Lege dein Profil an und teile deine Sicht mit einer Community, die vom Süden aus denkt.",
+      "cta": "Auf UNTOLD veröffentlichen"
+    },
+    "bottom": {
+      "eyebrow": "Eine Schöpfung von SurGlobal",
+      "title": "Die Zukunft vom Globalen Süden aus denken",
+      "text": "UNTOLD stammt von SurGlobal. Lerne die Organisation hinter dieser Plattform kennen.",
+      "cta": "SurGlobal kennenlernen"
+    }
   }
 }

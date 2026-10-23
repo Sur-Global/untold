@@ -386,5 +386,20 @@
     "topicTechnology": "Teknologi",
     "topicEducation": "Uddannelse",
     "topicResponsibleAI": "Ansvarlig AI"
+  },
+  "banners": {
+    "adLabel": "Annonce",
+    "top": {
+      "eyebrow": "Skriv på UNTOLD",
+      "title": "Har du en historie fra det globale syd? Fortæl den her.",
+      "text": "Artikler, videoer og vidensdoser: Opret din profil og del dit syn med et fællesskab, der tænker fra Syd.",
+      "cta": "Udgiv på UNTOLD"
+    },
+    "bottom": {
+      "eyebrow": "En skabelse af SurGlobal",
+      "title": "At tænke fremtiden fra det globale syd",
+      "text": "UNTOLD kommer fra SurGlobal. Lær organisationen bag denne platform at kende.",
+      "cta": "Lær SurGlobal at kende"
+    }
   }
 }
