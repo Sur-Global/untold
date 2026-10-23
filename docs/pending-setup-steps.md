@@ -5,7 +5,7 @@ the site is live and works, but the items below are needed for newsletter sign-u
 
 **Step-by-step guide (Spanish, for Elsie): `docs/guia-configuracion-paso-a-paso.md`** — Sender, Vercel, Supabase SMTP and key rotation.
 
-**Reminders scheduled (Claude Code scheduled tasks):** Mon 2026-10-26 09:00 (Spanish) manual + editor training; Tue 2026-10-27 09:00 (English) rotate exposed keys + Supabase custom SMTP. If a reminder is missed (app closed), it runs on next launch.
+**Reminders scheduled (Claude Code scheduled tasks):** Mon 2026-10-26 09:00 (Spanish) manual + editor training; Tue 2026-10-27 09:00 (English) rotate exposed keys + Supabase custom SMTP; Tue 2026-10-27 10:00 (English) Sender + Vercel setup, guided click by click (Elsie could not do it alone). If a reminder is missed (app closed), it runs on next launch.
 
 ## What is already live
 - Newsletter form (own design) at the bottom of the homepage and in a footer pop-up. It falls back to Sender's hosted form until `SENDER_API_TOKEN` is set in Vercel.
