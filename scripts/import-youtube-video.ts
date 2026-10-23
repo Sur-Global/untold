@@ -128,6 +128,8 @@ async function main() {
       slug,
       source_locale: 'es',
       status: 'published',
+      // Service-role inserts skip the curation trigger, and only curated content shows in listings
+      is_curated: true,
       published_at: snippet.publishedAt,
       cover_image_url: cover,
       declaration_accepted_at: new Date().toISOString(),
