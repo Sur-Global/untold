@@ -167,6 +167,8 @@
     "profileNudgeText": "Vi beder om dit navn og et billede, der repræsenterer dig, fordi vi leder efter menneskelige skabere, som vil tage ansvar for det, de udgiver. Din profil er offentlig og vises ved siden af alt dit indhold.",
     "profileNudgeMissing": "Mangler stadig: {items}.",
     "nudgePhoto": "billede",
+    "nudgeName": "rigtigt navn",
+    "profileNudgeRequired": "For at kunne udgive skal du tilføje: {items}.",
     "nudgeBio": "biografi",
     "nudgeLinks": "hjemmeside og sociale medier",
     "profileNudgeCta": "Udfyld min profil",

@@ -17,6 +17,7 @@ import { saveLanguageAvailability } from '@/lib/save-language-availability'
 import { publishNewContent } from '@/lib/publish-new-content'
 import { resolveAuthorId, requestedAuthorId } from '@/lib/resolve-author'
 import { logActivity, getContentLogInfo } from '@/lib/actions/activity-log'
+import { publishErrorMessage } from '@/lib/profile-complete'
 
 export async function createArticle(formData: FormData) {
   const { user, profile } = await requireCreator()
@@ -222,7 +223,8 @@ export async function publishArticle(id: string, formData: FormData) {
     .update({ status: 'published', published_at: new Date().toISOString() })
     .eq('id', id)
   if (!isEditorRole(profile.role)) query.eq('author_id', user.id)
-  await query
+  const { error: publishError } = await query
+  if (publishError) throw new Error(publishErrorMessage(publishError))
 
   const { label } = await getContentLogInfo(supabase, id)
   await logActivity({ entityType: 'article', entityId: id, entityLabel: label, action: 'published' })

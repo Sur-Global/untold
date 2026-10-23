@@ -21,7 +21,7 @@ export default async function CreatePickerPage() {
   const supabase = await createClient()
   const { data: myProfile } = await (supabase as any)
     .from('profiles')
-    .select('avatar_url, bio, website, social_bluesky, social_linkedin, social_instagram, social_medium, social_custom_url')
+    .select('display_name, avatar_url, bio, website, social_bluesky, social_linkedin, social_instagram, social_medium, social_custom_url')
     .eq('id', user.id)
     .single()
   const [{ userId, ...navProps }, t] = await Promise.all([
@@ -33,7 +33,7 @@ export default async function CreatePickerPage() {
     <>
       <Navigation {...navProps} />
       <main className="max-w-2xl mx-auto px-4 sm:px-6 py-16">
-        <ProfileNudge profile={myProfile} />
+        <ProfileNudge profile={myProfile} loginEmail={user.email} />
         <h1 className="mb-10 text-center">{t('pickType')}</h1>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           {CONTENT_TYPES.filter(({ key }) => canCreateType(profile.role, key)).map(({ key, href, Icon }) => (

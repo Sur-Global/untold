@@ -2,8 +2,10 @@ import { getTranslations } from 'next-intl/server'
 import { Link } from '@/i18n/navigation'
 import { buttonVariants } from '@/components/ui/button-variants'
 import { cn } from '@/lib/utils'
+import { profileGaps } from '@/lib/profile-complete'
 
 interface NudgeProfile {
+  display_name?: string | null
   avatar_url?: string | null
   bio?: string | null
   website?: string | null
@@ -17,11 +19,12 @@ interface NudgeProfile {
 const hasText = (v: unknown) => typeof v === 'string' && v.replace(/<[^>]*>/g, '').trim().length > 0
 
 /** Encourages creators to complete their public profile (photo, bio, links). Renders nothing when complete. */
-export async function ProfileNudge({ profile }: { profile: NudgeProfile | null }) {
+export async function ProfileNudge({ profile, loginEmail }: { profile: NudgeProfile | null; loginEmail?: string | null }) {
   const t = await getTranslations('dashboard')
 
+  // Photo and real name are needed to publish; the rest is only recommended
+  const required = profileGaps(profile, loginEmail).map((gap) => (gap === 'photo' ? t('nudgePhoto') : t('nudgeName')))
   const missing: string[] = []
-  if (!hasText(profile?.avatar_url)) missing.push(t('nudgePhoto'))
   if (!hasText(profile?.bio)) missing.push(t('nudgeBio'))
   const links = [
     profile?.website,
@@ -32,7 +35,7 @@ export async function ProfileNudge({ profile }: { profile: NudgeProfile | null }
     profile?.social_custom_url,
   ]
   if (!links.some(hasText)) missing.push(t('nudgeLinks'))
-  if (missing.length === 0) return null
+  if (required.length === 0 && missing.length === 0) return null
 
   return (
     <div
@@ -41,7 +44,10 @@ export async function ProfileNudge({ profile }: { profile: NudgeProfile | null }
     >
       <p className="font-semibold">{t('profileNudgeTitle')}</p>
       <p className="mt-1 text-sm text-[#4b3a2a] leading-relaxed">{t('profileNudgeText')}</p>
-      <p className="mt-2 text-sm text-[#6B5F58]">{t('profileNudgeMissing', { items: missing.join(', ') })}</p>
+      {required.length > 0 && (
+        <p className="mt-2 text-sm font-semibold text-[#111]">{t('profileNudgeRequired', { items: required.join(', ') })}</p>
+      )}
+      {missing.length > 0 && <p className="mt-2 text-sm text-[#6B5F58]">{t('profileNudgeMissing', { items: missing.join(', ') })}</p>}
       <Link href="/dashboard/profile" className={cn(buttonVariants({ size: 'sm' }), 'mt-3')}>
         {t('profileNudgeCta')}
       </Link>

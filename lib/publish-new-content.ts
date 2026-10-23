@@ -1,5 +1,6 @@
 import { after } from 'next/server'
 import { notifyFeatureRequest } from '@/lib/feature-request'
+import { publishErrorMessage } from '@/lib/profile-complete'
 
 /**
  * Publishes a just-created content item (the "Publish" button on create forms),
@@ -16,7 +17,7 @@ export async function publishNewContent(
     .from('content')
     .update({ status: 'published', published_at: new Date().toISOString() })
     .eq('id', contentId)
-  if (error) throw new Error(error.message ?? 'Saved, but could not publish')
+  if (error) throw new Error(publishErrorMessage(error) || 'Saved, but could not publish')
 
   after(async () => {
     await notifyFeatureRequest(contentId)

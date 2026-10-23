@@ -16,6 +16,7 @@ import { saveLanguageAvailability } from '@/lib/save-language-availability'
 import { publishNewContent } from '@/lib/publish-new-content'
 import { resolveAuthorId, requestedAuthorId } from '@/lib/resolve-author'
 import { logActivity } from '@/lib/actions/activity-log'
+import { publishErrorMessage } from '@/lib/profile-complete'
 
 export async function createCourse(formData: FormData) {
   const { user, profile } = await requireCreator('course')
@@ -141,10 +142,11 @@ export async function publishCourse(id: string) {
 
   // Intentionally no author_id filter — course publish is admin-only and any admin
   // may publish any course regardless of authorship (by design for v1).
-  await (supabase as any)
+  const { error: publishError } = await (supabase as any)
     .from('content')
     .update({ status: 'published', published_at: new Date().toISOString() })
     .eq('id', id)
+  if (publishError) throw new Error(publishErrorMessage(publishError))
 
   revalidatePath('/dashboard')
   revalidatePath('/dashboard/courses')

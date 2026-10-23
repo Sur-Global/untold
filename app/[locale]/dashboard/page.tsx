@@ -68,7 +68,7 @@ export default async function DashboardPage({ params }: { params: Promise<{ loca
     itemsPromise,
     (supabase as any)
       .from('profiles')
-      .select('avatar_url, bio, website, social_bluesky, social_linkedin, social_instagram, social_medium, social_custom_url')
+      .select('display_name, avatar_url, bio, website, social_bluesky, social_linkedin, social_instagram, social_medium, social_custom_url')
       .eq('id', user.id)
       .single(),
   ])
@@ -103,7 +103,7 @@ export default async function DashboardPage({ params }: { params: Promise<{ loca
 
         <p className="mb-8 text-sm text-[#6B5F58]">{t('myContentHint')}</p>
 
-        <ProfileNudge profile={myProfile} />
+        <ProfileNudge profile={myProfile} loginEmail={user.email} />
 
         {(!items || items.length === 0) ? (
           <p className="text-[#6B5F58]">{t('noContent')}</p>

@@ -167,6 +167,8 @@
     "profileNudgeText": "Nous vous demandons votre nom et une photo qui vous représente, car nous recherchons des créateurs humains prêts à assumer ce qu'ils publient. Votre profil est public et apparaît à côté de tous vos contenus.",
     "profileNudgeMissing": "Il manque encore : {items}.",
     "nudgePhoto": "photo",
+    "nudgeName": "vrai nom",
+    "profileNudgeRequired": "Pour pouvoir publier, vous devez ajouter : {items}.",
     "nudgeBio": "biographie",
     "nudgeLinks": "site web et réseaux",
     "profileNudgeCta": "Compléter mon profil",

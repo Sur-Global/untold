@@ -167,6 +167,8 @@
     "profileNudgeText": "We ask for your name and a photo that represents you because we're looking for human creators willing to take responsibility for what they publish. Your profile is public and appears next to all your content.",
     "profileNudgeMissing": "Still missing: {items}.",
     "nudgePhoto": "photo",
+    "nudgeName": "real name",
+    "profileNudgeRequired": "To be able to publish you need to add: {items}.",
     "nudgeBio": "bio",
     "nudgeLinks": "website and social links",
     "profileNudgeCta": "Complete my profile",

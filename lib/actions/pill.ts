@@ -16,6 +16,7 @@ import { publishNewContent } from '@/lib/publish-new-content'
 import { resolveAuthorId, requestedAuthorId } from '@/lib/resolve-author'
 import { logActivity } from '@/lib/actions/activity-log'
 import { stripNewMediaBlocks } from '@/lib/body-policy'
+import { publishErrorMessage } from '@/lib/profile-complete'
 
 export async function createPill(formData: FormData) {
   const { user, profile } = await requireCreator()
@@ -164,11 +165,12 @@ export async function publishPill(id: string) {
   const { user } = await requireCreator()
   const supabase = await createClient()
 
-  await (supabase as any)
+  const { error: publishError } = await (supabase as any)
     .from('content')
     .update({ status: 'published', published_at: new Date().toISOString() })
     .eq('id', id)
     .eq('author_id', user.id)
+  if (publishError) throw new Error(publishErrorMessage(publishError))
 
   revalidatePath('/dashboard')
   revalidatePath('/dashboard/pills')

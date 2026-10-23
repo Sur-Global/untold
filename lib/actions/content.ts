@@ -9,6 +9,7 @@ import { requireDeclaration } from '@/lib/declaration'
 import { notifyFeatureRequest } from '@/lib/feature-request'
 import { isEditorRole } from '@/lib/require-editor'
 import { logActivity, getContentLogInfo } from '@/lib/actions/activity-log'
+import { publishErrorMessage } from '@/lib/profile-complete'
 
 export async function publishContent(id: string, formData: FormData) {
   const { user, profile } = await requireCreator()
@@ -21,7 +22,8 @@ export async function publishContent(id: string, formData: FormData) {
     .update({ status: 'published', published_at: new Date().toISOString() })
     .eq('id', id)
   if (!isEditorRole(profile.role)) query.eq('author_id', user.id)
-  await query
+  const { error: publishError } = await query
+  if (publishError) throw new Error(publishErrorMessage(publishError))
 
   const { type, label } = await getContentLogInfo(supabase, id)
   await logActivity({ entityType: type ?? 'content', entityId: id, entityLabel: label, action: 'published' })
