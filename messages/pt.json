@@ -424,8 +424,7 @@
     "inThisIssue": "Nesta edição",
     "readEditorial": "Ler o editorial",
     "draft": "Rascunho",
-    "editorialOf": "Editorial da edição de {month}",
-    "viewIssue": "Ver a edição completa"
+    "editorialOf": "Editorial da edição de {month}"
   },
   "creators": {
     "title": "Criadores",

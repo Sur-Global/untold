@@ -24,7 +24,7 @@ import { SocialLinks } from '@/components/author/SocialLinks'
 import { ArticleRow } from '@/components/home/LatestSection'
 import { loadIssueArticles, toIssueItems } from '@/lib/data/issue-articles'
 import { triggerListingTranslations } from '@/lib/trigger-listing-translations'
-import { issueMonthLabel, issuePath } from '@/lib/issues'
+import { issueMonthLabel } from '@/lib/issues'
 
 interface PageProps {
   params: Promise<{ locale: string; slug: string }>
@@ -216,7 +216,7 @@ export default async function ArticlePage({ params }: PageProps) {
 
           {/* Back */}
           <IntlLink
-            href={editorialIssue ? issuePath(editorialIssue.issue_date) : '/articles'}
+            href={editorialIssue ? '/issues' : '/articles'}
             className="inline-flex items-center gap-2 text-sm text-muted-foreground font-['JetBrains_Mono',monospace] tracking-[0.28px] mb-8 hover:text-primary transition-colors"
           >
             <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden>
@@ -255,13 +255,12 @@ export default async function ArticlePage({ params }: PageProps) {
 
                 {/* Title */}
                 {editorialIssue && (
-                  <IntlLink
-                    href={issuePath(editorialIssue.issue_date)}
-                    className="mb-6 inline-flex min-h-9 items-center rounded-full px-5 py-1.5 text-[13px] uppercase tracking-[0.08em] no-underline transition-opacity hover:opacity-90"
+                  <p
+                    className="mb-6 inline-flex min-h-9 items-center rounded-full px-5 py-1.5 text-[13px] uppercase tracking-[0.08em]"
                     style={{ background: '#000', color: '#D2FE73', fontFamily: 'var(--font-aeonik), Aeonik, sans-serif', fontWeight: 400 }}
                   >
                     {tIssues('editorialOf', { month: issueMonthLabel(editorialIssue.issue_date, locale) })}
-                  </IntlLink>
+                  </p>
                 )}
                 {singleLanguage && <LanguageNotice sourceLocale={sourceLocale} subtitleLocales={article.subtitle_locales} />}
                 <h1
@@ -371,15 +370,8 @@ export default async function ArticlePage({ params }: PageProps) {
                     <div className="mt-10">{actionBar}</div>
                     {issueItems.length > 0 && (
                       <section className="mt-12" aria-label={tIssues('inThisIssue')}>
-                        <div className="flex items-end justify-between pb-3" style={{ borderBottom: '2px solid #000' }}>
+                        <div className="pb-3" style={{ borderBottom: '2px solid #000' }}>
                           <h2 style={{ color: '#000' }}>{tIssues('inThisIssue')}</h2>
-                          <IntlLink
-                            href={issuePath(editorialIssue.issue_date)}
-                            className="shrink-0 text-sm hover:underline"
-                            style={{ color: '#6b6ad0', fontFamily: 'var(--font-aeonik), Aeonik, sans-serif', fontWeight: 500 }}
-                          >
-                            {tIssues('viewIssue')} →
-                          </IntlLink>
                         </div>
                         <div className="mt-6">
                           {issueItems.map((item, i) => (

@@ -79,7 +79,7 @@ export default async function IssuesPage({ params }: { params: Promise<{ locale:
             return (
               <Link
                 key={issue.id}
-                href={issuePath(issue.issue_date)}
+                href={editorial ? `/articles/${editorial.slug}` : issuePath(issue.issue_date)}
                 aria-label={issueLabel(issue.issue_date, locale)}
                 className="grid gap-6 rounded-2xl border border-black/10 bg-white p-6 no-underline transition-shadow hover:shadow-lg md:grid-cols-[1fr_2.2fr] md:p-8"
                 style={{ color: '#000' }}

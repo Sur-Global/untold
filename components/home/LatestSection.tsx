@@ -26,8 +26,8 @@ export type LatestEditorial = {
   authorSlug: string | null
   authorAvatarUrl: string | null
   dateLabel: string | null
-  /** the numbered issue it belongs to, when it has one (the card's label then links to it) */
-  issue?: { label: string; href: string } | null
+  /** the numbered issue it belongs to, when it has one (its month is shown next to "Editorial"; with an href the label is a link) */
+  issue?: { label: string; href?: string } | null
 }
 
 export type LatestLabels = {
@@ -88,10 +88,12 @@ export function EditorialCard({ editorial, labels }: { editorial: LatestEditoria
   return (
     <article className="rounded-2xl p-6 lg:p-7" style={{ background: '#000', color: '#fff' }}>
       <p className="mb-3 text-[11px] uppercase tracking-[0.08em]" style={{ ...aeonik(300), color: '#A9A8E9' }}>
-        {editorial.issue ? (
+        {editorial.issue?.href ? (
           <Link href={editorial.issue.href} className="no-underline hover:underline" style={{ color: '#A9A8E9' }}>
             {labels.editorial} · {editorial.issue.label}
           </Link>
+        ) : editorial.issue ? (
+          `${labels.editorial} · ${editorial.issue.label}`
         ) : (
           labels.editorial
         )}

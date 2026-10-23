@@ -5,7 +5,7 @@
 ## Hecho esta semana
 - Banners publicitarios del homepage (antes de Videos y después de Píldoras) — se cambian en Admin → **Advertising**.
 - Sección **Lo más reciente** en el homepage (tarjeta de editorial + lista de lo último).
-- **Números** de la revista (Admin → **Issues**, archivo público en `/issues`): creados de marzo 2025 a septiembre 2026 (16 números, sin enero 2026), con sus editoriales y artículos. Se muestran solo por mes y año. Falta **enero 2026**: pendiente el enlace del boletín.
+- **Números** de la revista (Admin → **Issues**, archivo público en `/issues`; cada tarjeta lleva directo a la página del editorial, que muestra el texto, los artículos del número y la tarjeta de quien firma; las direcciones `/issues/<año>/<mes>` redirigen allí): creados de marzo 2025 a septiembre 2026 (16 números, sin enero 2026), con sus editoriales y artículos. Se muestran solo por mes y año. Falta **enero 2026**: pendiente el enlace del boletín.
 - **Página de Creadores** (`/creators`): buscador, orden A–Z / más contenido / más recientes, filtros de país y tema, letras. En el menú dentro de «Explorar» y en el pie bajo «Contenido → Comunidad».
 
 ## Próxima semana (recordar a Elsie el lunes 2026-10-26)

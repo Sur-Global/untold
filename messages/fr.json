@@ -424,8 +424,7 @@
     "inThisIssue": "Dans ce numéro",
     "readEditorial": "Lire l’éditorial",
     "draft": "Brouillon",
-    "editorialOf": "Éditorial du numéro de {month}",
-    "viewIssue": "Voir le numéro complet"
+    "editorialOf": "Éditorial du numéro de {month}"
   },
   "creators": {
     "title": "Créateurs",

@@ -1,5 +1,6 @@
 import { after } from 'next/server'
 import { notFound } from 'next/navigation'
+import { redirect } from '@/i18n/navigation'
 import { getTranslations } from 'next-intl/server'
 import { createClient } from '@/lib/supabase/server'
 import { getNavProps } from '@/lib/nav'
@@ -52,6 +53,9 @@ export default async function IssuePage({ params }: { params: Promise<{ locale: 
   const rows = await loadIssueArticles(supabase, issue.id)
 
   const editorial = issue.editorial && issue.editorial.status === 'published' ? issue.editorial : null
+  // The editorial's own page already holds the text, the issue's articles and the author: send old links there.
+  // (This page stays for an issue that has no editorial yet.)
+  if (editorial) redirect({ href: `/articles/${editorial.slug}`, locale })
   const articles = (rows ?? []).filter((r: any) => r.id !== editorial?.id)
   const texts = editorial ? await editorialTexts(supabase, [editorial], locale) : new Map()
   const text = editorial ? texts.get(editorial.id) : null

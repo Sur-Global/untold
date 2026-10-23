@@ -424,8 +424,7 @@
     "inThisIssue": "In dieser Ausgabe",
     "readEditorial": "Editorial lesen",
     "draft": "Entwurf",
-    "editorialOf": "Editorial der Ausgabe {month}",
-    "viewIssue": "Die ganze Ausgabe ansehen"
+    "editorialOf": "Editorial der Ausgabe {month}"
   },
   "creators": {
     "title": "Kreative",

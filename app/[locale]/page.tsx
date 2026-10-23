@@ -8,7 +8,7 @@ import { AdBanner } from '@/components/home/AdBanner'
 import { LatestSection, type LatestEditorial, type LatestItem } from '@/components/home/LatestSection'
 import { bodyExcerpt, isRecent } from '@/lib/editorial'
 import { formatDate } from '@/lib/format-date'
-import { issueLabel, issuePath } from '@/lib/issues'
+import { issueLabel } from '@/lib/issues'
 import { loadIssueArticles, toIssueItems } from '@/lib/data/issue-articles'
 import { getTranslation } from '@/lib/content'
 import { triggerListingTranslations } from '@/lib/trigger-listing-translations'
@@ -419,7 +419,7 @@ export default async function HomePage({ params }: PageProps) {
       authorAvatarUrl: editorialRow.profiles?.avatar_url ?? null,
       dateLabel: dateOf(editorialRow.published_at),
       issue: issueWithEditorial
-        ? { label: issueLabel(issueWithEditorial.issue_date, locale), href: issuePath(issueWithEditorial.issue_date) }
+        ? { label: issueLabel(issueWithEditorial.issue_date, locale) }
         : null,
     }
   }

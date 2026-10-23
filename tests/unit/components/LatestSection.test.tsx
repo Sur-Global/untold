@@ -41,6 +41,13 @@ describe('LatestSection', () => {
     expect(within(card).getByRole('link', { name: /Leer más/ })).toHaveAttribute('href', '/articles/viejos-mitos')
   })
 
+  it('shows the month next to "Editorial" as plain text when no link is given', () => {
+    render(<LatestSection items={[item(1)]} editorial={{ ...editorial, issue: { label: 'Septiembre de 2026' } }} labels={labels} />)
+    const card = screen.getByRole('article')
+    expect(within(card).getByText('Editorial · Septiembre de 2026')).toBeInTheDocument()
+    expect(within(card).queryByRole('link', { name: /Editorial · / })).not.toBeInTheDocument()
+  })
+
   it('shows only the list when there is no editorial', () => {
     render(<LatestSection items={[item(1), item(2), item(3), item(4)]} editorial={null} labels={labels} />)
     expect(screen.queryByRole('article')).not.toBeInTheDocument()
