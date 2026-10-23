@@ -49,4 +49,18 @@ describe('ContentCard', () => {
     )
     expect(container.querySelector('[style]')).toBeTruthy()
   })
+
+  it("the author's photo leads to the creator's page, like the name does", () => {
+    render(<ContentCard {...base} type="article" authorAvatarUrl="https://cdn/jane.webp" />)
+    const photoLink = screen.getByRole('img', { name: 'Jane Doe' }).closest('a')
+    expect(photoLink).toHaveAttribute('href', '/author/jane-doe')
+    const links = screen.getAllByRole('link', { name: 'Jane Doe' })
+    expect(links).toHaveLength(2) // the photo and the name
+    links.forEach((link) => expect(link).toHaveAttribute('href', '/author/jane-doe'))
+  })
+
+  it('shows the initial without a link when the author has no profile page', () => {
+    render(<ContentCard {...base} authorSlug={null} type="article" />)
+    expect(screen.getByText('J').closest('a')).toBeNull()
+  })
 })

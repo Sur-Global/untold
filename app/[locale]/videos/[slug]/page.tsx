@@ -318,8 +318,10 @@ export default async function VideoPage({ params }: PageProps) {
               {/* Avatar (left) + bio (right) */}
               <div className="flex items-start gap-6">
                 {/* Large circular avatar */}
-                <div
-                  className="flex-shrink-0 overflow-hidden rounded-full"
+                <Link
+                  href={`/author/${author.slug}`}
+                  aria-label={author.display_name}
+                  className="block flex-shrink-0 overflow-hidden rounded-full"
                   style={{ width: 160, height: 160, border: '2px solid #A9A8E9' }}
                 >
                   {author.avatar_url ? (
@@ -332,7 +334,7 @@ export default async function VideoPage({ params }: PageProps) {
                       {author.display_name?.[0]?.toUpperCase() ?? '?'}
                     </div>
                   )}
-                </div>
+                </Link>
 
                 {/* Bio text area */}
                 <div className="flex-1 min-w-0">

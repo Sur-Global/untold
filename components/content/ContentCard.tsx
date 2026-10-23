@@ -63,11 +63,12 @@ function CoverPlaceholder({ type, accentColor }: { type: ContentType; accentColo
   )
 }
 
-function AuthorAvatar({ name, avatarUrl }: { name?: string | null; avatarUrl?: string | null }) {
+function AuthorAvatar({ name, avatarUrl, slug }: { name?: string | null; avatarUrl?: string | null; slug?: string | null }) {
   // A broken photo link falls back to the initial instead of a broken-image icon
   const [failed, setFailed] = useState(false)
-  if (avatarUrl && !failed) {
-    return (
+  const initial = name?.charAt(0)?.toUpperCase() ?? '?'
+  const avatar =
+    avatarUrl && !failed ? (
       <img
         src={avatarUrl}
         alt={name ?? ''}
@@ -75,22 +76,27 @@ function AuthorAvatar({ name, avatarUrl }: { name?: string | null; avatarUrl?: s
         className="rounded-full object-cover object-top shrink-0"
         style={{ width: 32, height: 32, border: '1.5px solid rgba(212,165,116,0.6)' }}
       />
+    ) : (
+      <span
+        className="rounded-full shrink-0 flex items-center justify-center text-white text-xs font-semibold"
+        style={{
+          width: 32,
+          height: 32,
+          background: '#8b4513',
+          fontFamily: 'JetBrains Mono, monospace',
+          border: '1.5px solid rgba(212,165,116,0.6)',
+        }}
+      >
+        {initial}
+      </span>
     )
-  }
-  const initial = name?.charAt(0)?.toUpperCase() ?? '?'
-  return (
-    <span
-      className="rounded-full shrink-0 flex items-center justify-center text-white text-xs font-semibold"
-      style={{
-        width: 32,
-        height: 32,
-        background: '#8b4513',
-        fontFamily: 'JetBrains Mono, monospace',
-        border: '1.5px solid rgba(212,165,116,0.6)',
-      }}
-    >
-      {initial}
-    </span>
+  // With a profile, the photo leads to the creator's page just like the name does
+  return slug ? (
+    <Link href={`/author/${slug}`} aria-label={name ?? undefined} className="shrink-0 rounded-full">
+      {avatar}
+    </Link>
+  ) : (
+    avatar
   )
 }
 
@@ -336,7 +342,7 @@ export function ContentCard({
         {authorName && (
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <AuthorAvatar name={authorName} avatarUrl={authorAvatarUrl} />
+              <AuthorAvatar name={authorName} avatarUrl={authorAvatarUrl} slug={authorSlug} />
               <div className="flex flex-col gap-1 min-w-0">
                 <Link
                   href={authorSlug ? `/author/${authorSlug}` : '#'}

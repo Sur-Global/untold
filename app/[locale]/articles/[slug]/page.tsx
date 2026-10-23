@@ -305,7 +305,11 @@ export default async function ArticlePage({ params }: PageProps) {
                 <div className="flex items-center justify-between py-5 mb-6 border-b border-border">
                   {/* Author */}
                   <div className="flex items-center gap-3">
-                    <div className="w-12 h-12 rounded-full flex-shrink-0 overflow-hidden border-2 border-primary/20">
+                    <Link
+                      href={`/author/${author?.slug}`}
+                      aria-label={author?.display_name}
+                      className="block w-12 h-12 rounded-full flex-shrink-0 overflow-hidden border-2 border-primary/20"
+                    >
                       {author?.avatar_url ? (
                         <img src={author.avatar_url} alt={author.display_name} className="w-full h-full object-cover object-top" />
                       ) : (
@@ -313,7 +317,7 @@ export default async function ArticlePage({ params }: PageProps) {
                           {author?.display_name?.[0]?.toUpperCase() ?? '?'}
                         </div>
                       )}
-                    </div>
+                    </Link>
                     <Link href={`/author/${author?.slug}`} className="text-sm font-semibold text-foreground hover:text-primary transition-colors">
                       {author?.display_name}
                     </Link>
@@ -423,8 +427,10 @@ export default async function ArticlePage({ params }: PageProps) {
                     {/* Avatar (left) + bio (right) */}
                     <div className="flex items-start gap-6">
                       {/* Large circular avatar */}
-                      <div
-                        className="flex-shrink-0 overflow-hidden rounded-full"
+                      <Link
+                        href={`/author/${author.slug}`}
+                        aria-label={author.display_name}
+                        className="block flex-shrink-0 overflow-hidden rounded-full"
                         style={{ width: 160, height: 160, border: '2px solid #A9A8E9' }}
                       >
                         {author.avatar_url ? (
@@ -437,7 +443,7 @@ export default async function ArticlePage({ params }: PageProps) {
                             {author.display_name?.[0]?.toUpperCase() ?? '?'}
                           </div>
                         )}
-                      </div>
+                      </Link>
 
                       {/* Bio text area */}
                       <div className="flex-1 min-w-0">

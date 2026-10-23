@@ -5,11 +5,11 @@ import { BookmarkButton } from '@/components/social/BookmarkButton'
 
 // ─── Shared helpers ────────────────────────────────────────────────────────────
 
-function AuthorAvatar({ name, avatarUrl, size = 32 }: { name?: string | null; avatarUrl?: string | null; size?: number }) {
+function AuthorAvatar({ name, avatarUrl, size = 32, slug }: { name?: string | null; avatarUrl?: string | null; size?: number; slug?: string | null }) {
   // A broken photo link falls back to the initial instead of a broken-image icon
   const [failed, setFailed] = useState(false)
-  if (avatarUrl && !failed) {
-    return (
+  const avatar =
+    avatarUrl && !failed ? (
       <img
         src={avatarUrl}
         alt={name ?? ''}
@@ -17,22 +17,28 @@ function AuthorAvatar({ name, avatarUrl, size = 32 }: { name?: string | null; av
         className="rounded-full object-cover object-top shrink-0"
         style={{ width: size, height: size, border: '1.5px solid rgba(169,168,233,0.4)' }}
       />
+    ) : (
+      <span
+        className="rounded-full shrink-0 flex items-center justify-center text-white font-semibold"
+        style={{
+          width: size,
+          height: size,
+          background: '#A9A8E9',
+          fontFamily: 'var(--font-aeonik), Aeonik, sans-serif',
+          fontSize: size * 0.38,
+          border: '1.5px solid rgba(212,165,116,0.6)',
+        }}
+      >
+        {name?.charAt(0)?.toUpperCase() ?? '?'}
+      </span>
     )
-  }
-  return (
-    <span
-      className="rounded-full shrink-0 flex items-center justify-center text-white font-semibold"
-      style={{
-        width: size,
-        height: size,
-        background: '#A9A8E9',
-        fontFamily: 'var(--font-aeonik), Aeonik, sans-serif',
-        fontSize: size * 0.38,
-        border: '1.5px solid rgba(212,165,116,0.6)',
-      }}
-    >
-      {name?.charAt(0)?.toUpperCase() ?? '?'}
-    </span>
+  // With a profile, the photo leads to the creator's page just like the name does
+  return slug ? (
+    <Link href={`/author/${slug}`} aria-label={name ?? undefined} className="shrink-0 rounded-full" style={{ textDecoration: 'none' }}>
+      {avatar}
+    </Link>
+  ) : (
+    avatar
   )
 }
 
@@ -405,7 +411,7 @@ export function VideoCard({
 
         {authorName && (
           <div className="flex items-center gap-2 mb-2">
-            <AuthorAvatar name={authorName} avatarUrl={authorAvatarUrl} size={26} />
+            <AuthorAvatar name={authorName} avatarUrl={authorAvatarUrl} size={26} slug={authorSlug} />
             <div>
               <Link
                 href={authorSlug ? `/author/${authorSlug}` : '#'}
@@ -538,7 +544,7 @@ export function PodcastCard({
         className="px-5 py-4 flex items-center gap-3"
         style={{ borderTop: '1px solid rgba(0,0,0,0.08)' }}
       >
-        <AuthorAvatar name={authorName} avatarUrl={authorAvatarUrl} size={30} />
+        <AuthorAvatar name={authorName} avatarUrl={authorAvatarUrl} size={30} slug={authorSlug} />
         <div className="min-w-0">
           <Link
             href={authorSlug ? `/author/${authorSlug}` : '#'}
@@ -697,7 +703,7 @@ export function HomePillCard({
             className="flex items-center gap-2 pt-3 mt-auto"
             style={{ borderTop: '1px solid rgba(0,0,0,0.08)' }}
           >
-            <AuthorAvatar name={authorName} avatarUrl={authorAvatarUrl} size={28} />
+            <AuthorAvatar name={authorName} avatarUrl={authorAvatarUrl} size={28} slug={authorSlug} />
             <div className="min-w-0">
               <Link
                 href={authorSlug ? `/author/${authorSlug}` : '#'}
@@ -863,7 +869,7 @@ export function CourseCard({
             className="flex items-center gap-2.5 pt-3 mt-auto"
             style={{ borderTop: '1px solid rgba(0,0,0,0.08)' }}
           >
-            <AuthorAvatar name={authorName} avatarUrl={authorAvatarUrl} size={30} />
+            <AuthorAvatar name={authorName} avatarUrl={authorAvatarUrl} size={30} slug={authorSlug} />
             <div className="min-w-0">
               <p
                 className="text-sm font-medium text-[#5d4e37] truncate"
