@@ -9,6 +9,9 @@
 - **Página de Creadores** (`/creators`): buscador, orden A–Z / más contenido / más recientes, filtros de país y tema, letras. En el menú dentro de «Explorar» y en el pie, bajo «Páginas» (y «Números» bajo «Contenido»), cada lista en orden alfabético.
 - Perfiles de creadores traducidos a mano a inglés, portugués y francés (biografía y texto del botón); etiquetas con nombre en los 6 idiomas; país de origen (uno o dos) y país donde vive (uno, se ve en el idioma del lector) separados.
 - Editoriales fuera de /articles (automático) y en una sección «Editoriales» al final de la página del creador; la foto del autor lleva a su perfil; «También te puede interesar» bajo cada contenido; menú de compartir con redes sociales y vista previa al compartir enlaces; leyenda de colocación del admin plegable.
+- Enero 2026 creado (editorial «Tecnología, poder y futuros para iniciar el 2026» + 4 artículos). Cuenta de prueba oculta al público (Admin → Users → «Hide from public», solo admins). Portugués siempre de Brasil (interfaz, perfiles, páginas, etiquetas y DeepL).
+- Perfil completo para publicar: sin foto y nombre real no se puede publicar (editores y admins exentos); dos correos recordatorio (día 3 y 10) con un trabajo diario (necesita `CRON_SECRET` en Vercel).
+- Guía paso a paso de Sender, Vercel y Supabase en `docs/guia-configuracion-paso-a-paso.md`.
 
 ## Próxima semana (recordar a Elsie el lunes 2026-10-26)
 1. **Escribir el manual de uso de la plataforma** para editores (empezar por: crear un número, marcar un editorial, subir un banner, publicar y colocar contenido ★ ⌂ ↑).
@@ -16,8 +19,7 @@
 3. **Cuando estén entrenados:** darles acceso a la pestaña **Issues** para que creen números ellos mismos (hoy solo la ve la administradora; el cambio es poner `adminOnly: false` en `components/admin/AdminTabs.tsx`, y los permisos de base de datos ya los permiten).
 
 ## Siguiente
-- **Enero 2026:** crear en cuanto llegue el enlace del boletín; probablemente incluye «Resistir es acuerpar», «¿Y ahora, cómo innovamos?», la entrevista a Álex Hernández y «La sociedad del cansancio» (hoy sin número).
-- Que el traductor automático también traduzca los pies de foto.
+- Traducciones de artículos a pt/fr: **en pausa hasta que Elsie dé la directriz** (faltan 36 pt y 33 fr; la cuota gratuita de DeepL no alcanza).
 - Pendientes de configuración (Sender, Vercel, claves): ver `docs/pending-setup-steps.md`.
 
 ## Cómo crear un número (para el manual)

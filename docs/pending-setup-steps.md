@@ -3,6 +3,8 @@
 Saved 2026-10-21. Written in English so a helper can follow it. Nothing here is urgent for the site to run:
 the site is live and works, but the items below are needed for newsletter sign-ups, notification emails and security hygiene.
 
+**Step-by-step guide (Spanish, for Elsie): `docs/guia-configuracion-paso-a-paso.md`** — Sender, Vercel, Supabase SMTP and key rotation.
+
 ## What is already live
 - Newsletter form (own design) at the bottom of the homepage and in a footer pop-up. It falls back to Sender's hosted form until `SENDER_API_TOKEN` is set in Vercel.
 - Feature requests: Admin → Requests queue, "Assign to editor" with instructions, email notifications (emails need the settings below).
@@ -15,7 +17,7 @@ the site is live and works, but the items below are needed for newsletter sign-u
 3. Put the new values in Vercel and in the local `.env.local`, then redeploy.
 
 ## B. Sender account
-1. Confirm which list is the newsletter list. We saw `UNTOLD` (id `e0Ep3v`, 142 subscribers) and `SUR GLOBAL TODOS` (753). The code only adds people to the list(s) in `SENDER_GROUP_IDS`.
+1. DECIDED 2026-10-23: the list that receives subscribers is **UNTOLD** (id `e0Ep3v`; form `stats.sender.net/forms/bkRwZr/view`). Set `SENDER_GROUP_IDS=e0Ep3v`.
 2. Check the list/form double opt-in setting. Our form shows "Thanks for subscribing" either way.
 3. Verify a sender identity (the From address) and authenticate the sending domain (SPF / DKIM / DMARC).
 4. Confirm transactional emails are enabled on the plan. They are needed for the team notifications (feature requests and "assign to editor").
@@ -26,7 +28,8 @@ the site is live and works, but the items below are needed for newsletter sign-u
 - `NOTIFY_FROM_EMAIL` — the verified sender address from B3.
 - `NOTIFY_FROM_NAME` — optional, defaults to "UNTOLD".
 - `FEATURE_REQUEST_EMAIL` — optional, defaults to elsie@surglobal.io.
-- `NEXT_PUBLIC_SITE_URL` — check it holds the real production URL (used for links inside emails).
+- `CRON_SECRET` — NEW: any long random string. The daily job `/api/cron/profile-reminders` (vercel.json) uses it; without it the job answers 401 and no reminder is sent.
+- `NEXT_PUBLIC_SITE_URL` — must hold the real production URL (used for emails, canonical addresses and share pictures). Verified OK on 2026-10-23.
 - Then **Redeploy**.
 
 ## D. Newsletter form (homepage section + footer "Subscribe" pop-up)
@@ -57,8 +60,8 @@ the site is live and works, but the items below are needed for newsletter sign-u
 ## H. Decisions waiting for Elsie
 1. **Cover images** for pills / podcasts / videos (see the three options shown earlier):
    A) cover required (16:9) for everything; B) never required, auto-designed card when missing; **C) recommended:** one format per type (video 16:9 auto from YouTube/Vimeo, podcast square 1:1, pill any shape shown whole) plus the auto-designed card when a photo is missing. Also: should the square cover be **required** for podcasts?
-2. **Incomplete creator profiles** — reminders:
+2. **Incomplete creator profiles** — DECIDED 2026-10-23 (recommended option) and BUILT: a creator cannot publish without photo + real name (enforced in the database trigger `content_require_complete_profile`; admins/editors exempt) and gets two reminder emails (day 3 and day 10) from the daily job; needs the `CRON_SECRET` and Sender variables above. Original options:
    1) block the first publish without photo + real name; 2) two reminder emails (day 3 and day 10, then stop); 3) weekly digest to admins/editors listing incomplete profiles; 4) in-app notification inbox. Recommended: 1 + 2 (3 as an extra). Emails need a daily Vercel Cron job and working transactional email (section B/C).
-3. Confirm which Sender list receives subscribers (B1).
-4. **Translator gap:** the automatic translator does not translate image captions or the card summary of articles (the "Soberanía cultural" article was translated by hand). Offer: fix it so it does.
-5. Small consistency item: some interface strings added recently in Portuguese use European forms ("Subscrever", "o teu"), while the site's Portuguese is Brazilian. Offer: one pass to align them.
+3. Sender list: DECIDED — UNTOLD (B1).
+4. **Translator gap (captions / card summaries):** DECIDED 2026-10-23: Claude translates captions and card summaries by hand (audit found none missing in the existing translations). **Article translations (pt/fr) are ON HOLD until Elsie gives the go-ahead.** Original note: the automatic translator does not translate image captions or the card summary of articles (the "Soberanía cultural" article was translated by hand). Offer: fix it so it does.
+5. DONE 2026-10-23 — Portuguese is always Brazilian (interface, profiles, static pages, tags; DeepL now targets PT-BR). Original note: some interface strings added recently in Portuguese use European forms ("Subscrever", "o teu"), while the site's Portuguese is Brazilian. Offer: one pass to align them.
