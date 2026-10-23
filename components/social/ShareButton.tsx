@@ -2,8 +2,8 @@
 
 import { useEffect, useRef, useState } from 'react'
 import { useTranslations } from 'next-intl'
-import { FaBluesky, FaEnvelope, FaFacebook, FaLink, FaLinkedin, FaPinterest, FaReddit, FaTelegram, FaThreads, FaWhatsapp, FaXTwitter } from 'react-icons/fa6'
-import { cleanShareUrl, shareLinks, type ShareTarget } from '@/lib/share'
+import { FaBluesky, FaEnvelope, FaFacebook, FaInstagram, FaLink, FaLinkedin, FaReddit, FaTelegram, FaThreads, FaWhatsapp, FaXTwitter } from 'react-icons/fa6'
+import { cleanShareUrl, INSTAGRAM_URL, shareLinks, type ShareTarget } from '@/lib/share'
 
 interface ShareButtonProps {
   title: string
@@ -11,15 +11,15 @@ interface ShareButtonProps {
 }
 
 const ICONS: Record<ShareTarget, React.ComponentType<{ size?: number; 'aria-hidden'?: boolean }>> = {
+  bluesky: FaBluesky,
+  linkedin: FaLinkedin,
+  instagram: FaInstagram,
   whatsapp: FaWhatsapp,
   facebook: FaFacebook,
-  x: FaXTwitter,
-  linkedin: FaLinkedin,
   telegram: FaTelegram,
   reddit: FaReddit,
-  pinterest: FaPinterest,
   threads: FaThreads,
-  bluesky: FaBluesky,
+  x: FaXTwitter,
   email: FaEnvelope,
 }
 
@@ -31,6 +31,7 @@ export function ShareButton({ title, className }: ShareButtonProps) {
   const t = useTranslations('share')
   const [open, setOpen] = useState(false)
   const [copied, setCopied] = useState(false)
+  const [instagramHint, setInstagramHint] = useState(false)
   const rootRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
@@ -49,18 +50,37 @@ export function ShareButton({ title, className }: ShareButtonProps) {
     }
   }, [open])
 
-  // Worked out when the menu opens (the page address and its preview picture only exist in the browser)
+  // Worked out when the menu opens (the page address only exists in the browser)
   const url = open ? cleanShareUrl(window.location.href) : ''
-  const image = open ? document.querySelector<HTMLMetaElement>('meta[property="og:image"]')?.content || null : null
   const canShareNatively = open && typeof navigator.share === 'function'
 
-  const copy = async () => {
+  const copy = async (): Promise<boolean> => {
     try {
       await navigator.clipboard.writeText(url)
-      setCopied(true)
-      window.setTimeout(() => setCopied(false), 2000)
+      return true
     } catch {
-      // the browser blocked it: nothing to confirm
+      return false // the browser blocked it: nothing to confirm
+    }
+  }
+
+  const copyLink = async () => {
+    if (!(await copy())) return
+    setCopied(true)
+    window.setTimeout(() => setCopied(false), 2000)
+  }
+
+  // Instagram has no web address for sharing: on a phone the device's share sheet lists Instagram; elsewhere
+  // the link is copied and Instagram is opened, so it can be pasted into a story, post or message.
+  const shareOnInstagram = async () => {
+    if (typeof navigator.share === 'function' && window.matchMedia?.('(pointer: coarse)')?.matches) {
+      setOpen(false)
+      void navigator.share({ title, url }).catch(() => {})
+      return
+    }
+    window.open(INSTAGRAM_URL, '_blank', 'noopener,noreferrer') // first, while the click still allows opening a tab
+    if (await copy()) {
+      setInstagramHint(true)
+      window.setTimeout(() => setInstagramHint(false), 8000)
     }
   }
 
@@ -96,8 +116,16 @@ export function ShareButton({ title, className }: ShareButtonProps) {
               </button>
             </div>
             <div className="grid grid-cols-4 gap-1">
-              {shareLinks({ url, title, image, emailLabel: t('email') }).map(({ id, label, href }) => {
+              {shareLinks({ url, title, emailLabel: t('email') }).map(({ id, label, href }) => {
                 const Icon = ICONS[id]
+                if (href === null) {
+                  return (
+                    <button key={id} type="button" onClick={shareOnInstagram} className={itemClass}>
+                      <span className={circleClass}><Icon size={20} aria-hidden /></span>
+                      {label}
+                    </button>
+                  )
+                }
                 return (
                   <a
                     key={id}
@@ -112,7 +140,7 @@ export function ShareButton({ title, className }: ShareButtonProps) {
                   </a>
                 )
               })}
-              <button type="button" onClick={copy} className={itemClass}>
+              <button type="button" onClick={copyLink} className={itemClass}>
                 <span className={circleClass}><FaLink size={18} aria-hidden /></span>
                 {copied ? t('copied') : t('copyLink')}
               </button>
@@ -130,6 +158,7 @@ export function ShareButton({ title, className }: ShareButtonProps) {
                 </button>
               )}
             </div>
+            {instagramHint && <p className="mt-2 rounded-lg bg-muted px-3 py-2 text-xs leading-snug text-foreground">{t('instagramHint')}</p>}
             <p className="sr-only" aria-live="polite">{copied ? t('copied') : ''}</p>
           </div>
         </>

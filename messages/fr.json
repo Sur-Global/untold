@@ -395,6 +395,7 @@
     "copied": "Lien copié",
     "email": "E-mail",
     "more": "Plus d’options",
+    "instagramHint": "Lien copié. Instagram ne permet pas de partager un lien depuis un site : collez-le dans votre story, votre publication ou un message.",
     "close": "Fermer"
   },
   "footer": {

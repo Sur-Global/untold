@@ -2,7 +2,7 @@ import { render, screen, fireEvent, within } from '@testing-library/react'
 import { describe, it, expect, vi, afterEach } from 'vitest'
 import { ShareButton } from '@/components/social/ShareButton'
 
-const messages: Record<string, string> = { button: 'Compartir', dialog: 'Compartir en…', copyLink: 'Copiar enlace', copied: 'Enlace copiado', email: 'Correo', more: 'Más opciones', close: 'Cerrar' }
+const messages: Record<string, string> = { button: 'Compartir', dialog: 'Compartir en…', copyLink: 'Copiar enlace', copied: 'Enlace copiado', email: 'Correo', more: 'Más opciones', close: 'Cerrar', instagramHint: 'Enlace copiado. Pégalo en Instagram.' }
 vi.mock('next-intl', () => ({ useTranslations: () => (key: string) => messages[key] ?? key }))
 
 const open = () => fireEvent.click(screen.getByRole('button', { name: 'Compartir' }))
@@ -19,10 +19,19 @@ describe('ShareButton', () => {
     expect(screen.queryByRole('dialog')).not.toBeInTheDocument()
     open()
     const dialog = screen.getByRole('dialog', { name: 'Compartir en…' })
-    for (const name of ['WhatsApp', 'Facebook', 'X', 'LinkedIn', 'Telegram', 'Reddit', 'Threads', 'Bluesky', 'Correo']) {
+    for (const name of ['Bluesky', 'LinkedIn', 'WhatsApp', 'Facebook', 'Telegram', 'Reddit', 'Threads', 'X', 'Correo']) {
       expect(within(dialog).getByRole('link', { name })).toBeInTheDocument()
     }
+    expect(within(dialog).getByRole('button', { name: 'Instagram' })).toBeInTheDocument()
     expect(within(dialog).getByRole('button', { name: 'Copiar enlace' })).toBeInTheDocument()
+  })
+
+  it('shows the networks in the chosen order: Bluesky, LinkedIn, Instagram, WhatsApp, Facebook, Telegram, Reddit, Threads, X, email, copy link', () => {
+    render(<ShareButton title="Un título" />)
+    open()
+    const dialog = screen.getByRole('dialog')
+    const names = [...dialog.querySelectorAll('a, button')].map((el) => el.textContent?.trim()).filter((n) => n && n !== '✕')
+    expect(names).toEqual(['Bluesky', 'LinkedIn', 'Instagram', 'WhatsApp', 'Facebook', 'Telegram', 'Reddit', 'Threads', 'X', 'Correo', 'Copiar enlace'])
   })
 
   it('shares the address of this page, in a new tab, without tracking parameters', () => {
@@ -35,15 +44,29 @@ describe('ShareButton', () => {
     expect(facebook).toHaveAttribute('rel', 'noopener noreferrer')
   })
 
-  it('offers Pinterest only when the page has a preview picture', () => {
-    const { unmount } = render(<ShareButton title="t" />)
-    open()
-    expect(screen.queryByRole('link', { name: 'Pinterest' })).not.toBeInTheDocument()
-    unmount()
-    document.head.innerHTML = '<meta property="og:image" content="https://cdn/cover.webp">'
+  it('Instagram on a computer: copies the link, opens Instagram and says to paste it', async () => {
+    const writeText = vi.fn().mockResolvedValue(undefined)
+    Object.assign(navigator, { clipboard: { writeText } })
+    const openWindow = vi.spyOn(window, 'open').mockReturnValue(null)
     render(<ShareButton title="t" />)
     open()
-    expect(screen.getByRole('link', { name: 'Pinterest' }).getAttribute('href')).toContain(encodeURIComponent('https://cdn/cover.webp'))
+    fireEvent.click(screen.getByRole('button', { name: 'Instagram' }))
+    expect(openWindow).toHaveBeenCalledWith('https://www.instagram.com/', '_blank', 'noopener,noreferrer')
+    expect(writeText).toHaveBeenCalledWith(expect.stringContaining(window.location.origin))
+    expect(await screen.findByText('Enlace copiado. Pégalo en Instagram.')).toBeInTheDocument()
+  })
+
+  it('Instagram on a phone: opens the phone’s share sheet, where Instagram is listed', () => {
+    const share = vi.fn().mockResolvedValue(undefined)
+    Object.assign(navigator, { share })
+    vi.stubGlobal('matchMedia', (query: string) => ({ matches: query === '(pointer: coarse)', media: query, addEventListener() {}, removeEventListener() {} }))
+    const openWindow = vi.spyOn(window, 'open').mockReturnValue(null)
+    render(<ShareButton title="Un título" />)
+    open()
+    fireEvent.click(screen.getByRole('button', { name: 'Instagram' }))
+    expect(share).toHaveBeenCalledWith({ title: 'Un título', url: expect.stringContaining(window.location.origin) })
+    expect(openWindow).not.toHaveBeenCalled()
+    vi.unstubAllGlobals()
   })
 
   it('copies the link and says so', async () => {

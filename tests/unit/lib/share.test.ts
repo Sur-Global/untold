@@ -6,29 +6,28 @@ const title = 'Amazofuturismo: ¿qué futuro?'
 const byId = (links: ReturnType<typeof shareLinks>) => Object.fromEntries(links.map((l) => [l.id, l.href]))
 
 describe('shareLinks', () => {
-  it('has the networks people use most, in order, with email last', () => {
-    const links = shareLinks({ url, title, image: 'https://cdn/cover.webp' })
-    expect(links.map((l) => l.id)).toEqual(['whatsapp', 'facebook', 'x', 'linkedin', 'telegram', 'reddit', 'pinterest', 'threads', 'bluesky', 'email'])
+  it('lists the networks in the order the team chose, with email last', () => {
+    expect(shareLinks({ url, title }).map((l) => l.id)).toEqual(['bluesky', 'linkedin', 'instagram', 'whatsapp', 'facebook', 'telegram', 'reddit', 'threads', 'x', 'email'])
   })
 
   it('builds each network’s own address, with the link and title encoded', () => {
-    const h = byId(shareLinks({ url, title, image: 'https://cdn/cover.webp' }))
+    const h = byId(shareLinks({ url, title }))
     const u = encodeURIComponent(url)
     const t = encodeURIComponent(title)
-    expect(h.facebook).toBe(`https://www.facebook.com/sharer/sharer.php?u=${u}`)
+    const text = encodeURIComponent(`${title} ${url}`)
+    expect(h.bluesky).toBe(`https://bsky.app/intent/compose?text=${text}`)
     expect(h.linkedin).toBe(`https://www.linkedin.com/sharing/share-offsite/?url=${u}`)
-    expect(h.x).toBe(`https://twitter.com/intent/tweet?text=${t}&url=${u}`)
+    expect(h.whatsapp).toBe(`https://wa.me/?text=${text}`)
+    expect(h.facebook).toBe(`https://www.facebook.com/sharer/sharer.php?u=${u}`)
     expect(h.telegram).toBe(`https://t.me/share/url?url=${u}&text=${t}`)
     expect(h.reddit).toBe(`https://www.reddit.com/submit?url=${u}&title=${t}`)
-    expect(h.whatsapp).toBe(`https://wa.me/?text=${encodeURIComponent(`${title} ${url}`)}`)
-    expect(h.threads).toContain('threads.net/intent/post?text=')
-    expect(h.bluesky).toContain('https://bsky.app/intent/compose?text=')
-    expect(h.pinterest).toBe(`https://pinterest.com/pin/create/button/?url=${u}&media=${encodeURIComponent('https://cdn/cover.webp')}&description=${t}`)
+    expect(h.threads).toBe(`https://www.threads.net/intent/post?text=${text}`)
+    expect(h.x).toBe(`https://twitter.com/intent/tweet?text=${t}&url=${u}`)
     expect(h.email).toBe(`mailto:?subject=${t}&body=${u}`)
   })
 
-  it('leaves Pinterest out when the page has no picture to pin', () => {
-    expect(shareLinks({ url, title }).map((l) => l.id)).not.toContain('pinterest')
+  it('has no web address for Instagram: its button copies the link instead', () => {
+    expect(byId(shareLinks({ url, title })).instagram).toBeNull()
   })
 
   it('never lets a title break the address', () => {
