@@ -65,7 +65,9 @@
     "loadMore": "Indlæs flere artikler",
     "noArticles": "Ingen artikler endnu.",
     "noResults": "Ingen artikler matcher din søgning.",
-    "readMoreBy": "Læs mere af {name}"
+    "readMoreBy": "Læs mere af {name}",
+    "tagCloudLabel": "Udforsk efter emne",
+    "tagCloudAll": "Alle"
   },
   "auth": {
     "loginTitle": "Velkommen tilbage",

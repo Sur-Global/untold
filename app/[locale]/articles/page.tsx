@@ -9,6 +9,7 @@ import { triggerTagTranslations } from '@/lib/trigger-tag-translations'
 import { Navigation } from '@/components/layout/Navigation'
 import { Footer } from '@/components/layout/Footer'
 import { ContentCard } from '@/components/content/ContentCard'
+import { loadTagCloud } from '@/lib/data/tag-cloud'
 import { TranslationRefresher } from '@/components/TranslationRefresher'
 import { ArticlesFilter } from './ArticlesFilter'
 import type { TagItem } from './ArticlesFilter'
@@ -43,17 +44,9 @@ export default async function ArticlesPage({ params, searchParams }: PageProps) 
   ])
   const { userId, ...navProps } = navData
 
-  // Fetch all tags for the tag cloud
-  const { data: tagsData } = await (supabase as any)
-    .from('tags')
-    .select('slug, names')
-    .order('slug')
-
-  const tags: TagItem[] = (tagsData ?? []).map((t: any) => ({
-    slug: t.slug,
-    name: t.names[locale] ?? t.names['en'] ?? t.slug,
-    colorIndex: tagColorIndex(t.slug),
-  }))
+  // Tag cloud: only the topics that published articles have
+  const cloud = await loadTagCloud(supabase, 'article', locale)
+  const tags: TagItem[] = cloud.map((t) => ({ slug: t.slug, name: t.name, colorIndex: tagColorIndex(t.slug) }))
 
   // Build filtered content IDs from search/tag
   let filteredIds: string[] | null = null

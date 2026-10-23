@@ -8,6 +8,8 @@ import { triggerTagTranslations } from '@/lib/trigger-tag-translations'
 import { Navigation } from '@/components/layout/Navigation'
 import { Footer } from '@/components/layout/Footer'
 import { ContentCard } from '@/components/content/ContentCard'
+import { TagCloud } from '@/components/content/TagCloud'
+import { contentIdsForTag, loadTagCloud } from '@/lib/data/tag-cloud'
 import { FeaturedSection } from '@/components/content/FeaturedSection'
 import { PAGE_FEATURED_SLOTS } from '@/lib/featured-slots'
 import { TranslationRefresher } from '@/components/TranslationRefresher'
@@ -16,20 +18,26 @@ const PAGE_SIZE = 12
 
 interface PageProps {
   params: Promise<{ locale: string }>
-  searchParams: Promise<{ page?: string }>
+  searchParams: Promise<{ page?: string; tag?: string }>
 }
 
 export default async function PillsPage({ params, searchParams }: PageProps) {
   const { locale } = await params
-  const { page: pageStr } = await searchParams
+  const { page: pageStr, tag } = await searchParams
+  const activeTag = tag?.trim() ?? ''
   const page = Math.max(1, parseInt(pageStr ?? '1', 10))
   const offset = (page - 1) * PAGE_SIZE
 
   const supabase = await createClient()
+  const [cloud, tagIds] = await Promise.all([
+    loadTagCloud(supabase, 'pill', locale),
+    activeTag ? contentIdsForTag(supabase, activeTag) : Promise.resolve(null),
+  ])
   const tListings = await getTranslations('listings')
 
   // ★ picks (admin/content) shown at the top of page 1; kept out of the main list below
-  const { data: featuredRows } = await (supabase as any)
+  // the starred picks lead the page only when it is not filtered by topic
+  const { data: featuredRows } = activeTag ? { data: [] as any[] } : await (supabase as any)
     .from('content')
     .select(`
       id, slug, type, source_locale, single_language, subtitle_locales, is_featured, likes_count, published_at, cover_image_url, read_time_minutes,
@@ -47,7 +55,7 @@ export default async function PillsPage({ params, searchParams }: PageProps) {
   const featuredItems: any[] = featuredRows ?? []
   const featuredIds = featuredItems.map((i) => i.id)
 
-  const query = (supabase as any)
+  const baseQuery = (supabase as any)
     .from('content')
     .select(`
       id, slug, type, source_locale, single_language, subtitle_locales, is_featured, likes_count, published_at, cover_image_url, read_time_minutes,
@@ -62,6 +70,7 @@ export default async function PillsPage({ params, searchParams }: PageProps) {
     .not('id', 'in', `(${featuredIds.length ? featuredIds.join(',') : '00000000-0000-0000-0000-000000000000'})`)
     .order('published_at', { ascending: false })
     .range(offset, offset + PAGE_SIZE - 1)
+  const query = tagIds ? baseQuery.in('id', tagIds) : baseQuery
 
   const [{ userId, ...navProps }, { data: items, count }] = await Promise.all([
     getNavProps(),
@@ -93,6 +102,8 @@ export default async function PillsPage({ params, searchParams }: PageProps) {
     }
     after(() => triggerTagTranslations(locale))
   }
+
+  const pageHref = (n: number) => `?page=${n}${activeTag ? `&tag=${encodeURIComponent(activeTag)}` : ''}`
 
   const renderCard = (item: any) => {
     const t = getTranslation(item.content_translations ?? [], locale)
@@ -135,6 +146,7 @@ export default async function PillsPage({ params, searchParams }: PageProps) {
         <div className="mb-12">
           <h1 className="mb-2">Knowledge Pills</h1>
           <p className="text-[#6B5F58]">{tListings('pillsDesc')}</p>
+          <TagCloud tags={cloud} activeSlug={activeTag} basePath="/pills" label={tListings('tagCloudLabel')} allLabel={tListings('tagCloudAll')} />
         </div>
 
         {page === 1 && featuredItems.length > 0 && (
@@ -149,13 +161,13 @@ export default async function PillsPage({ params, searchParams }: PageProps) {
             {totalPages > 1 && (
               <div className="flex justify-center gap-2 mt-12">
                 {page > 1 && (
-                  <a href={`?page=${page - 1}`} className="px-4 py-2 rounded font-mono text-sm border" style={{ borderColor: 'rgba(139,69,19,0.2)' }}>
+                  <a href={pageHref(page - 1)} className="px-4 py-2 rounded font-mono text-sm border" style={{ borderColor: 'rgba(139,69,19,0.2)' }}>
                     ← Previous
                   </a>
                 )}
                 <span className="px-4 py-2 font-mono text-sm text-[#6B5F58]">Page {page} of {totalPages}</span>
                 {page < totalPages && (
-                  <a href={`?page=${page + 1}`} className="px-4 py-2 rounded font-mono text-sm border" style={{ borderColor: 'rgba(139,69,19,0.2)' }}>
+                  <a href={pageHref(page + 1)} className="px-4 py-2 rounded font-mono text-sm border" style={{ borderColor: 'rgba(139,69,19,0.2)' }}>
                     Next →
                   </a>
                 )}

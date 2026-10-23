@@ -65,7 +65,9 @@
     "loadMore": "Carregar mais artigos",
     "noArticles": "Ainda não há artigos.",
     "noResults": "Nenhum artigo corresponde à sua pesquisa.",
-    "readMoreBy": "Ler mais de {name}"
+    "readMoreBy": "Ler mais de {name}",
+    "tagCloudLabel": "Explore por tema",
+    "tagCloudAll": "Todos"
   },
   "auth": {
     "loginTitle": "Bem-vindo de volta",

@@ -65,7 +65,9 @@
     "loadMore": "Weitere Artikel laden",
     "noArticles": "Noch keine Artikel.",
     "noResults": "Keine Artikel entsprechen Ihrer Suche.",
-    "readMoreBy": "Mehr von {name} lesen"
+    "readMoreBy": "Mehr von {name} lesen",
+    "tagCloudLabel": "Nach Thema stöbern",
+    "tagCloudAll": "Alle"
   },
   "auth": {
     "loginTitle": "Willkommen zurück",
