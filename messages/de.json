@@ -388,6 +388,15 @@
     "policy": "Datenschutzerklärung",
     "settings": "Cookie-Einstellungen"
   },
+  "share": {
+    "button": "Teilen",
+    "dialog": "Teilen auf …",
+    "copyLink": "Link kopieren",
+    "copied": "Link kopiert",
+    "email": "E-Mail",
+    "more": "Weitere Optionen",
+    "close": "Schließen"
+  },
   "footer": {
     "subscribeCta": "Abonnieren",
     "subscribeClose": "Schließen",

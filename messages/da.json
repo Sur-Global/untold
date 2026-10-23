@@ -388,6 +388,15 @@
     "policy": "Privatlivspolitik",
     "settings": "Cookieindstillinger"
   },
+  "share": {
+    "button": "Del",
+    "dialog": "Del på …",
+    "copyLink": "Kopiér link",
+    "copied": "Link kopieret",
+    "email": "E-mail",
+    "more": "Flere muligheder",
+    "close": "Luk"
+  },
   "footer": {
     "subscribeCta": "Abonnér",
     "subscribeClose": "Luk",

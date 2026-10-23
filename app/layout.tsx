@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from 'next'
 import localFont from 'next/font/local'
 import { JetBrains_Mono } from 'next/font/google'
 import './globals.css'
+import { DEFAULT_SHARE_IMAGE, SITE_NAME, siteUrl } from '@/lib/content-metadata'
 
 const aeonik = localFont({
   src: [
@@ -28,8 +29,18 @@ const jetbrainsMono = JetBrains_Mono({
 })
 
 export const metadata: Metadata = {
+  // share pictures and canonical addresses are resolved against the site's own address
+  metadataBase: new URL(siteUrl()),
   title: 'UNTOLD.ink — Views from the Global South',
   description: 'A multilingual editorial platform by SurGlobal.',
+  openGraph: {
+    type: 'website',
+    siteName: SITE_NAME,
+    title: 'UNTOLD.ink — Views from the Global South',
+    description: 'A multilingual editorial platform by SurGlobal.',
+    images: [{ url: DEFAULT_SHARE_IMAGE, width: 1200, height: 630, alt: SITE_NAME }],
+  },
+  twitter: { card: 'summary_large_image', images: [DEFAULT_SHARE_IMAGE] },
 }
 
 export const viewport: Viewport = {

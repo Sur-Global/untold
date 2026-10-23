@@ -5,13 +5,21 @@ import { getTranslation } from '@/lib/content'
 import { LanguageNotice } from '@/components/content/LanguageNotice'
 import { Navigation } from '@/components/layout/Navigation'
 import { Footer } from '@/components/layout/Footer'
+import type { Metadata } from 'next'
+import { loadContentMetadata } from '@/lib/data/content-metadata'
 import { RelatedContent } from '@/components/content/RelatedContent'
 import { BodyTranslationLoader } from '@/components/content/BodyTranslationLoader'
 import { LikeButton } from '@/components/social/LikeButton'
 import { BookmarkButton } from '@/components/social/BookmarkButton'
+import { ShareButton } from '@/components/social/ShareButton'
 
 interface PageProps {
   params: Promise<{ locale: string; slug: string }>
+}
+
+export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+  const { locale, slug } = await params
+  return loadContentMetadata({ type: 'course', slug, locale })
 }
 
 export default async function CoursePage({ params }: PageProps) {
@@ -129,6 +137,7 @@ export default async function CoursePage({ params }: PageProps) {
                 initialIsBookmarked={isBookmarked}
                 isLoggedIn={!!user}
               />
+              <ShareButton title={t.title} className="flex items-center gap-1.5 text-sm font-mono text-muted-foreground hover:text-primary transition-colors" />
             </div>
           </div>
 

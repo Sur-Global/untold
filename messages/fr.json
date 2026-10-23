@@ -388,6 +388,15 @@
     "policy": "Politique de confidentialité",
     "settings": "Paramètres des cookies"
   },
+  "share": {
+    "button": "Partager",
+    "dialog": "Partager sur…",
+    "copyLink": "Copier le lien",
+    "copied": "Lien copié",
+    "email": "E-mail",
+    "more": "Plus d’options",
+    "close": "Fermer"
+  },
   "footer": {
     "subscribeCta": "S'abonner",
     "subscribeClose": "Fermer",

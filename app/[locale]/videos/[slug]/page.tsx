@@ -10,6 +10,7 @@ import { locationName } from '@/lib/countries'
 import { getNavProps } from '@/lib/nav'
 import { Navigation } from '@/components/layout/Navigation'
 import { Footer } from '@/components/layout/Footer'
+import { loadContentMetadata } from '@/lib/data/content-metadata'
 import { RelatedContent } from '@/components/content/RelatedContent'
 import { EmbedPlayer } from '@/components/content/EmbedPlayer'
 import { VideoTranslationLoader } from '@/components/content/VideoTranslationLoader'
@@ -32,19 +33,7 @@ interface PageProps {
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { locale, slug } = await params
-  const supabase = await createClient()
-  const { data } = await (supabase as any)
-    .from('content')
-    .select('content_translations ( title, locale )')
-    .eq('slug', slug)
-    .eq('type', 'video')
-    .eq('status', 'published')
-    .single()
-
-  const t = getTranslation(data?.content_translations ?? [], locale)
-  return {
-    title: t?.title ? `${t.title} — UNTOLD` : 'UNTOLD',
-  }
+  return loadContentMetadata({ type: 'video', slug, locale })
 }
 
 export default async function VideoPage({ params }: PageProps) {

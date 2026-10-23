@@ -11,6 +11,7 @@ import { sanitizeBioHtml } from '@/lib/sanitize-bio-html'
 import { formatDate } from '@/lib/format-date'
 import { Navigation } from '@/components/layout/Navigation'
 import { Footer } from '@/components/layout/Footer'
+import { loadContentMetadata } from '@/lib/data/content-metadata'
 import { RelatedContent } from '@/components/content/RelatedContent'
 import { ArticleBody } from '@/components/content/ArticleBody'
 import { BodyTranslationLoader } from '@/components/content/BodyTranslationLoader'
@@ -34,20 +35,7 @@ interface PageProps {
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { locale, slug } = await params
-  const supabase = await createClient()
-  const { data } = await (supabase as any)
-    .from('content')
-    .select('content_translations ( title, excerpt, featured_summary, locale )')
-    .eq('slug', slug)
-    .eq('type', 'article')
-    .eq('status', 'published')
-    .single()
-
-  const t = getTranslation(data?.content_translations ?? [], locale)
-  return {
-    title: t?.title ? `${t.title} — UNTOLD` : 'UNTOLD',
-    description: t?.excerpt || t?.featured_summary || undefined,
-  }
+  return loadContentMetadata({ type: 'article', slug, locale })
 }
 
 export default async function ArticlePage({ params }: PageProps) {
