@@ -405,5 +405,17 @@
       "text": "UNTOLD comes from SurGlobal. Get to know the organization behind this platform.",
       "cta": "Discover SurGlobal"
     }
+  },
+  "issues": {
+    "title": "Issues",
+    "one": "Issue",
+    "all": "All issues",
+    "description": "Every issue of the magazine, with its editorial and the articles in it.",
+    "articles": "{count, plural, one {# article} other {# articles}}",
+    "empty": "No issues published yet.",
+    "back": "← All issues",
+    "inThisIssue": "In this issue",
+    "readEditorial": "Read the editorial",
+    "draft": "Draft"
   }
 }

@@ -405,5 +405,17 @@
       "text": "UNTOLD kommer fra SurGlobal. Lær organisationen bag denne platform at kende.",
       "cta": "Lær SurGlobal at kende"
     }
+  },
+  "issues": {
+    "title": "Udgaver",
+    "one": "Udgave",
+    "all": "Alle udgaver",
+    "description": "Hver udgave af magasinet, med sin leder og de artikler, den består af.",
+    "articles": "{count, plural, one {# artikel} other {# artikler}}",
+    "empty": "Ingen udgaver udgivet endnu.",
+    "back": "← Alle udgaver",
+    "inThisIssue": "I denne udgave",
+    "readEditorial": "Læs lederen",
+    "draft": "Kladde"
   }
 }

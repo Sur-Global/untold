@@ -1,7 +1,7 @@
 'use client'
 
 import { Link, usePathname } from '@/i18n/navigation'
-import { LayoutDashboard, Globe, FileText, Users, BookOpen, Settings, Inbox, Megaphone } from 'lucide-react'
+import { LayoutDashboard, Globe, FileText, Users, BookOpen, Settings, Inbox, Megaphone, Newspaper } from 'lucide-react'
 import type { UserRole } from '@/lib/supabase/types'
 
 const TABS = [
@@ -11,6 +11,8 @@ const TABS = [
   { href: '/admin/translations', label: 'Translations', icon: Globe, exact: false, adminOnly: false },
   { href: '/admin/users', label: 'Users', icon: Users, exact: false, adminOnly: false },
   { href: '/admin/pages', label: 'Pages', icon: BookOpen, exact: false, adminOnly: true },
+  // Admins only for now; once the editors are trained, set adminOnly to false so they can create issues too
+  { href: '/admin/issues', label: 'Issues', icon: Newspaper, exact: false, adminOnly: true },
   { href: '/admin/advertising', label: 'Advertising', icon: Megaphone, exact: false, adminOnly: true },
   { href: '/admin/settings', label: 'Settings', icon: Settings, exact: false, adminOnly: true },
 ] as const

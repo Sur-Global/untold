@@ -26,6 +26,8 @@ export type LatestEditorial = {
   authorSlug: string | null
   authorAvatarUrl: string | null
   dateLabel: string | null
+  /** the numbered issue it belongs to, when it has one (the card's label then links to it) */
+  issue?: { label: string; href: string } | null
 }
 
 export type LatestLabels = {
@@ -42,7 +44,7 @@ interface Props {
   labels: LatestLabels
 }
 
-function ArticleRow({ item, labels, first }: { item: LatestItem; labels: LatestLabels; first: boolean }) {
+export function ArticleRow({ item, labels, first }: { item: LatestItem; labels: LatestLabels; first: boolean }) {
   const meta = [item.authorName, item.dateLabel, item.readTimeLabel].filter(Boolean).join(' · ')
   return (
     <Link
@@ -81,12 +83,18 @@ function ArticleRow({ item, labels, first }: { item: LatestItem; labels: LatestL
   )
 }
 
-function EditorialCard({ editorial, labels }: { editorial: LatestEditorial; labels: LatestLabels }) {
+export function EditorialCard({ editorial, labels }: { editorial: LatestEditorial; labels: LatestLabels }) {
   const initial = (editorial.authorName ?? '?').trim().charAt(0).toUpperCase()
   return (
     <article className="rounded-2xl p-6 lg:p-7" style={{ background: '#000', color: '#fff' }}>
       <p className="mb-3 text-[11px] uppercase tracking-[0.08em]" style={{ ...aeonik(300), color: '#A9A8E9' }}>
-        {labels.editorial}
+        {editorial.issue ? (
+          <Link href={editorial.issue.href} className="no-underline hover:underline" style={{ color: '#A9A8E9' }}>
+            {labels.editorial} · {editorial.issue.label}
+          </Link>
+        ) : (
+          labels.editorial
+        )}
       </p>
       <h3 className="mb-3 text-[22px] leading-[1.15]" style={{ ...aeonik(500), letterSpacing: '-0.02em' }}>
         <Link href={`/articles/${editorial.slug}`} className="no-underline" style={{ color: '#fff' }}>

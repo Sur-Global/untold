@@ -47,6 +47,12 @@ describe('LatestSection', () => {
     expect(screen.getAllByRole('heading', { level: 3 })).toHaveLength(4)
   })
 
+  it('links the editorial card to its numbered issue when it belongs to one', () => {
+    render(<LatestSection items={[item(1)]} editorial={{ ...editorial, issue: { label: 'Número VII · septiembre de 2026', href: '/issues/2026/7' } }} labels={labels} />)
+    const card = screen.getByRole('article')
+    expect(within(card).getByRole('link', { name: 'Editorial · Número VII · septiembre de 2026' })).toHaveAttribute('href', '/issues/2026/7')
+  })
+
   it('renders nothing when there is nothing to show', () => {
     const { container } = render(<LatestSection items={[]} editorial={null} labels={labels} />)
     expect(container).toBeEmptyDOMElement()

@@ -405,5 +405,17 @@
       "text": "UNTOLD nace de SurGlobal. Conoce a la organización que impulsa esta plataforma.",
       "cta": "Conocer SurGlobal"
     }
+  },
+  "issues": {
+    "title": "Números",
+    "one": "Número",
+    "all": "Todos los números",
+    "description": "Cada número de la revista, con su editorial y los artículos que lo componen.",
+    "articles": "{count, plural, one {# artículo} other {# artículos}}",
+    "empty": "Aún no hay números publicados.",
+    "back": "← Todos los números",
+    "inThisIssue": "En este número",
+    "readEditorial": "Leer el editorial",
+    "draft": "Borrador"
   }
 }

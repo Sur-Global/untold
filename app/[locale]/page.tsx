@@ -8,6 +8,7 @@ import { AdBanner } from '@/components/home/AdBanner'
 import { LatestSection, type LatestEditorial, type LatestItem } from '@/components/home/LatestSection'
 import { bodyExcerpt, isRecent } from '@/lib/editorial'
 import { formatDate } from '@/lib/format-date'
+import { issueLabel, issuePath } from '@/lib/issues'
 import { getTranslation } from '@/lib/content'
 import { triggerListingTranslations } from '@/lib/trigger-listing-translations'
 import { triggerTagTranslations } from '@/lib/trigger-tag-translations'
@@ -37,7 +38,7 @@ export default async function HomePage({ params }: PageProps) {
   const tListings = await getTranslations('listings')
   const tContentHome = await getTranslations('content')
   const platform = await getPlatformSettings()
-  const [banners, tBanners] = await Promise.all([getHomeBanners(), getTranslations('banners')])
+  const [banners, tBanners, tIssues] = await Promise.all([getHomeBanners(), getTranslations('banners'), getTranslations('issues')])
   const bannerCopy = (slot: 'top' | 'bottom') => ({
     adLabel: tBanners('adLabel'),
     eyebrow: tBanners(`${slot}.eyebrow`),
@@ -71,6 +72,7 @@ export default async function HomePage({ params }: PageProps) {
     { data: courses },
     { data: latestRows },
     { data: editorialRows },
+    { data: issueRows },
   ] = await Promise.all([
     getNavProps(),
     // Tag counts for hero stats
@@ -207,9 +209,29 @@ export default async function HomePage({ params }: PageProps) {
           .order('published_at', { ascending: false })
           .limit(1)
       : Promise.resolve({ data: [] }),
+    // The newest published numbered issue that has an editorial: its editorial takes the card
+    platform.latestSection.enabled
+      ? (supabase as any)
+          .from('issues')
+          .select(`
+            number, issue_date,
+            editorial:content!issues_editorial_id_fkey (
+              id, slug, source_locale, single_language, published_at, status,
+              profiles!author_id ( display_name, slug, avatar_url ),
+              content_translations ( title, excerpt, featured_summary, locale )
+            )
+          `)
+          .eq('status', 'published')
+          .not('editorial_id', 'is', null)
+          .order('issue_date', { ascending: false })
+          .order('number', { ascending: false })
+          .limit(3)
+      : Promise.resolve({ data: [] }),
   ])
 
-  const editorialRow = (editorialRows ?? [])[0] ?? null
+  const issueWithEditorial = (issueRows ?? []).find((i: any) => i.editorial?.status === 'published') ?? null
+  // an editorial chosen for a numbered issue wins; otherwise the latest article marked ✎
+  const editorialRow = issueWithEditorial?.editorial ?? (editorialRows ?? [])[0] ?? null
   const heroIds = new Set((heroPicks ?? []).map((i: any) => i.id))
   const latestArticles = (latestRows ?? [])
     .filter((i: any) => !heroIds.has(i.id) && i.id !== editorialRow?.id)
@@ -386,6 +408,9 @@ export default async function HomePage({ params }: PageProps) {
       authorSlug: editorialRow.profiles?.slug ?? null,
       authorAvatarUrl: editorialRow.profiles?.avatar_url ?? null,
       dateLabel: dateOf(editorialRow.published_at),
+      issue: issueWithEditorial
+        ? { label: issueLabel(tIssues('one'), issueWithEditorial.number, issueWithEditorial.issue_date, locale), href: issuePath(issueWithEditorial.issue_date, issueWithEditorial.number) }
+        : null,
     }
   }
 

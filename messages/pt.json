@@ -405,5 +405,17 @@
       "text": "A UNTOLD nasce da SurGlobal. Conheça a organização que impulsiona esta plataforma.",
       "cta": "Conhecer a SurGlobal"
     }
+  },
+  "issues": {
+    "title": "Edições",
+    "one": "Edição",
+    "all": "Todas as edições",
+    "description": "Cada edição da revista, com seu editorial e os artigos que a compõem.",
+    "articles": "{count, plural, one {# artigo} other {# artigos}}",
+    "empty": "Ainda não há edições publicadas.",
+    "back": "← Todas as edições",
+    "inThisIssue": "Nesta edição",
+    "readEditorial": "Ler o editorial",
+    "draft": "Rascunho"
   }
 }
