@@ -18,3 +18,18 @@ export function getTranslation(
     translations[0]
   )
 }
+
+const MEDIA_TYPES = ['video', 'podcast', 'course']
+
+/**
+ * Does this item still lack its card text (title, short description) in the visitor's language? Content marked "only
+ * available in this language" has none, except a video, podcast or course: what is spoken is in one language, but its
+ * card has to read in the visitor's language.
+ */
+export function needsListingTranslation(
+  item: { type?: string | null; single_language?: boolean | null; content_translations?: { locale: string }[] | null },
+  locale: string,
+): boolean {
+  if (item.single_language && !MEDIA_TYPES.includes(item.type ?? '')) return false
+  return !(item.content_translations ?? []).some((t) => t.locale === locale)
+}

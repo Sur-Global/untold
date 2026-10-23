@@ -2,7 +2,10 @@ import { notFound } from 'next/navigation'
 import { getTranslations } from 'next-intl/server'
 import { createClient } from '@/lib/supabase/server'
 import { getNavProps } from '@/lib/nav'
-import { getTranslation } from '@/lib/content'
+import { after } from 'next/server'
+import { getTranslation, needsListingTranslation } from '@/lib/content'
+import { triggerListingTranslations } from '@/lib/trigger-listing-translations'
+import { TranslationRefresher } from '@/components/TranslationRefresher'
 import { Navigation } from '@/components/layout/Navigation'
 import { Footer } from '@/components/layout/Footer'
 import { ContentCard } from '@/components/content/ContentCard'
@@ -55,6 +58,10 @@ export default async function TagPage({ params }: PageProps) {
       return new Date(b.published_at).getTime() - new Date(a.published_at).getTime()
     })
 
+  // The cards read in the visitor's language: what is not translated yet is asked for in the background and the page refreshes
+  const untranslatedIds = published.filter((i: any) => needsListingTranslation(i, locale)).map((i: any) => i.id)
+  if (untranslatedIds.length > 0) after(() => triggerListingTranslations(untranslatedIds, locale))
+
   // Batch bookmark resolution
   const contentIds = published.map((i: any) => i.id)
   const bookmarkedIds = new Set<string>()
@@ -69,6 +76,7 @@ export default async function TagPage({ params }: PageProps) {
 
   return (
     <>
+      <TranslationRefresher pending={untranslatedIds.length > 0} />
       <Navigation {...navProps} />
       <main className="max-w-7xl mx-auto px-4 sm:px-6 py-16">
         <div className="mb-12">

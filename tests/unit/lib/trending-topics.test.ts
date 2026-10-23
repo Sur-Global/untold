@@ -38,10 +38,21 @@ describe('rankTrendingTopics', () => {
   })
 })
 
+describe('the count of a topic', () => {
+  it('is how many pieces of content have it, so the hero buttons can show the same number as the topic page', () => {
+    const rows = [
+      { tags: { slug: 'a', names: {} }, content: { published_at: '2026-10-01T00:00:00Z', likes_count: 0 } },
+      { tags: { slug: 'a', names: {} }, content: { published_at: '2025-01-01T00:00:00Z', likes_count: 0 } },
+      { tags: { slug: 'b', names: {} }, content: { published_at: '2026-10-02T00:00:00Z', likes_count: 0 } },
+    ]
+    expect(rankTrendingTopics(rows, NOW).map((t) => [t.slug, t.count])).toEqual([['a', 2], ['b', 1]])
+  })
+})
+
 describe('topicLabel', () => {
   it('uses the name in the reader’s language, capitalised, falling back to English and then the slug', () => {
-    expect(topicLabel({ slug: 'decolonizacion', names: { es: 'decolonización', en: 'decolonization' } }, 'es')).toBe('Decolonización')
-    expect(topicLabel({ slug: 'x', names: { en: 'decolonization' } }, 'fr')).toBe('Decolonization')
-    expect(topicLabel({ slug: 'solo', names: {} }, 'fr')).toBe('Solo')
+    expect(topicLabel({ slug: 'decolonizacion', names: { es: 'decolonización', en: 'decolonization' }, count: 1 }, 'es')).toBe('Decolonización')
+    expect(topicLabel({ slug: 'x', names: { en: 'decolonization' }, count: 1 }, 'fr')).toBe('Decolonization')
+    expect(topicLabel({ slug: 'solo', names: {}, count: 1 }, 'fr')).toBe('Solo')
   })
 })

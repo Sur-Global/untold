@@ -8,7 +8,8 @@ export type TopicRow = {
   content?: { published_at?: string | null; likes_count?: number | null } | null
 }
 
-export type Topic = { slug: string; names: Record<string, string> }
+/** `count` is how many published, curated pieces of content have the topic (the number the topic's own page shows) */
+export type Topic = { slug: string; names: Record<string, string>; count: number }
 
 /** Tags that name a kind of text (not a subject), so they never show as a topic */
 export const NOT_TOPICS = new Set(['editorial', 'entrevista'])
@@ -26,7 +27,7 @@ export function recencyWeight(publishedAt: string | null | undefined, now: Date)
 
 /** The `limit` most trending topics: each content adds its recency weight, plus half a point per like */
 export function rankTrendingTopics(rows: TopicRow[], now: Date = new Date(), limit = 5): Topic[] {
-  const byTag = new Map<string, { topic: Topic; score: number; count: number }>()
+  const byTag = new Map<string, { topic: Topic; score: number }>()
   for (const row of rows) {
     const tag = row.tags
     if (!tag?.slug || NOT_TOPICS.has(tag.slug)) continue
@@ -34,13 +35,13 @@ export function rankTrendingTopics(rows: TopicRow[], now: Date = new Date(), lim
     const found = byTag.get(tag.slug)
     if (found) {
       found.score += weight
-      found.count++
+      found.topic.count++
     } else {
-      byTag.set(tag.slug, { topic: { slug: tag.slug, names: tag.names ?? {} }, score: weight, count: 1 })
+      byTag.set(tag.slug, { topic: { slug: tag.slug, names: tag.names ?? {}, count: 1 }, score: weight })
     }
   }
   return [...byTag.values()]
-    .sort((a, b) => b.score - a.score || b.count - a.count || a.topic.slug.localeCompare(b.topic.slug))
+    .sort((a, b) => b.score - a.score || b.topic.count - a.topic.count || a.topic.slug.localeCompare(b.topic.slug))
     .slice(0, limit)
     .map((t) => t.topic)
 }

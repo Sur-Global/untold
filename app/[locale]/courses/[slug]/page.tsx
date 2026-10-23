@@ -58,6 +58,8 @@ export default async function CoursePage({ params }: PageProps) {
   const singleLanguage: boolean = !!course.single_language
   const contentLocale: string = singleLanguage ? (course.source_locale ?? 'en') : locale
   const t = getTranslation(course.content_translations ?? [], contentLocale)
+  // What is spoken may be in one language only, but the heading reads in the visitor's language when it is translated
+  const heading: string = singleLanguage ? (course.content_translations ?? []).find((tr: any) => tr.locale === locale)?.title ?? t?.title : t?.title
   if (!t) notFound()
 
   const meta = course.course_meta
@@ -118,7 +120,7 @@ export default async function CoursePage({ params }: PageProps) {
               />
             )}
             {singleLanguage && <LanguageNotice sourceLocale={sourceLocale} subtitleLocales={course.subtitle_locales} />}
-            <h1 className="mb-4">{t.title}</h1>
+            <h1 className="mb-4">{heading}</h1>
             <BodyTranslationLoader
               contentId={course.id}
               locale={locale}

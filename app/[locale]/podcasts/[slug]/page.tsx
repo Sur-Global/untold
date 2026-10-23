@@ -58,6 +58,8 @@ export default async function PodcastPage({ params }: PageProps) {
   const singleLanguage: boolean = !!podcast.single_language
   const contentLocale: string = singleLanguage ? (podcast.source_locale ?? 'en') : locale
   const t = getTranslation(podcast.content_translations ?? [], contentLocale)
+  // What is spoken may be in one language only, but the heading reads in the visitor's language when it is translated
+  const heading: string = singleLanguage ? (podcast.content_translations ?? []).find((tr: any) => tr.locale === locale)?.title ?? t?.title : t?.title
   if (!t) notFound()
 
   const meta = podcast.podcast_meta
@@ -121,7 +123,7 @@ export default async function PodcastPage({ params }: PageProps) {
               <p className="text-sm font-mono text-[#A0522D] mb-1">{meta.episode_number}</p>
             )}
             {singleLanguage && <LanguageNotice sourceLocale={sourceLocale} subtitleLocales={podcast.subtitle_locales} />}
-            <h1 className="text-2xl mb-2">{t.title}</h1>
+            <h1 className="text-2xl mb-2">{heading}</h1>
             <div className="flex items-center gap-3 text-sm font-mono text-[#6B5F58]">
               {meta?.duration && <span>⏱ {meta.duration}</span>}
               {author && (

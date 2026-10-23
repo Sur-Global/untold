@@ -5,6 +5,7 @@ import { translateTexts, SUPPORTED_LOCALES, DeepLQuotaExceededError, type Suppor
 import { extractTextNodes, injectTextNodes } from '@/lib/tiptap-translate'
 import { extractBlockNoteTextNodes, injectBlockNoteTextNodes } from '@/lib/blocknote-translate'
 import { parseSlides } from '@/lib/pill-slides'
+import { shortText } from '@/lib/short-text'
 
 export async function POST(req: NextRequest) {
   const secret = req.headers.get('x-translate-secret')
@@ -41,10 +42,14 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'Content not found' }, { status: 404 })
   }
 
-  // Marked "only available in this language": never translated
-  if (content.single_language) {
+  // Marked "only available in this language": its text is never translated. The exception is a video, podcast or
+  // course (what is spoken is in one language, but its card and heading must read in the visitor's language): only its
+  // title and a short description are translated, never its text, transcript or chapters.
+  const isMedia = ['video', 'podcast', 'course'].includes(content.type)
+  if (content.single_language && !isMedia) {
     return NextResponse.json({ skipped: 'single_language' })
   }
+  const shortOnly = !!fieldsOnly || !!content.single_language
 
   const sourceLocale: string = content.source_locale ?? 'en'
 
@@ -82,7 +87,7 @@ export async function POST(req: NextRequest) {
 
       if (existing && existing.is_auto_translated === false) continue
       // For fields-only mode, skip if text fields are already translated
-      if (fieldsOnly && existing?.title) continue
+      if (shortOnly && existing?.title) continue
 
       // Build field list for this content type
       const fieldNames: string[] = []
@@ -93,7 +98,7 @@ export async function POST(req: NextRequest) {
         fieldNames.push('excerpt'); fieldValues.push(source.excerpt)
       }
       if (['video', 'podcast', 'course'].includes(content.type) && source.description) {
-        fieldNames.push('description'); fieldValues.push(source.description)
+        fieldNames.push('description'); fieldValues.push(content.single_language ? shortText(source.description) : source.description)
       }
 
       const translatedTexts = fieldValues.length > 0
@@ -103,9 +108,9 @@ export async function POST(req: NextRequest) {
       const translatedFields: Record<string, string> = {}
       fieldNames.forEach((name, i) => { translatedFields[name] = translatedTexts[i] })
 
-      // Translate body (skipped in fieldsOnly mode — used by listing page triggers)
+      // Translate body (skipped in short mode — listing page triggers, and single-language media)
       let translatedBody: unknown = null
-      const hasBody = !fieldsOnly && ['article', 'pill', 'video', 'podcast', 'course'].includes(content.type)
+      const hasBody = !shortOnly && ['article', 'pill', 'video', 'podcast', 'course'].includes(content.type)
       if (hasBody && source.body) {
         if (Array.isArray(source.body)) {
           // BlockNote format
@@ -145,8 +150,8 @@ export async function POST(req: NextRequest) {
 
       translated.push(targetLocale)
 
-      // Translate transcript, chapters, and author bio (skipped in fieldsOnly mode)
-      if (fieldsOnly) continue
+      // Translate transcript, chapters, and author bio (skipped in short mode)
+      if (shortOnly) continue
 
       // Translate transcript and chapters for video content
       if (content.type === 'video') {

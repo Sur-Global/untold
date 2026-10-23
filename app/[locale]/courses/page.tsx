@@ -1,7 +1,10 @@
 import { getTranslations } from 'next-intl/server'
 import { createClient } from '@/lib/supabase/server'
 import { getNavProps } from '@/lib/nav'
-import { getTranslation } from '@/lib/content'
+import { after } from 'next/server'
+import { getTranslation, needsListingTranslation } from '@/lib/content'
+import { triggerListingTranslations } from '@/lib/trigger-listing-translations'
+import { TranslationRefresher } from '@/components/TranslationRefresher'
 import { Navigation } from '@/components/layout/Navigation'
 import { Footer } from '@/components/layout/Footer'
 import { ContentCard } from '@/components/content/ContentCard'
@@ -76,6 +79,9 @@ export default async function CoursesPage({ params, searchParams }: PageProps) {
   ])
 
   const listed = [...featuredItems, ...(items ?? [])]
+  // cards read in the visitor's language: what is not translated yet is asked for in the background
+  const untranslatedIds = listed.filter((i: any) => needsListingTranslation(i, locale)).map((i: any) => i.id)
+  if (untranslatedIds.length > 0) after(() => triggerListingTranslations(untranslatedIds, locale))
   const contentIds = listed.map((i: any) => i.id)
   const bookmarkedIds = new Set<string>()
   if (userId && contentIds.length > 0) {
@@ -129,6 +135,7 @@ export default async function CoursesPage({ params, searchParams }: PageProps) {
 
   return (
     <>
+      <TranslationRefresher pending={untranslatedIds.length > 0} />
       <Navigation {...navProps} />
       <main className="max-w-7xl mx-auto px-4 sm:px-6 py-16">
         <div className="mb-12">

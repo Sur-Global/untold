@@ -83,6 +83,28 @@ describe('POST /api/translate', () => {
     expect(upsertMock).not.toHaveBeenCalled()
   })
 
+  it('translates only the title and a short description of a video marked as only available in its language', async () => {
+    const long = 'Primera frase de la descripción. '.repeat(40)
+    vi.mocked(translateTexts).mockImplementation(async (texts: string[]) => texts.map((t) => `T:${t}`))
+    const { from, upsertMock } = makeChainMock({
+      singleValues: [
+        { data: { type: 'video', author_id: 'a', source_locale: 'es', single_language: true } },
+        { data: { title: 'Título', description: long, excerpt: null, body: [{ type: 'paragraph', content: 'cuerpo' }] } },
+      ],
+    })
+    vi.mocked(createServiceRoleClient).mockReturnValue({ from } as any)
+
+    const res = await POST(makeRequest({ contentId: 'v1', locale: 'pt' }, SECRET))
+    expect((await res.json()).translated).toEqual(['pt'])
+    const sent = vi.mocked(translateTexts).mock.calls[0][0] as string[]
+    expect(sent[0]).toBe('Título')
+    expect(sent[1].length).toBeLessThanOrEqual(262)
+    expect(sent[1].length).toBeLessThan(long.length)
+    // the body, the transcript and the author's bio are not touched
+    expect(vi.mocked(translateTexts)).toHaveBeenCalledTimes(1)
+    expect(upsertMock.mock.calls[0][0]).not.toHaveProperty('body')
+  })
+
   it('does not translate into languages that are switched off', async () => {
     vi.mocked(translateTexts).mockResolvedValue(['Hola'])
     const settingsRow = { data: { settings: { languages: { enabled: ['es'] } } } }

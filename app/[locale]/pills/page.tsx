@@ -2,7 +2,7 @@ import { after } from 'next/server'
 import { getTranslations } from 'next-intl/server'
 import { createClient } from '@/lib/supabase/server'
 import { getNavProps } from '@/lib/nav'
-import { getTranslation } from '@/lib/content'
+import { getTranslation, needsListingTranslation } from '@/lib/content'
 import { triggerListingTranslations } from '@/lib/trigger-listing-translations'
 import { triggerTagTranslations } from '@/lib/trigger-tag-translations'
 import { Navigation } from '@/components/layout/Navigation'
@@ -96,7 +96,7 @@ export default async function PillsPage({ params, searchParams }: PageProps) {
   let pendingTranslations = false
   if (listed.length > 0) {
     const untranslatedIds = listed
-      .filter(i => !i.single_language && !(i.content_translations ?? []).some((t: any) => t.locale === locale))
+      .filter((i: any) => needsListingTranslation(i, locale))
       .map((i: any) => i.id)
     if (untranslatedIds.length > 0) {
       pendingTranslations = true

@@ -69,6 +69,8 @@ export default async function VideoPage({ params }: PageProps) {
   const singleLanguage: boolean = !!video.single_language
   const contentLocale: string = singleLanguage ? (video.source_locale ?? 'en') : locale
   const t = getTranslation(video.content_translations ?? [], contentLocale)
+  // What is spoken may be in one language only, but the heading reads in the visitor's language when it is translated
+  const heading: string = singleLanguage ? (video.content_translations ?? []).find((tr: any) => tr.locale === locale)?.title ?? t?.title : t?.title
   if (!t) notFound()
 
   const meta = Array.isArray(video.video_meta) ? video.video_meta[0] : video.video_meta ?? {}
@@ -187,7 +189,7 @@ export default async function VideoPage({ params }: PageProps) {
             className="font-heading text-foreground mb-6"
             style={{ fontSize: 50, lineHeight: '61.6px', letterSpacing: '-0.56px', maxWidth: 752 }}
           >
-            {t.title}
+            {heading}
           </h1>
 
           {/* Video embed */}

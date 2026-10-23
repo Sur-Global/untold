@@ -22,7 +22,7 @@ async function trendingTopics(limit: number): Promise<Topic[]> {
   return topics.slice(0, limit)
 }
 
-/** Menu and footer topics in the reader's language: [{ slug, label }] */
-export async function getTrendingTopics(locale: string, limit = 5): Promise<{ slug: string; label: string }[]> {
-  return (await trendingTopics(limit)).map((t) => ({ slug: t.slug, label: topicLabel(t, locale) }))
+/** Topics of the menu, the footer and the home page in the reader's language: [{ slug, label, count }] */
+export async function getTrendingTopics(locale: string, limit = 5): Promise<{ slug: string; label: string; count: number }[]> {
+  return (await trendingTopics(limit)).map((t) => ({ slug: t.slug, label: topicLabel(t, locale), count: t.count }))
 }

@@ -10,7 +10,7 @@ import { bodyExcerpt, isRecent } from '@/lib/editorial'
 import { formatDate } from '@/lib/format-date'
 import { issueLabel } from '@/lib/issues'
 import { loadIssueArticles, toIssueItems } from '@/lib/data/issue-articles'
-import { getTranslation } from '@/lib/content'
+import { getTranslation, needsListingTranslation } from '@/lib/content'
 import { triggerListingTranslations } from '@/lib/trigger-listing-translations'
 import { triggerTagTranslations } from '@/lib/trigger-tag-translations'
 import { Navigation } from '@/components/layout/Navigation'
@@ -28,6 +28,7 @@ import {
   CourseCard,
 } from './_home-cards'
 import { tagDisplayName } from '@/lib/tag-name'
+import { getTrendingTopics } from '@/lib/data/trending-topics'
 
 interface PageProps {
   params: Promise<{ locale: string }>
@@ -38,6 +39,7 @@ export default async function HomePage({ params }: PageProps) {
   const supabase = await createClient()
   const t = await getTranslations('home')
   const tListings = await getTranslations('listings')
+  const tTag = await getTranslations('tag')
   const tContentHome = await getTranslations('content')
   const platform = await getPlatformSettings()
   const [banners, tBanners] = await Promise.all([getHomeBanners(), getTranslations('banners')])
@@ -65,7 +67,7 @@ export default async function HomePage({ params }: PageProps) {
 
   const [
     { userId, ...navProps },
-    { data: tagAssocs },
+    trendingTopics,
     { data: heroPicks },
     { data: articles },
     { data: videos },
@@ -77,12 +79,8 @@ export default async function HomePage({ params }: PageProps) {
     { data: issueRows },
   ] = await Promise.all([
     getNavProps(),
-    // Tag counts for hero stats
-    (supabase as any)
-      .from('content_tags')
-      .select('tag_id, tags(slug, names), content!inner(status)')
-      .eq('content.status', 'published')
-      .limit(2000),
+    // The most trending topics (hero buttons, also the menu and footer topics)
+    getTrendingTopics(locale, 5),
     // Homepage hero picks (1 large + 2 small = 3 slots) — explicitly curated (↑ in
     // admin/content), can be ANY content type, and never overlaps with the
     // per-type sections below (those use is_home_featured, ⌂).
@@ -272,7 +270,7 @@ export default async function HomePage({ params }: PageProps) {
   let pendingTranslations = false
   {
     const untranslatedIds = allItems
-      .filter((i: any) => !i.single_language && !(i.content_translations ?? []).some((t: any) => t.locale === locale))
+      .filter((i: any) => needsListingTranslation(i, locale))
       .map((i: any) => i.id)
     const uniqueIds = [...new Set(untranslatedIds)] as string[]
     if (uniqueIds.length > 0) {
@@ -281,23 +279,6 @@ export default async function HomePage({ params }: PageProps) {
     }
     after(() => triggerTagTranslations(locale))
   }
-
-  // Aggregate top 3 tags by published content count
-  const tagCountMap = new Map<string, { slug: string; names: Record<string, string>; count: number }>()
-  for (const row of tagAssocs ?? []) {
-    if (!row.tags) continue
-    const existing = tagCountMap.get(row.tag_id)
-    if (existing) {
-      existing.count++
-    } else {
-      tagCountMap.set(row.tag_id, { slug: row.tags.slug, names: row.tags.names, count: 1 })
-    }
-  }
-  const topTags = [...tagCountMap.values()]
-    .sort((a, b) => b.count - a.count)
-    .slice(0, 3)
-
-  const TAG_COLORS = ['#A9A8E9', '#D2FE73', '#000000']
 
   function getItemProps(item: any) {
     const trans = getTranslation(item.content_translations ?? [], locale)
@@ -486,75 +467,26 @@ export default async function HomePage({ params }: PageProps) {
                   >
                     {t('ctaGetStarted')} ↗
                   </Link>
-                  <Link
-                    href="/courses"
-                    style={{
-                      border: '1.5px solid rgba(0,0,0,0.2)',
-                      color: '#000',
-                      padding: '10px 24px',
-                      borderRadius: 100,
-                      fontFamily: 'var(--font-aeonik), Aeonik, sans-serif',
-                      fontSize: 14,
-                      textDecoration: 'none',
-                    }}
-                  >
-                    {t('ctaBrowseCourses')}
-                  </Link>
                 </div>
 
-                {/* Stats pills */}
-                <div className="flex flex-wrap gap-2.5">
-                  {topTags.length > 0
-                    ? topTags.map(({ slug, names, count }, i) => {
-                        const label = tagDisplayName(names, locale, slug)
-                        return (
-                          <Link
-                            key={slug}
-                            href={`/tag/${slug}`}
-                            style={{
-                              border: '1.5px solid rgba(0,0,0,0.15)',
-                              borderRadius: 100,
-                              padding: '7px 16px',
-                              display: 'inline-flex',
-                              alignItems: 'center',
-                              gap: 8,
-                              textDecoration: 'none',
-                              color: '#000',
-                              fontFamily: 'var(--font-aeonik), Aeonik, sans-serif',
-                              fontSize: 13,
-                            }}
-                          >
-                            {label}
-                            <span style={{ fontWeight: 500, color: TAG_COLORS[i], fontSize: 12 }}>{count}</span>
-                          </Link>
-                        )
-                      })
-                    : [
-                        { label: 'Futures Design', slug: 'futures-design', count: 24, color: '#A9A8E9' },
-                        { label: 'Innovation', slug: 'innovation', count: 18, color: '#D2FE73' },
-                        { label: 'Decoloniality', slug: 'decoloniality', count: 31, color: '#000' },
-                      ].map(({ label, slug, count, color }) => (
+                {/* The most trending topics of the platform */}
+                {trendingTopics.length > 0 && (
+                  <ul aria-label={t('trendingTopics')} className="m-0 flex list-none flex-wrap gap-2.5 p-0">
+                    {trendingTopics.map(({ slug, label, count }) => (
+                      <li key={slug}>
                         <Link
-                          key={label}
                           href={`/tag/${slug}`}
-                          style={{
-                            border: '1.5px solid rgba(0,0,0,0.15)',
-                            borderRadius: 100,
-                            padding: '7px 16px',
-                            display: 'inline-flex',
-                            alignItems: 'center',
-                            gap: 8,
-                            textDecoration: 'none',
-                            color: '#000',
-                            fontFamily: 'var(--font-aeonik), Aeonik, sans-serif',
-                            fontSize: 13,
-                          }}
+                          aria-label={`${label}, ${tTag('contentCount', { count })}`}
+                          className="group inline-flex items-center gap-2 rounded-full border-[1.5px] border-black/25 py-[7px] pl-4 pr-2 text-[13px] text-black no-underline transition-colors hover:bg-black hover:text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black"
+                          style={{ fontFamily: 'var(--font-aeonik), Aeonik, sans-serif' }}
                         >
                           {label}
-                          <span style={{ fontWeight: 500, color, fontSize: 12 }}>{count}</span>
+                          <span aria-hidden className="rounded-full bg-black px-2 py-1 text-xs font-medium leading-none text-white group-hover:bg-white group-hover:text-black">{count}</span>
                         </Link>
-                      ))}
-                </div>
+                      </li>
+                    ))}
+                  </ul>
+                )}
 
                 {/* Dot indicators */}
                 <div className="flex items-center gap-5">
