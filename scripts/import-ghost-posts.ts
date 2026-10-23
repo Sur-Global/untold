@@ -298,7 +298,8 @@ export function convert(parent: Element): Block[] {
 
 const escapeHtml = (s: string) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
 
-function bioHtml(el: Element): string {
+function bioHtmlInner(el: Element): string {
+  // no trimming here: the spaces next to a link live at the edge of the little spans Ghost wraps text in
   return Array.from(el.childNodes)
     .map((n) => {
       if (n.nodeType === 3) return escapeHtml(n.textContent ?? '')
@@ -309,16 +310,25 @@ function bioHtml(el: Element): string {
         const text = e.textContent ?? ''
         return href && text.trim() ? `<a href="${escapeHtml(href)}" target="_blank" rel="noopener noreferrer">${escapeHtml(text)}</a>` : escapeHtml(text)
       }
-      return bioHtml(e)
+      return bioHtmlInner(e)
     })
     .join('')
-    .replace(/ /g, ' ')
-    .replace(/^[ \t\r\n]+|[ \t\r\n]+$/g, '')
 }
 
-const stripLinkedInTracking = (url: string) => cleanHref(url).replace(/[?&]lipi=[^&]*/, '').replace(/\?&/, '?').replace(/\?$/, '')
+export const bioHtml = (el: Element): string => bioHtmlInner(el).replace(/\u00a0/g, ' ').replace(/^[ \t\r\n]+|[ \t\r\n]+$/g, '')
 
-function readAuthorCard(doc: Document) {
+/** Drops tracking junk from a button link (utm_*, fbclid, LinkedIn's lipi, Instagram's igsh, Ghost's ref) */
+const stripLinkedInTracking = (raw: string): string => {
+  try {
+    const url = new URL(cleanHref(raw))
+    for (const key of [...url.searchParams.keys()]) if (/^utm_|^(fbclid|lipi|igsh)$/.test(key)) url.searchParams.delete(key)
+    return url.toString()
+  } catch {
+    return raw
+  }
+}
+
+export function readAuthorCard(doc: Document) {
   const text = (sel: string) => doc.querySelector(sel)?.textContent?.replace(/\s+/g, ' ').trim() || null
   const bioEl = doc.querySelector('.kg-header-card-subheading')
   const cta = doc.querySelector('.kg-header-card-button')
