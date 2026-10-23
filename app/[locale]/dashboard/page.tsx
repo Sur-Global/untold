@@ -16,6 +16,8 @@ import { ProfileNudge } from '@/components/profile/ProfileNudge'
 import { ViewContentLink } from '@/components/content/ViewContentLink'
 import { AuthorStarToggle } from './AuthorStarToggle'
 import type { ContentType } from '@/lib/supabase/types'
+import { DashboardFilters } from '@/components/dashboard/DashboardFilters'
+import { DASHBOARD_PAGE_SIZE, DASHBOARD_TYPES, dashboardCounts, filterDashboardItems, parseDashboardQuery } from '@/lib/dashboard-filters'
 
 const TYPE_KEY = {
   article: 'typeArticle',
@@ -48,15 +50,22 @@ function TypeBadge({ label }: { label: string }) {
   )
 }
 
-export default async function DashboardPage({ params }: { params: Promise<{ locale: string }> }) {
+export default async function DashboardPage({
+  params,
+  searchParams,
+}: {
+  params: Promise<{ locale: string }>
+  searchParams: Promise<Record<string, string | string[] | undefined>>
+}) {
   const { locale } = await params
+  const query = parseDashboardQuery(await searchParams)
   const { user, profile } = await requireCreator()
   const supabase = await createClient()
 
   const itemsPromise = (supabase as any)
     .from('content')
     .select(`
-      id, type, slug, status, created_at, is_curated, is_editorial, declaration_accepted_at, source_locale, is_author_featured,
+      id, type, slug, status, created_at, updated_at, is_curated, is_editorial, declaration_accepted_at, source_locale, is_author_featured,
       content_translations ( title, locale )
     `)
     .eq('author_id', user.id)
@@ -79,6 +88,21 @@ export default async function DashboardPage({ params }: { params: Promise<{ loca
       ?? item.content_translations?.[0]
     return tr?.title ?? t('untitled')
   }
+
+  const allItems: any[] = items ?? []
+  const counts = dashboardCounts(allItems)
+  const { shown, total } = filterDashboardItems(allItems, query, getTitle)
+  // only the kinds of content this creator has, in a fixed order
+  const typeChips = DASHBOARD_TYPES.filter((id) => counts.types[id]).map((id) => ({ id, count: counts.types[id] }))
+  const moreHref = (() => {
+    const params = new URLSearchParams()
+    if (query.type) params.set('type', query.type)
+    if (query.status) params.set('status', query.status)
+    if (query.q) params.set('q', query.q)
+    if (query.sort !== 'newest') params.set('sort', query.sort)
+    params.set('limit', String(query.limit + DASHBOARD_PAGE_SIZE))
+    return `/dashboard?${params.toString()}`
+  })()
 
   return (
     <>
@@ -105,11 +129,40 @@ export default async function DashboardPage({ params }: { params: Promise<{ loca
 
         <ProfileNudge profile={myProfile} loginEmail={user.email} />
 
-        {(!items || items.length === 0) ? (
+        {allItems.length > 0 && (
+          <DashboardFilters
+            types={typeChips}
+            counts={{ all: allItems.length, published: counts.published, draft: counts.draft }}
+            labels={{
+              searchPlaceholder: t('filterSearchPlaceholder'),
+              searchLabel: t('filterSearchLabel'),
+              typeLabel: t('filterTypeLabel'),
+              all: t('filterAll'),
+              statusLabel: t('filterStatusLabel'),
+              published: t('filterPublished'),
+              drafts: t('filterDrafts'),
+              sortLabel: t('filterSortLabel'),
+              sortNewest: t('sortNewest'),
+              sortOldest: t('sortOldest'),
+              sortEdited: t('sortEdited'),
+              sortTitle: t('sortTitle'),
+              clear: t('filterClear'),
+              types: { article: t('typeArticles'), video: t('typeVideos'), podcast: t('typePodcasts'), pill: t('typePills'), course: t('typeCourses') },
+            }}
+          />
+        )}
+
+        {allItems.length === 0 ? (
           <p className="text-[#6B5F58]">{t('noContent')}</p>
+        ) : total === 0 ? (
+          <p className="text-[#6B5F58]">{t('filterNoMatch')}</p>
         ) : (
+          <>
+          {(total > DASHBOARD_PAGE_SIZE || shown.length < total) && (
+            <p className="mb-3 text-xs font-mono text-[#6B5F58]">{t('filterShowing', { shown: shown.length, total })}</p>
+          )}
           <ul className="space-y-3">
-            {items.map((item: any) => (
+            {shown.map((item: any) => (
               <li
                 key={item.id}
                 className="flex items-center gap-4 p-4 rounded-lg"
@@ -170,6 +223,14 @@ export default async function DashboardPage({ params }: { params: Promise<{ loca
               </li>
             ))}
           </ul>
+          {shown.length < total && (
+            <div className="mt-6 text-center">
+              <Link href={moreHref as any} scroll={false} className={cn(buttonVariants({ variant: 'outline' }))}>
+                {t('filterShowMore')}
+              </Link>
+            </div>
+          )}
+          </>
         )}
       </main>
       <Footer />
