@@ -27,4 +27,5 @@ Atajo: al editar el artículo que será el editorial (solo lo ven editores y adm
 3. Admin → **Issues** → **New issue**. Elige el mes (los números se identifican solo por mes y año; hay uno por mes).
 4. En la lista, marca **Editorial** en el editorial y **In this issue** en cada artículo del número (se puede buscar por título o autor).
 5. Marca **Published** y pulsa **Save issue**. El homepage muestra el editorial del número más reciente publicado y, a su lado, **los artículos de ese número** (los que marcaste en el paso 4). Un número en borrador (por ejemplo diciembre 2026, ya creado con «Nombrar lo borrado») no se ve en la web hasta que lo publiques.
+   Los editoriales **no salen en /articles** (ni en búsquedas ni etiquetas): viven en los Números y en la sección **Editoriales** (al final) de la página de quien los firma. Esto es automático en cuanto un artículo se marca como editorial.
 En la web cada número se muestra con el mes grande y el año pequeño (Septiembre 2026).
