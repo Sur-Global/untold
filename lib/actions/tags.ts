@@ -1,32 +1,50 @@
 'use server'
 
+import { after } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
 import { createServiceRoleClient } from '@/lib/supabase/service-role'
 import { requireCreator } from '@/lib/require-creator'
 import { slugify } from '@/lib/utils'
+import { SUPPORTED_LOCALES } from '@/lib/deepl'
+import { tagDisplayName, tagSlugFor } from '@/lib/tag-name'
+import { triggerTagTranslations } from '@/lib/trigger-tag-translations'
 
-export async function ensureTag(name: string): Promise<{ id: string; slug: string; name: string }> {
+/**
+ * The tag a person typed, in the language they are writing in: it is found by its slug if it already exists
+ * (and left exactly as it is), or created with that name in their language and translated into the others.
+ */
+export async function ensureTag(name: string, locale: string = 'en'): Promise<{ id: string; slug: string; name: string }> {
   await requireCreator()
-  const slug = slugify(name.trim())
+  const label = name.trim()
+  const slug = tagSlugFor(label, slugify)
+  if (!slug) throw new Error('A tag needs a name')
+  const language = (SUPPORTED_LOCALES as readonly string[]).includes(locale) ? locale : 'en'
   const service = createServiceRoleClient()
 
-  // Try to insert; if slug already exists, get the existing one
-  const { data: inserted } = await (service as any)
+  const shown = (tag: { id: string; slug: string; names: Record<string, string> | null }) => ({
+    id: tag.id,
+    slug: tag.slug,
+    name: tagDisplayName(tag.names, language, tag.slug),
+  })
+  const find = () => (service as any).from('tags').select('id, slug, names').eq('slug', slug).maybeSingle()
+
+  const { data: existing } = await find()
+  if (existing) return shown(existing)
+
+  const { data: created } = await (service as any)
     .from('tags')
-    .upsert({ slug, names: { en: name.trim() } }, { onConflict: 'slug' })
+    .insert({ slug, names: { [language]: label } })
     .select('id, slug, names')
     .single()
+  if (created) {
+    after(() => Promise.all(SUPPORTED_LOCALES.map((l) => triggerTagTranslations(l))))
+    return shown(created)
+  }
 
-  if (inserted) return { id: inserted.id, slug: inserted.slug, name: inserted.names?.en ?? inserted.slug }
-
-  // Fallback: fetch existing
-  const { data: existing } = await (service as any)
-    .from('tags')
-    .select('id, slug, names')
-    .eq('slug', slug)
-    .single()
-
-  return { id: existing.id, slug: existing.slug, name: existing.names?.en ?? existing.slug }
+  // Someone created the same tag at the same moment
+  const { data: raced } = await find()
+  if (!raced) throw new Error('Could not create the tag')
+  return shown(raced)
 }
 
 export async function syncContentTags(contentId: string, tagIds: string[]): Promise<void> {

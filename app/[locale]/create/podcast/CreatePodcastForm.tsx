@@ -5,6 +5,7 @@ import { useTranslations } from 'next-intl'
 import { createPodcast } from '@/lib/actions/podcast'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
+import { FIELD_CLASS } from '@/components/ui/field-styles'
 import { Label } from '@/components/ui/label'
 import { CoverImageInput } from '@/components/ui/CoverImageInput'
 import { AuthorPicker } from '@/components/content/AuthorPicker'
@@ -40,29 +41,29 @@ export function CreatePodcastForm() {
 
       <div className="space-y-2">
         <Label htmlFor="title">{t('titleRequiredLabel')}</Label>
-        <Input id="title" name="title" placeholder={t('titlePlaceholder')} required className="text-xl font-semibold" />
+        <Input id="title" name="title" placeholder={t('titlePlaceholder')} required className={FIELD_CLASS} />
       </div>
 
       <div className="space-y-2">
         <Label htmlFor="embed_url">{t('embedUrlLabel')} *</Label>
-        <Input id="embed_url" name="embed_url" type="url" placeholder={t('embedUrlPlaceholder')} required />
+        <Input id="embed_url" name="embed_url" type="url" placeholder={t('embedUrlPlaceholder')} required className={FIELD_CLASS} />
       </div>
 
       <div className="space-y-2">
         <Label htmlFor="description">{t('descriptionLabel')}</Label>
-        <Input id="description" name="description" placeholder={t('descriptionPlaceholder')} />
+        <Input id="description" name="description" placeholder={t('descriptionPlaceholder')} className={FIELD_CLASS} />
       </div>
 
       <CoverImageInput name="cover_image_url" label={t('coverPodcastLabel')} sizeHint={t('coverPodcastHint')} {...coverInputProps('podcast')} />
 
       <div className="space-y-2">
         <Label htmlFor="episode_number">{t('episodeNumberLabel')}</Label>
-        <Input id="episode_number" name="episode_number" placeholder={t('episodeNumberPlaceholder')} />
+        <Input id="episode_number" name="episode_number" placeholder={t('episodeNumberPlaceholder')} className={FIELD_CLASS} />
       </div>
 
       <div className="space-y-2">
         <Label htmlFor="duration">{t('durationLabel')}</Label>
-        <Input id="duration" name="duration" placeholder={t('durationPlaceholder')} />
+        <Input id="duration" name="duration" placeholder={t('durationPlaceholder')} className={FIELD_CLASS} />
       </div>
 
       <ResponsibilityDeclaration checked={declared} onChange={setDeclared} />

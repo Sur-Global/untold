@@ -230,7 +230,7 @@ export function CoverImageInput({
               onChange={(e) => setUrlInput(e.target.value)}
               onKeyDown={(e) => { if (e.key === 'Enter') { e.preventDefault(); handleUseUrl() } }}
               placeholder="https://example.com/image.jpg"
-              style={{ flex: 1, background: '#E8E2D5', border: '1px solid rgba(139,69,19,0.15)', borderRadius: 8, padding: '8px 11px', fontSize: 13, color: '#2C2420', outline: 'none' }}
+              className="h-10 flex-1 rounded-[10px] border border-primary/20 bg-white px-3 text-sm text-foreground outline-none transition-colors focus:border-primary/50 placeholder:text-muted-foreground"
             />
             <button
               type="button"

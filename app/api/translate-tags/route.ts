@@ -23,26 +23,35 @@ export async function POST(req: NextRequest) {
     .from('tags')
     .select('id, names')
 
-  const missing = (tags ?? []).filter(
-    (tag: any) => tag.names?.en && !tag.names?.[targetLocale]
-  )
+  // A tag is translated from English when it has an English name, otherwise from the language it was written in
+  const sourceOf = (names: Record<string, string> | null): string | null => {
+    if (names?.en) return 'en'
+    return (SUPPORTED_LOCALES as readonly string[]).find((l) => names?.[l]) ?? null
+  }
+  const missing = (tags ?? []).filter((tag: any) => !tag.names?.[targetLocale] && sourceOf(tag.names))
 
   if (missing.length === 0) {
     return NextResponse.json({ ok: true, translated: 0 })
   }
 
-  const englishNames: string[] = missing.map((tag: any) => tag.names.en)
-  const translatedNames = await translateTexts(englishNames, targetLocale)
+  const bySource = new Map<string, any[]>()
+  for (const tag of missing) {
+    const source = sourceOf(tag.names)!
+    bySource.set(source, [...(bySource.get(source) ?? []), tag])
+  }
 
-  // Update each tag with the new locale name
-  await Promise.all(
-    missing.map((tag: any, i: number) =>
-      (supabase as any)
-        .from('tags')
-        .update({ names: { ...tag.names, [targetLocale]: translatedNames[i] } })
-        .eq('id', tag.id)
+  for (const [source, group] of bySource) {
+    const translatedNames = await translateTexts(group.map((tag: any) => tag.names[source]), targetLocale, source)
+    // Update each tag with the new locale name
+    await Promise.all(
+      group.map((tag: any, i: number) =>
+        (supabase as any)
+          .from('tags')
+          .update({ names: { ...tag.names, [targetLocale]: translatedNames[i] } })
+          .eq('id', tag.id)
+      )
     )
-  )
+  }
 
   return NextResponse.json({ ok: true, translated: missing.length })
 }

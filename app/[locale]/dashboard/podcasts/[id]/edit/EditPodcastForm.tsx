@@ -6,6 +6,7 @@ import { updatePodcast } from '@/lib/actions/podcast'
 import { publishContent, unpublishContent, deleteContent } from '@/lib/actions/content'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
+import { FIELD_CLASS } from '@/components/ui/field-styles'
 import { Label } from '@/components/ui/label'
 import { CoverImageInput } from '@/components/ui/CoverImageInput'
 import { AuthorPicker } from '@/components/content/AuthorPicker'
@@ -70,7 +71,7 @@ export function EditPodcastForm({
           defaultValue={initialTitle}
           placeholder={t('titlePlaceholder')}
           required
-          className="text-xl font-semibold"
+          className={FIELD_CLASS}
         />
       </div>
 
@@ -83,6 +84,7 @@ export function EditPodcastForm({
           defaultValue={initialEmbedUrl}
           placeholder={t('embedUrlPlaceholder')}
           required
+          className={FIELD_CLASS}
         />
       </div>
 
@@ -93,6 +95,7 @@ export function EditPodcastForm({
           name="description"
           defaultValue={initialDescription}
           placeholder={t('descriptionPlaceholder')}
+          className={FIELD_CLASS}
         />
       </div>
 
@@ -105,6 +108,7 @@ export function EditPodcastForm({
           name="episode_number"
           defaultValue={initialEpisodeNumber}
           placeholder={t('episodeNumberPlaceholder')}
+          className={FIELD_CLASS}
         />
       </div>
 
@@ -115,6 +119,7 @@ export function EditPodcastForm({
           name="duration"
           defaultValue={initialDuration}
           placeholder={t('durationPlaceholder')}
+          className={FIELD_CLASS}
         />
       </div>
 

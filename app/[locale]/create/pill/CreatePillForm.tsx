@@ -7,6 +7,7 @@ import type { EditorBlock } from '@/components/editor/RichTextEditorLazy'
 import type { Tag } from '@/components/ui/TagsInput'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
+import { FIELD_CLASS } from '@/components/ui/field-styles'
 import { Label } from '@/components/ui/label'
 import { AccentColorPicker } from '@/components/pills/AccentColorPicker'
 import { PillContentFields, type PillFormat } from '@/components/pills/PillContentFields'
@@ -54,7 +55,7 @@ export function CreatePillForm({ brandLogos = false }: { brandLogos?: boolean })
 
       <div className="space-y-2">
         <Label htmlFor="title">{t('titleRequiredLabel')}</Label>
-        <Input id="title" name="title" placeholder={t('titlePlaceholder')} required className="text-xl font-semibold" />
+        <Input id="title" name="title" placeholder={t('titlePlaceholder')} required className={FIELD_CLASS} />
       </div>
 
       <AccentColorPicker />

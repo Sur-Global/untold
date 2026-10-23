@@ -6,6 +6,7 @@ import { updateCourse } from '@/lib/actions/course'
 import { publishContent, unpublishContent, deleteContent } from '@/lib/actions/content'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
+import { FIELD_CLASS } from '@/components/ui/field-styles'
 import { Label } from '@/components/ui/label'
 import { CoverImageInput } from '@/components/ui/CoverImageInput'
 import { AuthorPicker } from '@/components/content/AuthorPicker'
@@ -57,12 +58,12 @@ export function EditCourseForm({
 
       <div className="space-y-2">
         <Label htmlFor="title">{t('titleRequiredLabel')}</Label>
-        <Input id="title" name="title" defaultValue={initialTitle} placeholder={t('titlePlaceholder')} required className="text-xl font-semibold" />
+        <Input id="title" name="title" defaultValue={initialTitle} placeholder={t('titlePlaceholder')} required className={FIELD_CLASS} />
       </div>
 
       <div className="space-y-2">
         <Label htmlFor="description">{t('descriptionLabel')}</Label>
-        <Input id="description" name="description" defaultValue={initialDescription} placeholder={t('descriptionPlaceholder')} />
+        <Input id="description" name="description" defaultValue={initialDescription} placeholder={t('descriptionPlaceholder')} className={FIELD_CLASS} />
       </div>
 
       <CoverImageInput name="cover_image_url" defaultValue={initialCoverImageUrl} />
@@ -70,17 +71,17 @@ export function EditCourseForm({
       <div className="grid grid-cols-2 gap-4">
         <div className="space-y-2">
           <Label htmlFor="price">{t('priceLabel')}</Label>
-          <Input id="price" name="price" type="number" min="0" step="0.01" defaultValue={String(initialPrice)} placeholder={t('pricePlaceholder')} />
+          <Input id="price" name="price" type="number" min="0" step="0.01" defaultValue={String(initialPrice)} placeholder={t('pricePlaceholder')} className={FIELD_CLASS} />
         </div>
         <div className="space-y-2">
           <Label htmlFor="currency">{t('currencyLabel')}</Label>
-          <Input id="currency" name="currency" defaultValue={initialCurrency || 'USD'} maxLength={3} placeholder="USD" />
+          <Input id="currency" name="currency" defaultValue={initialCurrency || 'USD'} maxLength={3} placeholder="USD" className={FIELD_CLASS} />
         </div>
       </div>
 
       <div className="space-y-2">
         <Label htmlFor="duration">{t('durationLabel')}</Label>
-        <Input id="duration" name="duration" defaultValue={initialDuration} placeholder={t('durationPlaceholder')} />
+        <Input id="duration" name="duration" defaultValue={initialDuration} placeholder={t('durationPlaceholder')} className={FIELD_CLASS} />
       </div>
 
       {status === 'draft' && <ResponsibilityDeclaration checked={declared} onChange={setDeclared} />}

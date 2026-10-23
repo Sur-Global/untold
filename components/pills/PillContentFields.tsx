@@ -104,7 +104,9 @@ export function PillContentFields({
           <CoverImageInput name="image_url" defaultValue={initialImageUrl} label={t('coverPillLabel')} sizeHint={t('coverPillHint')} {...coverInputProps('pill')} />
           <div className="space-y-2">
             <Label>{t('bodyLabel')}</Label>
-            <RichTextEditor value={body} onChange={onBodyChange} placeholder={t('bodyPlaceholder')} locale={locale} videos="none" />
+            <div className="overflow-hidden rounded-[10px] border border-primary/20">
+              <RichTextEditor value={body} onChange={onBodyChange} placeholder={t('bodyPlaceholder')} locale={locale} videos="none" />
+            </div>
             <p className={`text-xs ${tooLong ? 'font-semibold text-red-600' : 'text-muted-foreground'}`} aria-live="polite">
               {t('textCounter', { count: length, max: PILL_TEXT_MAX_CHARS })}{tooLong ? ` — ${t('textTooLong')}` : ''}
             </p>

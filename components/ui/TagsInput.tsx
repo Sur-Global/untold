@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useRef, useEffect, useCallback } from 'react'
+import { useLocale, useTranslations } from 'next-intl'
 import { ensureTag } from '@/lib/actions/tags'
 
 export interface Tag {
@@ -16,6 +17,8 @@ interface TagsInputProps {
 }
 
 export function TagsInput({ value, onChange, placeholder = 'Add categories…' }: TagsInputProps) {
+  const locale = useLocale()
+  const t = useTranslations('editor')
   const [query, setQuery] = useState('')
   const [suggestions, setSuggestions] = useState<Tag[]>([])
   const [open, setOpen] = useState(false)
@@ -26,14 +29,14 @@ export function TagsInput({ value, onChange, placeholder = 'Add categories…' }
 
   const fetchSuggestions = useCallback((q: string) => {
     if (!q.trim()) { setSuggestions([]); setActiveIndex(-1); return }
-    fetch(`/api/tags?q=${encodeURIComponent(q)}`)
+    fetch(`/api/tags?q=${encodeURIComponent(q)}&locale=${locale}`)
       .then((r) => r.json())
       .then((tags: Tag[]) => {
         setSuggestions(tags.filter((t) => !value.find((v) => v.id === t.id)))
         setActiveIndex(-1)
       })
       .catch(() => setSuggestions([]))
-  }, [value])
+  }, [value, locale])
 
   useEffect(() => {
     if (debounceRef.current) clearTimeout(debounceRef.current)
@@ -60,7 +63,7 @@ export function TagsInput({ value, onChange, placeholder = 'Add categories…' }
     if (!query.trim()) return
     setCreating(true)
     try {
-      const tag = await ensureTag(query.trim())
+      const tag = await ensureTag(query.trim(), locale)
       addTag(tag)
     } finally {
       setCreating(false)
@@ -114,7 +117,7 @@ export function TagsInput({ value, onChange, placeholder = 'Add categories…' }
               type="button"
               onClick={(e) => { e.stopPropagation(); removeTag(tag.id) }}
               className="text-primary/60 hover:text-primary ml-0.5"
-              aria-label={`Remove ${tag.name}`}
+              aria-label={t('tagRemove', { name: tag.name })}
             >
               ×
             </button>
@@ -160,7 +163,7 @@ export function TagsInput({ value, onChange, placeholder = 'Add categories…' }
                 activeIndex === suggestions.length ? 'bg-primary/10' : 'hover:bg-primary/5',
               ].join(' ')}
             >
-              {creating ? 'Creating…' : `Create "${query.trim()}"`}
+              {creating ? t('tagCreating') : t('tagCreate', { name: query.trim() })}
             </button>
           )}
         </div>
