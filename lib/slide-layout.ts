@@ -27,23 +27,27 @@ export const lilacBox = (logoCount: number) => ({ top: LILAC.top, side: LILAC.si
 export const lilacLetterSpacing = (base: number) => (base >= 6 ? -0.02 : 0)
 /** The sizes of the text of a text slide, in cqw (medium is how every text slide was before it had sizes) */
 export const LILAC_SIZE_CQW: Record<TextSize, number> = { s: 4.4, m: 5.2, l: 6.4, xl: 8 }
-/** Big text is set tight, like the team's designs, with a blank line between paragraphs */
-export const lilacLineHeight = (base: number) => (base >= 6 ? 1.15 : 1.45)
+/** Text is set tight, like the team's designs; big text a little tighter, with a blank line between paragraphs */
+export const lilacLineHeight = (base: number) => (base >= 6 ? 1.15 : 1.3)
 export const lilacParagraphGap = (base: number) => (base >= 6 ? base * 1.15 : LILAC.paragraphGap)
 
-export type SlideTextBlock = { type: 'p'; text: string } | { type: 'ul'; items: string[] }
+export type SlideTextBlock = { type: 'p'; text: string } | { type: 'ul'; items: string[] } | { type: 'ol'; items: string[] }
 
-/** Text of a text slide: lines that start with "•", "-" or "*" become a list; the rest are paragraphs */
+/** Text of a text slide: lines that start with "•", "-" or "*" become a list, lines that start with "1." a numbered list; the rest are paragraphs */
 export function parseSlideText(text: string): SlideTextBlock[] {
   const blocks: SlideTextBlock[] = []
   for (const raw of text.split('\n')) {
     const line = raw.trim()
     if (!line) continue
     const bullet = /^[•\-*]\s+(.*)$/.exec(line)
+    const numbered = /^\d+[.)]\s+(.*)$/.exec(line)
     const last = blocks[blocks.length - 1]
     if (bullet) {
       if (last?.type === 'ul') last.items.push(bullet[1])
       else blocks.push({ type: 'ul', items: [bullet[1]] })
+    } else if (numbered) {
+      if (last?.type === 'ol') last.items.push(numbered[1])
+      else blocks.push({ type: 'ol', items: [numbered[1]] })
     } else blocks.push({ type: 'p', text: line })
   }
   return blocks

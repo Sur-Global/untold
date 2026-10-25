@@ -46,6 +46,13 @@ describe('SlideView', () => {
     expect(text.style.textShadow).toBe('')
     expect(white.container.querySelector('[data-logo="black"]')).toBeTruthy()
   })
+  it('shows a numbered list on a text slide', () => {
+    const { container } = render(<SlideView slide={slide({ kind: 'text', image_url: null, text: 'Niveles:\n1. Uno\n2. Dos' })} />)
+    const list = container.querySelector('ol') as HTMLElement
+    expect(list).toBeTruthy()
+    expect([...list.querySelectorAll('li')].map((li) => li.textContent)).toEqual(['Uno', 'Dos'])
+    expect(list.style.listStyle).toMatch(/decimal/)
+  })
   it('puts a light shadow under the text on lilac, like the Figma designs', () => {
     const { container } = render(<SlideView slide={slides[1]} />)
     expect(container.innerHTML).toMatch(/text-shadow/)

@@ -3,7 +3,7 @@
 // can be translated. Admins and editors can put the UNTOLD and / or SurGlobal logo in the bottom right corner of a slide.
 
 export const MAX_SLIDES = 20
-export const SLIDE_TEXT_MAX = 600
+export const SLIDE_TEXT_MAX = 800
 export const SLIDE_CREDIT_MAX = 200
 /** The description under a carousel */
 export const PILL_DESCRIPTION_MAX = 600

@@ -157,7 +157,7 @@ function Overlay({ slide, logos, textSize }: { slide: PillSlide; logos: Logo[]; 
                 <div key={i} style={{ display: 'flex', flexDirection: 'column', gap: px(LILAC.itemGap) }}>
                   {block.items.map((item, j) => (
                     <div key={j} style={{ display: 'flex' }}>
-                      <div style={{ display: 'flex', width: px(LILAC.listIndent), justifyContent: 'flex-end', paddingRight: size * 0.35 }}>•</div>
+                      <div style={{ display: 'flex', width: px(LILAC.listIndent), justifyContent: 'flex-end', paddingRight: size * 0.35 }}>{block.type === 'ol' ? `${j + 1}.` : '•'}</div>
                       <div style={{ display: 'flex', flex: 1 }}>{item}</div>
                     </div>
                   ))}

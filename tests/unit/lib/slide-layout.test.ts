@@ -11,6 +11,16 @@ describe('parseSlideText', () => {
   })
 })
 
+describe('numbered lists', () => {
+  it('lines that start with a number and a dot or bracket become a numbered list', () => {
+    expect(parseSlideText('Los niveles:\n1. Individual\n2) Institucional\n3. Cultural\nFin')).toEqual([
+      { type: 'p', text: 'Los niveles:' },
+      { type: 'ol', items: ['Individual', 'Institucional', 'Cultural'] },
+      { type: 'p', text: 'Fin' },
+    ])
+  })
+})
+
 describe('fitSize', () => {
   it('keeps the size when the text fits', () => {
     expect(fitSize(10, (size) => size * 10, 200)).toBe(10)
@@ -66,10 +76,10 @@ describe('the text of a text slide', () => {
     expect(lilacBox(0)).toEqual({ top: 9, side: 9, bottom: 9 })
     expect(lilacBox(1)).toEqual({ top: 9, side: 9, bottom: 20 })
   })
-  it('medium is the size text slides always had; large is set tighter, with a blank line between paragraphs', () => {
+  it('medium is the size text slides always had; large is set a little tighter, with a blank line between paragraphs', () => {
     expect(LILAC_SIZE_CQW.m).toBe(5.2)
-    expect(lilacLineHeight(LILAC_SIZE_CQW.m)).toBe(1.45)
-    expect(lilacLineHeight(LILAC_SIZE_CQW.l)).toBeLessThan(1.45)
+    expect(lilacLineHeight(LILAC_SIZE_CQW.m)).toBe(1.3)
+    expect(lilacLineHeight(LILAC_SIZE_CQW.l)).toBeLessThan(lilacLineHeight(LILAC_SIZE_CQW.m))
     expect(lilacParagraphGap(LILAC_SIZE_CQW.m)).toBe(2.2)
     expect(lilacParagraphGap(LILAC_SIZE_CQW.l)).toBeGreaterThan(5)
     expect(lilacLetterSpacing(LILAC_SIZE_CQW.m)).toBe(0)

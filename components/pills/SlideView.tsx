@@ -15,9 +15,14 @@ function SlideText({ text, base }: { text: string; base: number }) {
         b.type === 'p' ? (
           <p key={i} style={{ margin: 0, fontSize: 'inherit', lineHeight: 'inherit', color: 'inherit' }}>{b.text}</p>
         ) : (
-          <ul key={i} style={{ margin: 0, paddingLeft: `${LILAC.listIndent}cqw`, display: 'grid', gap: `${LILAC.itemGap}cqw`, listStyle: 'disc' }}>
-            {b.items.map((item, j) => <li key={j}>{item}</li>)}
-          </ul>
+          (() => {
+            const List = b.type === 'ol' ? 'ol' : 'ul'
+            return (
+              <List key={i} style={{ margin: 0, paddingLeft: `${LILAC.listIndent}cqw`, display: 'grid', gap: `${LILAC.itemGap}cqw`, listStyle: b.type === 'ol' ? 'decimal' : 'disc' }}>
+                {b.items.map((item, j) => <li key={j}>{item}</li>)}
+              </List>
+            )
+          })()
         ),
       )}
     </div>
