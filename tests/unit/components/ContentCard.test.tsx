@@ -24,6 +24,16 @@ const base = {
 }
 
 describe('ContentCard', () => {
+  it('shows the like count and the save button, unless the card is asked to hide them (the home page does)', () => {
+    const shown = render(<ContentCard {...base} type="article" />)
+    expect(screen.getByText('42')).toBeInTheDocument()
+    expect(shown.container.querySelector('button')).toBeTruthy()
+    shown.unmount()
+    const hidden = render(<ContentCard {...base} type="article" hideActions />)
+    expect(screen.queryByText('42')).toBeNull()
+    expect(hidden.container.querySelector('button')).toBeNull()
+  })
+
   it('renders article card with title and author', () => {
     render(<ContentCard {...base} type="article" excerpt="Some excerpt" />)
     expect(screen.getByText('Test Title')).toBeInTheDocument()

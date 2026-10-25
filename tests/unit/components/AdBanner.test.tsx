@@ -12,6 +12,18 @@ vi.mock('@/i18n/navigation', () => ({
 const copy = { adLabel: 'Advertisement', eyebrow: 'Write on UNTOLD', title: 'Have a story?', text: 'Tell it here.', cta: 'Publish' }
 
 describe('AdBanner', () => {
+  it('both promos are on the brand’s lime, and a promo without a small line does not show an empty one', () => {
+    for (const slot of ['top', 'bottom'] as const) {
+      const { container, unmount } = render(<AdBanner slot={slot} banner={DEFAULT_BANNER} copy={{ ...copy, eyebrow: undefined }} houseLink="/x" />)
+      const card = container.querySelector('a > div') as HTMLElement
+      expect(card.style.background).toMatch(/210, 254, 115|#d2fe73/i)
+      expect(container.querySelector('p.uppercase')).toBeNull()
+      unmount()
+    }
+    render(<AdBanner slot="top" banner={DEFAULT_BANNER} copy={copy} houseLink="/x" />)
+    expect(screen.getByText('Write on UNTOLD')).toBeInTheDocument()
+  })
+
   it('shows UNTOLD’s own promo, linking to its default page, while no picture is set', () => {
     render(<AdBanner slot="top" banner={DEFAULT_BANNER} copy={copy} houseLink="/create" />)
     expect(screen.getByText('Have a story?')).toBeInTheDocument()

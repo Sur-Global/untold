@@ -2,7 +2,6 @@
 import { useState } from 'react'
 import { useTranslations } from 'next-intl'
 import { Link, useRouter } from '@/i18n/navigation'
-import { BookmarkButton } from '@/components/social/BookmarkButton'
 import { readableTextColor } from '@/lib/cover-formats'
 
 // ─── Shared helpers ────────────────────────────────────────────────────────────
@@ -53,20 +52,6 @@ function ClockIcon() {
   )
 }
 
-function HeartIcon() {
-  return (
-    <svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden>
-      <path
-        d="M8 13.5S2 9.8 2 5.5a3 3 0 015.5-1.6A3 3 0 0114 5.5C14 9.8 8 13.5 8 13.5z"
-        stroke="currentColor"
-        strokeWidth="1.2"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-    </svg>
-  )
-}
-
 function ShareIcon() {
   return (
     <svg width="15" height="15" viewBox="0 0 16 16" fill="none" aria-hidden>
@@ -109,7 +94,6 @@ interface LargeArticleCardProps {
   categoryTag?: string | null
   categoryTagSlug?: string | null
   readTimeMinutes?: number | null
-  likesCount?: number | null
   isFeatured?: boolean
 }
 
@@ -124,7 +108,6 @@ export function LargeArticleCard({
   categoryTag,
   categoryTagSlug,
   readTimeMinutes,
-  likesCount,
   isFeatured,
 }: LargeArticleCardProps) {
   const tHome = useTranslations('home')
@@ -247,15 +230,6 @@ export function LargeArticleCard({
                   {readTimeMinutes} min
                 </div>
               )}
-              {likesCount != null && (
-                <div
-                  className="flex items-center gap-1 text-xs"
-                  style={{ color: 'rgba(245,241,232,0.55)', fontFamily: 'var(--font-aeonik), Aeonik, sans-serif' }}
-                >
-                  <HeartIcon />
-                  {likesCount}
-                </div>
-              )}
             </div>
           </div>
         )}
@@ -277,10 +251,6 @@ interface VideoCardProps {
   authorName?: string | null
   authorSlug?: string | null
   authorAvatarUrl?: string | null
-  likesCount?: number | null
-  contentId: string
-  isBookmarked?: boolean
-  isLoggedIn?: boolean
 }
 
 export function VideoCard({
@@ -294,10 +264,6 @@ export function VideoCard({
   authorName,
   authorSlug,
   authorAvatarUrl,
-  likesCount,
-  contentId,
-  isBookmarked = false,
-  isLoggedIn = false,
 }: VideoCardProps) {
   const image = thumbnailUrl ?? coverImageUrl
   const router = useRouter()
@@ -427,20 +393,6 @@ export function VideoCard({
           </div>
         )}
 
-        <div className="flex items-center gap-3">
-          <span
-            className="flex items-center gap-1 text-xs"
-            style={{ color: '#666', fontFamily: 'var(--font-aeonik), Aeonik, sans-serif' }}
-          >
-            <HeartIcon />
-            {likesCount ?? 0}
-          </span>
-          <BookmarkButton
-            contentId={contentId}
-            initialIsBookmarked={isBookmarked}
-            isLoggedIn={isLoggedIn}
-          />
-        </div>
       </div>
     </div>
   )
@@ -566,7 +518,6 @@ export function PodcastCard({
 // ─── HomePillCard ──────────────────────────────────────────────────────────────
 
 interface HomePillCardProps {
-  contentId: string
   slug: string
   title: string
   excerpt?: string | null
@@ -577,12 +528,9 @@ interface HomePillCardProps {
   authorName?: string | null
   authorSlug?: string | null
   authorAvatarUrl?: string | null
-  isBookmarked?: boolean
-  isLoggedIn?: boolean
 }
 
 export function HomePillCard({
-  contentId,
   slug,
   title,
   excerpt,
@@ -593,8 +541,6 @@ export function HomePillCard({
   authorName,
   authorSlug,
   authorAvatarUrl,
-  isBookmarked = false,
-  isLoggedIn = false,
 }: HomePillCardProps) {
   const tShare = useTranslations('share')
   // The chip is the pill's brand colour, with the text colour that reads best on it
@@ -663,11 +609,6 @@ export function HomePillCard({
             <div />
           )}
           <div className="flex items-center gap-2">
-            <BookmarkButton
-              contentId={contentId}
-              initialIsBookmarked={isBookmarked}
-              isLoggedIn={isLoggedIn}
-            />
             <button
               className="flex items-center justify-center rounded-lg transition-colors hover:bg-[#d4a574]/20"
               style={{ width: 28, height: 28, color: '#666', background: 'none', border: 'none', cursor: 'pointer' }}

@@ -9,8 +9,8 @@ const aeonik = (weight: 300 | 400 | 500): React.CSSProperties => ({
 export type AdBannerCopy = {
   /** “Advertisement” */
   adLabel: string
-  /** UNTOLD's own promo shown while no picture is uploaded */
-  eyebrow: string
+  /** UNTOLD's own promo shown while no picture is uploaded (the small line above the title, if it has one) */
+  eyebrow?: string
   title: string
   text: string
   cta: string
@@ -24,7 +24,8 @@ interface Props {
   houseLink: string
 }
 
-const HOUSE_BACKGROUND: Record<BannerSlot, string> = { top: '#D2FE73', bottom: '#A9A8E9' }
+// Both promos are on the brand's lime (Lima #D2FE73 in the SurGlobal brand manual)
+const HOUSE_BACKGROUND: Record<BannerSlot, string> = { top: '#D2FE73', bottom: '#D2FE73' }
 
 /**
  * A wide banner on the homepage. With a picture uploaded in Admin → Advertising it shows the picture
@@ -54,9 +55,11 @@ export function AdBanner({ banner, slot, copy, houseLink }: Props) {
       style={{ background: HOUSE_BACKGROUND[slot], color: '#000' }}
     >
       <div className="max-w-2xl">
-        <p className="mb-2 text-xs uppercase tracking-[0.08em]" style={aeonik(300)}>
-          {copy.eyebrow}
-        </p>
+        {copy.eyebrow && (
+          <p className="mb-2 text-xs uppercase tracking-[0.08em]" style={aeonik(300)}>
+            {copy.eyebrow}
+          </p>
+        )}
         <p
           className="mb-2"
           style={{ ...aeonik(500), fontSize: 'clamp(1.4rem, 2.4vw, 2rem)', lineHeight: 1.15, letterSpacing: '-0.02em' }}

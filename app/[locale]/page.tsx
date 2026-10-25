@@ -45,7 +45,8 @@ export default async function HomePage({ params }: PageProps) {
   const [banners, tBanners] = await Promise.all([getHomeBanners(), getTranslations('banners')])
   const bannerCopy = (slot: 'top' | 'bottom') => ({
     adLabel: tBanners('adLabel'),
-    eyebrow: tBanners(`${slot}.eyebrow`),
+    // only the first promo has a small line above its title
+    eyebrow: slot === 'top' ? tBanners('top.eyebrow') : undefined,
     title: tBanners(`${slot}.title`),
     text: tBanners(`${slot}.text`),
     cta: tBanners(`${slot}.cta`),
@@ -677,7 +678,6 @@ export default async function HomePage({ params }: PageProps) {
                       categoryTag={sectionLargeCategoryTag}
                       categoryTagSlug={sectionLargeCategoryTagSlug}
                       readTimeMinutes={sectionLargeArticle.read_time_minutes}
-                      likesCount={sectionLargeArticle.likes_count}
                       isFeatured
                     />
                   )}
@@ -699,6 +699,7 @@ export default async function HomePage({ params }: PageProps) {
                         <ContentCard
                           key={item.id}
                           {...getItemProps(item)}
+                          hideActions
                         />
                       ))}
                     </div>
@@ -729,7 +730,6 @@ export default async function HomePage({ params }: PageProps) {
                     return (
                       <VideoCard
                         key={item.id}
-                        contentId={p.contentId}
                         slug={p.slug}
                         title={p.title}
                         thumbnailUrl={p.thumbnailUrl}
@@ -740,9 +740,6 @@ export default async function HomePage({ params }: PageProps) {
                         authorName={p.authorName}
                         authorSlug={p.authorSlug}
                         authorAvatarUrl={p.authorAvatarUrl}
-                        likesCount={p.likesCount}
-                        isBookmarked={p.isBookmarked}
-                        isLoggedIn={p.isLoggedIn}
                       />
                     )
                   })}
@@ -805,7 +802,6 @@ export default async function HomePage({ params }: PageProps) {
                     return (
                       <HomePillCard
                         key={item.id}
-                        contentId={p.contentId}
                         slug={p.slug}
                         title={p.title}
                         excerpt={p.excerpt}
@@ -816,8 +812,6 @@ export default async function HomePage({ params }: PageProps) {
                         authorName={p.authorName}
                         authorSlug={p.authorSlug}
                         authorAvatarUrl={p.authorAvatarUrl}
-                        isBookmarked={p.isBookmarked}
-                        isLoggedIn={p.isLoggedIn}
                       />
                     )
                   })}

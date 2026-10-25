@@ -35,6 +35,8 @@ interface ContentCardProps {
   readTimeMinutes?: number | null
   isBookmarked?: boolean
   isLoggedIn?: boolean
+  /** no like count or save button (the home page shows cards without them) */
+  hideActions?: boolean
   isFeatured?: boolean
   /** Content that only exists in its original language (never auto-translated) */
   singleLanguage?: boolean
@@ -122,6 +124,7 @@ export function ContentCard({
   readTimeMinutes,
   isBookmarked = false,
   isLoggedIn = false,
+  hideActions = false,
   isFeatured = false,
   singleLanguage = false,
   sourceLocale,
@@ -393,28 +396,30 @@ export function ContentCard({
         )}
 
         {/* Actions: like count + bookmark */}
-        <div className="flex items-center gap-3">
-          <span
-            className="text-xs flex items-center gap-1"
-            style={{ color: '#8b7355', fontFamily: 'var(--font-aeonik), Aeonik, sans-serif' }}
-          >
-            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden>
-              <path
-                d="M8 13.5S2 9.8 2 5.5a3 3 0 015.5-1.6A3 3 0 0114 5.5C14 9.8 8 13.5 8 13.5z"
-                stroke="currentColor"
-                strokeWidth="1.2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg>
-            {likesCount ?? 0}
-          </span>
-          <BookmarkButton
-            contentId={contentId}
-            initialIsBookmarked={isBookmarked}
-            isLoggedIn={isLoggedIn}
-          />
-        </div>
+        {!hideActions && (
+          <div className="flex items-center gap-3">
+            <span
+              className="text-xs flex items-center gap-1"
+              style={{ color: '#8b7355', fontFamily: 'var(--font-aeonik), Aeonik, sans-serif' }}
+            >
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden>
+                <path
+                  d="M8 13.5S2 9.8 2 5.5a3 3 0 015.5-1.6A3 3 0 0114 5.5C14 9.8 8 13.5 8 13.5z"
+                  stroke="currentColor"
+                  strokeWidth="1.2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+              {likesCount ?? 0}
+            </span>
+            <BookmarkButton
+              contentId={contentId}
+              initialIsBookmarked={isBookmarked}
+              isLoggedIn={isLoggedIn}
+            />
+          </div>
+        )}
       </div>
     </article>
   )
