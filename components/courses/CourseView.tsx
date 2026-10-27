@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react'
-import { CourseAudience, CourseFacts, IntroSessionList, type CourseFact } from '@/components/courses/CourseParts'
+import { CourseAudience, CourseFacts, CoursePeople, IntroSessionList, type CourseFact } from '@/components/courses/CourseParts'
 import { CourseRegistration } from '@/components/courses/CourseRegistration'
-import type { IntroSession } from '@/lib/course-page'
+import type { CoursePerson, IntroSession, PersonGroup } from '@/lib/course-page'
 
 const aeonik: React.CSSProperties = { fontFamily: 'var(--font-aeonik), Aeonik, sans-serif' }
 
@@ -21,6 +21,8 @@ export type CourseViewProps = {
   audience: string
   /** the full description */
   content: ReactNode
+  /** the teachers and the facilitators */
+  people: CoursePerson[]
   registration: {
     note: string
     sessions: { day: string; time: string; status: IntroSession['status'] }[]
@@ -39,6 +41,7 @@ export type CourseViewProps = {
   rating?: number | null
   labels: {
     facts: string; provider: string; instructor: string; price: string; free: string; intro: string; audience: string
+    people: string; groups: Record<PersonGroup, string>; viewProfile: string
     status: Record<IntroSession['status'], string>
     formTitle: string; openForm: string; noForm: string; enrollSoon: string; enrollSoonTitle: string; rating: string
   }
@@ -92,6 +95,7 @@ export function CourseView(p: CourseViewProps) {
           {p.actions}
           <CourseAudience title={p.labels.audience} text={p.audience} />
           {p.content}
+          <CoursePeople people={p.people} title={p.labels.people} groupTitles={p.labels.groups} viewProfile={p.labels.viewProfile} />
           <CourseRegistration
             title={p.labels.intro}
             note={p.registration.note}

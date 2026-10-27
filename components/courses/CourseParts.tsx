@@ -1,5 +1,5 @@
 import { Award, BarChart3, CalendarDays, Check, Clock, Languages, MapPin, Monitor } from 'lucide-react'
-import { audienceItems, type IntroSession } from '@/lib/course-page'
+import { audienceItems, PERSON_GROUPS, type CoursePerson, type IntroSession, type PersonGroup } from '@/lib/course-page'
 
 const aeonik: React.CSSProperties = { fontFamily: 'var(--font-aeonik), Aeonik, sans-serif' }
 
@@ -75,6 +75,62 @@ export function CourseAudience({ title, text }: { title: string; text: string })
           ))}
         </ul>
       )}
+    </section>
+  )
+}
+
+function initialsOf(name: string): string {
+  return name.split(/\s+/).filter(Boolean).slice(0, 2).map((word) => word[0]?.toUpperCase() ?? '').join('')
+}
+
+function PersonCard({ person, viewProfile }: { person: CoursePerson; viewProfile: string }) {
+  return (
+    <li className="flex gap-4 rounded-2xl p-4" style={{ background: '#FAF7F2', border: '1px solid rgba(139,69,19,0.12)' }}>
+      {person.photoUrl ? (
+        // eslint-disable-next-line @next/next/no-img-element
+        <img src={person.photoUrl} alt="" className="size-20 shrink-0 rounded-full object-cover" />
+      ) : (
+        <span aria-hidden className="flex size-20 shrink-0 items-center justify-center rounded-full text-xl text-[#26215C]" style={{ ...aeonik, background: '#A1A1E9' }}>{initialsOf(person.name)}</span>
+      )}
+      <div className="min-w-0">
+        <p className="m-0 text-[17px] leading-tight text-[#1f1b2e]" style={{ ...aeonik, fontWeight: 500 }}>{person.name}</p>
+        {person.role && <p className="mt-1 text-sm leading-snug text-[#6B5F58]" style={aeonik}>{person.role}</p>}
+        {person.bio && <p className="mt-2 text-sm leading-relaxed text-[#3d342f]" style={aeonik}>{person.bio}</p>}
+        {person.linkUrl && (
+          <a href={person.linkUrl} target="_blank" rel="noopener noreferrer" className="mt-2 inline-block text-sm underline underline-offset-4" style={aeonik}>
+            {viewProfile} ↗<span className="sr-only"> — {person.name}</span>
+          </a>
+        )}
+      </div>
+    </li>
+  )
+}
+
+/** The teachers and the SurGlobal facilitators of the course, each group under its own subheading (a group with nobody is left out) */
+export function CoursePeople({ people, title, groupTitles, viewProfile }: {
+  people: CoursePerson[]
+  title: string
+  groupTitles: Record<PersonGroup, string>
+  viewProfile: string
+}) {
+  if (people.length === 0) return null
+  return (
+    <section>
+      <h2 className="mb-5 text-2xl" style={{ ...aeonik, fontWeight: 500, letterSpacing: '-0.01em' }}>{title}</h2>
+      <div className="space-y-6">
+        {PERSON_GROUPS.map((group) => {
+          const members = people.filter((person) => person.group === group)
+          if (members.length === 0) return null
+          return (
+            <div key={group}>
+              <h3 className="mb-3 text-xs uppercase tracking-[0.08em] text-[#6B5F58]" style={{ ...aeonik, fontWeight: 400 }}>{groupTitles[group]}</h3>
+              <ul className="m-0 grid list-none gap-4 p-0 sm:grid-cols-2">
+                {members.map((person, i) => <PersonCard key={`${group}-${i}`} person={person} viewProfile={viewProfile} />)}
+              </ul>
+            </div>
+          )
+        })}
+      </div>
     </section>
   )
 }

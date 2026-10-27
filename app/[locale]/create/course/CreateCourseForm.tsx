@@ -14,7 +14,7 @@ import { ResponsibilityDeclaration } from '@/components/content/ResponsibilityDe
 import { LanguageAvailabilityFields } from '@/components/content/LanguageAvailabilityFields'
 import { RichTextEditor } from '@/components/editor/RichTextEditorLazy'
 import type { EditorBlock } from '@/components/editor/RichTextEditorLazy'
-import { CourseDetailsFields, CourseRegistrationFields } from '@/components/courses/CourseFormFields'
+import { CourseDetailsFields, CoursePeopleFields, CourseRegistrationFields } from '@/components/courses/CourseFormFields'
 import { courseTemplateBlocks } from '@/lib/course-page'
 
 export function CreateCourseForm() {
@@ -55,7 +55,7 @@ export function CreateCourseForm() {
         <Input id="title" name="title" placeholder={t('titlePlaceholder')} required className={FIELD_CLASS} />
       </div>
 
-      <CoverImageInput name="cover_image_url" />
+      <CoverImageInput name="cover_image_url" uploadType="hero" />
 
       <CourseDetailsFields />
 
@@ -66,6 +66,8 @@ export function CreateCourseForm() {
           <RichTextEditor value={body ?? template} onChange={setBody} placeholder={t('bodyPlaceholder')} locale={locale} />
         </div>
       </div>
+
+      <CoursePeopleFields />
 
       <CourseRegistrationFields />
 

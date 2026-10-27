@@ -15,7 +15,7 @@ import { ResponsibilityDeclaration } from '@/components/content/ResponsibilityDe
 import { LanguageAvailabilityFields } from '@/components/content/LanguageAvailabilityFields'
 import { RichTextEditor } from '@/components/editor/RichTextEditorLazy'
 import type { EditorBlock } from '@/components/editor/RichTextEditorLazy'
-import { CourseDetailsFields, CourseRegistrationFields, type CourseFormInitial } from '@/components/courses/CourseFormFields'
+import { CourseDetailsFields, CoursePeopleFields, CourseRegistrationFields, type CourseFormInitial } from '@/components/courses/CourseFormFields'
 
 interface EditCourseFormProps {
   id: string
@@ -67,7 +67,7 @@ export function EditCourseForm({
         <Input id="title" name="title" defaultValue={initialTitle} placeholder={t('titlePlaceholder')} required className={FIELD_CLASS} />
       </div>
 
-      <CoverImageInput name="cover_image_url" defaultValue={initialCoverImageUrl} />
+      <CoverImageInput name="cover_image_url" uploadType="hero" defaultValue={initialCoverImageUrl} />
 
       <CourseDetailsFields initial={initial} />
 
@@ -78,6 +78,8 @@ export function EditCourseForm({
           <RichTextEditor value={initialBody} onChange={setBody} placeholder={t('bodyPlaceholder')} locale={locale} />
         </div>
       </div>
+
+      <CoursePeopleFields initial={initial} />
 
       <CourseRegistrationFields initial={initial} />
 

@@ -1,6 +1,6 @@
 import { render, screen } from '@testing-library/react'
 import { describe, it, expect } from 'vitest'
-import { CourseAudience, CourseFacts, IntroSessionList } from '@/components/courses/CourseParts'
+import { CourseAudience, CourseFacts, CoursePeople, IntroSessionList } from '@/components/courses/CourseParts'
 import { CourseRegistration } from '@/components/courses/CourseRegistration'
 
 const statusLabels = { open: 'Abierta', few: 'Últimas plazas', full: 'Agotada' } as const
@@ -87,6 +87,42 @@ describe('CourseRegistration', () => {
 
   it('is not shown when the course has neither sessions nor a form', () => {
     const { container } = render(<CourseRegistration {...registration} sessions={[]} href={null} embedUrl={null} />)
+    expect(container).toBeEmptyDOMElement()
+  })
+})
+
+describe('CoursePeople', () => {
+  const groupTitles = { teacher: 'Docentes', facilitator: 'Facilitadores de SurGlobal' }
+  const people = [
+    { group: 'teacher' as const, name: 'Ana Pérez', role: 'Docente · UNAM', bio: 'Investiga futuros.', photoUrl: 'https://cdn.test/ana.webp', linkUrl: 'https://ana.example' },
+    { group: 'teacher' as const, name: 'Rui Costa', role: '', bio: '', photoUrl: '', linkUrl: '' },
+    { group: 'facilitator' as const, name: 'Luz Mora', role: 'Facilitación', bio: '', photoUrl: '', linkUrl: '' },
+  ]
+
+  it('shows each group under its subheading, with the photo, role, presentation and a link to the profile', () => {
+    render(<CoursePeople people={people} title="Docentes y facilitación" groupTitles={groupTitles} viewProfile="Ver perfil" />)
+    expect(screen.getByRole('heading', { name: 'Docentes y facilitación' })).toBeInTheDocument()
+    expect(screen.getByRole('heading', { name: 'Docentes' })).toBeInTheDocument()
+    expect(screen.getByRole('heading', { name: 'Facilitadores de SurGlobal' })).toBeInTheDocument()
+    expect(screen.getByText('Docente · UNAM')).toBeInTheDocument()
+    expect(screen.getByText('Investiga futuros.')).toBeInTheDocument()
+    const link = screen.getByRole('link', { name: /Ver perfil/ })
+    expect(link).toHaveAttribute('href', 'https://ana.example')
+    expect(link).toHaveAttribute('rel', expect.stringContaining('noopener'))
+    expect(document.querySelector('img')).toHaveAttribute('src', 'https://cdn.test/ana.webp')
+  })
+
+  it('shows the initials when a person has no photo, and no link when they have none', () => {
+    render(<CoursePeople people={people} title="Equipo" groupTitles={groupTitles} viewProfile="Ver perfil" />)
+    expect(screen.getByText('RC')).toBeInTheDocument()
+    expect(screen.getAllByRole('link')).toHaveLength(1)
+  })
+
+  it('leaves out a group with nobody, and shows nothing without people', () => {
+    render(<CoursePeople people={people.filter((p) => p.group === 'facilitator')} title="Equipo" groupTitles={groupTitles} viewProfile="Ver perfil" />)
+    expect(screen.queryByRole('heading', { name: 'Docentes' })).toBeNull()
+    expect(screen.getByRole('heading', { name: 'Facilitadores de SurGlobal' })).toBeInTheDocument()
+    const { container } = render(<CoursePeople people={[]} title="Equipo" groupTitles={groupTitles} viewProfile="Ver perfil" />)
     expect(container).toBeEmptyDOMElement()
   })
 })

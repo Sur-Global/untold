@@ -553,7 +553,7 @@
     "courseSubtitleLabel": "Untertitel",
     "courseSubtitlePlaceholder": "Ein Satz, der den Kurs erklärt",
     "courseBannerLabel": "Kursbanner (optional)",
-    "courseBannerHint": "Ein breites Bild für den Seitenkopf, am besten 2000 × 800 px. Es wird vollständig und ohne Text darüber angezeigt: Der Titel steht darunter. Ohne Banner werden das Titelbild oder die Markenfarbe verwendet.",
+    "courseBannerHint": "Ein breites Bild für den Seitenkopf, am besten 2400 × 960 px. Es wird vollständig und ohne Text darüber angezeigt: Der Titel steht darunter. Ohne Banner werden das Titelbild oder die Markenfarbe verwendet.",
     "courseDetailsTitle": "Kursdaten",
     "courseProviderLabel": "Wer den Kurs anbietet",
     "courseProviderPlaceholder": "SurGlobals Kurzschule",
@@ -592,7 +592,21 @@
     "courseRegistrationUrlHint": "Tally, Google Forms, Typeform, Airtable, Jotform und Microsoft Forms funktionieren auf der Seite. Bei einem anderen Link wird der Button gezeigt.",
     "courseRegistrationLabelLabel": "Text des Buttons",
     "courseRegistrationLabelPlaceholder": "Anmelden",
-    "courseRegistrationNoteLabel": "Text zur Anmeldung (optional)"
+    "courseRegistrationNoteLabel": "Text zur Anmeldung (optional)",
+    "coursePeopleTitle": "Lehrende und Moderation",
+    "coursePeopleHint": "Wer den Kurs gibt: bis zu vier Lehrende und zwei Moderatorinnen oder Moderatoren von SurGlobal. Jede Person hat ein Foto, einen Namen, eine Zeile zur Rolle, eine kurze Vorstellung und einen Link (LinkedIn, eigene Website oder Profil). Personen ohne Namen werden nicht gespeichert.",
+    "coursePeopleTeachers": "Lehrende (bis zu {max})",
+    "coursePeopleFacilitators": "Moderation von SurGlobal (bis zu {max})",
+    "coursePeopleAddTeacher": "Lehrende Person hinzufügen",
+    "coursePeopleAddFacilitator": "Moderation hinzufügen",
+    "coursePersonName": "Name",
+    "coursePersonRole": "Rolle oder Funktion",
+    "coursePersonRolePlaceholderTeacher": "Lehrende · Universität oder Institution",
+    "coursePersonRolePlaceholderFacilitator": "Moderation · SurGlobal",
+    "coursePersonBio": "Kurze Vorstellung",
+    "coursePersonLink": "Link (LinkedIn, Website oder Profil)",
+    "coursePersonPhoto": "Foto",
+    "coursePersonRemove": "Diese Person entfernen"
   },
   "subscribe": {
     "eyebrow": "Newsletter",
@@ -762,6 +776,10 @@
     "openForm": "Formular in neuem Tab öffnen",
     "formTitle": "Anmeldeformular",
     "facts": "Kursdaten",
-    "noForm": "Die Anmeldung öffnet bald."
+    "noForm": "Die Anmeldung öffnet bald.",
+    "peopleTitle": "Lehrende und Begleitung",
+    "teachersTitle": "Lehrende",
+    "facilitatorsTitle": "Moderation von SurGlobal",
+    "viewProfile": "Profil ansehen"
   }
 }

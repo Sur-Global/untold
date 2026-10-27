@@ -25,8 +25,8 @@ export async function POST(request: NextRequest) {
   if (!file || !file.type.startsWith('image/')) {
     return NextResponse.json({ error: 'Invalid file — must be an image' }, { status: 400 })
   }
-  if (type !== 'cover' && type !== 'avatar' && type !== 'content' && type !== 'banner') {
-    return NextResponse.json({ error: 'Invalid type — must be cover, avatar, content, or banner' }, { status: 400 })
+  if (type !== 'cover' && type !== 'avatar' && type !== 'content' && type !== 'banner' && type !== 'hero' && type !== 'person') {
+    return NextResponse.json({ error: 'Invalid type — must be cover, avatar, content, banner, hero, or person' }, { status: 400 })
   }
   // Advertising banners are an administrator's tool
   if (type === 'banner' && !(await isActiveAdmin(supabase, user.id))) {

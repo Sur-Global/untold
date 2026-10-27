@@ -42,10 +42,10 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'Content not found' }, { status: 404 })
   }
 
-  // Marked "only available in this language": its text is never translated. The exception is a video, podcast or
-  // course (what is spoken is in one language, but its card and heading must read in the visitor's language): only its
-  // title and a short description are translated, never its text, transcript or chapters.
-  const isMedia = ['video', 'podcast', 'course'].includes(content.type)
+  // Marked "only available in this language": its text is never translated. The exception is a video or podcast
+  // (what is spoken is in one language, but its card and heading must read in the visitor's language): only its
+  // title and a short description are translated, never its text, transcript or chapters. A course is never translated.
+  const isMedia = ['video', 'podcast'].includes(content.type)
   if (content.single_language && !isMedia) {
     return NextResponse.json({ skipped: 'single_language' })
   }

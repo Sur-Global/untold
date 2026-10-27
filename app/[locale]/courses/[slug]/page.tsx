@@ -52,7 +52,7 @@ export default async function CoursePage({ params }: PageProps) {
       id, slug, author_id, source_locale, single_language, subtitle_locales, cover_image_url, likes_count, published_at,
       profiles!author_id ( display_name, slug, avatar_url ),
       content_translations ( title, excerpt, description, body, locale ),
-      course_meta ( price, currency, duration, rating, banner_url, modality, place, starts_on, language_label, level, certificate, audience, price_note, provider_name, provider_url, registration_mode, registration_url, registration_label, registration_note, intro_sessions, intro_timezone ),
+      course_meta ( price, currency, duration, rating, banner_url, modality, place, starts_on, language_label, level, certificate, audience, price_note, provider_name, provider_url, registration_mode, registration_url, registration_label, registration_note, intro_sessions, intro_timezone, people ),
       content_tags ( tags ( slug, names, is_topic ) )
     `)
     .eq('slug', slug)
@@ -67,9 +67,8 @@ export default async function CoursePage({ params }: PageProps) {
   const singleLanguage: boolean = !!course.single_language
   const contentLocale: string = singleLanguage ? (course.source_locale ?? 'en') : locale
   const t = getTranslation(course.content_translations ?? [], contentLocale)
-  // What is spoken may be in one language only, but the heading reads in the visitor's language when it is translated
-  const heading: string = singleLanguage ? (course.content_translations ?? []).find((tr: any) => tr.locale === locale)?.title ?? t?.title : t?.title
   if (!t) notFound()
+  const heading: string = t.title
 
   const meta = Array.isArray(course.course_meta) ? course.course_meta[0] : course.course_meta
   const extras = extrasFromMeta(meta)
@@ -153,6 +152,7 @@ export default async function CoursePage({ params }: PageProps) {
             </div>
           }
           audience={extras.audience}
+          people={extras.people}
           content={
             body ? (
               <ArticleBody json={body} />
@@ -183,6 +183,7 @@ export default async function CoursePage({ params }: PageProps) {
           rating={meta?.rating}
           labels={{
             facts: tp('facts'), provider: tp('providerLabel'), instructor: tContent('instructor'), price: tp('priceLabel'), free: tp('free'), intro: tp('introTitle'), audience: tp('audienceTitle'),
+            people: tp('peopleTitle'), groups: { teacher: tp('teachersTitle'), facilitator: tp('facilitatorsTitle') }, viewProfile: tp('viewProfile'),
             status: { open: tp(STATUS_KEYS.open), few: tp(STATUS_KEYS.few), full: tp(STATUS_KEYS.full) },
             formTitle: tp('formTitle'), openForm: tp('openForm'), noForm: tp('noForm'), enrollSoon: tContent('enrollSoon'), enrollSoonTitle: tContent('enrollSoonTitle'), rating: tContent('rating'),
           }}

@@ -553,7 +553,7 @@
     "courseSubtitleLabel": "Undertitel",
     "courseSubtitlePlaceholder": "Én sætning, der forklarer kurset",
     "courseBannerLabel": "Kursusbanner (valgfrit)",
-    "courseBannerHint": "Et bredt billede til toppen af siden, helst 2000 × 800 px. Det vises helt, uden tekst ovenpå: titlen står nedenunder. Uden banner bruges forsiden eller mærkets farve.",
+    "courseBannerHint": "Et bredt billede til toppen af siden, helst 2400 × 960 px. Det vises helt, uden tekst ovenpå: titlen står nedenunder. Uden banner bruges forsiden eller mærkets farve.",
     "courseDetailsTitle": "Kursusoplysninger",
     "courseProviderLabel": "Hvem der afholder kurset",
     "courseProviderPlaceholder": "SurGlobals korte skole",
@@ -592,7 +592,21 @@
     "courseRegistrationUrlHint": "Tally, Google Forms, Typeform, Airtable, Jotform og Microsoft Forms virker på siden. Med et andet link vises knappen.",
     "courseRegistrationLabelLabel": "Knaptekst",
     "courseRegistrationLabelPlaceholder": "Tilmeld mig",
-    "courseRegistrationNoteLabel": "Tekst om tilmeldingen (valgfrit)"
+    "courseRegistrationNoteLabel": "Tekst om tilmeldingen (valgfrit)",
+    "coursePeopleTitle": "Undervisere og facilitatorer",
+    "coursePeopleHint": "Hvem der underviser på kurset: op til fire undervisere og to facilitatorer fra SurGlobal. Hver person har et foto, et navn, en linje om sin rolle, en kort præsentation og et link (LinkedIn, egen hjemmeside eller profil). Personer uden navn bliver ikke gemt.",
+    "coursePeopleTeachers": "Undervisere (op til {max})",
+    "coursePeopleFacilitators": "Facilitatorer fra SurGlobal (op til {max})",
+    "coursePeopleAddTeacher": "Tilføj en underviser",
+    "coursePeopleAddFacilitator": "Tilføj en facilitator",
+    "coursePersonName": "Navn",
+    "coursePersonRole": "Rolle eller stilling",
+    "coursePersonRolePlaceholderTeacher": "Underviser · Universitet eller institution",
+    "coursePersonRolePlaceholderFacilitator": "Facilitering · SurGlobal",
+    "coursePersonBio": "Kort præsentation",
+    "coursePersonLink": "Link (LinkedIn, hjemmeside eller profil)",
+    "coursePersonPhoto": "Foto",
+    "coursePersonRemove": "Fjern denne person"
   },
   "subscribe": {
     "eyebrow": "Nyhedsbrev",
@@ -762,6 +776,10 @@
     "openForm": "Åbn formularen i en ny fane",
     "formTitle": "Tilmeldingsformular",
     "facts": "Kursusoplysninger",
-    "noForm": "Tilmeldingen åbner snart."
+    "noForm": "Tilmeldingen åbner snart.",
+    "peopleTitle": "Undervisere og facilitering",
+    "teachersTitle": "Undervisere",
+    "facilitatorsTitle": "Facilitatorer fra SurGlobal",
+    "viewProfile": "Se profil"
   }
 }

@@ -19,12 +19,12 @@ export function getTranslation(
   )
 }
 
-const MEDIA_TYPES = ['video', 'podcast', 'course']
+const MEDIA_TYPES = ['video', 'podcast']
 
 /**
  * Does this item still lack its card text (title, short description) in the visitor's language? Content marked "only
- * available in this language" has none, except a video, podcast or course: what is spoken is in one language, but its
- * card has to read in the visitor's language.
+ * available in this language" has none, except a video or podcast: what is spoken is in one language, but its card has
+ * to read in the visitor's language. A course marked that way is never translated, not even its title.
  */
 export function needsListingTranslation(
   item: { type?: string | null; single_language?: boolean | null; content_translations?: { locale: string }[] | null },

@@ -9,7 +9,7 @@ import { Label } from '@/components/ui/label'
 const MAX_DIMENSION = 2400
 const SAFE_BYTES = 3 * 1024 * 1024
 
-export async function prepareImage(file: File): Promise<File> {
+export async function prepareImage(file: File, jpegQuality = 0.88): Promise<File> {
   if (!file.type.startsWith('image/') || file.type === 'image/gif' || file.type === 'image/svg+xml') return file
   try {
     const bitmap = await createImageBitmap(file, { imageOrientation: 'from-image' })
@@ -30,7 +30,7 @@ export async function prepareImage(file: File): Promise<File> {
     ctx.fillRect(0, 0, canvas.width, canvas.height)
     ctx.drawImage(bitmap, 0, 0, canvas.width, canvas.height)
     bitmap.close()
-    const blob = await new Promise<Blob | null>((resolve) => canvas.toBlob(resolve, 'image/jpeg', 0.88))
+    const blob = await new Promise<Blob | null>((resolve) => canvas.toBlob(resolve, 'image/jpeg', jpegQuality))
     if (!blob) return file
     return new File([blob], file.name.replace(/\.[^.]+$/, '') + '.jpg', { type: 'image/jpeg' })
   } catch {
@@ -42,7 +42,8 @@ export async function prepareImage(file: File): Promise<File> {
 interface CoverImageInputProps {
   name: string
   defaultValue?: string | null
-  uploadType?: 'cover' | 'avatar' | 'banner'
+  /** 'hero': the picture at the top of a page, kept at up to 2400 px wide and high quality (the others are smaller) */
+  uploadType?: 'cover' | 'avatar' | 'banner' | 'hero' | 'person'
   label?: string
   /** shape of the preview box, e.g. '5/1' for a wide banner (default 16/9) */
   previewAspect?: string
@@ -72,7 +73,8 @@ export function CoverImageInput({
   const [error, setError] = useState<string | null>(null)
   const fileInputRef = useRef<HTMLInputElement>(null)
 
-  const isAvatar = uploadType === 'avatar'
+  // a person's photo is round and upload-only, like a profile photo
+  const isAvatar = uploadType === 'avatar' || uploadType === 'person'
   const fieldLabel = label ?? (isAvatar ? 'Avatar' : 'Cover Image')
 
   async function handleFile(file: File) {
@@ -80,7 +82,7 @@ export function CoverImageInput({
     setUploading(true)
     try {
       const fd = new FormData()
-      fd.append('file', await prepareImage(file))
+      fd.append('file', await prepareImage(file, uploadType === 'hero' ? 0.95 : undefined))
       fd.append('type', uploadType)
       if (ownerId && uploadType === 'avatar') fd.append('ownerId', ownerId)
       const res = await fetch('/api/upload', { method: 'POST', body: fd })

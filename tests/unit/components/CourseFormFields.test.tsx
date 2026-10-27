@@ -1,6 +1,6 @@
-import { render, screen } from '@testing-library/react'
+import { fireEvent, render, screen } from '@testing-library/react'
 import { describe, it, expect, vi } from 'vitest'
-import { CourseDetailsFields, CourseRegistrationFields, EMPTY_COURSE_FORM, type CourseFormInitial } from '@/components/courses/CourseFormFields'
+import { CourseDetailsFields, CoursePeopleFields, CourseRegistrationFields, EMPTY_COURSE_FORM, type CourseFormInitial } from '@/components/courses/CourseFormFields'
 import { readCourseExtras } from '@/lib/course-page'
 import es from '@/messages/es.json'
 
@@ -77,5 +77,47 @@ describe('course form fields', () => {
     expect(extras.introSessions).toEqual([])
     expect(extras.certificate).toBe(false)
     expect(extras.modality).toBe('')
+  })
+})
+
+describe('CoursePeopleFields', () => {
+  const sentPeople = (container: HTMLElement) => JSON.parse((container.querySelector('input[name="people_json"]') as HTMLInputElement).value)
+
+  it('starts with nobody and offers to add teachers (up to four) and facilitators (up to two)', () => {
+    const { container } = render(<CoursePeopleFields />)
+    expect(sentPeople(container)).toEqual([])
+    expect(screen.getByText('Docentes (hasta 4)')).toBeInTheDocument()
+    expect(screen.getByText('Facilitadores de SurGlobal (hasta 2)')).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: /Añadir docente/ })).toBeInTheDocument()
+  })
+
+  it('sends what is typed for each person, and stops offering to add after four teachers and two facilitators', () => {
+    const { container } = render(<CoursePeopleFields />)
+    for (let i = 0; i < 4; i++) fireEvent.click(screen.getByRole('button', { name: /Añadir docente/ }))
+    expect(screen.queryByRole('button', { name: /Añadir docente/ })).toBeNull()
+    for (let i = 0; i < 2; i++) fireEvent.click(screen.getByRole('button', { name: /Añadir facilitador/ }))
+    expect(screen.queryByRole('button', { name: /Añadir facilitador/ })).toBeNull()
+
+    const names = screen.getAllByLabelText(/^Nombre \(\d\)$/)
+    expect(names).toHaveLength(6)
+    fireEvent.change(names[0], { target: { value: 'Ana Pérez' } })
+    fireEvent.change(screen.getAllByLabelText('Rol o cargo')[0], { target: { value: 'Docente · UNAM' } })
+    fireEvent.change(names[4], { target: { value: 'Luz Mora' } })
+    const sent = sentPeople(container)
+    expect(sent).toHaveLength(6)
+    expect(sent[0]).toMatchObject({ group: 'teacher', name: 'Ana Pérez', role: 'Docente · UNAM' })
+    expect(sent[4]).toMatchObject({ group: 'facilitator', name: 'Luz Mora' })
+  })
+
+  it('shows the people of a saved course and lets one be removed', () => {
+    const initial = { ...EMPTY_COURSE_FORM, people: [
+      { group: 'teacher' as const, name: 'Ana', role: '', bio: 'Hola', photoUrl: 'https://cdn/ana.webp', linkUrl: '' },
+      { group: 'teacher' as const, name: 'Rui', role: '', bio: '', photoUrl: '', linkUrl: '' },
+    ] }
+    const { container } = render(<CoursePeopleFields initial={initial} />)
+    expect(screen.getByDisplayValue('Ana')).toBeInTheDocument()
+    expect(container.querySelector('input[name^="person_photo_"]')).toHaveValue('https://cdn/ana.webp')
+    fireEvent.click(screen.getAllByRole('button', { name: 'Quitar a esta persona' })[0])
+    expect(sentPeople(container).map((p: any) => p.name)).toEqual(['Rui'])
   })
 })

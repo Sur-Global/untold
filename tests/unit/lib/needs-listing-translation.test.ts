@@ -9,12 +9,16 @@ describe('needsListingTranslation', () => {
     expect(needsListingTranslation({ type: 'article', content_translations: rows('es', 'en') }, 'en')).toBe(false)
     expect(needsListingTranslation({ type: 'article', content_translations: rows('es') }, 'es')).toBe(false)
   })
-  it('is false for an article or a pill marked "only in this language": its text is never translated', () => {
+  it('is false for an article, a pill or a course marked "only in this language": its text is never translated', () => {
     expect(needsListingTranslation({ type: 'article', single_language: true, content_translations: rows('es') }, 'en')).toBe(false)
     expect(needsListingTranslation({ type: 'pill', single_language: true, content_translations: rows('es') }, 'en')).toBe(false)
+    expect(needsListingTranslation({ type: 'course', single_language: true, content_translations: rows('es') }, 'en')).toBe(false)
   })
-  it('is true for a video, podcast or course "only in this language": its card still has to read in the visitor’s language', () => {
-    for (const type of ['video', 'podcast', 'course']) {
+  it('is still true for a course that is not marked "only in this language"', () => {
+    expect(needsListingTranslation({ type: 'course', single_language: false, content_translations: rows('es') }, 'en')).toBe(true)
+  })
+  it('is true for a video or podcast "only in this language": its card still has to read in the visitor’s language', () => {
+    for (const type of ['video', 'podcast']) {
       expect(needsListingTranslation({ type, single_language: true, content_translations: rows('es') }, 'en')).toBe(true)
       expect(needsListingTranslation({ type, single_language: true, content_translations: rows('es', 'en') }, 'en')).toBe(false)
     }

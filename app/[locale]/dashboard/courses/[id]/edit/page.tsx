@@ -26,7 +26,7 @@ export default async function EditCoursePage({ params }: EditCoursePageProps) {
     .select(`
       id, slug, author_id, status, source_locale, single_language, subtitle_locales, declaration_accepted_at, cover_image_url,
       content_translations ( title, excerpt, description, body, locale ),
-      course_meta ( price, currency, duration, banner_url, modality, place, starts_on, language_label, level, certificate, audience, price_note, provider_name, provider_url, registration_mode, registration_url, registration_label, registration_note, intro_sessions, intro_timezone )
+      course_meta ( price, currency, duration, banner_url, modality, place, starts_on, language_label, level, certificate, audience, price_note, provider_name, provider_url, registration_mode, registration_url, registration_label, registration_note, intro_sessions, intro_timezone, people )
     `)
     .eq('id', id)
     .eq('type', 'course')

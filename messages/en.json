@@ -553,7 +553,7 @@
     "courseSubtitleLabel": "Subtitle",
     "courseSubtitlePlaceholder": "One sentence that explains the course",
     "courseBannerLabel": "Course banner (optional)",
-    "courseBannerHint": "A wide picture for the top of the page, best 2000 × 800 px. It is shown whole, with no text over it: the title goes below. Without a banner the cover, or the brand colour, is used.",
+    "courseBannerHint": "A wide picture for the top of the page, best 2400 × 960 px. It is shown whole, with no text over it: the title goes below. Without a banner the cover, or the brand colour, is used.",
     "courseDetailsTitle": "Course details",
     "courseProviderLabel": "Who teaches the course",
     "courseProviderPlaceholder": "SurGlobal’s Short School",
@@ -592,7 +592,21 @@
     "courseRegistrationUrlHint": "Tally, Google Forms, Typeform, Airtable, Jotform and Microsoft Forms work inside the page. With another link the button is shown.",
     "courseRegistrationLabelLabel": "Button text",
     "courseRegistrationLabelPlaceholder": "Register",
-    "courseRegistrationNoteLabel": "Text about the registration (optional)"
+    "courseRegistrationNoteLabel": "Text about the registration (optional)",
+    "coursePeopleTitle": "Teachers and facilitators",
+    "coursePeopleHint": "Who gives the course: up to four teachers and two SurGlobal facilitators. Each person has a photo, a name, a line about their role, a short presentation and a link (LinkedIn, their website or their profile). People without a name are not saved.",
+    "coursePeopleTeachers": "Teachers (up to {max})",
+    "coursePeopleFacilitators": "SurGlobal facilitators (up to {max})",
+    "coursePeopleAddTeacher": "Add a teacher",
+    "coursePeopleAddFacilitator": "Add a facilitator",
+    "coursePersonName": "Name",
+    "coursePersonRole": "Role or position",
+    "coursePersonRolePlaceholderTeacher": "Teacher · University or institution",
+    "coursePersonRolePlaceholderFacilitator": "Facilitation · SurGlobal",
+    "coursePersonBio": "Short presentation",
+    "coursePersonLink": "Link (LinkedIn, website or profile)",
+    "coursePersonPhoto": "Photo",
+    "coursePersonRemove": "Remove this person"
   },
   "subscribe": {
     "eyebrow": "Newsletter",
@@ -762,6 +776,10 @@
     "openForm": "Open the form in a new tab",
     "formTitle": "Registration form",
     "facts": "Course details",
-    "noForm": "Registration will open soon."
+    "noForm": "Registration will open soon.",
+    "peopleTitle": "Teachers and facilitators",
+    "teachersTitle": "Teachers",
+    "facilitatorsTitle": "SurGlobal facilitators",
+    "viewProfile": "View profile"
   }
 }

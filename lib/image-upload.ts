@@ -1,12 +1,14 @@
 import sharp from 'sharp'
 import { createServiceRoleClient } from '@/lib/supabase/service-role'
 
-export type ImageKind = 'cover' | 'avatar' | 'content' | 'banner'
+export type ImageKind = 'cover' | 'avatar' | 'content' | 'banner' | 'hero' | 'person'
 
 /**
  * Resizes an image to what the site needs and stores it as WebP:
  *   cover / content — up to 1200px wide, never enlarged
  *   banner          — up to 2000px wide (advertising banners carry text, so they stay sharp on big screens)
+ *   hero            — up to 2400px wide at high quality: the picture at the top of a course page, shown across the whole page
+ *   person          — 640×640 square photo of a teacher or facilitator of a course (any number can be stored)
  *   avatar          — 512×512 square, cropped around the most interesting part (faces)
  * Returns the public URL.
  */
@@ -22,6 +24,18 @@ export async function processAndStoreImage(buffer: Buffer, kind: ImageKind, user
   } else if (kind === 'banner') {
     processed = await sharp(buffer).rotate().resize({ width: 2000, withoutEnlargement: true }).webp({ quality: 85 }).toBuffer()
     storagePath = `banners/${userId}/${crypto.randomUUID()}.webp`
+    bucket = 'content-images'
+  } else if (kind === 'hero') {
+    processed = await sharp(buffer).rotate().resize({ width: 2400, withoutEnlargement: true }).webp({ quality: 92, smartSubsample: true }).toBuffer()
+    storagePath = `heroes/${userId}/${crypto.randomUUID()}.webp`
+    bucket = 'content-images'
+  } else if (kind === 'person') {
+    processed = await sharp(buffer)
+      .rotate()
+      .resize(640, 640, { fit: 'cover', position: sharp.strategy.attention })
+      .webp({ quality: 88 })
+      .toBuffer()
+    storagePath = `people/${userId}/${crypto.randomUUID()}.webp`
     bucket = 'content-images'
   } else if (kind === 'content') {
     processed = await sharp(buffer).rotate().resize({ width: 1200, withoutEnlargement: true }).webp({ quality: 82 }).toBuffer()

@@ -14,7 +14,7 @@ export async function POST(request: NextRequest) {
   const body = await request.json().catch(() => null)
   const url = typeof body?.url === 'string' ? body.url.trim() : ''
   const type = body?.type
-  if (!url || (type !== 'cover' && type !== 'avatar' && type !== 'content' && type !== 'banner')) {
+  if (!url || (type !== 'cover' && type !== 'avatar' && type !== 'content' && type !== 'banner' && type !== 'hero' && type !== 'person')) {
     return NextResponse.json({ error: 'Invalid request' }, { status: 400 })
   }
   if (type === 'banner' && !(await isActiveAdmin(supabase, user.id))) {

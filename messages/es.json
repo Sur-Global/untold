@@ -553,7 +553,7 @@
     "courseSubtitleLabel": "Subtítulo",
     "courseSubtitlePlaceholder": "Una frase que explique el curso",
     "courseBannerLabel": "Banner del curso (opcional)",
-    "courseBannerHint": "Imagen ancha para la cabecera de la página, mejor 2000 × 800 px. Se muestra completa, sin texto encima: el título va debajo. Sin banner se usa la portada o el color de la marca.",
+    "courseBannerHint": "Imagen ancha para la cabecera de la página, mejor 2400 × 960 px. Se muestra completa, sin texto encima: el título va debajo. Sin banner se usa la portada o el color de la marca.",
     "courseDetailsTitle": "Datos del curso",
     "courseProviderLabel": "Quién imparte el curso",
     "courseProviderPlaceholder": "Escuela breve de SurGlobal",
@@ -592,7 +592,21 @@
     "courseRegistrationUrlHint": "Dentro de la página funcionan Tally, Google Forms, Typeform, Airtable, Jotform y Microsoft Forms. Con otro enlace se muestra el botón.",
     "courseRegistrationLabelLabel": "Texto del botón",
     "courseRegistrationLabelPlaceholder": "Inscribirme",
-    "courseRegistrationNoteLabel": "Texto sobre la inscripción (opcional)"
+    "courseRegistrationNoteLabel": "Texto sobre la inscripción (opcional)",
+    "coursePeopleTitle": "Docentes y facilitadores",
+    "coursePeopleHint": "Quiénes imparten el curso: hasta cuatro docentes y dos facilitadores de SurGlobal. Cada persona lleva foto, nombre, una línea sobre su rol, una presentación breve y un enlace (LinkedIn, su web o su perfil). Las personas sin nombre no se guardan.",
+    "coursePeopleTeachers": "Docentes (hasta {max})",
+    "coursePeopleFacilitators": "Facilitadores de SurGlobal (hasta {max})",
+    "coursePeopleAddTeacher": "Añadir docente",
+    "coursePeopleAddFacilitator": "Añadir facilitador o facilitadora",
+    "coursePersonName": "Nombre",
+    "coursePersonRole": "Rol o cargo",
+    "coursePersonRolePlaceholderTeacher": "Docente · Universidad o institución",
+    "coursePersonRolePlaceholderFacilitator": "Facilitación · SurGlobal",
+    "coursePersonBio": "Presentación breve",
+    "coursePersonLink": "Enlace (LinkedIn, web o perfil)",
+    "coursePersonPhoto": "Foto",
+    "coursePersonRemove": "Quitar a esta persona"
   },
   "subscribe": {
     "eyebrow": "Boletín",
@@ -762,6 +776,10 @@
     "openForm": "Abrir el formulario en otra pestaña",
     "formTitle": "Formulario de inscripción",
     "facts": "Datos del curso",
-    "noForm": "Pronto abriremos las inscripciones."
+    "noForm": "Pronto abriremos las inscripciones.",
+    "peopleTitle": "Docentes y facilitación",
+    "teachersTitle": "Docentes",
+    "facilitatorsTitle": "Facilitadores de SurGlobal",
+    "viewProfile": "Ver perfil"
   }
 }

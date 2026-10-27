@@ -1,6 +1,8 @@
 'use client'
 
+import { useRef, useState } from 'react'
 import { useTranslations } from 'next-intl'
+import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { FIELD_CLASS } from '@/components/ui/field-styles'
@@ -10,10 +12,14 @@ import {
   COURSE_MODALITIES,
   LEVEL_KEYS,
   MAX_INTRO_SESSIONS,
+  MAX_PEOPLE,
   MODALITY_KEYS,
+  PERSON_GROUPS,
   SESSION_STATUSES,
   STATUS_KEYS,
   type CourseExtras,
+  type CoursePerson,
+  type PersonGroup,
 } from '@/lib/course-page'
 
 /** What the create and edit forms start with */
@@ -21,7 +27,7 @@ export type CourseFormInitial = CourseExtras & { subtitle: string; duration: str
 
 export const EMPTY_COURSE_FORM: CourseFormInitial = {
   bannerUrl: '', modality: '', place: '', startsOn: '', languageLabel: '', level: '', certificate: false, audience: '', priceNote: '', providerName: '', providerUrl: '',
-  registrationMode: 'button', registrationUrl: '', registrationLabel: '', registrationNote: '', introSessions: [], introTimezone: '',
+  registrationMode: 'button', registrationUrl: '', registrationLabel: '', registrationNote: '', introSessions: [], introTimezone: '', people: [],
   subtitle: '', duration: '', price: 0, currency: 'USD',
 }
 
@@ -43,6 +49,7 @@ export function CourseDetailsFields({ initial = EMPTY_COURSE_FORM }: { initial?:
         </div>
         <CoverImageInput
           name="banner_url"
+          uploadType="hero"
           label={t('courseBannerLabel')}
           previewAspect="5/2"
           sizeHint={t('courseBannerHint')}
@@ -192,6 +199,82 @@ export function CourseRegistrationFields({ initial = EMPTY_COURSE_FORM }: { init
           <Input id="registration_note" name="registration_note" defaultValue={initial.registrationNote} maxLength={300} className={FIELD_CLASS} />
         </div>
       </div>
+    </fieldset>
+  )
+}
+
+type PersonDraft = CoursePerson & { key: number }
+
+const GROUP_LABELS: Record<PersonGroup, { title: string; add: string; rolePlaceholder: string }> = {
+  teacher: { title: 'coursePeopleTeachers', add: 'coursePeopleAddTeacher', rolePlaceholder: 'coursePersonRolePlaceholderTeacher' },
+  facilitator: { title: 'coursePeopleFacilitators', add: 'coursePeopleAddFacilitator', rolePlaceholder: 'coursePersonRolePlaceholderFacilitator' },
+}
+
+/** The teachers (up to four) and the SurGlobal facilitators (up to two) of the course, each with a photo, a line about their role, a short presentation and a link */
+export function CoursePeopleFields({ initial = EMPTY_COURSE_FORM }: { initial?: CourseFormInitial }) {
+  const t = useTranslations('editor')
+  const nextKey = useRef(initial.people.length)
+  const [people, setPeople] = useState<PersonDraft[]>(() => initial.people.map((person, i) => ({ ...person, key: i })))
+
+  const change = (key: number, patch: Partial<CoursePerson>) => setPeople((list) => list.map((p) => (p.key === key ? { ...p, ...patch } : p)))
+  const add = (group: PersonGroup) => setPeople((list) => [...list, { key: nextKey.current++, group, name: '', role: '', bio: '', photoUrl: '', linkUrl: '' }])
+  const remove = (key: number) => setPeople((list) => list.filter((p) => p.key !== key))
+
+  return (
+    <fieldset className={sectionClass}>
+      <legend className="px-2 text-sm font-semibold text-[#5d4e37]">{t('coursePeopleTitle')}</legend>
+      <p className="text-sm leading-relaxed text-[#6b5744]">{t('coursePeopleHint')}</p>
+      <input type="hidden" name="people_json" value={JSON.stringify(people.map(({ key: _key, ...person }) => person))} />
+
+      {PERSON_GROUPS.map((group) => {
+        const members = people.filter((p) => p.group === group)
+        const labels = GROUP_LABELS[group]
+        return (
+          <div key={group} className="space-y-4">
+            <p className="text-sm font-medium">{t(labels.title, { max: MAX_PEOPLE[group] })}</p>
+            {members.map((person, index) => (
+              <div key={person.key} className="grid gap-4 rounded-[12px] border border-primary/15 bg-white p-4 sm:grid-cols-[190px_minmax(0,1fr)]">
+                <CoverImageInput
+                  name={`person_photo_${person.key}`}
+                  uploadType="person"
+                  label={t('coursePersonPhoto')}
+                  defaultValue={person.photoUrl}
+                  onChange={(url) => change(person.key, { photoUrl: url })}
+                />
+                <div className="space-y-3">
+                  <div className="space-y-2">
+                    <Label htmlFor={`person_name_${person.key}`}>{t('coursePersonName')} ({index + 1})</Label>
+                    <Input id={`person_name_${person.key}`} value={person.name} onChange={(e) => change(person.key, { name: e.target.value })} maxLength={80} className={FIELD_CLASS} />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor={`person_role_${person.key}`}>{t('coursePersonRole')}</Label>
+                    <Input id={`person_role_${person.key}`} value={person.role} onChange={(e) => change(person.key, { role: e.target.value })} maxLength={120} placeholder={t(labels.rolePlaceholder)} className={FIELD_CLASS} />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor={`person_bio_${person.key}`}>{t('coursePersonBio')}</Label>
+                    <textarea
+                      id={`person_bio_${person.key}`}
+                      value={person.bio}
+                      onChange={(e) => change(person.key, { bio: e.target.value })}
+                      maxLength={500}
+                      rows={3}
+                      className={`${FIELD_CLASS} h-auto min-h-[90px] py-3 leading-relaxed`}
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor={`person_link_${person.key}`}>{t('coursePersonLink')}</Label>
+                    <Input id={`person_link_${person.key}`} type="url" value={person.linkUrl} onChange={(e) => change(person.key, { linkUrl: e.target.value })} placeholder="https://…" className={FIELD_CLASS} />
+                  </div>
+                  <Button type="button" variant="ghost" size="sm" onClick={() => remove(person.key)}>{t('coursePersonRemove')}</Button>
+                </div>
+              </div>
+            ))}
+            {members.length < MAX_PEOPLE[group] && (
+              <Button type="button" variant="outline" onClick={() => add(group)}>+ {t(labels.add)}</Button>
+            )}
+          </div>
+        )
+      })}
     </fieldset>
   )
 }

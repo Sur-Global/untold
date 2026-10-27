@@ -18,6 +18,13 @@ export const MAX_INTRO_SESSIONS = 2
 
 export type IntroSession = { date: string; time: string; status: SessionStatus }
 
+/** The people of a course: teachers and the facilitators from SurGlobal (up to four and two) */
+export const PERSON_GROUPS = ['teacher', 'facilitator'] as const
+export type PersonGroup = (typeof PERSON_GROUPS)[number]
+export const MAX_PEOPLE: Record<PersonGroup, number> = { teacher: 4, facilitator: 2 }
+
+export type CoursePerson = { group: PersonGroup; name: string; role: string; bio: string; photoUrl: string; linkUrl: string }
+
 /** What the course page shows besides the title, subtitle and description (the course_meta columns, as the forms use them) */
 export type CourseExtras = {
   bannerUrl: string
@@ -37,6 +44,7 @@ export type CourseExtras = {
   registrationNote: string
   introSessions: IntroSession[]
   introTimezone: string
+  people: CoursePerson[]
 }
 
 const oneOf = <T extends string>(list: readonly T[], value: unknown): T | '' => (typeof value === 'string' && (list as readonly string[]).includes(value) ? (value as T) : '')
@@ -54,6 +62,30 @@ export function normalizeIntroSessions(raw: unknown): IntroSession[] {
     .filter((s) => s.date)
     .sort((a, b) => (a.date + a.time).localeCompare(b.date + b.time))
     .slice(0, MAX_INTRO_SESSIONS)
+}
+
+/**
+ * The people of a course, cleaned (from the form's JSON, or the database): each needs a name, the texts are limited, the
+ * photo and the link must be web addresses, and there are at most four teachers and two facilitators. Teachers come first.
+ */
+export function normalizePeople(raw: unknown): CoursePerson[] {
+  const list = typeof raw === 'string' ? (() => { try { return JSON.parse(raw) } catch { return [] } })() : raw
+  if (!Array.isArray(list)) return []
+  const people: CoursePerson[] = []
+  for (const item of list) {
+    const group = oneOf(PERSON_GROUPS, item?.group)
+    const name = text(item?.name, 80)
+    if (!group || !name) continue
+    people.push({
+      group,
+      name,
+      role: text(item?.role, 120),
+      bio: text(item?.bio, 500),
+      photoUrl: safeWebUrl(item?.photoUrl ?? item?.photo_url),
+      linkUrl: safeWebUrl(item?.linkUrl ?? item?.link_url),
+    })
+  }
+  return PERSON_GROUPS.flatMap((group) => people.filter((person) => person.group === group).slice(0, MAX_PEOPLE[group]))
 }
 
 /** The extras from the fields of a create/edit form */
@@ -78,6 +110,7 @@ export function readCourseExtras(formData: FormData): CourseExtras {
     registrationNote: text(get('registration_note'), 300),
     introSessions: normalizeIntroSessions(sessions),
     introTimezone: text(get('intro_timezone'), 80),
+    people: normalizePeople(get('people_json')),
   }
 }
 
@@ -102,6 +135,7 @@ export function extrasToColumns(extras: CourseExtras) {
     registration_note: nullable(extras.registrationNote),
     intro_sessions: extras.introSessions,
     intro_timezone: nullable(extras.introTimezone),
+    people: extras.people.map((p) => ({ group: p.group, name: p.name, role: p.role, bio: p.bio, photo_url: p.photoUrl, link_url: p.linkUrl })),
   }
 }
 
@@ -125,6 +159,7 @@ export function extrasFromMeta(meta: any): CourseExtras {
     registrationNote: text(meta?.registration_note, 300),
     introSessions: normalizeIntroSessions(meta?.intro_sessions),
     introTimezone: text(meta?.intro_timezone, 80),
+    people: normalizePeople(meta?.people),
   }
 }
 
