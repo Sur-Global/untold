@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { useTranslations } from 'next-intl'
-import { PODCAST_ORIGINS, PODCAST_ORIGIN_KEYS, type PodcastOrigin } from '@/lib/podcast-origin'
+import { PODCAST_ORIGINS, PODCAST_ORIGIN_OPTION_KEYS, type PodcastOrigin } from '@/lib/podcast-origin'
 
 /**
  * The type of podcast (made by SurGlobal / UNTOLD.ink, in collaboration, interviewing them, or a third party's).
@@ -11,7 +11,6 @@ import { PODCAST_ORIGINS, PODCAST_ORIGIN_KEYS, type PodcastOrigin } from '@/lib/
  */
 export function PodcastOriginField({ defaultValue = null, onChange }: { defaultValue?: PodcastOrigin | null; onChange?: (origin: PodcastOrigin) => void }) {
   const t = useTranslations('editor')
-  const tl = useTranslations('listings')
   const [value, setValue] = useState<PodcastOrigin | null>(defaultValue)
 
   return (
@@ -29,7 +28,7 @@ export function PodcastOriginField({ defaultValue = null, onChange }: { defaultV
               onChange={() => { setValue(origin); onChange?.(origin) }}
               className="mt-1 w-4 h-4 accent-[#b8860b]"
             />
-            <span className="text-[#5d4e37]">{tl(PODCAST_ORIGIN_KEYS[origin])}</span>
+            <span className="text-[#5d4e37]">{t(PODCAST_ORIGIN_OPTION_KEYS[origin])}</span>
           </label>
         ))}
       </div>

@@ -3,6 +3,7 @@ import {
   PODCAST_BADGE_KEYS,
   PODCAST_ORIGINS,
   PODCAST_ORIGIN_KEYS,
+  PODCAST_ORIGIN_OPTION_KEYS,
   PODCAST_ORIGIN_REQUIRED_MESSAGE,
   isPodcastOrigin,
   originForNewPodcast,
@@ -82,15 +83,23 @@ describe('what the readers see', () => {
   it('every type has its heading and label in the interface texts', () => {
     for (const messages of [en, es]) {
       for (const key of Object.values(PODCAST_ORIGIN_KEYS)) expect((messages.listings as Record<string, string>)[key]).toBeTruthy()
+      for (const key of Object.values(PODCAST_ORIGIN_OPTION_KEYS)) expect((messages.editor as unknown as Record<string, string>)[key]).toBeTruthy()
       for (const key of Object.values(PODCAST_BADGE_KEYS)) expect((messages.listings as Record<string, string>)[key]).toBeTruthy()
     }
   })
 
   it('the headings of the page, in Spanish, are the ones chosen', () => {
-    expect(es.listings.podcastOriginOwn).toBe('Creados por SurGlobal / UNTOLD.ink')
-    expect(es.listings.podcastOriginCollab).toBe('Terceros en colaboración con SurGlobal / UNTOLD.ink')
-    expect(es.listings.podcastOriginGuest).toBe('Terceros que entrevistan a SurGlobal / UNTOLD.ink')
-    expect(es.listings.podcastOriginThirdParty).toBe('Podcasts de terceros')
+    expect(es.listings.podcastOriginOwn).toBe('UNTOLD.ink presenta')
+    expect(es.listings.podcastOriginCollab).toBe('Nuestras colaboraciones')
+    expect(es.listings.podcastOriginGuest).toBe('Nos invitan a conversar')
+    expect(es.listings.podcastOriginThirdParty).toBe('De nuestra comunidad')
+  })
+
+  it('admins and editors keep the descriptive names in the form, not the headings readers see', () => {
+    expect(es.editor.podcastOptionOwn).toBe('Creados por SurGlobal / UNTOLD.ink')
+    expect(es.editor.podcastOptionCollab).toBe('Terceros en colaboración con SurGlobal / UNTOLD.ink')
+    expect(es.editor.podcastOptionGuest).toBe('Terceros que entrevistan a SurGlobal / UNTOLD.ink')
+    expect(es.editor.podcastOptionThirdParty).toBe('Podcasts de terceros')
   })
 })
 

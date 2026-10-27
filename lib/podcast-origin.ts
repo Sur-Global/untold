@@ -34,12 +34,20 @@ export function originForSavedPodcast({ isEditor, formData }: { isEditor: boolea
   return isEditor ? readPodcastOrigin(formData) ?? undefined : undefined
 }
 
-/** The messages key of a type: its heading on the podcasts page and its option in the form */
+/** The messages key of a type's heading on the podcasts page (what readers see) */
 export const PODCAST_ORIGIN_KEYS: Record<PodcastOrigin, string> = {
   own: 'podcastOriginOwn',
   collab: 'podcastOriginCollab',
   guest: 'podcastOriginGuest',
   third_party: 'podcastOriginThirdParty',
+}
+
+/** The messages key of a type's option in the form: the descriptive name admins and editors see (not the heading readers see) */
+export const PODCAST_ORIGIN_OPTION_KEYS: Record<PodcastOrigin, string> = {
+  own: 'podcastOptionOwn',
+  collab: 'podcastOptionCollab',
+  guest: 'podcastOptionGuest',
+  third_party: 'podcastOptionThirdParty',
 }
 
 /** The short label on a card; the third-party podcast (the usual one) has none */
