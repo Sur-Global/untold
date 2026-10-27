@@ -575,16 +575,11 @@
   },
   "share": {
     "button": "Teilen",
-    "dialog": "Teilen auf …",
+    "dialog": "Diesen Inhalt teilen",
     "copyLink": "Link kopieren",
     "copied": "Link kopiert",
-    "email": "E-Mail",
-    "more": "Weitere Optionen",
-    "downloadSlides": "Folien herunterladen",
-    "preparingSlides": "Folien werden vorbereitet …",
-    "instagramSlidesHint": "Die Folien wurden heruntergeladen. Lade sie in deine Instagram-Story oder deinen Beitrag hoch.",
-    "slidesReady": "Folien bereit: Tippe noch einmal, um sie zu teilen.",
-    "slidesError": "Die Folien konnten nicht vorbereitet werden. Bitte versuche es erneut.",
+    "email": "Per E-Mail senden",
+    "copyFailed": "Kopieren war nicht möglich. Kopiere den Link von hier:",
     "close": "Schließen"
   },
   "footer": {

@@ -575,16 +575,11 @@
   },
   "share": {
     "button": "Partager",
-    "dialog": "Partager sur…",
+    "dialog": "Partager ce contenu",
     "copyLink": "Copier le lien",
     "copied": "Lien copié",
-    "email": "E-mail",
-    "more": "Plus d’options",
-    "downloadSlides": "Télécharger les planches",
-    "preparingSlides": "Préparation des planches…",
-    "instagramSlidesHint": "Les planches sont téléchargées. Publiez-les dans votre story ou votre publication Instagram.",
-    "slidesReady": "Planches prêtes : touchez de nouveau pour les partager.",
-    "slidesError": "Impossible de préparer les planches. Réessayez.",
+    "email": "Envoyer par e-mail",
+    "copyFailed": "Impossible de copier. Copiez le lien ici :",
     "close": "Fermer"
   },
   "footer": {

@@ -1,40 +1,17 @@
-import { describe, it, expect } from 'vitest'
-import { cleanShareUrl, shareLinks } from '@/lib/share'
+import { describe, it, expect, vi, afterEach } from 'vitest'
+import { cleanShareUrl, copyText, emailShareHref } from '@/lib/share'
 
-const url = 'https://untold-six.vercel.app/es/articles/amazofuturismo'
-const title = 'Amazofuturismo: ¿qué futuro?'
-const byId = (links: ReturnType<typeof shareLinks>) => Object.fromEntries(links.map((l) => [l.id, l.href]))
-
-describe('shareLinks', () => {
-  it('lists the networks in the order the team chose, with email last, and Instagram only when asked (content that is pictures)', () => {
-    expect(shareLinks({ url, title }).map((l) => l.id)).toEqual(['bluesky', 'linkedin', 'whatsapp', 'facebook', 'telegram', 'reddit', 'threads', 'x', 'email'])
-    expect(shareLinks({ url, title, instagram: true }).map((l) => l.id)).toEqual(['bluesky', 'linkedin', 'instagram', 'whatsapp', 'facebook', 'telegram', 'reddit', 'threads', 'x', 'email'])
-  })
-
-  it('builds each network’s own address, with the link and title encoded', () => {
-    const h = byId(shareLinks({ url, title }))
-    const u = encodeURIComponent(url)
-    const t = encodeURIComponent(title)
-    const text = encodeURIComponent(`${title} ${url}`)
-    expect(h.bluesky).toBe(`https://bsky.app/intent/compose?text=${text}`)
-    expect(h.linkedin).toBe(`https://www.linkedin.com/sharing/share-offsite/?url=${u}`)
-    expect(h.whatsapp).toBe(`https://wa.me/?text=${text}`)
-    expect(h.facebook).toBe(`https://www.facebook.com/sharer/sharer.php?u=${u}`)
-    expect(h.telegram).toBe(`https://t.me/share/url?url=${u}&text=${t}`)
-    expect(h.reddit).toBe(`https://www.reddit.com/submit?url=${u}&title=${t}`)
-    expect(h.threads).toBe(`https://www.threads.net/intent/post?text=${text}`)
-    expect(h.x).toBe(`https://twitter.com/intent/tweet?text=${t}&url=${u}`)
-    expect(h.email).toBe(`mailto:?subject=${t}&body=${u}`)
-  })
-
-  it('has no web address for Instagram: its button hands the slides over as pictures instead', () => {
-    expect(byId(shareLinks({ url, title, instagram: true })).instagram).toBeNull()
+describe('emailShareHref', () => {
+  it('opens the mail with the title as the subject and the link inside, both encoded', () => {
+    const url = 'https://untold-six.vercel.app/es/articles/amazofuturismo'
+    expect(emailShareHref({ url, title: 'Amazofuturismo: ¿qué futuro?' })).toBe(`mailto:?subject=${encodeURIComponent('Amazofuturismo: ¿qué futuro?')}&body=${encodeURIComponent(url)}`)
   })
 
   it('never lets a title break the address', () => {
-    const h = byId(shareLinks({ url, title: 'A & B? #1 "ok"' }))
-    expect(h.facebook).not.toContain('"')
-    expect(h.x).toContain('text=A%20%26%20B%3F%20%231%20%22ok%22')
+    const href = emailShareHref({ url: 'https://x.org/a?b=1', title: 'A & B? #1 "ok"' })
+    expect(href).toContain('subject=A%20%26%20B%3F%20%231%20%22ok%22')
+    expect(href).not.toContain('"')
+    expect(href.split('&body=')).toHaveLength(2)
   })
 })
 
@@ -44,5 +21,37 @@ describe('cleanShareUrl', () => {
   })
   it('returns anything that is not an address as it is', () => {
     expect(cleanShareUrl('nope')).toBe('nope')
+  })
+})
+
+describe('copyText', () => {
+  afterEach(() => {
+    vi.restoreAllMocks()
+    Object.assign(navigator, { clipboard: undefined })
+    delete (document as any).execCommand
+    document.body.innerHTML = ''
+  })
+
+  it('uses the clipboard of the browser', async () => {
+    const writeText = vi.fn().mockResolvedValue(undefined)
+    Object.assign(navigator, { clipboard: { writeText } })
+    expect(await copyText('https://x.org/a')).toBe(true)
+    expect(writeText).toHaveBeenCalledWith('https://x.org/a')
+  })
+
+  it('tries the old way when the browser does not allow the clipboard', async () => {
+    Object.assign(navigator, { clipboard: { writeText: vi.fn().mockRejectedValue(new Error('blocked')) } })
+    const execCommand = vi.fn().mockReturnValue(true)
+    ;(document as any).execCommand = execCommand
+    expect(await copyText('https://x.org/a')).toBe(true)
+    expect(execCommand).toHaveBeenCalledWith('copy')
+    expect(document.querySelector('textarea')).toBeNull() // the temporary box is removed
+  })
+
+  it('says it could not copy when nothing worked, so the link can be shown to copy by hand', async () => {
+    Object.assign(navigator, { clipboard: undefined })
+    expect(await copyText('https://x.org/a')).toBe(false)
+    ;(document as any).execCommand = vi.fn().mockReturnValue(false)
+    expect(await copyText('https://x.org/a')).toBe(false)
   })
 })

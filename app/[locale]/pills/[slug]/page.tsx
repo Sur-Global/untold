@@ -17,10 +17,8 @@ import { EditContentButton } from '@/components/content/EditContentButton'
 import { AuthorByline } from '@/components/content/AuthorByline'
 import { Link } from '@/i18n/navigation'
 import { PillCarousel } from '@/components/pills/PillCarousel'
-import { ShareBar } from '@/components/social/ShareBar'
 import { TranslationRefresher } from '@/components/TranslationRefresher'
 import { localizedSlides, parseSlides, slideCredits } from '@/lib/pill-slides'
-import { localizedPath, siteUrl } from '@/lib/content-metadata'
 import { normalizeAccent } from '@/lib/pill-accent'
 import { readableTextColor } from '@/lib/cover-formats'
 import { TopicKicker } from '@/components/content/TopicKicker'
@@ -88,10 +86,7 @@ export default async function PillPage({ params }: PageProps) {
   const { slides, translated: slidesTranslated } = localizedSlides(parseSlides(meta?.slides), meta?.slide_translations, contentLocale, sourceLocale)
   const needsSlides = isCarousel && contentLocale !== sourceLocale && !slidesTranslated
   const credits = slideCredits(slides)
-  // a carousel can be shared as pictures (Instagram) and downloaded
-  const slidesToShare = isCarousel && slides.length > 0 ? { slug: pill.slug, count: slides.length } : undefined
   const topics = await loadContentTopics(supabase, (pill.content_tags ?? []).map((ct: any) => ct.tags).filter(Boolean), locale)
-  const pillUrl = `${siteUrl()}${localizedPath(locale, `/pills/${slug}`)}`
 
   if (needsBody || needsSlides) {
     after(async () => {
@@ -154,7 +149,7 @@ export default async function PillPage({ params }: PageProps) {
                 initialIsBookmarked={isBookmarked}
                 isLoggedIn={!!user}
               />
-              <ShareButton title={t.title} slides={slidesToShare} className="flex items-center gap-1.5 text-sm font-mono text-muted-foreground hover:text-primary transition-colors" />
+              <ShareButton title={t.title} className="flex items-center gap-1.5 text-sm font-mono text-muted-foreground hover:text-primary transition-colors" />
               <EditContentButton type="pill" contentId={pill.id} authorId={pill.author_id} userId={user?.id} role={navUserRole} className="flex items-center gap-1.5 text-sm font-mono text-muted-foreground hover:text-primary transition-colors" />
             </div>
           </div>
@@ -198,9 +193,6 @@ export default async function PillPage({ params }: PageProps) {
 
         <OtherTags tags={topics.others} label={tContent('otherTags')} className="mb-8" />
 
-        <div className="rounded-2xl border border-black/10 bg-white p-5">
-          <ShareBar title={t.title} url={pillUrl} slides={slidesToShare} />
-        </div>
       </main>
       <RelatedContent contentId={pill.id} type="pill" locale={locale} userId={user?.id} />
       <Footer />

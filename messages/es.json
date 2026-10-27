@@ -575,16 +575,11 @@
   },
   "share": {
     "button": "Compartir",
-    "dialog": "Compartir en…",
+    "dialog": "Compartir este contenido",
     "copyLink": "Copiar enlace",
     "copied": "Enlace copiado",
-    "email": "Correo",
-    "more": "Más opciones",
-    "downloadSlides": "Descargar láminas",
-    "preparingSlides": "Preparando láminas…",
-    "instagramSlidesHint": "Descargamos las láminas. Súbelas a tu historia o publicación de Instagram.",
-    "slidesReady": "Láminas listas: pulsa otra vez para compartirlas.",
-    "slidesError": "No se pudieron preparar las láminas. Inténtalo de nuevo.",
+    "email": "Enviar por correo",
+    "copyFailed": "No se pudo copiar. Copia el enlace desde aquí:",
     "close": "Cerrar"
   },
   "footer": {

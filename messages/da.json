@@ -575,16 +575,11 @@
   },
   "share": {
     "button": "Del",
-    "dialog": "Del på …",
+    "dialog": "Del dette indhold",
     "copyLink": "Kopiér link",
     "copied": "Link kopieret",
-    "email": "E-mail",
-    "more": "Flere muligheder",
-    "downloadSlides": "Download slides",
-    "preparingSlides": "Forbereder slides…",
-    "instagramSlidesHint": "Slidesene er downloadet. Upload dem til din Instagram-story eller dit opslag.",
-    "slidesReady": "Slides klar: tryk igen for at dele dem.",
-    "slidesError": "Slidesene kunne ikke forberedes. Prøv igen.",
+    "email": "Send som e-mail",
+    "copyFailed": "Kunne ikke kopiere. Kopiér linket herfra:",
     "close": "Luk"
   },
   "footer": {

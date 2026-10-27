@@ -575,16 +575,11 @@
   },
   "share": {
     "button": "Share",
-    "dialog": "Share on…",
+    "dialog": "Share this content",
     "copyLink": "Copy link",
     "copied": "Link copied",
-    "email": "Email",
-    "more": "More options",
-    "downloadSlides": "Download slides",
-    "preparingSlides": "Preparing slides…",
-    "instagramSlidesHint": "The slides were downloaded. Upload them to your Instagram story or post.",
-    "slidesReady": "Slides ready: tap again to share them.",
-    "slidesError": "The slides could not be prepared. Please try again.",
+    "email": "Send by email",
+    "copyFailed": "Couldn’t copy the link. Copy it from here:",
     "close": "Close"
   },
   "footer": {

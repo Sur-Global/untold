@@ -575,16 +575,11 @@
   },
   "share": {
     "button": "Compartilhar",
-    "dialog": "Compartilhar em…",
+    "dialog": "Compartilhar este conteúdo",
     "copyLink": "Copiar link",
     "copied": "Link copiado",
-    "email": "E-mail",
-    "more": "Mais opções",
-    "downloadSlides": "Baixar lâminas",
-    "preparingSlides": "Preparando lâminas…",
-    "instagramSlidesHint": "Baixamos as lâminas. Envie-as para o seu story ou publicação do Instagram.",
-    "slidesReady": "Lâminas prontas: toque de novo para compartilhá-las.",
-    "slidesError": "Não foi possível preparar as lâminas. Tente de novo.",
+    "email": "Enviar por e-mail",
+    "copyFailed": "Não foi possível copiar. Copie o link aqui:",
     "close": "Fechar"
   },
   "footer": {
