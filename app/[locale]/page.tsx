@@ -30,6 +30,7 @@ import {
 } from './_home-cards'
 import { tagDisplayName } from '@/lib/tag-name'
 import { cardTopic } from '@/lib/topics'
+import { coverSlideFor } from '@/lib/pill-slides'
 import { getTrendingTopics } from '@/lib/data/trending-topics'
 
 interface PageProps {
@@ -157,7 +158,7 @@ export default async function HomePage({ params }: PageProps) {
         profiles!author_id ( display_name, slug, avatar_url ),
         content_translations ( title, excerpt, featured_summary, locale ),
         content_tags ( tags ( names, slug, is_topic ) ),
-        pill_meta ( accent_color, image_url )
+        pill_meta ( accent_color, image_url, format, slides )
       `)
       .eq('type', 'pill')
       .eq('status', 'published')
@@ -808,6 +809,7 @@ export default async function HomePage({ params }: PageProps) {
                         slug={p.slug}
                         title={p.title}
                         coverImageUrl={p.coverImageUrl}
+                        coverSlide={coverSlideFor(item.pill_meta, p.title)}
                         categoryTag={p.categoryTag}
                         categoryTagSlug={p.categoryTagSlug}
                         accentColor={p.accentColor}

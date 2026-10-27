@@ -1,9 +1,11 @@
 'use client'
 import { useCallback, useEffect, useRef, useState } from 'react'
-import { ChevronLeft, ChevronRight, Zap } from 'lucide-react'
+import { ChevronLeft, ChevronRight } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import { Link, useRouter } from '@/i18n/navigation'
 import { readableTextColor } from '@/lib/cover-formats'
+import type { PillSlide } from '@/lib/pill-slides'
+import { SlideView } from '@/components/pills/SlideView'
 
 // ─── Shared helpers ────────────────────────────────────────────────────────────
 
@@ -511,6 +513,8 @@ interface HomePillCardProps {
   slug: string
   title: string
   coverImageUrl?: string | null
+  /** The first slide of a carousel pill with the title as its text: shown as the pill's design (see coverSlideFor) */
+  coverSlide?: PillSlide | null
   categoryTag?: string | null
   categoryTagSlug?: string | null
   accentColor?: string | null
@@ -520,13 +524,14 @@ interface HomePillCardProps {
 }
 
 /**
- * A knowledge pill on the home page: its slide whole, vertical (4:5, like on Instagram), with its topic on top and
- * its title and author below. Meant to sit in a PillsRail.
+ * A knowledge pill on the home page: its first slide as designed (the title over the photo, 4:5 like on Instagram) and,
+ * below, its topic and its author. Meant to sit in a PillsRail.
  */
 export function HomePillCard({
   slug,
   title,
   coverImageUrl,
+  coverSlide,
   categoryTag,
   categoryTagSlug,
   accentColor,
@@ -547,43 +552,52 @@ export function HomePillCard({
     fontSize: 11,
     textDecoration: 'none',
   }
+  const frameColor = accentColor || '#8b7355'
 
   return (
     <article className="flex shrink-0 basis-[68%] snap-start flex-col sm:basis-[40%] md:basis-[30%] lg:basis-[calc((100%-60px)/4)]">
-      {/* The slide, whole: 4:5 */}
-      <div className="relative overflow-hidden rounded-xl" style={{ aspectRatio: '4 / 5', background: accentColor || '#8b7355', boxShadow: '0 2px 8px rgba(93,78,55,0.12)' }}>
-        <Link href={`/pills/${slug}`} tabIndex={-1} aria-hidden className="block h-full w-full" style={{ textDecoration: 'none' }}>
-          {coverImageUrl ? (
-            <img src={coverImageUrl} alt="" className="h-full w-full object-cover" loading="lazy" />
-          ) : (
-            <span className="flex h-full w-full items-center justify-center" style={{ color: readableTextColor(accentColor || '#8b7355') }}>
-              <Zap size={40} aria-hidden />
+      {/* The slide, whole: 4:5, with the title over the photo */}
+      <Link
+        href={`/pills/${slug}`}
+        aria-label={title}
+        className="relative block overflow-hidden rounded-xl"
+        style={{ aspectRatio: '4 / 5', background: frameColor, boxShadow: '0 2px 8px rgba(93,78,55,0.12)', textDecoration: 'none' }}
+      >
+        {coverSlide ? (
+          <SlideView slide={coverSlide} />
+        ) : (
+          <>
+            {coverImageUrl && <img src={coverImageUrl} alt="" className="absolute inset-0 h-full w-full object-cover" loading="lazy" />}
+            {coverImageUrl && <span aria-hidden className="absolute inset-x-0 bottom-0 h-3/5" style={{ background: 'linear-gradient(to top, rgba(0,0,0,0.7), rgba(0,0,0,0))' }} />}
+            <span
+              className="absolute inset-x-0 bottom-0 p-4 text-xl leading-tight"
+              style={{
+                fontFamily: 'var(--font-aeonik), Aeonik, sans-serif',
+                fontWeight: 500,
+                letterSpacing: '-0.01em',
+                color: coverImageUrl ? '#fff' : readableTextColor(frameColor),
+                ...(coverImageUrl ? { textShadow: '0 1px 6px rgba(0,0,0,0.45)' } : {}),
+              }}
+            >
+              {title}
             </span>
-          )}
-        </Link>
-        {categoryTag &&
-          (categoryTagSlug ? (
-            <Link href={`/tag/${categoryTagSlug}`} className="absolute left-3 top-3 rounded-full px-3 py-1 text-xs transition-opacity hover:opacity-80" style={chipStyle}>
-              {categoryTag}
-            </Link>
-          ) : (
-            <span className="absolute left-3 top-3 rounded-full px-3 py-1 text-xs" style={chipStyle}>
-              {categoryTag}
-            </span>
-          ))}
-      </div>
-
-      {/* Title and author */}
-      <Link href={`/pills/${slug}`} style={{ textDecoration: 'none' }}>
-        <h3
-          className="mt-3 line-clamp-2 min-h-[2.75em] leading-snug transition-colors hover:text-primary"
-          style={{ fontFamily: 'var(--font-heading)', fontSize: 15, color: '#2C2420' }}
-        >
-          {title}
-        </h3>
+          </>
+        )}
       </Link>
+
+      {/* Topic and author */}
+      {categoryTag &&
+        (categoryTagSlug ? (
+          <Link href={`/tag/${categoryTagSlug}`} className="mt-3 self-start rounded-full px-3 py-1 text-xs transition-opacity hover:opacity-80" style={chipStyle}>
+            {categoryTag}
+          </Link>
+        ) : (
+          <span className="mt-3 self-start rounded-full px-3 py-1 text-xs" style={chipStyle}>
+            {categoryTag}
+          </span>
+        ))}
       {authorName && (
-        <div className="mt-2 flex items-center gap-2">
+        <div className={`${categoryTag ? 'mt-2' : 'mt-3'} flex items-center gap-2`}>
           <AuthorAvatar name={authorName} avatarUrl={authorAvatarUrl} size={22} slug={authorSlug} />
           <Link
             href={authorSlug ? `/author/${authorSlug}` : '#'}

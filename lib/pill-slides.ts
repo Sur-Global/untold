@@ -201,3 +201,15 @@ export function keepLocales(
   const kept = Object.fromEntries(Object.entries(translations ?? {}).filter(([locale]) => locales.includes(locale)))
   return Object.keys(kept).length > 0 ? kept : null
 }
+
+/**
+ * The slide that stands for a carousel pill on the home page: its first slide, when it is a photo, with the pill's title as
+ * its text (the same design, position, size, colour and logos the author chose, in the reader's language).
+ * null when the pill has no such slide (a text pill, or a first slide that is not a photo): the card then draws the title itself.
+ */
+export function coverSlideFor(meta: { format?: string | null; slides?: unknown } | null | undefined, title: string): PillSlide | null {
+  if (meta?.format !== 'carousel') return null
+  const first = parseSlides(meta.slides)[0]
+  if (!first || first.kind !== 'photo' || !first.image_url) return null
+  return { ...first, text: title }
+}

@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { blocksTextLength, firstSlideImage, localizedSlides, logoColorOf, MAX_SLIDES, newSlide, parseSlides, slideCredits, slidesProblem, SLIDE_TEXT_MAX, type PillSlide, TEXT_DEFAULTS, textBand } from '@/lib/pill-slides'
+import { blocksTextLength, coverSlideFor, firstSlideImage, localizedSlides, logoColorOf, MAX_SLIDES, newSlide, parseSlides, slideCredits, slidesProblem, SLIDE_TEXT_MAX, type PillSlide, TEXT_DEFAULTS, textBand } from '@/lib/pill-slides'
 
 const slide = (extra: Partial<PillSlide> = {}): PillSlide => ({ id: 's1', kind: 'photo', image_url: 'https://cdn/a.webp', text: 'Hola', credit: '', ...TEXT_DEFAULTS, brands: ['untold'], logo: 'auto', logo_color: null, ...extra })
 
@@ -111,5 +111,23 @@ describe('small helpers', () => {
     expect(firstSlideImage([slide({ kind: 'text', image_url: null }), slide({ image_url: 'https://cdn/b.webp' })])).toBe('https://cdn/b.webp')
     expect(slideCredits([slide({ credit: 'A' }), slide({ credit: '' }), slide({ credit: 'A' }), slide({ credit: 'B' })])).toEqual([{ number: 1, credit: 'A' }, { number: 4, credit: 'B' }])
     expect(blocksTextLength([{ type: 'paragraph', content: [{ type: 'text', text: 'Hola ' }, { type: 'text', text: 'mundo' }], children: [{ type: 'paragraph', content: [{ type: 'text', text: '!!' }] }] }])).toBe(12)
+  })
+})
+
+describe('coverSlideFor (the slide that stands for a carousel pill on the home page)', () => {
+  const meta = (slides: unknown[], format = 'carousel') => ({ format, slides })
+
+  it('is the first slide, a photo, with the title of the pill as its text and the design the author chose', () => {
+    const cover = coverSlideFor(meta([slide({ id: 'a', text: 'Texto de la lámina', text_x: 'center', text_y: 'middle', text_size: 'l', brands: ['untold'] }), slide({ id: 'b' })]), 'Del diseño sostenible')
+    expect(cover).toMatchObject({ id: 'a', kind: 'photo', image_url: 'https://cdn/a.webp', text: 'Del diseño sostenible', text_x: 'center', text_y: 'middle', text_size: 'l', brands: ['untold'] })
+  })
+
+  it('is nothing for a text pill, or when the first slide is not a photo with a picture', () => {
+    expect(coverSlideFor(meta([slide()], 'text'), 'T')).toBeNull()
+    expect(coverSlideFor(null, 'T')).toBeNull()
+    expect(coverSlideFor(meta([]), 'T')).toBeNull()
+    expect(coverSlideFor(meta([slide({ kind: 'text', image_url: null })]), 'T')).toBeNull()
+    expect(coverSlideFor(meta([slide({ kind: 'image' })]), 'T')).toBeNull()
+    expect(coverSlideFor(meta([slide({ image_url: null })]), 'T')).toBeNull()
   })
 })
