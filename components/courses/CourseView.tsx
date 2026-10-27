@@ -1,6 +1,7 @@
 import type { ReactNode } from 'react'
-import { CourseAudience, CourseFacts, CoursePeople, IntroSessionList, type CourseFact } from '@/components/courses/CourseParts'
+import { CourseAudience, CourseFacts, CoursePeople, type CourseFact } from '@/components/courses/CourseParts'
 import { CourseRegistration } from '@/components/courses/CourseRegistration'
+import { CourseSidebar } from '@/components/courses/CourseSidebar'
 import type { CoursePerson, IntroSession, PersonGroup } from '@/lib/course-page'
 
 const aeonik: React.CSSProperties = { fontFamily: 'var(--font-aeonik), Aeonik, sans-serif' }
@@ -57,8 +58,6 @@ export function CourseView(p: CourseViewProps) {
       : p.providerName
     : null
   const { href, embedUrl, label } = p.registration
-  const buttonClass = 'flex h-12 w-full items-center justify-center rounded-full bg-black text-[15px] text-white transition-opacity hover:opacity-85'
-  const buttonStyle = { ...aeonik, fontWeight: 500, textDecoration: 'none' }
 
   return (
     <>
@@ -112,42 +111,20 @@ export function CourseView(p: CourseViewProps) {
           {p.tags}
         </div>
 
-        {/* Sidebar: price, who gives it, the sessions and the button; it stays in view on a computer */}
-        <aside className="h-fit rounded-2xl p-6 lg:sticky lg:top-24" style={{ background: '#FAF7F2', border: '1px solid rgba(139,69,19,0.12)', boxShadow: '0 4px 16px rgba(44,36,32,0.08)' }}>
-          <p className="text-xs uppercase tracking-[0.08em] text-[#6B5F58]" style={aeonik}>{p.labels.price}</p>
-          <p className="mt-1 text-3xl" style={{ ...aeonik, fontWeight: 500, letterSpacing: '-0.02em' }}>{p.price ?? p.labels.free}</p>
-          {p.priceNote && <p className="mt-1 text-sm text-[#6B5F58]" style={aeonik}>{p.priceNote}</p>}
-
-          {(provider || p.authorName) && (
-            <div className="mt-5 border-t border-black/10 pt-4 text-sm" style={aeonik}>
-              <p className="text-xs uppercase tracking-[0.08em] text-[#6B5F58]">{provider ? p.labels.provider : p.labels.instructor}</p>
-              <p className="mt-1 text-[15px] text-[#2c2420]">{provider ?? p.authorName}</p>
-            </div>
-          )}
-
-          {p.registration.sessions.length > 0 && (
-            <div className="mt-5 border-t border-black/10 pt-4">
-              <p className="mb-2 text-xs uppercase tracking-[0.08em] text-[#6B5F58]" style={aeonik}>{p.labels.intro}</p>
-              <IntroSessionList sessions={p.registration.sessions} statusLabels={p.labels.status} timezone={p.registration.timezone} />
-            </div>
-          )}
-
-          <div className="mt-6">
-            {href ? (
-              embedUrl ? (
-                <a href="#inscripcion" className={buttonClass} style={buttonStyle}>{label}</a>
-              ) : (
-                <a href={href} target="_blank" rel="noopener noreferrer" className={buttonClass} style={buttonStyle}>{label} ↗</a>
-              )
-            ) : (
-              <button disabled className="flex h-12 w-full cursor-not-allowed items-center justify-center rounded-full bg-black/25 text-[15px] text-white/80" title={p.labels.enrollSoonTitle} style={aeonik}>
-                {p.labels.enrollSoon}
-              </button>
-            )}
-          </div>
-
-          {p.rating != null && <p className="mt-4 text-sm text-[#6B5F58]" style={aeonik}>{p.labels.rating}: ★ {Number(p.rating).toFixed(1)}</p>}
-        </aside>
+        {/* Sidebar: price, who gives it, the sessions and the button. On a computer it stays in view and lets go of its button while the
+            registration box is on screen; on a phone a bar at the bottom carries the price and the button until the box is reached */}
+        <CourseSidebar
+          price={p.price}
+          priceNote={p.priceNote}
+          provider={provider}
+          authorName={p.authorName}
+          rating={p.rating}
+          registration={p.registration}
+          labels={{
+            price: p.labels.price, free: p.labels.free, provider: p.labels.provider, instructor: p.labels.instructor, intro: p.labels.intro, rating: p.labels.rating,
+            status: p.labels.status, enrollSoon: p.labels.enrollSoon, enrollSoonTitle: p.labels.enrollSoonTitle,
+          }}
+        />
       </div>
     </>
   )
