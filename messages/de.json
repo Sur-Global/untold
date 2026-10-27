@@ -553,7 +553,7 @@
     "courseSubtitleLabel": "Untertitel",
     "courseSubtitlePlaceholder": "Ein Satz, der den Kurs erklärt",
     "courseBannerLabel": "Kursbanner (optional)",
-    "courseBannerHint": "Ein breites Bild für den Seitenkopf, am besten 2000 × 800 px. Ohne Banner werden das Titelbild oder die Markenfarbe verwendet.",
+    "courseBannerHint": "Ein breites Bild für den Seitenkopf, am besten 2000 × 800 px. Es wird vollständig und ohne Text darüber angezeigt: Der Titel steht darunter. Ohne Banner werden das Titelbild oder die Markenfarbe verwendet.",
     "courseDetailsTitle": "Kursdaten",
     "courseProviderLabel": "Wer den Kurs anbietet",
     "courseProviderPlaceholder": "SurGlobals Kurzschule",

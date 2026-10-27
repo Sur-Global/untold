@@ -553,7 +553,7 @@
     "courseSubtitleLabel": "Sous-titre",
     "courseSubtitlePlaceholder": "Une phrase qui explique le cours",
     "courseBannerLabel": "Bannière du cours (facultatif)",
-    "courseBannerHint": "Image large pour le haut de la page, idéalement 2000 × 800 px. Sans bannière, la couverture ou la couleur de la marque est utilisée.",
+    "courseBannerHint": "Image large pour le haut de la page, idéalement 2000 × 800 px. Elle est affichée en entier, sans texte par-dessus : le titre se place dessous. Sans bannière, la couverture ou la couleur de la marque est utilisée.",
     "courseDetailsTitle": "Informations sur le cours",
     "courseProviderLabel": "Qui anime le cours",
     "courseProviderPlaceholder": "École brève de SurGlobal",

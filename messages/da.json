@@ -553,7 +553,7 @@
     "courseSubtitleLabel": "Undertitel",
     "courseSubtitlePlaceholder": "Én sætning, der forklarer kurset",
     "courseBannerLabel": "Kursusbanner (valgfrit)",
-    "courseBannerHint": "Et bredt billede til toppen af siden, helst 2000 × 800 px. Uden banner bruges forsiden eller mærkets farve.",
+    "courseBannerHint": "Et bredt billede til toppen af siden, helst 2000 × 800 px. Det vises helt, uden tekst ovenpå: titlen står nedenunder. Uden banner bruges forsiden eller mærkets farve.",
     "courseDetailsTitle": "Kursusoplysninger",
     "courseProviderLabel": "Hvem der afholder kurset",
     "courseProviderPlaceholder": "SurGlobals korte skole",

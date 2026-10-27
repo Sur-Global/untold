@@ -60,19 +60,29 @@ export function CourseView(p: CourseViewProps) {
       {p.notice}
       {p.kicker}
 
-      {/* Banner: the picture (or the brand lime) with the title, the subtitle and who gives the course */}
-      <div className="relative overflow-hidden rounded-2xl" style={{ background: p.bannerImage ? '#2c2420' : '#D2FE73' }}>
-        {p.bannerImage && (
-          // eslint-disable-next-line @next/next/no-img-element
-          <img src={p.bannerImage} alt="" className="absolute inset-0 h-full w-full object-cover" />
-        )}
-        {p.bannerImage && <span aria-hidden className="absolute inset-0" style={{ background: 'linear-gradient(to top, rgba(0,0,0,0.78) 0%, rgba(0,0,0,0.3) 55%, rgba(0,0,0,0.1) 100%)' }} />}
-        <div className="relative flex min-h-[260px] flex-col justify-end p-6 sm:min-h-[340px] sm:p-10" style={{ color: p.bannerImage ? '#fff' : '#000' }}>
-          <h1 className="max-w-3xl text-[clamp(2rem,4.5vw,3.4rem)] leading-[1.08]" style={{ ...aeonik, fontWeight: 500, letterSpacing: '-0.03em', color: 'inherit' }}>{p.heading}</h1>
-          {p.subtitle && <p className="mt-3 max-w-2xl text-lg leading-snug sm:text-xl" style={{ ...aeonik, fontWeight: 300 }}>{p.subtitle}</p>}
-          {provider && <p className="mt-4 text-sm" style={aeonik}>{p.labels.provider}: {provider}</p>}
-        </div>
-      </div>
+      {/* Header: with a picture, the picture alone (whole, no filter, no text over it) and the title, the subtitle and who
+          gives the course below it; without one, the title, subtitle and provider sit on the brand lime */}
+      {p.bannerImage ? (
+        <header>
+          <div className="overflow-hidden rounded-2xl" style={{ background: '#F2EEE8' }}>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src={p.bannerImage} alt="" className="mx-auto block h-auto max-h-[560px] w-full object-contain" />
+          </div>
+          <div className="pt-6 sm:pt-8">
+            {provider && <p className="mb-2 text-sm text-[#6B5F58]" style={aeonik}>{p.labels.provider}: {provider}</p>}
+            <h1 className="max-w-3xl text-[clamp(2rem,4.5vw,3.4rem)] leading-[1.08]" style={{ ...aeonik, fontWeight: 500, letterSpacing: '-0.03em' }}>{p.heading}</h1>
+            {p.subtitle && <p className="mt-3 max-w-2xl text-lg leading-snug text-[#555] sm:text-xl" style={{ ...aeonik, fontWeight: 300 }}>{p.subtitle}</p>}
+          </div>
+        </header>
+      ) : (
+        <header className="rounded-2xl" style={{ background: '#D2FE73' }}>
+          <div className="flex min-h-[260px] flex-col justify-end p-6 sm:min-h-[340px] sm:p-10" style={{ color: '#000' }}>
+            <h1 className="max-w-3xl text-[clamp(2rem,4.5vw,3.4rem)] leading-[1.08]" style={{ ...aeonik, fontWeight: 500, letterSpacing: '-0.03em', color: 'inherit' }}>{p.heading}</h1>
+            {p.subtitle && <p className="mt-3 max-w-2xl text-lg leading-snug sm:text-xl" style={{ ...aeonik, fontWeight: 300 }}>{p.subtitle}</p>}
+            {provider && <p className="mt-4 text-sm" style={aeonik}>{p.labels.provider}: {provider}</p>}
+          </div>
+        </header>
+      )}
 
       <CourseFacts facts={p.facts} label={p.labels.facts} />
 

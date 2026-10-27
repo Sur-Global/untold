@@ -553,7 +553,7 @@
     "courseSubtitleLabel": "Subtitle",
     "courseSubtitlePlaceholder": "One sentence that explains the course",
     "courseBannerLabel": "Course banner (optional)",
-    "courseBannerHint": "A wide picture for the top of the page, best 2000 × 800 px. Without a banner the cover, or the brand colour, is used.",
+    "courseBannerHint": "A wide picture for the top of the page, best 2000 × 800 px. It is shown whole, with no text over it: the title goes below. Without a banner the cover, or the brand colour, is used.",
     "courseDetailsTitle": "Course details",
     "courseProviderLabel": "Who teaches the course",
     "courseProviderPlaceholder": "SurGlobal’s Short School",

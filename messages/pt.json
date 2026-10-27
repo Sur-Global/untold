@@ -553,7 +553,7 @@
     "courseSubtitleLabel": "Subtítulo",
     "courseSubtitlePlaceholder": "Uma frase que explique o curso",
     "courseBannerLabel": "Banner do curso (opcional)",
-    "courseBannerHint": "Imagem larga para o topo da página, de preferência 2000 × 800 px. Sem banner, usa-se a capa ou a cor da marca.",
+    "courseBannerHint": "Imagem larga para o topo da página, de preferência 2000 × 800 px. Ela aparece inteira, sem texto por cima: o título vai abaixo. Sem banner, usa-se a capa ou a cor da marca.",
     "courseDetailsTitle": "Dados do curso",
     "courseProviderLabel": "Quem ministra o curso",
     "courseProviderPlaceholder": "Escola breve da SurGlobal",
