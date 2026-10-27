@@ -10,7 +10,8 @@ import { Footer } from '@/components/layout/Footer'
 import { ContentCard } from '@/components/content/ContentCard'
 import { TopicStrip } from '@/components/content/TopicStrip'
 import { contentIdsForTag, loadTagCloud } from '@/lib/data/tag-cloud'
-import { FeaturedSection } from '@/components/content/FeaturedSection'
+import { FeaturedHero } from '@/components/content/FeaturedHero'
+import { buildHeroItems } from '@/lib/featured-hero'
 import { PAGE_FEATURED_SLOTS } from '@/lib/featured-slots'
 import { TranslationRefresher } from '@/components/TranslationRefresher'
 import { tagDisplayName } from '@/lib/tag-name'
@@ -153,7 +154,7 @@ export default async function VideosPage({ params, searchParams }: PageProps) {
         </div>
 
         {page === 1 && featuredItems.length > 0 && (
-          <FeaturedSection label={tListings('filterFeatured')}>{featuredItems.map(renderCard)}</FeaturedSection>
+          <FeaturedHero kind="video" label={tListings('filterFeatured')} items={buildHeroItems(featuredItems, 'video', locale, () => '')} />
         )}
 
         {items && items.length > 0 ? (

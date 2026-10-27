@@ -7,7 +7,8 @@ import { triggerListingTranslations } from '@/lib/trigger-listing-translations'
 import { triggerTagTranslations } from '@/lib/trigger-tag-translations'
 import { Navigation } from '@/components/layout/Navigation'
 import { Footer } from '@/components/layout/Footer'
-import { ContentCard } from '@/components/content/ContentCard'
+import { PillListCard } from '@/components/pills/PillListCard'
+import { coverSlideFor } from '@/lib/pill-slides'
 import { TopicStrip } from '@/components/content/TopicStrip'
 import { contentIdsForTag, loadTagCloud } from '@/lib/data/tag-cloud'
 import { FeaturedSection } from '@/components/content/FeaturedSection'
@@ -47,7 +48,7 @@ export default async function PillsPage({ params, searchParams }: PageProps) {
       profiles!author_id ( display_name, slug, role, avatar_url ),
       content_translations ( title, excerpt, locale ),
       content_tags ( tags ( names, slug, is_topic ) ),
-      pill_meta ( accent_color, image_url )
+      pill_meta ( accent_color, image_url, format, slides )
     `)
     .eq('type', 'pill')
     .eq('status', 'published')
@@ -65,7 +66,7 @@ export default async function PillsPage({ params, searchParams }: PageProps) {
       profiles!author_id ( display_name, slug, role, avatar_url ),
       content_translations ( title, excerpt, locale ),
       content_tags ( tags ( names, slug, is_topic ) ),
-      pill_meta ( accent_color, image_url )
+      pill_meta ( accent_color, image_url, format, slides )
     `, { count: 'exact' })
     .eq('type', 'pill')
     .eq('status', 'published')
@@ -114,26 +115,25 @@ export default async function PillsPage({ params, searchParams }: PageProps) {
     const firstTag = cardTopic(item.content_tags)
     const categoryTag = firstTag ? tagDisplayName(firstTag.names, locale, firstTag.slug) : null
     const categoryTagSlug = firstTag?.slug ?? null
+    const title = t?.title ?? 'Untitled'
     return (
-      <ContentCard
+      <PillListCard
         key={item.id}
         contentId={item.id}
-        type="pill"
         slug={item.slug}
-        title={t?.title ?? 'Untitled'}
+        title={title}
         excerpt={t?.excerpt}
         coverImageUrl={item.cover_image_url ?? item.pill_meta?.image_url}
-        publishedAt={item.published_at}
-        likesCount={item.likes_count}
+        coverSlide={coverSlideFor(item.pill_meta, title)}
+        accentColor={item.pill_meta?.accent_color}
+        categoryTag={categoryTag}
+        categoryTagSlug={categoryTagSlug}
         authorName={author?.display_name}
         authorSlug={author?.slug}
         authorAvatarUrl={author?.avatar_url}
-        categoryTag={categoryTag}
-          categoryTagSlug={categoryTagSlug}
-        accentColor={item.pill_meta?.accent_color}
+        likesCount={item.likes_count}
         isBookmarked={bookmarkedIds.has(item.id)}
         isLoggedIn={navProps.isLoggedIn}
-        isFeatured={item.is_featured}
         singleLanguage={item.single_language}
         sourceLocale={item.source_locale}
         subtitleLocales={item.subtitle_locales}
@@ -153,12 +153,12 @@ export default async function PillsPage({ params, searchParams }: PageProps) {
         </div>
 
         {page === 1 && featuredItems.length > 0 && (
-          <FeaturedSection label={tListings('filterFeatured')}>{featuredItems.map(renderCard)}</FeaturedSection>
+          <FeaturedSection label={tListings('filterFeatured')} gridClassName="grid lg:grid-cols-2 gap-6">{featuredItems.map(renderCard)}</FeaturedSection>
         )}
 
         {items && items.length > 0 ? (
           <>
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid lg:grid-cols-2 gap-6">
               {items.map(renderCard)}
             </div>
             {totalPages > 1 && (

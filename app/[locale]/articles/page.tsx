@@ -14,7 +14,8 @@ import { TranslationRefresher } from '@/components/TranslationRefresher'
 import { ArticlesFilter } from './ArticlesFilter'
 import { TopicStrip } from '@/components/content/TopicStrip'
 import Link from 'next/link'
-import { FeaturedSection } from '@/components/content/FeaturedSection'
+import { FeaturedHero } from '@/components/content/FeaturedHero'
+import { buildHeroItems } from '@/lib/featured-hero'
 import { PAGE_FEATURED_SLOTS } from '@/lib/featured-slots'
 import { tagDisplayName } from '@/lib/tag-name'
 import { cardTopic } from '@/lib/topics'
@@ -40,6 +41,7 @@ export default async function ArticlesPage({ params, searchParams }: PageProps) 
   ])
   const { userId, ...navProps } = navData
   const tNav = await getTranslations('nav')
+  const tContent = await getTranslations('content')
 
   // The tags of published articles, to offer their topics in one row
   const cloud = await loadTagCloud(supabase, 'article', locale)
@@ -264,7 +266,7 @@ export default async function ArticlesPage({ params, searchParams }: PageProps) 
         {/* Articles grid */}
         <div className="max-w-[1280px] mx-auto px-6 py-12">
           {featuredItems.length > 0 && (
-            <FeaturedSection label={tListings('filterFeatured')}>{featuredItems.map(renderCard)}</FeaturedSection>
+            <FeaturedHero kind="article" label={tListings('filterFeatured')} items={buildHeroItems(featuredItems, 'article', locale, (minutes) => tContent('readTime', { minutes }))} />
           )}
           {articles && articles.length > 0 ? (
             <>

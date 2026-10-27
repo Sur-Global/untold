@@ -70,7 +70,7 @@ function AutoCover({ type, label, accentColor }: { type: ContentType; label: str
   )
 }
 
-function AuthorAvatar({ name, avatarUrl, slug }: { name?: string | null; avatarUrl?: string | null; slug?: string | null }) {
+export function AuthorAvatar({ name, avatarUrl, slug }: { name?: string | null; avatarUrl?: string | null; slug?: string | null }) {
   // A broken photo link falls back to the initial instead of a broken-image icon
   const [failed, setFailed] = useState(false)
   const initial = name?.charAt(0)?.toUpperCase() ?? '?'

@@ -5,7 +5,7 @@ import { useTranslations } from 'next-intl'
 import { Link, useRouter } from '@/i18n/navigation'
 import { readableTextColor } from '@/lib/cover-formats'
 import type { PillSlide } from '@/lib/pill-slides'
-import { SlideView } from '@/components/pills/SlideView'
+import { PillCover } from '@/components/pills/PillCover'
 
 // ─── Shared helpers ────────────────────────────────────────────────────────────
 
@@ -552,38 +552,11 @@ export function HomePillCard({
     fontSize: 11,
     textDecoration: 'none',
   }
-  const frameColor = accentColor || '#8b7355'
 
   return (
     <article className="flex shrink-0 basis-[68%] snap-start flex-col sm:basis-[40%] md:basis-[30%] lg:basis-[calc((100%-60px)/4)]">
       {/* The slide, whole: 4:5, with the title over the photo */}
-      <Link
-        href={`/pills/${slug}`}
-        aria-label={title}
-        className="relative block overflow-hidden rounded-xl"
-        style={{ aspectRatio: '4 / 5', background: frameColor, boxShadow: '0 2px 8px rgba(93,78,55,0.12)', textDecoration: 'none' }}
-      >
-        {coverSlide ? (
-          <SlideView slide={coverSlide} />
-        ) : (
-          <>
-            {coverImageUrl && <img src={coverImageUrl} alt="" className="absolute inset-0 h-full w-full object-cover" loading="lazy" />}
-            {coverImageUrl && <span aria-hidden className="absolute inset-x-0 bottom-0 h-3/5" style={{ background: 'linear-gradient(to top, rgba(0,0,0,0.7), rgba(0,0,0,0))' }} />}
-            <span
-              className="absolute inset-x-0 bottom-0 p-4 text-xl leading-tight"
-              style={{
-                fontFamily: 'var(--font-aeonik), Aeonik, sans-serif',
-                fontWeight: 500,
-                letterSpacing: '-0.01em',
-                color: coverImageUrl ? '#fff' : readableTextColor(frameColor),
-                ...(coverImageUrl ? { textShadow: '0 1px 6px rgba(0,0,0,0.45)' } : {}),
-              }}
-            >
-              {title}
-            </span>
-          </>
-        )}
-      </Link>
+      <PillCover slug={slug} title={title} coverImageUrl={coverImageUrl} coverSlide={coverSlide} accentColor={accentColor} />
 
       {/* Topic and author */}
       {categoryTag &&
