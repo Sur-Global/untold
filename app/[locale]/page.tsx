@@ -450,26 +450,29 @@ export default async function HomePage({ params }: PageProps) {
                   {heroSubtext}
                 </p>
 
-                <div className="flex items-center gap-3 flex-wrap">
-                  <Link
-                    href="/articles"
-                    style={{
-                      background: '#A9A8E9',
-                      color: '#000',
-                      padding: '10px 24px',
-                      borderRadius: 100,
-                      fontFamily: 'var(--font-aeonik), Aeonik, sans-serif',
-                      fontWeight: 500,
-                      fontSize: 14,
-                      textDecoration: 'none',
-                      display: 'inline-flex',
-                      alignItems: 'center',
-                      gap: 6,
-                    }}
-                  >
-                    {t('ctaGetStarted')} ↗
-                  </Link>
-                </div>
+                {/* "Create your account": for visitors who have none yet */}
+                {!navProps.isLoggedIn && (
+                  <div className="flex items-center gap-3 flex-wrap">
+                    <Link
+                      href="/auth/signup"
+                      style={{
+                        background: '#A9A8E9',
+                        color: '#000',
+                        padding: '10px 24px',
+                        borderRadius: 100,
+                        fontFamily: 'var(--font-aeonik), Aeonik, sans-serif',
+                        fontWeight: 500,
+                        fontSize: 14,
+                        textDecoration: 'none',
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        gap: 6,
+                      }}
+                    >
+                      {t('ctaCreateAccount')} ↗
+                    </Link>
+                  </div>
+                )}
 
                 {/* The most trending topics of the platform */}
                 {trendingTopics.length > 0 && (
