@@ -10,11 +10,15 @@ import { Label } from '@/components/ui/label'
 import { CoverImageInput } from '@/components/ui/CoverImageInput'
 import { AuthorPicker } from '@/components/content/AuthorPicker'
 import { ContentLanguageSelect } from '@/components/content/ContentLanguageSelect'
+import { FeatureRequestField } from '@/components/content/FeatureRequestField'
+import { PodcastOriginField } from '@/components/content/PodcastOriginField'
 import { ResponsibilityDeclaration } from '@/components/content/ResponsibilityDeclaration'
 import { LanguageAvailabilityFields } from '@/components/content/LanguageAvailabilityFields'
 import { coverInputProps } from '@/lib/cover-formats'
+import type { PodcastOrigin } from '@/lib/podcast-origin'
 
-export function CreatePodcastForm() {
+/** `canChooseOrigin`: admins and editors choose the type of podcast (and must, to publish); everyone else's is third-party */
+export function CreatePodcastForm({ canChooseOrigin = false }: { canChooseOrigin?: boolean }) {
   const t = useTranslations('editor')
   const td = useTranslations('dashboard')
   const formRef = useRef<HTMLFormElement>(null)
@@ -24,6 +28,7 @@ export function CreatePodcastForm() {
   // Mirrors publishRef for rendering (refs can't be read during render)
   const [publishing, setPublishing] = useState(false)
   const [declared, setDeclared] = useState(false)
+  const [origin, setOrigin] = useState<PodcastOrigin | null>(null)
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
@@ -66,6 +71,10 @@ export function CreatePodcastForm() {
         <Input id="duration" name="duration" placeholder={t('durationPlaceholder')} className={FIELD_CLASS} />
       </div>
 
+      {canChooseOrigin && <PodcastOriginField onChange={setOrigin} />}
+
+      <FeatureRequestField />
+
       <ResponsibilityDeclaration checked={declared} onChange={setDeclared} />
 
       <div className="flex items-center gap-3">
@@ -79,7 +88,7 @@ export function CreatePodcastForm() {
         </Button>
         <Button
           type="submit"
-          disabled={isPending || !declared}
+          disabled={isPending || !declared || (canChooseOrigin && !origin)}
           onClick={() => { publishRef.current = true; setPublishing(true) }}
           className="gradient-rust text-white border-0"
         >

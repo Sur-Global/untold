@@ -102,6 +102,7 @@ export interface Database {
           cover_image_url: string | null;
           duration: string | null;
           episode_number: string | null;
+          origin: "own" | "collab" | "guest" | "third_party" | null;
         };
         Insert: Database["public"]["Tables"]["podcast_meta"]["Row"];
         Update: Partial<Database["public"]["Tables"]["podcast_meta"]["Insert"]>;

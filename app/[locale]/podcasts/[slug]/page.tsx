@@ -15,6 +15,8 @@ import { BookmarkButton } from '@/components/social/BookmarkButton'
 import { ShareButton } from '@/components/social/ShareButton'
 import Link from 'next/link'
 import { EditContentButton } from '@/components/content/EditContentButton'
+import { getTranslations } from 'next-intl/server'
+import { podcastBadgeLabel } from '@/lib/podcast-origin'
 
 interface PageProps {
   params: Promise<{ locale: string; slug: string }>
@@ -44,7 +46,7 @@ export default async function PodcastPage({ params }: PageProps) {
       id, slug, author_id, source_locale, single_language, subtitle_locales, likes_count, published_at,
       profiles!author_id ( display_name, slug, avatar_url ),
       content_translations ( title, description, locale ),
-      podcast_meta ( embed_url, cover_image_url, duration, episode_number )
+      podcast_meta ( embed_url, cover_image_url, duration, episode_number, origin )
     `)
     .eq('slug', slug)
     .eq('type', 'podcast')
@@ -64,6 +66,7 @@ export default async function PodcastPage({ params }: PageProps) {
 
   const meta = podcast.podcast_meta
   const author = podcast.profiles
+  const originLabel = podcastBadgeLabel(meta?.origin, await getTranslations('listings'))
 
   const sourceLocale: string = podcast.source_locale ?? 'en'
   const sourceTranslation = (podcast.content_translations ?? []).find((tr: any) => tr.locale === sourceLocale)
@@ -121,6 +124,11 @@ export default async function PodcastPage({ params }: PageProps) {
           <div className="flex-1">
             {meta?.episode_number && (
               <p className="text-sm font-mono text-[#A0522D] mb-1">{meta.episode_number}</p>
+            )}
+            {originLabel && (
+              <p className="mb-2 inline-block rounded-full px-2.5 py-0.5 text-[11px] text-[#5d4e37]" style={{ background: 'rgba(184,134,11,0.14)', fontFamily: 'JetBrains Mono, monospace' }}>
+                {originLabel}
+              </p>
             )}
             {singleLanguage && <LanguageNotice sourceLocale={sourceLocale} subtitleLocales={podcast.subtitle_locales} />}
             <h1 className="text-2xl mb-2">{heading}</h1>

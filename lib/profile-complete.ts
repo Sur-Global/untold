@@ -1,6 +1,8 @@
 // A creator must have a photo and a real name before publishing (the database enforces it when content
 // becomes published). Creators who join and do not complete their profile get two reminder emails.
 
+import { PODCAST_ORIGIN_REQUIRED_MESSAGE } from '@/lib/podcast-origin'
+
 export type ProfileGap = 'photo' | 'name'
 
 type ProfileLike = { display_name?: string | null; avatar_url?: string | null }
@@ -18,10 +20,12 @@ export function profileGaps(profile: ProfileLike | null | undefined, loginEmail?
 export const PROFILE_INCOMPLETE_MESSAGE =
   'Add your photo and your real name to your profile before publishing (Dashboard → Edit profile).'
 
-/** The message a creator sees when publishing is refused: clear for the profile rule, as it came for anything else */
+/** The message a creator sees when publishing is refused: clear for the profile and podcast-type rules, as it came for anything else */
 export function publishErrorMessage(error: { message?: string } | null | undefined): string {
   const message = error?.message ?? 'Could not publish'
-  return message.includes('profile_incomplete') ? PROFILE_INCOMPLETE_MESSAGE : message
+  if (message.includes('profile_incomplete')) return PROFILE_INCOMPLETE_MESSAGE
+  if (message.includes('podcast_origin_required')) return PODCAST_ORIGIN_REQUIRED_MESSAGE
+  return message
 }
 
 const DAY = 24 * 60 * 60 * 1000

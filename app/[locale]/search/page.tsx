@@ -5,6 +5,7 @@ import { getTranslation } from '@/lib/content'
 import { Navigation } from '@/components/layout/Navigation'
 import { Footer } from '@/components/layout/Footer'
 import { ContentCard } from '@/components/content/ContentCard'
+import { podcastBadgeLabel } from '@/lib/podcast-origin'
 import { SearchForm } from './_SearchForm'
 import type { ContentType } from '@/lib/supabase/types'
 
@@ -18,10 +19,11 @@ interface PageProps {
 export default async function SearchPage({ params, searchParams }: PageProps) {
   const { locale } = await params
   const { q = '', type: typeFilter } = await searchParams
-  const [{ userId, ...navProps }, supabase, tSearch] = await Promise.all([
+  const [{ userId, ...navProps }, supabase, tSearch, tListings] = await Promise.all([
     getNavProps(),
     createClient(),
     getTranslations({ locale, namespace: 'search' }),
+    getTranslations({ locale, namespace: 'listings' }),
   ])
 
   let results: any[] = []
@@ -38,7 +40,7 @@ export default async function SearchPage({ params, searchParams }: PageProps) {
           id, slug, type, source_locale, single_language, subtitle_locales, is_featured, likes_count, published_at, cover_image_url,
           profiles!author_id ( display_name, slug, role ),
           video_meta ( duration ),
-          podcast_meta ( duration, episode_number ),
+          podcast_meta ( duration, episode_number, origin ),
           pill_meta ( accent_color ),
           course_meta ( price, currency, rating )
         )
@@ -158,6 +160,7 @@ export default async function SearchPage({ params, searchParams }: PageProps) {
                   authorSlug={author?.slug}
                   duration={item.video_meta?.duration ?? item.podcast_meta?.duration}
                   episodeNumber={item.podcast_meta?.episode_number}
+                  originLabel={podcastBadgeLabel(item.podcast_meta?.origin, tListings)}
                   accentColor={item.pill_meta?.accent_color}
                   rating={item.course_meta?.rating}
                   price={item.course_meta?.price}

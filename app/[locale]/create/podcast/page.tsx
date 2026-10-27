@@ -1,5 +1,6 @@
 import { getTranslations } from 'next-intl/server'
 import { requireCreator } from '@/lib/require-creator'
+import { isEditorRole } from '@/lib/require-editor'
 import { Navigation } from '@/components/layout/Navigation'
 import { Footer } from '@/components/layout/Footer'
 import { getNavProps } from '@/lib/nav'
@@ -7,7 +8,7 @@ import { Link } from '@/i18n/navigation'
 import { CreatePodcastForm } from './CreatePodcastForm'
 
 export default async function CreatePodcastPage() {
-  await requireCreator('podcast')
+  const { profile } = await requireCreator('podcast')
   const [{ userId, ...navProps }, t] = await Promise.all([
     getNavProps(),
     getTranslations('editor'),
@@ -21,7 +22,7 @@ export default async function CreatePodcastPage() {
           {t('backToCreate')}
         </Link>
         <h1 className="mb-8">{t('newPodcast')}</h1>
-        <CreatePodcastForm />
+        <CreatePodcastForm canChooseOrigin={isEditorRole(profile.role)} />
       </main>
       <Footer />
     </>

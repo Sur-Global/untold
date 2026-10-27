@@ -2,6 +2,7 @@ import { notFound } from 'next/navigation'
 import { getTranslations } from 'next-intl/server'
 import { requireCreator } from '@/lib/require-creator'
 import { isEditorRole } from '@/lib/require-editor'
+import { isPodcastOrigin } from '@/lib/podcast-origin'
 import { createClient } from '@/lib/supabase/server'
 import { Navigation } from '@/components/layout/Navigation'
 import { Footer } from '@/components/layout/Footer'
@@ -23,9 +24,9 @@ export default async function EditPodcastPage({ params }: PageProps) {
   const contentQuery = (supabase as any)
     .from('content')
     .select(`
-      id, slug, author_id, status, source_locale, single_language, subtitle_locales, declaration_accepted_at, cover_image_url,
+      id, slug, author_id, status, source_locale, single_language, subtitle_locales, declaration_accepted_at, cover_image_url, feature_requested_at,
       content_translations ( title, description, locale ),
-      podcast_meta ( embed_url, cover_image_url, duration, episode_number )
+      podcast_meta ( embed_url, cover_image_url, duration, episode_number, origin )
     `)
     .eq('id', id)
     .eq('type', 'podcast')
@@ -73,6 +74,9 @@ export default async function EditPodcastPage({ params }: PageProps) {
         slug={content.slug}
           initialSingleLanguage={content.single_language ?? false}
         initialDeclared={!!content.declaration_accepted_at}
+          initialFeatureRequested={!!content.feature_requested_at}
+          canChooseOrigin={isEditorRole(profile.role)}
+          initialOrigin={isPodcastOrigin(meta?.origin) ? meta.origin : null}
           initialTitle={tr?.title ?? ''}
           initialDescription={tr?.description ?? ''}
           initialEmbedUrl={meta?.embed_url ?? ''}

@@ -5,7 +5,7 @@ import { redirect } from 'next/navigation'
 import { after } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
 import { requireCreator } from '@/lib/require-creator'
-import { notifyFeatureRequest } from '@/lib/feature-request'
+import { notifyFeatureRequest, readFeatureRequest, syncFeatureRequest } from '@/lib/feature-request'
 import { isEditorRole } from '@/lib/require-editor'
 import { slugify } from '@/lib/utils'
 import { resolveSourceLocale } from '@/lib/resolve-source-locale'
@@ -17,6 +17,7 @@ import { resolveAuthorId, requestedAuthorId } from '@/lib/resolve-author'
 import { logActivity } from '@/lib/actions/activity-log'
 import { publishErrorMessage } from '@/lib/profile-complete'
 import { markTranslationsStale, saveSourceText } from '@/lib/translation-sync'
+import { originForNewPodcast, originForSavedPodcast } from '@/lib/podcast-origin'
 
 export async function createPodcast(formData: FormData) {
   const { user, profile } = await requireCreator('podcast')
@@ -27,6 +28,8 @@ export async function createPodcast(formData: FormData) {
     throw new Error('Please confirm the responsibility statement before publishing')
   }
   const authorId = await resolveAuthorId(supabase, formData, user, profile.role)
+  // Only admins/editors choose the type of podcast (and must, to publish); everyone else's is third-party
+  const origin = originForNewPodcast({ isEditor: isEditorRole(profile.role), formData, publishing: formData.get('publish') === 'true' })
 
   const title = (formData.get('title') as string).trim()
   const description = (formData.get('description') as string)?.trim() || null
@@ -34,6 +37,7 @@ export async function createPodcast(formData: FormData) {
   const coverImageUrl = (formData.get('cover_image_url') as string)?.trim() || null
   const duration = (formData.get('duration') as string)?.trim() || null
   const episodeNumber = (formData.get('episode_number') as string)?.trim() || null
+  const featureRequested = readFeatureRequest(formData) === true
 
   const slug = `${slugify(title)}-${Date.now().toString(36)}`
 
@@ -48,6 +52,7 @@ export async function createPodcast(formData: FormData) {
       declaration_accepted_at: declared ? new Date().toISOString() : null,
       status: 'draft',
       cover_image_url: coverImageUrl,
+      feature_requested_at: featureRequested ? new Date().toISOString() : null,
     })
     .select('id')
     .single()
@@ -74,6 +79,7 @@ export async function createPodcast(formData: FormData) {
       cover_image_url: coverImageUrl,
       duration,
       episode_number: episodeNumber,
+      origin,
     })
 
   if (metaError) throw new Error(metaError.message ?? 'Failed to save podcast metadata')
@@ -100,6 +106,7 @@ export async function updatePodcast(id: string, formData: FormData) {
   const coverImageUrl = (formData.get('cover_image_url') as string)?.trim() || null
   const duration = (formData.get('duration') as string)?.trim() || null
   const episodeNumber = (formData.get('episode_number') as string)?.trim() || null
+  const origin = originForSavedPodcast({ isEditor: isEditorRole(profile.role), formData })
 
   const newAuthorId = await requestedAuthorId(supabase, formData, profile.role)
 
@@ -112,6 +119,8 @@ export async function updatePodcast(id: string, formData: FormData) {
   const { data: owned } = await updateQuery.select('id, source_locale').single()
 
   if (!owned) return
+  await syncFeatureRequest(id, readFeatureRequest(formData))
+  after(() => notifyFeatureRequest(id))
   const sourceLocale: string = owned.source_locale ?? 'en'
   await saveLanguageAvailability(supabase, id, sourceLocale, formData)
   await recordDeclaration(supabase, id, formData)
@@ -121,7 +130,7 @@ export async function updatePodcast(id: string, formData: FormData) {
   await (supabase as any)
     .from('podcast_meta')
     .upsert(
-      { content_id: id, embed_url: embedUrl, cover_image_url: coverImageUrl, duration, episode_number: episodeNumber },
+      { content_id: id, embed_url: embedUrl, cover_image_url: coverImageUrl, duration, episode_number: episodeNumber, ...(origin ? { origin } : {}) },
       { onConflict: 'content_id' }
     )
 

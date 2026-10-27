@@ -10,6 +10,7 @@ import { Navigation } from '@/components/layout/Navigation'
 import { Footer } from '@/components/layout/Footer'
 import { ContentCard } from '@/components/content/ContentCard'
 import { tagDisplayName } from '@/lib/tag-name'
+import { podcastBadgeLabel } from '@/lib/podcast-origin'
 
 interface PageProps {
   params: Promise<{ locale: string; slug: string }>
@@ -19,6 +20,7 @@ export default async function TagPage({ params }: PageProps) {
   const { locale, slug } = await params
   const supabase = await createClient()
   const tTag = await getTranslations('tag')
+  const tListings = await getTranslations('listings')
 
   const tagPromise = (supabase as any)
     .from('tags')
@@ -41,7 +43,7 @@ export default async function TagPage({ params }: PageProps) {
         profiles!author_id ( display_name, slug, role ),
         content_translations ( title, excerpt, featured_summary, description, locale ),
         video_meta ( duration ),
-        podcast_meta ( duration, episode_number ),
+        podcast_meta ( duration, episode_number, origin ),
         pill_meta ( accent_color ),
         course_meta ( price, currency, rating )
       )
@@ -108,6 +110,7 @@ export default async function TagPage({ params }: PageProps) {
                   authorSlug={author?.slug}
                   duration={item.video_meta?.duration ?? item.podcast_meta?.duration}
                   episodeNumber={item.podcast_meta?.episode_number}
+                  originLabel={podcastBadgeLabel(item.podcast_meta?.origin, tListings)}
                   accentColor={item.pill_meta?.accent_color}
                   rating={item.course_meta?.rating}
                   price={item.course_meta?.price}

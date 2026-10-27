@@ -42,6 +42,8 @@ interface ContentCardProps {
   singleLanguage?: boolean
   sourceLocale?: string | null
   subtitleLocales?: string[] | null
+  /** Podcasts: the type of podcast (made by SurGlobal / UNTOLD.ink, in collaboration, interviewing them) */
+  originLabel?: string | null
   duration?: string | null
   episodeNumber?: string | null
   accentColor?: string | null
@@ -129,6 +131,7 @@ export function ContentCard({
   singleLanguage = false,
   sourceLocale,
   subtitleLocales,
+  originLabel,
   duration,
   episodeNumber,
   accentColor,
@@ -315,6 +318,16 @@ export function ContentCard({
             style={{ background: 'rgba(212,165,116,0.18)', fontFamily: 'JetBrains Mono, monospace' }}
           >
             🌐 {languageLabel(tContent, uiLocale, { sourceLocale, subtitleLocales })}
+          </span>
+        )}
+
+        {/* Type of podcast — shown where no heading says it */}
+        {originLabel && (
+          <span
+            className="self-start rounded-full px-2.5 py-0.5 text-[11px] text-[#5d4e37]"
+            style={{ background: 'rgba(184,134,11,0.14)', fontFamily: 'JetBrains Mono, monospace' }}
+          >
+            {originLabel}
           </span>
         )}
 

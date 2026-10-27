@@ -11,9 +11,12 @@ import { Label } from '@/components/ui/label'
 import { CoverImageInput } from '@/components/ui/CoverImageInput'
 import { AuthorPicker } from '@/components/content/AuthorPicker'
 import { ViewContentLink } from '@/components/content/ViewContentLink'
+import { FeatureRequestField } from '@/components/content/FeatureRequestField'
+import { PodcastOriginField } from '@/components/content/PodcastOriginField'
 import { ResponsibilityDeclaration } from '@/components/content/ResponsibilityDeclaration'
 import { LanguageAvailabilityFields } from '@/components/content/LanguageAvailabilityFields'
 import { coverInputProps } from '@/lib/cover-formats'
+import type { PodcastOrigin } from '@/lib/podcast-origin'
 
 interface EditPodcastFormProps {
   id: string
@@ -22,6 +25,10 @@ interface EditPodcastFormProps {
   slug: string
   initialSingleLanguage?: boolean
   initialDeclared?: boolean
+  initialFeatureRequested?: boolean
+  /** admins and editors choose the type of podcast (and must, to publish) */
+  canChooseOrigin?: boolean
+  initialOrigin?: PodcastOrigin | null
   initialTitle: string
   initialDescription: string
   initialEmbedUrl: string
@@ -32,7 +39,8 @@ interface EditPodcastFormProps {
 
 export function EditPodcastForm({
   id,
-  status, initialAuthorId, slug, initialSingleLanguage = false, initialDeclared = false,
+  status, initialAuthorId, slug, initialSingleLanguage = false, initialDeclared = false, initialFeatureRequested = false,
+  canChooseOrigin = false, initialOrigin = null,
   initialTitle,
   initialDescription,
   initialEmbedUrl,
@@ -44,13 +52,16 @@ export function EditPodcastForm({
   const td = useTranslations('dashboard')
   const formRef = useRef<HTMLFormElement>(null)
   const [declared, setDeclared] = useState(initialDeclared)
+  const [origin, setOrigin] = useState<PodcastOrigin | null>(initialOrigin)
+  const [isPending, startTransition] = useTransition()
   const publishNow = () =>
     startTransition(async () => {
+      // the type chosen but not saved yet is saved first: a podcast cannot be published without it
+      if (canChooseOrigin && origin !== initialOrigin && formRef.current) await updatePodcast(id, new FormData(formRef.current))
       const fd = new FormData()
       fd.set('responsibility_confirmed', String(declared))
       await publishContent(id, fd)
     })
-  const [isPending, startTransition] = useTransition()
 
   const handleSave = (e: React.FormEvent) => {
     e.preventDefault()
@@ -123,6 +134,10 @@ export function EditPodcastForm({
         />
       </div>
 
+      {canChooseOrigin && <PodcastOriginField defaultValue={initialOrigin} onChange={setOrigin} />}
+
+      <FeatureRequestField defaultChecked={initialFeatureRequested} />
+
       {status === 'draft' && <ResponsibilityDeclaration checked={declared} onChange={setDeclared} />}
 
       <div className="flex items-center gap-3 pt-2">
@@ -135,7 +150,7 @@ export function EditPodcastForm({
           <Button
             type="button"
             variant="outline"
-            disabled={isPending || !declared}
+            disabled={isPending || !declared || (canChooseOrigin && !origin)}
             onClick={publishNow}
           >
             {td('publish')}
