@@ -1,11 +1,9 @@
 'use client'
 
-import { SearchIcon } from '@/components/ui/SearchIcon'
 import { useRouter, usePathname, useSearchParams } from 'next/navigation'
-import { useCallback, useTransition, useState, useEffect, useRef } from 'react'
+import { useCallback, useTransition } from 'react'
 
 interface ArticlesFilterProps {
-  searchPlaceholder: string
   labelFeatured: string
   labelTrending: string
   labelRecent: string
@@ -13,7 +11,6 @@ interface ArticlesFilterProps {
 }
 
 export function ArticlesFilter({
-  searchPlaceholder,
   labelFeatured,
   labelTrending,
   labelRecent,
@@ -25,10 +22,6 @@ export function ArticlesFilter({
   const [, startTransition] = useTransition()
 
   const currentFilter = searchParams.get('filter') ?? 'all'
-  const currentQ = searchParams.get('q') ?? ''
-
-  const [inputValue, setInputValue] = useState(currentQ)
-  const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
   const updateParams = useCallback(
     (updates: Record<string, string | null>) => {
@@ -49,20 +42,6 @@ export function ArticlesFilter({
     [router, pathname, searchParams]
   )
 
-  const handleSearch = (value: string) => {
-    setInputValue(value)
-    if (debounceRef.current) clearTimeout(debounceRef.current)
-    debounceRef.current = setTimeout(() => {
-      updateParams({ q: value || null })
-    }, 400)
-  }
-
-  useEffect(() => {
-    return () => {
-      if (debounceRef.current) clearTimeout(debounceRef.current)
-    }
-  }, [])
-
   const filters = [
     { id: 'all', label: labelAll },
     { id: 'featured', label: labelFeatured },
@@ -71,25 +50,7 @@ export function ArticlesFilter({
   ]
 
   return (
-    <div className="space-y-5">
-      {/* Search */}
-      <div className="flex justify-center">
-        <div className="relative w-full max-w-[672px]">
-          <SearchIcon className="absolute left-4 top-1/2 -translate-y-1/2 pointer-events-none" size={20} style={{ color: 'rgba(0,0,0,0.5)' }} />
-          <input
-            type="search"
-            value={inputValue}
-            onChange={(e) => handleSearch(e.target.value)}
-            placeholder={searchPlaceholder}
-            className="w-full h-[60px] pl-12 pr-4 rounded-[10px] bg-white text-base text-foreground placeholder:text-[rgba(0,0,0,0.35)] focus:outline-none transition-shadow"
-            style={{
-              border: '1.5px solid rgba(0,0,0,0.15)',
-              boxShadow: '0px 2px 8px rgba(0,0,0,0.06), 0px 4px 16px rgba(0,0,0,0.03)',
-            }}
-          />
-        </div>
-      </div>
-
+    <div>
       {/* Filter tabs */}
       <div className="flex flex-wrap justify-center gap-2">
         {filters.map((f) => {

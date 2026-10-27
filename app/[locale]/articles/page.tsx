@@ -24,12 +24,12 @@ const LOAD_MORE_STEP = 12
 
 interface PageProps {
   params: Promise<{ locale: string }>
-  searchParams: Promise<{ limit?: string; q?: string; filter?: string; tag?: string }>
+  searchParams: Promise<{ limit?: string; filter?: string; tag?: string }>
 }
 
 export default async function ArticlesPage({ params, searchParams }: PageProps) {
   const { locale } = await params
-  const { limit: limitStr, q, filter, tag } = await searchParams
+  const { limit: limitStr, filter, tag } = await searchParams
   const limit = Math.min(100, Math.max(BASE_LIMIT, parseInt(limitStr ?? String(BASE_LIMIT), 10)))
 
   const [tListings, tSearch, supabase, navData] = await Promise.all([
@@ -44,17 +44,8 @@ export default async function ArticlesPage({ params, searchParams }: PageProps) 
   // The tags of published articles, to offer their topics in one row
   const cloud = await loadTagCloud(supabase, 'article', locale)
 
-  // Build filtered content IDs from search/tag
+  // Build filtered content IDs from the topic
   let filteredIds: string[] | null = null
-
-  if (q?.trim()) {
-    const { data: matches } = await (supabase as any)
-      .from('content_translations')
-      .select('content_id')
-      .ilike('title', `%${q.trim()}%`)
-    const ids = [...new Set((matches ?? []).map((m: any) => m.content_id))] as string[]
-    filteredIds = ids
-  }
 
   if (tag) {
     const { data: tagRow } = await (supabase as any)
@@ -68,7 +59,7 @@ export default async function ArticlesPage({ params, searchParams }: PageProps) 
         .select('content_id')
         .eq('tag_id', tagRow.id)
       const tagIds = (ctRows ?? []).map((ct: any) => ct.content_id) as string[]
-      filteredIds = filteredIds ? filteredIds.filter((id) => tagIds.includes(id)) : tagIds
+      filteredIds = tagIds
     } else {
       filteredIds = []
     }
@@ -76,7 +67,7 @@ export default async function ArticlesPage({ params, searchParams }: PageProps) 
 
   // ★ picks (admin/content) at the top of the default view; kept out of the main list below
   let featuredItems: any[] = []
-  if (!q?.trim() && !tag && !filter) {
+  if (!tag && !filter) {
     const { data: featuredRows } = await (supabase as any)
       .from('content')
       .select(`
@@ -172,7 +163,6 @@ export default async function ArticlesPage({ params, searchParams }: PageProps) 
 
   function buildUrl(overrides: Record<string, string | null>) {
     const params: Record<string, string> = {}
-    if (q) params.q = q
     if (filter) params.filter = filter
     if (tag) params.tag = tag
     for (const [k, v] of Object.entries(overrides)) {
@@ -252,7 +242,6 @@ export default async function ArticlesPage({ params, searchParams }: PageProps) 
             {/* Interactive filters */}
             <Suspense>
               <ArticlesFilter
-                searchPlaceholder={tListings('articlesSearch')}
                 labelAll={tSearch('filterAll')}
                 labelFeatured={tListings('filterFeatured')}
                 labelTrending={tListings('filterTrending')}
@@ -267,7 +256,7 @@ export default async function ArticlesPage({ params, searchParams }: PageProps) 
               exploreLabel={tListings('topicsExplore')}
               allLabel={tListings('tagCloudAll')}
               allTopicsLabel={tListings('allTopics')}
-              keep={{ q: q?.trim() || undefined, filter }}
+              keep={{ filter }}
             />
           </div>
         </div>
@@ -317,7 +306,7 @@ export default async function ArticlesPage({ params, searchParams }: PageProps) 
                 className="text-sm"
                 style={{ color: '#999', fontFamily: 'var(--font-aeonik), Aeonik, sans-serif' }}
               >
-                {q || tag ? tListings('noResults') : tListings('noArticles')}
+                {tag ? tListings('noResults') : tListings('noArticles')}
               </p>
             </div>
           )}
