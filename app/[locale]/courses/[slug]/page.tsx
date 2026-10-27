@@ -10,6 +10,7 @@ import type { Metadata } from 'next'
 import { loadContentMetadata } from '@/lib/data/content-metadata'
 import { RelatedContent } from '@/components/content/RelatedContent'
 import { BodyTranslationLoader } from '@/components/content/BodyTranslationLoader'
+import { ArticleBody } from '@/components/content/ArticleBody'
 import { LikeButton } from '@/components/social/LikeButton'
 import { BookmarkButton } from '@/components/social/BookmarkButton'
 import { ShareButton } from '@/components/social/ShareButton'
@@ -17,6 +18,9 @@ import { EditContentButton } from '@/components/content/EditContentButton'
 import { TopicKicker } from '@/components/content/TopicKicker'
 import { OtherTags } from '@/components/content/OtherTags'
 import { loadContentTopics } from '@/lib/data/topics'
+import { CourseView } from '@/components/courses/CourseView'
+import type { CourseFact } from '@/components/courses/CourseParts'
+import { LEVEL_KEYS, MODALITY_KEYS, STATUS_KEYS, extrasFromMeta, formatCourseDate, formatIntroSession, formatPrice, registrationTarget } from '@/lib/course-page'
 
 interface PageProps {
   params: Promise<{ locale: string; slug: string }>
@@ -31,6 +35,7 @@ export default async function CoursePage({ params }: PageProps) {
   const { locale, slug } = await params
   const supabase = await createClient()
   const tContent = await getTranslations('content')
+  const tp = await getTranslations('coursePage')
 
   const { data: { user } } = await supabase.auth.getUser()
   let navUserRole = null
@@ -46,8 +51,8 @@ export default async function CoursePage({ params }: PageProps) {
     .select(`
       id, slug, author_id, source_locale, single_language, subtitle_locales, cover_image_url, likes_count, published_at,
       profiles!author_id ( display_name, slug, avatar_url ),
-      content_translations ( title, description, locale ),
-      course_meta ( price, currency, duration, students_count, rating ),
+      content_translations ( title, excerpt, description, body, locale ),
+      course_meta ( price, currency, duration, rating, banner_url, modality, place, starts_on, language_label, level, certificate, audience, price_note, provider_name, provider_url, registration_mode, registration_url, registration_label, registration_note, intro_sessions, intro_timezone ),
       content_tags ( tags ( slug, names, is_topic ) )
     `)
     .eq('slug', slug)
@@ -66,17 +71,21 @@ export default async function CoursePage({ params }: PageProps) {
   const heading: string = singleLanguage ? (course.content_translations ?? []).find((tr: any) => tr.locale === locale)?.title ?? t?.title : t?.title
   if (!t) notFound()
 
-  const meta = course.course_meta
+  const meta = Array.isArray(course.course_meta) ? course.course_meta[0] : course.course_meta
+  const extras = extrasFromMeta(meta)
   const author = course.profiles
   const topics = await loadContentTopics(supabase, (course.content_tags ?? []).map((ct: any) => ct.tags).filter(Boolean), locale)
 
   const sourceLocale: string = course.source_locale ?? 'en'
   const sourceTranslation = (course.content_translations ?? []).find((tr: any) => tr.locale === sourceLocale)
-  const sourceDescription = sourceTranslation?.description as string | null
+  const body = Array.isArray(t.body) && t.body.length > 0 ? (t.body as unknown[]) : null
+  const subtitle: string | null = (t.excerpt as string | null) || null
 
+  // A course made before the full description existed has a one-line description: shown as it was, translated on demand
+  const sourceDescription = sourceTranslation?.description as string | null
   const usingFallback = t.locale !== contentLocale
   const description = usingFallback ? null : (t.description as string | null)
-  const needsDescription = contentLocale !== sourceLocale && !!sourceDescription && (usingFallback || !description)
+  const needsDescription = !body && contentLocale !== sourceLocale && !!sourceDescription && (usingFallback || !description)
 
   if (needsDescription) {
     after(async () => {
@@ -110,84 +119,74 @@ export default async function CoursePage({ params }: PageProps) {
     isBookmarked = !!bookmark
   }
 
+  // What the page shows of the course
+  const facts = [
+    extras.modality && { id: 'modality', icon: 'modality', text: tp(MODALITY_KEYS[extras.modality]) },
+    extras.place && { id: 'place', icon: 'place', text: extras.place },
+    extras.startsOn && { id: 'starts', icon: 'starts', text: `${tp('startsLabel')}: ${formatCourseDate(extras.startsOn, locale)}` },
+    meta?.duration && { id: 'duration', icon: 'duration', text: meta.duration },
+    extras.languageLabel && { id: 'language', icon: 'language', text: extras.languageLabel },
+    extras.level && { id: 'level', icon: 'level', text: tp(LEVEL_KEYS[extras.level]) },
+    extras.certificate && { id: 'certificate', icon: 'certificate', text: tp('certificate') },
+  ].filter(Boolean) as CourseFact[]
+  const target = registrationTarget(extras)
+
   return (
     <>
       <Navigation {...navProps} />
-      <main className="max-w-4xl mx-auto px-4 sm:px-6 py-16">
-        <div className="grid md:grid-cols-3 gap-10">
-          {/* Main content */}
-          <div className="md:col-span-2">
-            {course.cover_image_url && (
-              <img
-                src={course.cover_image_url}
-                alt={t.title}
-                className="w-full rounded-xl mb-8 aspect-video object-cover"
-              />
-            )}
-            {singleLanguage && <LanguageNotice sourceLocale={sourceLocale} subtitleLocales={course.subtitle_locales} />}
-            <TopicKicker primary={topics.primary} related={topics.related} exploreAlso={tContent('exploreAlso')} className="mb-3" />
-            <h1 className="mb-4">{heading}</h1>
-            <BodyTranslationLoader
-              contentId={course.id}
-              locale={locale}
-              isTranslating={needsDescription}
-              field="description"
-              fallback={sourceDescription}
-              initialContent={description}
-              descriptionClassName="text-[#6B5F58] leading-relaxed text-lg"
-            />
-            <OtherTags tags={topics.others} label={tContent('otherTags')} className="mt-6" />
-            <div className="flex items-center gap-3 mt-4">
-              <LikeButton
-                contentId={course.id}
-                initialIsLiked={isLiked}
-                initialCount={course.likes_count ?? 0}
-                isLoggedIn={!!user}
-              />
-              <BookmarkButton
-                contentId={course.id}
-                initialIsBookmarked={isBookmarked}
-                isLoggedIn={!!user}
-              />
+      <main className="max-w-6xl mx-auto px-4 sm:px-6 py-12">
+        <CourseView
+          notice={singleLanguage ? <LanguageNotice sourceLocale={sourceLocale} subtitleLocales={course.subtitle_locales} /> : undefined}
+          kicker={<TopicKicker primary={topics.primary} related={topics.related} exploreAlso={tContent('exploreAlso')} className="mb-4" />}
+          heading={heading}
+          subtitle={subtitle}
+          bannerImage={extras.bannerUrl || course.cover_image_url || null}
+          providerName={extras.providerName}
+          providerUrl={extras.providerUrl}
+          facts={facts}
+          actions={
+            <div className="flex items-center gap-3">
+              <LikeButton contentId={course.id} initialIsLiked={isLiked} initialCount={course.likes_count ?? 0} isLoggedIn={!!user} />
+              <BookmarkButton contentId={course.id} initialIsBookmarked={isBookmarked} isLoggedIn={!!user} />
               <ShareButton title={t.title} className="flex items-center gap-1.5 text-sm font-mono text-muted-foreground hover:text-primary transition-colors" />
               <EditContentButton type="course" contentId={course.id} authorId={course.author_id} userId={user?.id} role={navUserRole} className="flex items-center gap-1.5 text-sm font-mono text-muted-foreground hover:text-primary transition-colors" />
             </div>
-          </div>
-
-          {/* Course info sidebar */}
-          <div
-            className="rounded-xl p-6 h-fit"
-            style={{ background: '#FAF7F2', border: '1px solid rgba(139,69,19,0.12)', boxShadow: '0 4px 16px rgba(44,36,32,0.08)' }}
-          >
-            {/* Price */}
-            {meta && (
-              <p className="text-2xl font-mono font-bold text-[#A0522D] mb-4">
-                {meta.price === 0 ? 'Free' : meta.currency ? `${meta.currency} ${meta.price}` : String(meta.price)}
-              </p>
-            )}
-
-            <button
-              disabled
-              className="w-full py-3 rounded-lg font-mono text-sm font-semibold mb-4 cursor-not-allowed"
-              style={{ background: 'rgba(139,69,19,0.3)', color: 'rgba(255,255,255,0.6)' }}
-              title={tContent('enrollSoonTitle')}
-            >
-              {tContent('enrollSoon')}
-            </button>
-
-            <div className="space-y-3 text-sm font-mono text-[#6B5F58]">
-              {meta?.duration && <div className="flex justify-between"><span>{tContent('duration')}</span><span>{meta.duration}</span></div>}
-              {meta?.students_count != null && <div className="flex justify-between"><span>{tContent('courseStudents')}</span><span>{meta.students_count}</span></div>}
-              {meta?.rating != null && <div className="flex justify-between"><span>{tContent('rating')}</span><span>★ {meta.rating.toFixed(1)}</span></div>}
-              {author && (
-                <div className="flex justify-between">
-                  <span>{tContent('instructor')}</span>
-                  <span>{author.display_name}</span>
-                </div>
-              )}
-            </div>
-          </div>
-        </div>
+          }
+          audience={extras.audience}
+          content={
+            body ? (
+              <ArticleBody json={body} />
+            ) : (
+              <BodyTranslationLoader
+                contentId={course.id}
+                locale={locale}
+                isTranslating={needsDescription}
+                field="description"
+                fallback={sourceDescription}
+                initialContent={description}
+                descriptionClassName="text-[#6B5F58] leading-relaxed text-lg"
+              />
+            )
+          }
+          registration={{
+            note: extras.registrationNote || tp('introNote'),
+            sessions: extras.introSessions.map((s) => ({ ...formatIntroSession(s, locale), status: s.status })),
+            timezone: extras.introTimezone,
+            href: target?.href ?? null,
+            embedUrl: target?.embedUrl ?? null,
+            label: extras.registrationLabel || tp('register'),
+          }}
+          tags={<OtherTags tags={topics.others} label={tContent('otherTags')} className="mt-2" />}
+          price={formatPrice(meta?.price, meta?.currency, locale)}
+          priceNote={extras.priceNote}
+          authorName={author?.display_name}
+          rating={meta?.rating}
+          labels={{
+            facts: tp('facts'), provider: tp('providerLabel'), instructor: tContent('instructor'), price: tp('priceLabel'), free: tp('free'), intro: tp('introTitle'), audience: tp('audienceTitle'),
+            status: { open: tp(STATUS_KEYS.open), few: tp(STATUS_KEYS.few), full: tp(STATUS_KEYS.full) },
+            formTitle: tp('formTitle'), openForm: tp('openForm'), noForm: tp('noForm'), enrollSoon: tContent('enrollSoon'), enrollSoonTitle: tContent('enrollSoonTitle'), rating: tContent('rating'),
+          }}
+        />
       </main>
       <RelatedContent contentId={course.id} type="course" locale={locale} userId={user?.id} />
       <Footer />

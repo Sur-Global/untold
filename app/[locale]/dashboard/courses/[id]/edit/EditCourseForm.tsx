@@ -1,7 +1,7 @@
 'use client'
 
 import { useRef, useState, useTransition } from 'react'
-import { useTranslations } from 'next-intl'
+import { useLocale, useTranslations } from 'next-intl'
 import { updateCourse } from '@/lib/actions/course'
 import { publishContent, unpublishContent, deleteContent } from '@/lib/actions/content'
 import { Button } from '@/components/ui/button'
@@ -13,6 +13,9 @@ import { AuthorPicker } from '@/components/content/AuthorPicker'
 import { ViewContentLink } from '@/components/content/ViewContentLink'
 import { ResponsibilityDeclaration } from '@/components/content/ResponsibilityDeclaration'
 import { LanguageAvailabilityFields } from '@/components/content/LanguageAvailabilityFields'
+import { RichTextEditor } from '@/components/editor/RichTextEditorLazy'
+import type { EditorBlock } from '@/components/editor/RichTextEditorLazy'
+import { CourseDetailsFields, CourseRegistrationFields, type CourseFormInitial } from '@/components/courses/CourseFormFields'
 
 interface EditCourseFormProps {
   id: string
@@ -22,19 +25,20 @@ interface EditCourseFormProps {
   initialSingleLanguage?: boolean
   initialDeclared?: boolean
   initialTitle: string
-  initialDescription: string
   initialCoverImageUrl: string
-  initialPrice: number
-  initialCurrency: string
-  initialDuration: string
+  /** the subtitle, the course data and the registration */
+  initial: CourseFormInitial
+  /** the full description (rich text) */
+  initialBody: EditorBlock[] | null
 }
 
 export function EditCourseForm({
-  id, status, initialAuthorId, slug, initialSingleLanguage = false, initialDeclared = false, initialTitle, initialDescription, initialCoverImageUrl,
-  initialPrice, initialCurrency, initialDuration,
+  id, status, initialAuthorId, slug, initialSingleLanguage = false, initialDeclared = false, initialTitle, initialCoverImageUrl, initial, initialBody,
 }: EditCourseFormProps) {
   const t = useTranslations('editor')
   const td = useTranslations('dashboard')
+  const locale = useLocale()
+  const [body, setBody] = useState<EditorBlock[] | null>(initialBody)
   const formRef = useRef<HTMLFormElement>(null)
   const [declared, setDeclared] = useState(initialDeclared)
   const publishNow = () =>
@@ -48,7 +52,9 @@ export function EditCourseForm({
   const handleSave = (e: React.FormEvent) => {
     e.preventDefault()
     if (!formRef.current) return
-    startTransition(() => updateCourse(id, new FormData(formRef.current!)))
+    const fd = new FormData(formRef.current)
+    if (body) fd.set('body', JSON.stringify(body))
+    startTransition(() => updateCourse(id, fd))
   }
 
   return (
@@ -61,28 +67,19 @@ export function EditCourseForm({
         <Input id="title" name="title" defaultValue={initialTitle} placeholder={t('titlePlaceholder')} required className={FIELD_CLASS} />
       </div>
 
-      <div className="space-y-2">
-        <Label htmlFor="description">{t('descriptionLabel')}</Label>
-        <Input id="description" name="description" defaultValue={initialDescription} placeholder={t('descriptionPlaceholder')} className={FIELD_CLASS} />
-      </div>
-
       <CoverImageInput name="cover_image_url" defaultValue={initialCoverImageUrl} />
 
-      <div className="grid grid-cols-2 gap-4">
-        <div className="space-y-2">
-          <Label htmlFor="price">{t('priceLabel')}</Label>
-          <Input id="price" name="price" type="number" min="0" step="0.01" defaultValue={String(initialPrice)} placeholder={t('pricePlaceholder')} className={FIELD_CLASS} />
-        </div>
-        <div className="space-y-2">
-          <Label htmlFor="currency">{t('currencyLabel')}</Label>
-          <Input id="currency" name="currency" defaultValue={initialCurrency || 'USD'} maxLength={3} placeholder="USD" className={FIELD_CLASS} />
+      <CourseDetailsFields initial={initial} />
+
+      <div className="space-y-2">
+        <Label>{t('courseBodyLabel')}</Label>
+        <p className="text-xs text-muted-foreground">{t('courseBodyHint')}</p>
+        <div className="overflow-hidden rounded-[10px] border border-primary/20">
+          <RichTextEditor value={initialBody} onChange={setBody} placeholder={t('bodyPlaceholder')} locale={locale} />
         </div>
       </div>
 
-      <div className="space-y-2">
-        <Label htmlFor="duration">{t('durationLabel')}</Label>
-        <Input id="duration" name="duration" defaultValue={initialDuration} placeholder={t('durationPlaceholder')} className={FIELD_CLASS} />
-      </div>
+      <CourseRegistrationFields initial={initial} />
 
       {status === 'draft' && <ResponsibilityDeclaration checked={declared} onChange={setDeclared} />}
 

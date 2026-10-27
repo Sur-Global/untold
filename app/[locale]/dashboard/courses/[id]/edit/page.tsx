@@ -10,6 +10,7 @@ import { Link } from '@/i18n/navigation'
 import { EditCourseForm } from './EditCourseForm'
 import { TranslationsPanel } from '@/components/translations/TranslationsPanel'
 import { loadTranslationEditor } from '@/lib/data/translation-editor'
+import { extrasFromMeta } from '@/lib/course-page'
 
 interface EditCoursePageProps {
   params: Promise<{ locale: string; id: string }>
@@ -24,8 +25,8 @@ export default async function EditCoursePage({ params }: EditCoursePageProps) {
     .from('content')
     .select(`
       id, slug, author_id, status, source_locale, single_language, subtitle_locales, declaration_accepted_at, cover_image_url,
-      content_translations ( title, description, locale ),
-      course_meta ( price, currency, duration )
+      content_translations ( title, excerpt, description, body, locale ),
+      course_meta ( price, currency, duration, banner_url, modality, place, starts_on, language_label, level, certificate, audience, price_note, provider_name, provider_url, registration_mode, registration_url, registration_label, registration_note, intro_sessions, intro_timezone )
     `)
     .eq('id', id)
     .eq('type', 'course')
@@ -63,11 +64,16 @@ export default async function EditCoursePage({ params }: EditCoursePageProps) {
           initialSingleLanguage={content.single_language ?? false}
         initialDeclared={!!content.declaration_accepted_at}
           initialTitle={tr?.title ?? ''}
-          initialDescription={tr?.description ?? ''}
           initialCoverImageUrl={content.cover_image_url ?? ''}
-          initialPrice={meta?.price ?? 0}
-          initialCurrency={meta?.currency ?? 'USD'}
-          initialDuration={meta?.duration ?? ''}
+          initial={{
+            ...extrasFromMeta(meta),
+            // a course made before the subtitle existed has its one-line description as the subtitle
+            subtitle: tr?.excerpt || tr?.description || '',
+            duration: meta?.duration ?? '',
+            price: meta?.price ?? 0,
+            currency: meta?.currency ?? 'USD',
+          }}
+          initialBody={Array.isArray(tr?.body) && tr.body.length > 0 ? tr.body : null}
         />
         {translationEditor && <TranslationsPanel data={translationEditor} />}
       </main>

@@ -1,4 +1,8 @@
-/** The banner for SurGlobal / UNTOLD.ink's own podcast, on the podcasts page (set in Admin → Advertising). */
+// The banner for SurGlobal / UNTOLD.ink's own podcast, on the podcasts page (set in Admin → Advertising).
+
+import { safeWebUrl } from '@/lib/web-url'
+
+export { safeWebUrl }
 
 /** The name of the podcast: a proper name, the same in every language */
 export const PODCAST_NAME = 'El Lado Incómodo de la Innovación'
@@ -45,12 +49,6 @@ export const DEFAULT_PODCAST_BANNER: PodcastBanner = {
   altText: '',
   links: Object.fromEntries(PODCAST_PLATFORMS.map((p) => [p, ''])) as Record<PodcastPlatform, string>,
   others: [],
-}
-
-/** Only web addresses are allowed in a link or picture of the banner — never javascript:, data: or mailto: */
-export function safeWebUrl(raw: unknown): string {
-  const value = typeof raw === 'string' ? raw.trim() : ''
-  return /^https?:\/\/[^\s]+$/i.test(value) && value.length <= 2000 ? value : ''
 }
 
 function text(raw: unknown, max: number): string {

@@ -18,6 +18,19 @@ import { resolveAuthorId, requestedAuthorId } from '@/lib/resolve-author'
 import { logActivity } from '@/lib/actions/activity-log'
 import { publishErrorMessage } from '@/lib/profile-complete'
 import { markTranslationsStale, saveSourceText } from '@/lib/translation-sync'
+import { extrasToColumns, readCourseExtras } from '@/lib/course-page'
+
+/** The full description (rich text) from a form: a list of blocks, or nothing */
+function readBody(formData: FormData): unknown[] | null {
+  const raw = formData.get('body')
+  if (typeof raw !== 'string' || !raw.trim()) return null
+  try {
+    const parsed = JSON.parse(raw)
+    return Array.isArray(parsed) && parsed.length > 0 ? parsed : null
+  } catch {
+    return null
+  }
+}
 
 export async function createCourse(formData: FormData) {
   const { user, profile } = await requireCreator('course')
@@ -30,11 +43,13 @@ export async function createCourse(formData: FormData) {
   const authorId = await resolveAuthorId(supabase, formData, user, profile.role)
 
   const title = (formData.get('title') as string).trim()
-  const description = (formData.get('description') as string)?.trim() || null
+  const subtitle = (formData.get('subtitle') as string)?.trim().slice(0, 200) || null
+  const body = readBody(formData)
   const coverImageUrl = (formData.get('cover_image_url') as string)?.trim() || null
   const price = parseFloat((formData.get('price') as string) || '0') || 0
   const currency = (formData.get('currency') as string)?.trim() || 'USD'
   const duration = (formData.get('duration') as string)?.trim() || null
+  const extras = extrasToColumns(readCourseExtras(formData))
 
   const slug = `${slugify(title)}-${Date.now().toString(36)}`
 
@@ -61,8 +76,9 @@ export async function createCourse(formData: FormData) {
       content_id: content.id,
       locale: sourceLocale,
       title,
-      description,
-      body: null,
+      excerpt: subtitle,
+      description: null,
+      body,
     })
 
   if (translationError) throw new Error(translationError.message ?? 'Failed to save course translation')
@@ -75,6 +91,7 @@ export async function createCourse(formData: FormData) {
       currency,
       duration,
       students_count: 0,
+      ...extras,
     })
 
   if (metaError) throw new Error(metaError.message ?? 'Failed to save course metadata')
@@ -96,11 +113,13 @@ export async function updateCourse(id: string, formData: FormData) {
   const supabase = await createClient()
 
   const title = (formData.get('title') as string).trim()
-  const description = (formData.get('description') as string)?.trim() || null
+  const subtitle = (formData.get('subtitle') as string)?.trim().slice(0, 200) || null
+  const body = readBody(formData)
   const coverImageUrl = (formData.get('cover_image_url') as string)?.trim() || null
   const price = parseFloat((formData.get('price') as string) || '0') || 0
   const currency = (formData.get('currency') as string)?.trim() || 'USD'
   const duration = (formData.get('duration') as string)?.trim() || null
+  const extras = extrasToColumns(readCourseExtras(formData))
 
   const newAuthorId = await requestedAuthorId(supabase, formData, profile.role)
 
@@ -117,12 +136,12 @@ export async function updateCourse(id: string, formData: FormData) {
   await saveLanguageAvailability(supabase, id, sourceLocale, formData)
   await recordDeclaration(supabase, id, formData)
 
-  await markTranslationsStale(supabase, id, sourceLocale, await saveSourceText(supabase, id, sourceLocale, { title, description, body: null }))
+  await markTranslationsStale(supabase, id, sourceLocale, await saveSourceText(supabase, id, sourceLocale, { title, excerpt: subtitle, description: null, body }))
 
   await (supabase as any)
     .from('course_meta')
     .upsert(
-      { content_id: id, price, currency, duration },
+      { content_id: id, price, currency, duration, ...extras },
       { onConflict: 'content_id' }
     )
 
