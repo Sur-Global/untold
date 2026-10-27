@@ -53,7 +53,9 @@
     "latestReadMore": "Lire la suite",
     "latestNew": "Nouveau",
     "placeholderTag": "Design de futurs",
-    "placeholderTitle": "Technologie décoloniale : concevoir de nouveaux futurs"
+    "placeholderTitle": "Technologie décoloniale : concevoir de nouveaux futurs",
+    "railPrevious": "Précédent",
+    "railNext": "Suivant"
   },
   "listings": {
     "videosDesc": "Regardez des vidéos de journalistes et créateurs de tout le Sud Global.",

@@ -53,7 +53,9 @@
     "latestReadMore": "Ler mais",
     "latestNew": "Novo",
     "placeholderTag": "Design de futuros",
-    "placeholderTitle": "Tecnologia decolonial: desenhando novos futuros"
+    "placeholderTitle": "Tecnologia decolonial: desenhando novos futuros",
+    "railPrevious": "Anterior",
+    "railNext": "Próximo"
   },
   "listings": {
     "videosDesc": "Assista a vídeos de jornalistas e criadores de todo o Sul Global.",

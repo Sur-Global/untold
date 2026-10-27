@@ -53,7 +53,9 @@
     "latestReadMore": "Leer más",
     "latestNew": "Nuevo",
     "placeholderTag": "Diseño de futuros",
-    "placeholderTitle": "Tecnología decolonial: diseñando nuevos futuros"
+    "placeholderTitle": "Tecnología decolonial: diseñando nuevos futuros",
+    "railPrevious": "Anterior",
+    "railNext": "Siguiente"
   },
   "listings": {
     "articlesDesc": "Análisis en profundidad, investigación y reflexiones sobre tecnología responsable, accesibilidad y pensamiento decolonial.",

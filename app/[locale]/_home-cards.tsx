@@ -1,5 +1,6 @@
 'use client'
-import { useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
+import { ChevronLeft, ChevronRight, Zap } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import { Link, useRouter } from '@/i18n/navigation'
 import { readableTextColor } from '@/lib/cover-formats'
@@ -48,17 +49,6 @@ function ClockIcon() {
     <svg width="13" height="13" viewBox="0 0 16 16" fill="none" aria-hidden>
       <circle cx="8" cy="8" r="6" stroke="currentColor" strokeWidth="1.2" />
       <path d="M8 5v3.5l2.5 1.5" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" />
-    </svg>
-  )
-}
-
-function ShareIcon() {
-  return (
-    <svg width="15" height="15" viewBox="0 0 16 16" fill="none" aria-hidden>
-      <circle cx="12" cy="4" r="1.5" stroke="currentColor" strokeWidth="1.2" />
-      <circle cx="12" cy="12" r="1.5" stroke="currentColor" strokeWidth="1.2" />
-      <circle cx="4" cy="8" r="1.5" stroke="currentColor" strokeWidth="1.2" />
-      <path d="M10.5 4.8L5.5 7.3M10.5 11.2L5.5 8.7" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" />
     </svg>
   )
 }
@@ -520,7 +510,6 @@ export function PodcastCard({
 interface HomePillCardProps {
   slug: string
   title: string
-  excerpt?: string | null
   coverImageUrl?: string | null
   categoryTag?: string | null
   categoryTagSlug?: string | null
@@ -530,10 +519,13 @@ interface HomePillCardProps {
   authorAvatarUrl?: string | null
 }
 
+/**
+ * A knowledge pill on the home page: its slide whole, vertical (4:5, like on Instagram), with its topic on top and
+ * its title and author below. Meant to sit in a PillsRail.
+ */
 export function HomePillCard({
   slug,
   title,
-  excerpt,
   coverImageUrl,
   categoryTag,
   categoryTagSlug,
@@ -542,128 +534,127 @@ export function HomePillCard({
   authorSlug,
   authorAvatarUrl,
 }: HomePillCardProps) {
-  const tShare = useTranslations('share')
   // The chip is the pill's brand colour, with the text colour that reads best on it
   const tagBg = accentColor ?? 'rgba(107,142,35,0.12)'
   const tagColor = accentColor ? readableTextColor(accentColor) : '#6B8E23'
   const tagBorder = accentColor ? 'rgba(0,0,0,0.12)' : 'rgba(107,142,35,0.25)'
+  const chipStyle: React.CSSProperties = {
+    background: tagBg,
+    color: tagColor,
+    border: `1px solid ${tagBorder}`,
+    fontFamily: 'var(--font-aeonik), Aeonik, sans-serif',
+    fontWeight: 400,
+    fontSize: 11,
+    textDecoration: 'none',
+  }
 
   return (
-    <div
-      className="flex flex-col rounded-2xl overflow-hidden"
-      style={{
-        background: '#F8F8F8',
-        border: '1px solid rgba(0,0,0,0.1)',
-        boxShadow: '0 2px 8px rgba(93,78,55,0.08)',
-      }}
-    >
-      {/* Optional cover image */}
-      {coverImageUrl && (
-        <Link href={`/pills/${slug}`} className="block shrink-0" style={{ textDecoration: 'none', background: `${accentColor || '#8b7355'}22` }}>
-          {/* pill images can have any shape: shown whole, never cropped */}
-          <img
-            src={coverImageUrl}
-            alt={title}
-            className="w-full object-contain"
-            style={{ height: 160 }}
-            loading="lazy"
-          />
-        </Link>
-      )}
-
-      {/* Card body */}
-      <div className="flex flex-col gap-3 flex-1 p-5">
-        {/* Badge row */}
-        <div className="flex items-center justify-between">
-          {categoryTag ? (
-            categoryTagSlug ? (
-              <Link
-                href={`/tag/${categoryTagSlug}`}
-                className="text-xs px-3 py-1 rounded-full hover:opacity-80 transition-opacity"
-                style={{
-                  background: tagBg,
-                  color: tagColor,
-                  border: `1px solid ${tagBorder}`,
-                  fontFamily: 'var(--font-aeonik), Aeonik, sans-serif', fontWeight: 400,
-                  fontSize: 11,
-                  textDecoration: 'none',
-                }}
-              >
-                {categoryTag}
-              </Link>
-            ) : (
-              <span
-                className="text-xs px-3 py-1 rounded-full"
-                style={{
-                  background: tagBg,
-                  color: tagColor,
-                  border: `1px solid ${tagBorder}`,
-                  fontFamily: 'var(--font-aeonik), Aeonik, sans-serif', fontWeight: 400,
-                  fontSize: 11,
-                }}
-              >
-                {categoryTag}
-              </span>
-            )
+    <article className="flex shrink-0 basis-[68%] snap-start flex-col sm:basis-[40%] md:basis-[30%] lg:basis-[calc((100%-60px)/4)]">
+      {/* The slide, whole: 4:5 */}
+      <div className="relative overflow-hidden rounded-xl" style={{ aspectRatio: '4 / 5', background: accentColor || '#8b7355', boxShadow: '0 2px 8px rgba(93,78,55,0.12)' }}>
+        <Link href={`/pills/${slug}`} tabIndex={-1} aria-hidden className="block h-full w-full" style={{ textDecoration: 'none' }}>
+          {coverImageUrl ? (
+            <img src={coverImageUrl} alt="" className="h-full w-full object-cover" loading="lazy" />
           ) : (
-            <div />
+            <span className="flex h-full w-full items-center justify-center" style={{ color: readableTextColor(accentColor || '#8b7355') }}>
+              <Zap size={40} aria-hidden />
+            </span>
           )}
-          <div className="flex items-center gap-2">
-            <button
-              className="flex items-center justify-center rounded-lg transition-colors hover:bg-[#d4a574]/20"
-              style={{ width: 28, height: 28, color: '#666', background: 'none', border: 'none', cursor: 'pointer' }}
-              aria-label={tShare('button')}
-              title={tShare('button')}
-            >
-              <ShareIcon />
-            </button>
-          </div>
-        </div>
-
-        {/* Title */}
-        <Link href={`/pills/${slug}`} style={{ textDecoration: 'none' }}>
-          <h3
-            className="leading-snug line-clamp-3 hover:text-primary transition-colors"
-            style={{
-              fontFamily: 'var(--font-heading)',
-              fontSize: 15,
-              color: '#2C2420',
-              
-            }}
-          >
-            {title}
-          </h3>
         </Link>
-
-        {/* Excerpt */}
-        {excerpt && (
-          <p
-            className="text-sm line-clamp-3 flex-1"
-            style={{ color: '#555', fontFamily: 'var(--font-aeonik), Aeonik, sans-serif', lineHeight: 1.6 }}
-          >
-            {excerpt}
-          </p>
-        )}
-
-        {/* Footer */}
-        {authorName && (
-          <div
-            className="flex items-center gap-2 pt-3 mt-auto"
-            style={{ borderTop: '1px solid rgba(0,0,0,0.08)' }}
-          >
-            <AuthorAvatar name={authorName} avatarUrl={authorAvatarUrl} size={28} slug={authorSlug} />
-            <div className="min-w-0">
-              <Link
-                href={authorSlug ? `/author/${authorSlug}` : '#'}
-                className="text-sm font-medium text-[#5d4e37] truncate block"
-                style={{ fontFamily: 'var(--font-aeonik), Aeonik, sans-serif', textDecoration: 'none' }}
-              >
-                {authorName}
-              </Link>
-            </div>
-          </div>
-        )}
+        {categoryTag &&
+          (categoryTagSlug ? (
+            <Link href={`/tag/${categoryTagSlug}`} className="absolute left-3 top-3 rounded-full px-3 py-1 text-xs transition-opacity hover:opacity-80" style={chipStyle}>
+              {categoryTag}
+            </Link>
+          ) : (
+            <span className="absolute left-3 top-3 rounded-full px-3 py-1 text-xs" style={chipStyle}>
+              {categoryTag}
+            </span>
+          ))}
       </div>
+
+      {/* Title and author */}
+      <Link href={`/pills/${slug}`} style={{ textDecoration: 'none' }}>
+        <h3
+          className="mt-3 line-clamp-2 min-h-[2.75em] leading-snug transition-colors hover:text-primary"
+          style={{ fontFamily: 'var(--font-heading)', fontSize: 15, color: '#2C2420' }}
+        >
+          {title}
+        </h3>
+      </Link>
+      {authorName && (
+        <div className="mt-2 flex items-center gap-2">
+          <AuthorAvatar name={authorName} avatarUrl={authorAvatarUrl} size={22} slug={authorSlug} />
+          <Link
+            href={authorSlug ? `/author/${authorSlug}` : '#'}
+            className="block truncate text-[13px] text-[#5d4e37]"
+            style={{ fontFamily: 'var(--font-aeonik), Aeonik, sans-serif', textDecoration: 'none' }}
+          >
+            {authorName}
+          </Link>
+        </div>
+      )}
+    </article>
+  )
+}
+
+/**
+ * The pills of the home page in one row that slides (with the finger, or with the arrows where the row is longer than
+ * the screen). The arrows only show when there is something to slide to.
+ */
+export function PillsRail({ children }: { children: React.ReactNode }) {
+  const t = useTranslations('home')
+  const rail = useRef<HTMLDivElement>(null)
+  const [canPrev, setCanPrev] = useState(false)
+  const [canNext, setCanNext] = useState(false)
+
+  const update = useCallback(() => {
+    const el = rail.current
+    if (!el) return
+    setCanPrev(el.scrollLeft > 2)
+    setCanNext(el.scrollLeft + el.clientWidth < el.scrollWidth - 2)
+  }, [])
+
+  useEffect(() => {
+    update()
+    const el = rail.current
+    const observer = typeof ResizeObserver !== 'undefined' && el ? new ResizeObserver(update) : null
+    if (el) observer?.observe(el)
+    window.addEventListener('resize', update)
+    return () => {
+      observer?.disconnect()
+      window.removeEventListener('resize', update)
+    }
+  }, [update])
+
+  const slide = (direction: 1 | -1) => {
+    const el = rail.current
+    if (el) el.scrollBy({ left: direction * el.clientWidth * 0.9, behavior: 'smooth' })
+  }
+  const arrow = 'flex size-9 items-center justify-center rounded-full border border-black/20 bg-white text-black transition-colors hover:bg-[#A9A8E9]/40 disabled:opacity-30 disabled:hover:bg-white'
+
+  return (
+    <div className="mt-6">
+      <div
+        ref={rail}
+        onScroll={update}
+        role="region"
+        aria-label={t('pills')}
+        tabIndex={0}
+        className="flex snap-x snap-mandatory gap-5 overflow-x-auto scroll-smooth pb-2 [scrollbar-width:none] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#A9A8E9] [&::-webkit-scrollbar]:hidden"
+      >
+        {children}
+      </div>
+      {(canPrev || canNext) && (
+        <div className="mt-4 flex justify-end gap-2">
+          <button type="button" className={arrow} disabled={!canPrev} onClick={() => slide(-1)} aria-label={t('railPrevious')}>
+            <ChevronLeft size={18} aria-hidden />
+          </button>
+          <button type="button" className={arrow} disabled={!canNext} onClick={() => slide(1)} aria-label={t('railNext')}>
+            <ChevronRight size={18} aria-hidden />
+          </button>
+        </div>
+      )}
     </div>
   )
 }

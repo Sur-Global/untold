@@ -53,7 +53,9 @@
     "latestReadMore": "Weiterlesen",
     "latestNew": "Neu",
     "placeholderTag": "Zukunftsdesign",
-    "placeholderTitle": "Dekoloniale Technologie: neue Zukünfte gestalten"
+    "placeholderTitle": "Dekoloniale Technologie: neue Zukünfte gestalten",
+    "railPrevious": "Zurück",
+    "railNext": "Weiter"
   },
   "listings": {
     "videosDesc": "Videos von Journalisten und Erstellern aus dem Globalen Süden ansehen.",

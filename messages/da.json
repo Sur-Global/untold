@@ -53,7 +53,9 @@
     "latestReadMore": "Læs mere",
     "latestNew": "Nyt",
     "placeholderTag": "Fremtidsdesign",
-    "placeholderTitle": "Dekolonial teknologi: at designe nye fremtider"
+    "placeholderTitle": "Dekolonial teknologi: at designe nye fremtider",
+    "railPrevious": "Forrige",
+    "railNext": "Næste"
   },
   "listings": {
     "videosDesc": "Se videoer fra journalister og skabere fra hele det Globale Syd.",

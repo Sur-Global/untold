@@ -25,6 +25,7 @@ import {
   VideoCard,
   PodcastCard,
   HomePillCard,
+  PillsRail,
   CourseCard,
 } from './_home-cards'
 import { tagDisplayName } from '@/lib/tag-name'
@@ -788,7 +789,7 @@ export default async function HomePage({ params }: PageProps) {
             </section>
           )}
 
-          {/* Knowledge Pills — 3×2 */}
+          {/* Knowledge Pills — a row of vertical slides that slides */}
           {platform.featuredSections.pills && (
             <section>
               <SectionHeader
@@ -798,7 +799,7 @@ export default async function HomePage({ params }: PageProps) {
                 viewAllLabel={t('viewAll')}
               />
               {(pills ?? []).length > 0 ? (
-                <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5 mt-6">
+                <PillsRail>
                   {(pills ?? []).map((item: any) => {
                     const p = getItemProps(item)
                     return (
@@ -806,7 +807,6 @@ export default async function HomePage({ params }: PageProps) {
                         key={item.id}
                         slug={p.slug}
                         title={p.title}
-                        excerpt={p.excerpt}
                         coverImageUrl={p.coverImageUrl}
                         categoryTag={p.categoryTag}
                         categoryTagSlug={p.categoryTagSlug}
@@ -817,7 +817,7 @@ export default async function HomePage({ params }: PageProps) {
                       />
                     )
                   })}
-                </div>
+                </PillsRail>
               ) : (
                 <SectionPlaceholder count={6} layout="pills" label={tContentHome('comingSoon')} />
               )}
