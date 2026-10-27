@@ -52,7 +52,7 @@ export default async function CoursePage({ params }: PageProps) {
       id, slug, author_id, source_locale, single_language, subtitle_locales, cover_image_url, likes_count, published_at,
       profiles!author_id ( display_name, slug, avatar_url ),
       content_translations ( title, excerpt, description, body, locale ),
-      course_meta ( price, currency, duration, rating, banner_url, modality, place, starts_on, language_label, level, certificate, audience, price_note, provider_name, provider_url, registration_mode, registration_url, registration_label, registration_note, intro_sessions, intro_timezone, people ),
+      course_meta ( price, currency, duration, rating, banner_url, banner_has_title, modality, place, starts_on, language_label, level, certificate, audience, price_note, provider_name, provider_url, registration_mode, registration_url, registration_label, registration_note, intro_sessions, intro_timezone, people ),
       content_tags ( tags ( slug, names, is_topic ) )
     `)
     .eq('slug', slug)
@@ -152,6 +152,7 @@ export default async function CoursePage({ params }: PageProps) {
             </div>
           }
           audience={extras.audience}
+          bannerHasTitle={extras.bannerHasTitle}
           people={extras.people}
           content={
             body ? (

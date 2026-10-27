@@ -606,7 +606,9 @@
     "coursePersonBio": "Kort præsentation",
     "coursePersonLink": "Link (LinkedIn, hjemmeside eller profil)",
     "coursePersonPhoto": "Foto",
-    "coursePersonRemove": "Fjern denne person"
+    "coursePersonRemove": "Fjern denne person",
+    "courseBannerHasTitleLabel": "Mit banner indeholder allerede titlen",
+    "courseBannerHasTitleHint": "Markér, hvis billedet allerede indeholder titel og undertitel, så de ikke gentages nedenunder."
   },
   "subscribe": {
     "eyebrow": "Nyhedsbrev",

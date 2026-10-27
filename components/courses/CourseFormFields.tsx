@@ -26,7 +26,7 @@ import {
 export type CourseFormInitial = CourseExtras & { subtitle: string; duration: string; price: number; currency: string }
 
 export const EMPTY_COURSE_FORM: CourseFormInitial = {
-  bannerUrl: '', modality: '', place: '', startsOn: '', languageLabel: '', level: '', certificate: false, audience: '', priceNote: '', providerName: '', providerUrl: '',
+  bannerUrl: '', bannerHasTitle: false, modality: '', place: '', startsOn: '', languageLabel: '', level: '', certificate: false, audience: '', priceNote: '', providerName: '', providerUrl: '',
   registrationMode: 'button', registrationUrl: '', registrationLabel: '', registrationNote: '', introSessions: [], introTimezone: '', people: [],
   subtitle: '', duration: '', price: 0, currency: 'USD',
 }
@@ -55,6 +55,13 @@ export function CourseDetailsFields({ initial = EMPTY_COURSE_FORM }: { initial?:
           sizeHint={t('courseBannerHint')}
           defaultValue={initial.bannerUrl}
         />
+        <div className="space-y-1">
+          <label className="flex items-center gap-3 text-sm text-foreground">
+            <input type="checkbox" name="banner_has_title" defaultChecked={initial.bannerHasTitle} className="size-4 rounded border-primary/30" />
+            {t('courseBannerHasTitleLabel')}
+          </label>
+          <p className="pl-7 text-xs text-muted-foreground">{t('courseBannerHasTitleHint')}</p>
+        </div>
       </fieldset>
 
       <fieldset className={sectionClass}>

@@ -56,7 +56,7 @@ describe('readCourseExtras (from the create/edit form)', () => {
 
   it('an empty form gives an empty page: nothing chosen, a button for the registration, no sessions, nobody listed', () => {
     expect(readCourseExtras(form({}))).toEqual({
-      bannerUrl: '', modality: '', place: '', startsOn: '', languageLabel: '', level: '', certificate: false, audience: '', priceNote: '', providerName: '', providerUrl: '',
+      bannerUrl: '', bannerHasTitle: false, modality: '', place: '', startsOn: '', languageLabel: '', level: '', certificate: false, audience: '', priceNote: '', providerName: '', providerUrl: '',
       registrationMode: 'button', registrationUrl: '', registrationLabel: '', registrationNote: '', introSessions: [], introTimezone: '', people: [],
     })
   })
@@ -196,5 +196,17 @@ describe('normalizePeople (teachers and SurGlobal facilitators)', () => {
     ])
     expect(extrasFromMeta(columns).people).toEqual(extras.people)
     expect(extrasFromMeta({}).people).toEqual([])
+  })
+})
+
+describe('bannerHasTitle (a designed banner that already carries the title)', () => {
+  it('is off by default, and goes from the form to the column and back', () => {
+    expect(readCourseExtras(form({})).bannerHasTitle).toBe(false)
+    const extras = readCourseExtras(form({ banner_url: 'https://cdn.test/banner.webp', banner_has_title: 'on' }))
+    expect(extras.bannerHasTitle).toBe(true)
+    const columns = extrasToColumns(extras)
+    expect(columns.banner_has_title).toBe(true)
+    expect(extrasFromMeta(columns).bannerHasTitle).toBe(true)
+    expect(extrasFromMeta({}).bannerHasTitle).toBe(false)
   })
 })

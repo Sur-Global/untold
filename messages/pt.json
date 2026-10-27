@@ -606,7 +606,9 @@
     "coursePersonBio": "Apresentação breve",
     "coursePersonLink": "Link (LinkedIn, site ou perfil)",
     "coursePersonPhoto": "Foto",
-    "coursePersonRemove": "Remover esta pessoa"
+    "coursePersonRemove": "Remover esta pessoa",
+    "courseBannerHasTitleLabel": "Meu banner já tem o título",
+    "courseBannerHasTitleHint": "Marque se a sua imagem já inclui o título e o subtítulo, para que não se repitam abaixo dela."
   },
   "subscribe": {
     "eyebrow": "Newsletter",

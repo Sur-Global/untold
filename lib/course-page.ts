@@ -28,6 +28,8 @@ export type CoursePerson = { group: PersonGroup; name: string; role: string; bio
 /** What the course page shows besides the title, subtitle and description (the course_meta columns, as the forms use them) */
 export type CourseExtras = {
   bannerUrl: string
+  /** the picture already carries the title and the subtitle: the page does not repeat them under it */
+  bannerHasTitle: boolean
   modality: CourseModality | ''
   place: string
   startsOn: string
@@ -94,6 +96,7 @@ export function readCourseExtras(formData: FormData): CourseExtras {
   const sessions = Array.from({ length: MAX_INTRO_SESSIONS }, (_, i) => ({ date: get(`intro_date_${i + 1}`), time: get(`intro_time_${i + 1}`), status: get(`intro_status_${i + 1}`) }))
   return {
     bannerUrl: safeWebUrl(get('banner_url')),
+    bannerHasTitle: get('banner_has_title') === 'on' || get('banner_has_title') === 'true',
     modality: oneOf(COURSE_MODALITIES, get('modality')),
     place: text(get('place'), 120),
     startsOn: isDate(get('starts_on')) ? (get('starts_on') as string) : '',
@@ -119,6 +122,7 @@ export function extrasToColumns(extras: CourseExtras) {
   const nullable = (value: string) => value || null
   return {
     banner_url: nullable(extras.bannerUrl),
+    banner_has_title: extras.bannerHasTitle,
     modality: nullable(extras.modality),
     place: nullable(extras.place),
     starts_on: nullable(extras.startsOn),
@@ -143,6 +147,7 @@ export function extrasToColumns(extras: CourseExtras) {
 export function extrasFromMeta(meta: any): CourseExtras {
   return {
     bannerUrl: safeWebUrl(meta?.banner_url),
+    bannerHasTitle: !!meta?.banner_has_title,
     modality: oneOf(COURSE_MODALITIES, meta?.modality),
     place: text(meta?.place, 120),
     startsOn: isDate(meta?.starts_on) ? meta.starts_on : '',

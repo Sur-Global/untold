@@ -121,3 +121,16 @@ describe('CoursePeopleFields', () => {
     expect(sentPeople(container).map((p: any) => p.name)).toEqual(['Rui'])
   })
 })
+
+describe('the banner already has the title', () => {
+  it('is a checkbox under the banner, off for a new course and on for one that had it, and it is sent with the form', () => {
+    const { container, unmount } = render(<CourseDetailsFields />)
+    const box = screen.getByLabelText('Mi banner ya lleva el título') as HTMLInputElement
+    expect(box.checked).toBe(false)
+    unmount()
+    const { container: saved } = render(<CourseDetailsFields initial={{ ...EMPTY_COURSE_FORM, bannerUrl: 'https://cdn/banner.webp', bannerHasTitle: true }} />)
+    expect((saved.querySelector('input[name="banner_has_title"]') as HTMLInputElement).checked).toBe(true)
+    expect(readCourseExtras(send(saved)).bannerHasTitle).toBe(true)
+    void container
+  })
+})
