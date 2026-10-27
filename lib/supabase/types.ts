@@ -145,8 +145,9 @@ export interface Database {
           names: Record<string, string>;
           is_topic: boolean;
           descriptions: Record<string, string>;
+          image_url: string | null;
         };
-        Insert: Omit<Database["public"]["Tables"]["tags"]["Row"], "id" | "is_topic" | "descriptions"> & { is_topic?: boolean; descriptions?: Record<string, string> };
+        Insert: Omit<Database["public"]["Tables"]["tags"]["Row"], "id" | "is_topic" | "descriptions" | "image_url"> & { is_topic?: boolean; descriptions?: Record<string, string>; image_url?: string | null };
         Update: Partial<Database["public"]["Tables"]["tags"]["Insert"]>;
       };
       likes: {

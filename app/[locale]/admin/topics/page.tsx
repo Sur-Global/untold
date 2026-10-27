@@ -8,7 +8,7 @@ export default async function AdminTopicsPage() {
   await requireAdmin()
   const supabase = await createClient()
   const [{ data }, counts] = await Promise.all([
-    (supabase as any).from('tags').select('id, slug, names, is_topic').limit(1000),
+    (supabase as any).from('tags').select('id, slug, names, is_topic, descriptions, image_url').limit(1000),
     loadTagCounts(supabase),
   ])
   const rows: TopicRow[] = (data ?? []).map((tag: any) => ({
@@ -17,6 +17,8 @@ export default async function AdminTopicsPage() {
     name: tagDisplayName(tag.names, 'es', tag.slug),
     count: counts.get(tag.slug) ?? 0,
     isTopic: !!tag.is_topic,
+    description: tag.descriptions?.es ?? '',
+    imageUrl: tag.image_url ?? '',
   }))
   // topics first, then by how much content they have
   rows.sort((a, b) => Number(b.isTopic) - Number(a.isTopic) || b.count - a.count || a.name.localeCompare(b.name))

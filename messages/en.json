@@ -180,6 +180,7 @@
     "noContent": "No content for this tag yet."
   },
   "topics": {
+    "eyebrow": "Topic",
     "title": "Topics",
     "description": "The big themes of UNTOLD.ink. Pick one and explore the articles, videos, podcasts and knowledge pills about it.",
     "empty": "No topics yet."

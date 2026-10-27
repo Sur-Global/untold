@@ -4,7 +4,7 @@
 import { tagDisplayName } from '@/lib/tag-name'
 
 export type TopicRow = {
-  tags?: { slug: string; names?: Record<string, string> | null } | null
+  tags?: { slug: string; names?: Record<string, string> | null; is_topic?: boolean | null } | null
   content?: { published_at?: string | null; likes_count?: number | null } | null
 }
 
@@ -30,7 +30,8 @@ export function rankTrendingTopics(rows: TopicRow[], now: Date = new Date(), lim
   const byTag = new Map<string, { topic: Topic; score: number }>()
   for (const row of rows) {
     const tag = row.tags
-    if (!tag?.slug || NOT_TOPICS.has(tag.slug)) continue
+    // only the tags the editors chose as topics (Admin → Topics); a row that does not say is taken as one
+    if (!tag?.slug || NOT_TOPICS.has(tag.slug) || tag.is_topic === false) continue
     const weight = recencyWeight(row.content?.published_at, now) * (1 + 0.5 * (row.content?.likes_count ?? 0))
     const found = byTag.get(tag.slug)
     if (found) {

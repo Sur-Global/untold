@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { TOPIC_STRIP_SIZE, cardTopic, pickTopicStrip, splitItemTags } from '@/lib/topics'
+import { TOPIC_STRIP_SIZE, cardTopic, cleanTopicImage, pickTopicStrip, splitItemTags } from '@/lib/topics'
 import type { CloudTag } from '@/lib/tag-cloud'
 
 const cloud = (slug: string, count: number, isTopic = true, name = slug): CloudTag => ({ slug, name, count, isTopic })
@@ -79,5 +79,12 @@ describe('cardTopic (the category a card shows)', () => {
     expect(cardTopic([{ tags: { slug: 'ai', is_topic: false } }])).toBeUndefined()
     expect(cardTopic([{ tags: null }])).toBeUndefined()
     expect(cardTopic(null)).toBeUndefined()
+  })
+})
+
+describe('cleanTopicImage', () => {
+  it('keeps a web address and drops anything else', () => {
+    expect(cleanTopicImage(' https://cdn/x.webp ')).toBe('https://cdn/x.webp')
+    for (const bad of ['', 'javascript:alert(1)', '/x.png', 'data:image/png;base64,AAA', null, 4]) expect(cleanTopicImage(bad)).toBeNull()
   })
 })

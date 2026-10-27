@@ -180,6 +180,7 @@
     "noContent": "Intet indhold med dette emne endnu."
   },
   "topics": {
+    "eyebrow": "Emne",
     "title": "Emner",
     "description": "UNTOLD.inks store emner. Vælg ét og udforsk artikler, videoer, podcasts og videnspiller om det.",
     "empty": "Ingen emner endnu."

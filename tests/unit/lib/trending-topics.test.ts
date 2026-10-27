@@ -16,6 +16,11 @@ describe('recencyWeight', () => {
 })
 
 describe('rankTrendingTopics', () => {
+  it('only counts the tags the editors chose as topics', () => {
+    const plain = { tags: { slug: 'plain', names: {}, is_topic: false }, content: { published_at: daysAgo(1), likes_count: 50 } }
+    const topic = { tags: { slug: 'topic', names: {}, is_topic: true }, content: { published_at: daysAgo(400), likes_count: 0 } }
+    expect(rankTrendingTopics([plain, topic], NOW).map((t) => t.slug)).toEqual(['topic'])
+  })
   it('puts first the topics with the most recent content', () => {
     const rows = [row('antiguo', 800), row('antiguo', 800), row('antiguo', 800), row('nuevo', 5), row('nuevo', 8)]
     expect(rankTrendingTopics(rows, NOW).map((t) => t.slug)).toEqual(['nuevo', 'antiguo'])

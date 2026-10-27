@@ -11,6 +11,8 @@ import { Footer } from '@/components/layout/Footer'
 import { ContentCard } from '@/components/content/ContentCard'
 import { tagDisplayName } from '@/lib/tag-name'
 import { podcastBadgeLabel } from '@/lib/podcast-origin'
+import { TopicHeader } from '@/components/content/TopicHeader'
+import { relatedTopics } from '@/lib/data/topics'
 
 interface PageProps {
   params: Promise<{ locale: string; slug: string }>
@@ -21,10 +23,11 @@ export default async function TagPage({ params }: PageProps) {
   const supabase = await createClient()
   const tTag = await getTranslations('tag')
   const tListings = await getTranslations('listings')
+  const tTopics = await getTranslations('topics')
 
   const tagPromise = (supabase as any)
     .from('tags')
-    .select('id, slug, names')
+    .select('id, slug, names, is_topic, descriptions, image_url')
     .eq('slug', slug)
     .single()
 
@@ -33,6 +36,9 @@ export default async function TagPage({ params }: PageProps) {
   if (!tag) notFound()
 
   const tagLabel = tagDisplayName(tag.names as Record<string, string>, locale, tag.slug)
+  // A topic has its own page header (a sentence, maybe a picture, and the topics that go with it); a plain tag keeps the simple one
+  const related = tag.is_topic ? await relatedTopics(supabase, tag.slug, locale, 3) : []
+  const description: string | null = tag.descriptions?.[locale]?.trim() || tag.descriptions?.es?.trim() || null
 
   // Get all published content with this tag
   const { data: items } = await (supabase as any)
@@ -81,10 +87,23 @@ export default async function TagPage({ params }: PageProps) {
       <TranslationRefresher pending={untranslatedIds.length > 0} />
       <Navigation {...navProps} />
       <main className="max-w-7xl mx-auto px-4 sm:px-6 py-16">
-        <div className="mb-12">
-          <h1 className="mb-2">#{tagLabel}</h1>
-          <p className="text-[#6B5F58] font-mono">{tTag('contentCount', { count: published.length })}</p>
-        </div>
+        {tag.is_topic ? (
+          <TopicHeader
+            name={tagLabel}
+            eyebrow={tTopics('eyebrow')}
+            description={description}
+            imageUrl={tag.image_url}
+            countLabel={tTag('contentCount', { count: published.length })}
+            exploreLabel={tListings('topicsExplore')}
+            related={related}
+            allTopicsLabel={tListings('allTopics')}
+          />
+        ) : (
+          <div className="mb-12">
+            <h1 className="mb-2">#{tagLabel}</h1>
+            <p className="text-[#6B5F58] font-mono">{tTag('contentCount', { count: published.length })}</p>
+          </div>
+        )}
 
         {published.length > 0 ? (
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">

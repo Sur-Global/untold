@@ -51,3 +51,12 @@ type CardTag = { slug: string; names?: Record<string, string> | null; is_topic?:
 export function cardTopic(contentTags: { tags?: CardTag | null }[] | null | undefined): CardTag | undefined {
   return (contentTags ?? []).map((row) => row.tags).find((tag): tag is CardTag => !!tag && !!tag.is_topic)
 }
+
+/** The longest sentence about a topic */
+export const TOPIC_DESCRIPTION_MAX = 240
+
+/** The picture of a topic: a web address, or nothing */
+export function cleanTopicImage(raw: unknown): string | null {
+  const value = typeof raw === 'string' ? raw.trim() : ''
+  return /^https?:\/\/[^\s]+$/i.test(value) && value.length <= 2000 ? value : null
+}

@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { loadAllTopics, loadContentTopics, loadTagCounts, mostRelatedTopic } from '@/lib/data/topics'
+import { loadAllTopics, loadContentTopics, loadTagCounts, mostRelatedTopic, relatedTopics } from '@/lib/data/topics'
 
 /** A database that answers each table's queries in turn */
 function fakeDb(answers: Record<string, any[]>) {
@@ -19,6 +19,24 @@ describe('loadTagCounts', () => {
   it('counts the published content of each tag', async () => {
     const db = fakeDb({ content_tags: [{ data: [{ tags: { slug: 'a' } }, { tags: { slug: 'a' } }, { tags: { slug: 'b' } }, { tags: null }] }] })
     expect([...(await loadTagCounts(db))]).toEqual([['a', 2], ['b', 1]])
+  })
+})
+
+describe('relatedTopics', () => {
+  it('lists the topics that most often go with a topic, the closest first, at most the asked number', async () => {
+    const db = fakeDb({
+      tags: [{ data: { id: 't1' } }],
+      content_tags: [
+        { data: [{ content_id: 'c1' }, { content_id: 'c2' }, { content_id: 'c3' }] },
+        { data: [row('futuros', 'Futuros'), row('tecnologia', 'Tecnología'), row('tecnologia', 'Tecnología'), row('diseno', 'Diseño'), row('diseno', 'Diseño'), row('arte', 'Arte'), row('tecnologia', 'Tecnología')] },
+      ],
+    })
+    expect(await relatedTopics(db, 'futuros', 'es', 2)).toEqual([{ slug: 'tecnologia', name: 'Tecnología' }, { slug: 'diseno', name: 'Diseño' }])
+  })
+
+  it('is empty for a topic that does not exist or has no content', async () => {
+    expect(await relatedTopics(fakeDb({ tags: [{ data: null }] }), 'x', 'es')).toEqual([])
+    expect(await relatedTopics(fakeDb({ tags: [{ data: { id: 't' } }], content_tags: [{ data: [] }] }), 'x', 'es')).toEqual([])
   })
 })
 

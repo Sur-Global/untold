@@ -12,7 +12,7 @@ async function trendingTopics(limit: number): Promise<Topic[]> {
   })
   const { data } = await supabase
     .from('content_tags')
-    .select('tags ( slug, names ), content!inner ( status, is_curated, published_at, likes_count )')
+    .select('tags ( slug, names, is_topic ), content!inner ( status, is_curated, published_at, likes_count )')
     .eq('content.status', 'published')
     .eq('content.is_curated', true)
     .limit(5000)

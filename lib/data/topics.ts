@@ -20,10 +20,10 @@ export async function loadTagCounts(supabase: SupabaseClient): Promise<Map<strin
   return counts
 }
 
-/** The topic that appears most often together with a topic, in published content (not one of `exclude`) */
-export async function mostRelatedTopic(supabase: SupabaseClient, slug: string, locale: string, exclude: string[] = []): Promise<TopicLink | null> {
+/** The topics that appear most often together with a topic in published content (not the topic itself nor one of `exclude`), the closest first */
+export async function relatedTopics(supabase: SupabaseClient, slug: string, locale: string, limit = 3, exclude: string[] = []): Promise<TopicLink[]> {
   const { data: tag } = await (supabase as any).from('tags').select('id').eq('slug', slug).maybeSingle()
-  if (!tag) return null
+  if (!tag) return []
   const { data: sameContent } = await (supabase as any)
     .from('content_tags')
     .select('content_id, content!inner ( status, is_curated )')
@@ -32,7 +32,7 @@ export async function mostRelatedTopic(supabase: SupabaseClient, slug: string, l
     .eq('content.is_curated', true)
     .limit(5000)
   const ids: string[] = (sameContent ?? []).map((row: any) => row.content_id)
-  if (ids.length === 0) return null
+  if (ids.length === 0) return []
 
   const { data: rows } = await (supabase as any)
     .from('content_tags')
@@ -49,10 +49,16 @@ export async function mostRelatedTopic(supabase: SupabaseClient, slug: string, l
     entry.count++
     found.set(other.slug, entry)
   }
-  const best = [...found.entries()]
+  return [...found.entries()]
     .map(([otherSlug, entry]) => ({ slug: otherSlug, name: tagDisplayName(entry.names, locale, otherSlug), count: entry.count }))
-    .sort((a, b) => b.count - a.count || a.name.localeCompare(b.name))[0]
-  return best ? { slug: best.slug, name: best.name } : null
+    .sort((a, b) => b.count - a.count || a.name.localeCompare(b.name))
+    .slice(0, limit)
+    .map(({ slug: otherSlug, name }) => ({ slug: otherSlug, name }))
+}
+
+/** The topic that appears most often together with a topic, in published content (not one of `exclude`) */
+export async function mostRelatedTopic(supabase: SupabaseClient, slug: string, locale: string, exclude: string[] = []): Promise<TopicLink | null> {
+  return (await relatedTopics(supabase, slug, locale, 1, exclude))[0] ?? null
 }
 
 /**
