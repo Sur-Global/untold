@@ -594,6 +594,11 @@
       "title": "At tænke fremtiden, fra Syd",
       "text": "Mød organisationen bag UNTOLD.ink",
       "cta": "Mød SurGlobal"
+    },
+    "podcast": {
+      "tagline": "En podcast fra SurGlobal & UNTOLD.ink",
+      "listenOn": "Lyt på",
+      "listenOnPlatform": "Lyt på {platform}"
     }
   },
   "issues": {

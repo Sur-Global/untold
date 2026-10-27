@@ -594,6 +594,11 @@
       "title": "Penser l’avenir, depuis le Sud",
       "text": "Découvrez l’organisation derrière UNTOLD.ink",
       "cta": "Découvrez SurGlobal"
+    },
+    "podcast": {
+      "tagline": "Un podcast de SurGlobal & UNTOLD.ink",
+      "listenOn": "À écouter sur",
+      "listenOnPlatform": "Écouter sur {platform}"
     }
   },
   "issues": {

@@ -594,6 +594,11 @@
       "title": "Thinking the future, from the South",
       "text": "Meet the organization behind UNTOLD.ink",
       "cta": "Meet SurGlobal"
+    },
+    "podcast": {
+      "tagline": "A podcast by SurGlobal & UNTOLD.ink",
+      "listenOn": "Listen on",
+      "listenOnPlatform": "Listen on {platform}"
     }
   },
   "issues": {

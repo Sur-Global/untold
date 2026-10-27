@@ -12,7 +12,10 @@ import { TagCloud } from '@/components/content/TagCloud'
 import { contentIdsForTag, loadTagCloud } from '@/lib/data/tag-cloud'
 import { TranslationRefresher } from '@/components/TranslationRefresher'
 import { tagDisplayName } from '@/lib/tag-name'
+import { Fragment } from 'react'
 import { Link } from '@/i18n/navigation'
+import { PodcastBanner } from '@/components/podcasts/PodcastBanner'
+import { getPodcastBanner } from '@/lib/data/podcast-banner'
 import { PODCAST_ORIGINS, PODCAST_ORIGIN_KEYS, isPodcastOrigin, type PodcastOrigin } from '@/lib/podcast-origin'
 
 const PAGE_SIZE = 12 // one type's own list ("view all")
@@ -41,12 +44,15 @@ export default async function PodcastsPage({ params, searchParams }: PageProps) 
   const offset = (page - 1) * PAGE_SIZE
 
   const supabase = await createClient()
-  const [cloud, tagIds] = await Promise.all([
+  const [cloud, tagIds, podcastBanner] = await Promise.all([
     loadTagCloud(supabase, 'podcast', locale),
     activeTag ? contentIdsForTag(supabase, activeTag) : Promise.resolve(null),
+    // the banner of our own podcast is part of the page with all the types, not of a list filtered by type or topic
+    activeOrigin || activeTag ? Promise.resolve(null) : getPodcastBanner(),
   ])
   const tListings = await getTranslations('listings')
   const tNav = await getTranslations('nav')
+  const tBanners = await getTranslations('banners')
 
   // the published podcasts of one type: the ★ picks (admin/content) first, then the newest (the star shows on their card)
   const ofType = (podcastOrigin: PodcastOrigin, from: number, to: number) => {
@@ -153,19 +159,35 @@ export default async function PodcastsPage({ params, searchParams }: PageProps) 
           </Link>
         )}
 
-        {sections.map((section) => (
-          <section key={section.origin} aria-labelledby={`podcasts-${section.origin}`} className="mb-14">
-            <div className="mb-6 flex flex-wrap items-baseline justify-between gap-x-6 gap-y-1">
-              <h2 id={`podcasts-${section.origin}`}>{tListings(PODCAST_ORIGIN_KEYS[section.origin])}</h2>
-              {!activeOrigin && section.count > SECTION_SIZE && (
-                <Link href={`/podcasts?origin=${section.origin}${tagQuery}`} className="font-mono text-sm text-[#A0522D] hover:underline">
-                  {tListings('viewAll', { count: section.count })}
-                </Link>
+        {(activeOrigin ? [activeOrigin] : [...PODCAST_ORIGINS]).map((podcastOrigin) => {
+          const section = sections.find((s) => s.origin === podcastOrigin)
+          return (
+            <Fragment key={podcastOrigin}>
+              {section && (
+                <section aria-labelledby={`podcasts-${section.origin}`} className="mb-14">
+                  <div className="mb-6 flex flex-wrap items-baseline justify-between gap-x-6 gap-y-1">
+                    <h2 id={`podcasts-${section.origin}`}>{tListings(PODCAST_ORIGIN_KEYS[section.origin])}</h2>
+                    {!activeOrigin && section.count > SECTION_SIZE && (
+                      <Link href={`/podcasts?origin=${section.origin}${tagQuery}`} className="font-mono text-sm text-[#A0522D] hover:underline">
+                        {tListings('viewAll', { count: section.count })}
+                      </Link>
+                    )}
+                  </div>
+                  <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">{section.items.map((item) => renderCard(item))}</div>
+                </section>
               )}
-            </div>
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">{section.items.map((item) => renderCard(item))}</div>
-          </section>
-        ))}
+              {/* the banner of our own podcast, right below the podcasts made by SurGlobal / UNTOLD.ink (Admin → Advertising) */}
+              {podcastOrigin === 'own' && podcastBanner?.enabled && (
+                <div className="mb-14">
+                  <PodcastBanner
+                    banner={podcastBanner}
+                    copy={{ tagline: tBanners('podcast.tagline'), listenOn: tBanners('podcast.listenOn'), listenOnPlatform: tBanners('podcast.listenOnPlatform') }}
+                  />
+                </div>
+              )}
+            </Fragment>
+          )
+        })}
 
         {activeOrigin && totalPages > 1 && (
           <div className="flex justify-center gap-2 mt-12">
@@ -183,7 +205,7 @@ export default async function PodcastsPage({ params, searchParams }: PageProps) 
           </div>
         )}
 
-        {sections.length === 0 && (
+        {sections.length === 0 && !podcastBanner?.enabled && (
           <p className="text-center py-20 text-[#6B5F58]">{tListings('noPodcasts')}</p>
         )}
       </main>
