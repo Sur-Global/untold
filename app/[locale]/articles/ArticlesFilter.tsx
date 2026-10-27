@@ -1,5 +1,6 @@
 'use client'
 
+import { SearchIcon } from '@/components/ui/SearchIcon'
 import { useRouter, usePathname, useSearchParams } from 'next/navigation'
 import { useCallback, useTransition, useState, useEffect, useRef } from 'react'
 
@@ -74,17 +75,7 @@ export function ArticlesFilter({
       {/* Search */}
       <div className="flex justify-center">
         <div className="relative w-full max-w-[672px]">
-          <svg
-            className="absolute left-4 top-1/2 -translate-y-1/2 pointer-events-none"
-            width="20"
-            height="20"
-            viewBox="0 0 20 20"
-            fill="none"
-            style={{ color: 'rgba(0,0,0,0.35)' }}
-          >
-            <circle cx="9" cy="9" r="5.5" stroke="currentColor" strokeWidth="1.5" />
-            <path d="M14 14l-3-3" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
-          </svg>
+          <SearchIcon className="absolute left-4 top-1/2 -translate-y-1/2 pointer-events-none" size={20} style={{ color: 'rgba(0,0,0,0.5)' }} />
           <input
             type="search"
             value={inputValue}

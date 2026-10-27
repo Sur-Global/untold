@@ -35,7 +35,8 @@ export function TopicStrip({ tags, activeSlug, basePath, label, exploreLabel, al
   }
 
   return (
-    <nav aria-label={label} className="mt-8 flex items-center gap-2 overflow-x-auto border-y border-black/10 py-3 [scrollbar-width:none]" style={aeonik}>
+    <nav aria-label={label} className="mt-8 flex items-center gap-4 border-y border-black/10 py-3" style={aeonik}>
+      <div className="flex min-w-0 flex-1 items-center gap-2 overflow-x-auto [scrollbar-width:none]">
       <span className="shrink-0 pr-1 text-xs uppercase tracking-[0.08em] text-[#6B5F58]">{exploreLabel}</span>
       <span aria-hidden className="h-4 w-px shrink-0 bg-black/20" />
       <Link
@@ -60,7 +61,9 @@ export function TopicStrip({ tags, activeSlug, basePath, label, exploreLabel, al
           </Link>
         )
       })}
-      <Link href={'/topics' as any} className="ml-auto shrink-0 pl-4 text-sm text-[#6b6ad0] underline-offset-4 hover:underline">
+      </div>
+      {/* outside the sliding row, so it is always there */}
+      <Link href={'/topics' as any} className="shrink-0 text-sm text-[#6b6ad0] underline-offset-4 hover:underline">
         {allTopicsLabel}
       </Link>
     </nav>

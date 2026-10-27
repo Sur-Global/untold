@@ -1,4 +1,5 @@
 'use client'
+import { SearchIcon } from '@/components/ui/SearchIcon'
 import Link from 'next/link'
 import { useTranslations } from 'next-intl'
 import { usePathname } from 'next/navigation'
@@ -51,15 +52,6 @@ function isEditorOrAdmin(role: UserRole | null) {
 // Every logged-in member can create (articles, videos, pills); podcasts/courses are limited later
 function isCreator(role: UserRole | null) {
   return role === 'admin' || role === 'author' || role === 'editor' || role === 'user'
-}
-
-function SearchIcon() {
-  return (
-    <svg width="18" height="18" viewBox="0 0 20 20" fill="none" aria-hidden>
-      <circle cx="9" cy="9" r="5.5" stroke="currentColor" strokeWidth="1.5" />
-      <path d="M14 14l-3-3" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
-    </svg>
-  )
 }
 
 const navLinkStyle: React.CSSProperties = {
@@ -273,10 +265,11 @@ export function NavigationClient({
             <Link
               href="/search"
               aria-label={t('search')}
-              className="flex items-center justify-center rounded-lg transition-colors hover:bg-white/10"
-              style={{ width: 32, height: 32, color: 'rgba(255,255,255,0.5)' }}
+              title={t('search')}
+              className="flex items-center justify-center rounded-lg transition-colors hover:bg-white/15 focus-visible:bg-white/15"
+              style={{ width: 36, height: 36, color: 'rgba(255,255,255,0.9)' }}
             >
-              <SearchIcon />
+              <SearchIcon size={20} />
             </Link>
           )}
 
