@@ -23,7 +23,9 @@ import { localizedSlides, parseSlides, slideCredits } from '@/lib/pill-slides'
 import { localizedPath, siteUrl } from '@/lib/content-metadata'
 import { normalizeAccent } from '@/lib/pill-accent'
 import { readableTextColor } from '@/lib/cover-formats'
-import { tagDisplayName } from '@/lib/tag-name'
+import { TopicKicker } from '@/components/content/TopicKicker'
+import { OtherTags } from '@/components/content/OtherTags'
+import { loadContentTopics } from '@/lib/data/topics'
 
 interface PageProps {
   params: Promise<{ locale: string; slug: string }>
@@ -55,7 +57,7 @@ export default async function PillPage({ params }: PageProps) {
       profiles!author_id ( display_name, slug, avatar_url ),
       content_translations ( title, body, excerpt, locale ),
       pill_meta ( accent_color, image_url, format, slides, slide_translations ),
-      content_tags ( tags ( slug, names ) )
+      content_tags ( tags ( slug, names, is_topic ) )
     `)
     .eq('slug', slug)
     .eq('type', 'pill')
@@ -88,10 +90,7 @@ export default async function PillPage({ params }: PageProps) {
   const credits = slideCredits(slides)
   // a carousel can be shared as pictures (Instagram) and downloaded
   const slidesToShare = isCarousel && slides.length > 0 ? { slug: pill.slug, count: slides.length } : undefined
-  const topics: { slug: string; name: string }[] = (pill.content_tags ?? [])
-    .map((ct: any) => ct.tags)
-    .filter(Boolean)
-    .map((tag: any) => ({ slug: tag.slug, name: tagDisplayName(tag.names, locale, tag.slug) }))
+  const topics = await loadContentTopics(supabase, (pill.content_tags ?? []).map((ct: any) => ct.tags).filter(Boolean), locale)
   const pillUrl = `${siteUrl()}${localizedPath(locale, `/pills/${slug}`)}`
 
   if (needsBody || needsSlides) {
@@ -160,6 +159,7 @@ export default async function PillPage({ params }: PageProps) {
             </div>
           </div>
           {singleLanguage && <LanguageNotice sourceLocale={sourceLocale} subtitleLocales={pill.subtitle_locales} />}
+          <TopicKicker primary={topics.primary} related={topics.related} exploreAlso={tContent('exploreAlso')} className="mb-3" />
           <h1 className="mb-4" style={{ color: '#2C2420' }}>{t.title}</h1>
           {pill.profiles && <AuthorByline author={pill.profiles} publishedAt={pill.published_at} locale={locale} />}
           {isCarousel ? (
@@ -196,20 +196,7 @@ export default async function PillPage({ params }: PageProps) {
           />
         )}
 
-        {topics.length > 0 && (
-          <div className="mb-8 flex flex-wrap gap-2">
-            {topics.map((topic) => (
-              <Link
-                key={topic.slug}
-                href={`/tag/${topic.slug}` as any}
-                className="rounded-full px-3 py-1 text-sm text-black no-underline transition-colors hover:bg-[#A9A8E9]/40"
-                style={{ border: '1.5px solid rgba(169,168,233,0.6)', background: '#fff' }}
-              >
-                {topic.name}
-              </Link>
-            ))}
-          </div>
-        )}
+        <OtherTags tags={topics.others} label={tContent('otherTags')} className="mb-8" />
 
         <div className="rounded-2xl border border-black/10 bg-white p-5">
           <ShareBar title={t.title} url={pillUrl} slides={slidesToShare} />

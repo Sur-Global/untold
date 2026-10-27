@@ -28,6 +28,7 @@ import {
   CourseCard,
 } from './_home-cards'
 import { tagDisplayName } from '@/lib/tag-name'
+import { cardTopic } from '@/lib/topics'
 import { getTrendingTopics } from '@/lib/data/trending-topics'
 
 interface PageProps {
@@ -91,7 +92,7 @@ export default async function HomePage({ params }: PageProps) {
         id, slug, type, cover_image_url, read_time_minutes, likes_count,
         profiles!author_id ( display_name, slug, avatar_url ),
         content_translations ( title, excerpt, featured_summary, locale ),
-        content_tags ( tags ( names, slug ) ),
+        content_tags ( tags ( names, slug, is_topic ) ),
         video_meta ( thumbnail_url ),
         podcast_meta ( cover_image_url ),
         pill_meta ( image_url )
@@ -107,7 +108,7 @@ export default async function HomePage({ params }: PageProps) {
         id, slug, type, source_locale, single_language, subtitle_locales, is_featured, likes_count, published_at, cover_image_url, read_time_minutes,
         profiles!author_id ( display_name, slug, avatar_url ),
         content_translations ( title, excerpt, featured_summary, locale ),
-        content_tags ( tags ( names, slug ) )
+        content_tags ( tags ( names, slug, is_topic ) )
       `)
       .eq('type', 'article')
       .eq('status', 'published')
@@ -122,7 +123,7 @@ export default async function HomePage({ params }: PageProps) {
         id, slug, type, source_locale, single_language, subtitle_locales, is_featured, likes_count, published_at, cover_image_url,
         profiles!author_id ( display_name, slug, avatar_url ),
         content_translations ( title, excerpt, featured_summary, locale ),
-        content_tags ( tags ( names, slug ) ),
+        content_tags ( tags ( names, slug, is_topic ) ),
         video_meta ( thumbnail_url, duration )
       `)
       .eq('type', 'video')
@@ -138,7 +139,7 @@ export default async function HomePage({ params }: PageProps) {
         id, slug, type, source_locale, single_language, subtitle_locales, is_featured, likes_count, published_at,
         profiles!author_id ( display_name, slug, avatar_url ),
         content_translations ( title, excerpt, featured_summary, locale ),
-        content_tags ( tags ( names, slug ) ),
+        content_tags ( tags ( names, slug, is_topic ) ),
         podcast_meta ( cover_image_url, duration, episode_number )
       `)
       .eq('type', 'podcast')
@@ -154,7 +155,7 @@ export default async function HomePage({ params }: PageProps) {
         id, slug, type, source_locale, single_language, subtitle_locales, is_featured, likes_count, published_at, cover_image_url,
         profiles!author_id ( display_name, slug, avatar_url ),
         content_translations ( title, excerpt, featured_summary, locale ),
-        content_tags ( tags ( names, slug ) ),
+        content_tags ( tags ( names, slug, is_topic ) ),
         pill_meta ( accent_color, image_url )
       `)
       .eq('type', 'pill')
@@ -170,7 +171,7 @@ export default async function HomePage({ params }: PageProps) {
         id, slug, type, source_locale, single_language, subtitle_locales, is_featured, likes_count, published_at, cover_image_url,
         profiles!author_id ( display_name, slug, avatar_url ),
         content_translations ( title, excerpt, featured_summary, locale ),
-        content_tags ( tags ( names, slug ) ),
+        content_tags ( tags ( names, slug, is_topic ) ),
         course_meta ( price, currency, duration, students_count, rating )
       `)
       .eq('type', 'course')
@@ -187,7 +188,7 @@ export default async function HomePage({ params }: PageProps) {
             id, slug, source_locale, single_language, published_at, read_time_minutes, cover_image_url,
             profiles!author_id ( display_name, slug, avatar_url ),
             content_translations ( title, excerpt, featured_summary, locale ),
-            content_tags ( tags ( names, slug ) )
+            content_tags ( tags ( names, slug, is_topic ) )
           `)
           .eq('type', 'article')
           .eq('status', 'published')
@@ -284,7 +285,7 @@ export default async function HomePage({ params }: PageProps) {
   function getItemProps(item: any) {
     const trans = getTranslation(item.content_translations ?? [], locale)
     const author = item.profiles
-    const firstTag = item.content_tags?.[0]?.tags
+    const firstTag = cardTopic(item.content_tags)
     const categoryTag = firstTag ? tagDisplayName(firstTag.names, locale, firstTag.slug) : null
     const categoryTagSlug = firstTag?.slug ?? null
     const vm = item.video_meta

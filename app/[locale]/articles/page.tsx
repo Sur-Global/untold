@@ -12,11 +12,12 @@ import { ContentCard } from '@/components/content/ContentCard'
 import { loadTagCloud } from '@/lib/data/tag-cloud'
 import { TranslationRefresher } from '@/components/TranslationRefresher'
 import { ArticlesFilter } from './ArticlesFilter'
-import { TagCloud } from '@/components/content/TagCloud'
+import { TopicStrip } from '@/components/content/TopicStrip'
 import Link from 'next/link'
 import { FeaturedSection } from '@/components/content/FeaturedSection'
 import { PAGE_FEATURED_SLOTS } from '@/lib/featured-slots'
 import { tagDisplayName } from '@/lib/tag-name'
+import { cardTopic } from '@/lib/topics'
 
 const BASE_LIMIT = 12
 const LOAD_MORE_STEP = 12
@@ -40,7 +41,7 @@ export default async function ArticlesPage({ params, searchParams }: PageProps) 
   const { userId, ...navProps } = navData
   const tNav = await getTranslations('nav')
 
-  // Tag cloud: only the topics that published articles have
+  // The tags of published articles, to offer their topics in one row
   const cloud = await loadTagCloud(supabase, 'article', locale)
 
   // Build filtered content IDs from search/tag
@@ -82,7 +83,7 @@ export default async function ArticlesPage({ params, searchParams }: PageProps) 
         id, slug, type, source_locale, single_language, subtitle_locales, is_featured, likes_count, published_at, cover_image_url, read_time_minutes,
         profiles!author_id ( display_name, slug, role, avatar_url ),
         content_translations ( title, excerpt, featured_summary, locale ),
-        content_tags ( tags ( names, slug ) )
+        content_tags ( tags ( names, slug, is_topic ) )
       `)
       .eq('type', 'article')
       .eq('status', 'published')
@@ -105,7 +106,7 @@ export default async function ArticlesPage({ params, searchParams }: PageProps) 
         id, slug, type, source_locale, single_language, subtitle_locales, is_featured, likes_count, published_at, cover_image_url, read_time_minutes,
         profiles!author_id ( display_name, slug, role, avatar_url ),
         content_translations ( title, excerpt, featured_summary, locale ),
-        content_tags ( tags ( names, slug ) )
+        content_tags ( tags ( names, slug, is_topic ) )
       `,
         { count: 'exact' }
       )
@@ -184,7 +185,7 @@ export default async function ArticlesPage({ params, searchParams }: PageProps) 
 
   const renderCard = (article: any) => {
         const t = getTranslation(article.content_translations ?? [], locale)
-        const firstTag = article.content_tags?.[0]?.tags
+        const firstTag = cardTopic(article.content_tags)
         const categoryTag = firstTag
           ? tagDisplayName(firstTag.names, locale, firstTag.slug)
           : null
@@ -258,12 +259,14 @@ export default async function ArticlesPage({ params, searchParams }: PageProps) 
                 labelRecent={tListings('filterRecent')}
               />
             </Suspense>
-            <TagCloud
+            <TopicStrip
               tags={cloud}
               activeSlug={tag}
               basePath="/articles"
               label={tListings('tagCloudLabel')}
+              exploreLabel={tListings('topicsExplore')}
               allLabel={tListings('tagCloudAll')}
+              allTopicsLabel={tListings('allTopics')}
               keep={{ q: q?.trim() || undefined, filter }}
             />
           </div>

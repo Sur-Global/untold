@@ -14,6 +14,9 @@ import { LikeButton } from '@/components/social/LikeButton'
 import { BookmarkButton } from '@/components/social/BookmarkButton'
 import { ShareButton } from '@/components/social/ShareButton'
 import { EditContentButton } from '@/components/content/EditContentButton'
+import { TopicKicker } from '@/components/content/TopicKicker'
+import { OtherTags } from '@/components/content/OtherTags'
+import { loadContentTopics } from '@/lib/data/topics'
 
 interface PageProps {
   params: Promise<{ locale: string; slug: string }>
@@ -44,7 +47,8 @@ export default async function CoursePage({ params }: PageProps) {
       id, slug, author_id, source_locale, single_language, subtitle_locales, cover_image_url, likes_count, published_at,
       profiles!author_id ( display_name, slug, avatar_url ),
       content_translations ( title, description, locale ),
-      course_meta ( price, currency, duration, students_count, rating )
+      course_meta ( price, currency, duration, students_count, rating ),
+      content_tags ( tags ( slug, names, is_topic ) )
     `)
     .eq('slug', slug)
     .eq('type', 'course')
@@ -64,6 +68,7 @@ export default async function CoursePage({ params }: PageProps) {
 
   const meta = course.course_meta
   const author = course.profiles
+  const topics = await loadContentTopics(supabase, (course.content_tags ?? []).map((ct: any) => ct.tags).filter(Boolean), locale)
 
   const sourceLocale: string = course.source_locale ?? 'en'
   const sourceTranslation = (course.content_translations ?? []).find((tr: any) => tr.locale === sourceLocale)
@@ -120,6 +125,7 @@ export default async function CoursePage({ params }: PageProps) {
               />
             )}
             {singleLanguage && <LanguageNotice sourceLocale={sourceLocale} subtitleLocales={course.subtitle_locales} />}
+            <TopicKicker primary={topics.primary} related={topics.related} exploreAlso={tContent('exploreAlso')} className="mb-3" />
             <h1 className="mb-4">{heading}</h1>
             <BodyTranslationLoader
               contentId={course.id}
@@ -130,6 +136,7 @@ export default async function CoursePage({ params }: PageProps) {
               initialContent={description}
               descriptionClassName="text-[#6B5F58] leading-relaxed text-lg"
             />
+            <OtherTags tags={topics.others} label={tContent('otherTags')} className="mt-6" />
             <div className="flex items-center gap-3 mt-4">
               <LikeButton
                 contentId={course.id}

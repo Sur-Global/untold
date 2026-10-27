@@ -13,6 +13,9 @@ import { Navigation } from '@/components/layout/Navigation'
 import { Footer } from '@/components/layout/Footer'
 import { loadContentMetadata } from '@/lib/data/content-metadata'
 import { RelatedContent } from '@/components/content/RelatedContent'
+import { TopicKicker } from '@/components/content/TopicKicker'
+import { OtherTags } from '@/components/content/OtherTags'
+import { loadContentTopics } from '@/lib/data/topics'
 import { ArticleBody } from '@/components/content/ArticleBody'
 import { BodyTranslationLoader } from '@/components/content/BodyTranslationLoader'
 import { AuthorBioLoader } from '@/components/content/AuthorBioLoader'
@@ -29,7 +32,6 @@ import { triggerListingTranslations } from '@/lib/trigger-listing-translations'
 import { issueMonthLabel } from '@/lib/issues'
 import { locationName } from '@/lib/countries'
 import { EditContentButton } from '@/components/content/EditContentButton'
-import { tagDisplayName } from '@/lib/tag-name'
 
 interface PageProps {
   params: Promise<{ locale: string; slug: string }>
@@ -59,7 +61,7 @@ export default async function ArticlePage({ params }: PageProps) {
       id, slug, likes_count, published_at, cover_image_url, image_credits, source_locale, single_language, subtitle_locales,
       profiles!author_id ( id, display_name, slug, avatar_url, bio, profile_translations, location_country, followers_count, role, social_bluesky, social_linkedin, social_instagram, social_medium, social_custom_url ),
       content_translations ( title, excerpt, featured_summary, body, locale ),
-      content_tags ( tags ( slug, names ) )
+      content_tags ( tags ( slug, names, is_topic ) )
     `)
     .eq('slug', slug)
     .eq('type', 'article')
@@ -88,7 +90,8 @@ export default async function ArticlePage({ params }: PageProps) {
 
   const author = article.profiles
   const authorLocation = locationName(author?.location_country, locale)
-  const tags = article.content_tags?.map((ct: any) => ct.tags) ?? []
+  const tags = (article.content_tags ?? []).map((ct: any) => ct.tags).filter(Boolean)
+  const topics = await loadContentTopics(supabase, tags, locale)
 
   const sourceLocale: string = article.source_locale ?? 'en'
   const sourceTranslation = (article.content_translations ?? []).find((tr: any) => tr.locale === sourceLocale)
@@ -218,23 +221,8 @@ export default async function ArticlePage({ params }: PageProps) {
               />
             ) : (
               <>
-                {/* Category tags */}
-                {!editorialIssue && tags.length > 0 && (
-                  <div className="flex flex-wrap gap-2 mb-8">
-                    {tags.map((tag: any) => (
-                      <Link
-                        key={tag.slug}
-                        href={`/tag/${tag.slug}`}
-                        className="inline-flex items-center gap-2 h-9 px-4 rounded-full text-sm text-primary bg-primary/10 hover:bg-primary/15 transition-colors"
-                      >
-                        <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden>
-                          <path d="M2 4a2 2 0 012-2h4.586a1 1 0 01.707.293l4.414 4.414a1 1 0 010 1.414l-4.586 4.586a1 1 0 01-1.414 0L3.293 8.293A1 1 0 013 7.586V4z"/>
-                        </svg>
-                        {tagDisplayName(tag.names, locale, tag.slug)}
-                      </Link>
-                    ))}
-                  </div>
-                )}
+                {/* Main topic, and one more to explore */}
+                {!editorialIssue && <TopicKicker primary={topics.primary} related={topics.related} exploreAlso={tContent('exploreAlso')} className="mb-8" />}
 
                 {/* Title */}
                 {editorialIssue && (
@@ -500,6 +488,7 @@ export default async function ArticlePage({ params }: PageProps) {
                 )}
               </>
             )}
+            {!editorialIssue && <OtherTags tags={topics.others} label={tContent('otherTags')} />}
           </article>
         </div>
       </main>

@@ -71,6 +71,8 @@
     "readMoreBy": "Lire plus de {name}",
     "tagCloudLabel": "Explorer par thème",
     "tagCloudAll": "Tous",
+    "topicsExplore": "Explorer",
+    "allTopics": "Tous les thèmes →",
     "previous": "← Précédent",
     "next": "Suivant →",
     "pageOf": "Page {page} sur {total}",
@@ -156,7 +158,9 @@
     "carouselNext": "Planche suivante",
     "slideOf": "Planche {n} sur {total}",
     "imageCredits": "Crédits des images",
-    "creditSlide": "Planche {n} : {credit}"
+    "creditSlide": "Planche {n} : {credit}",
+    "exploreAlso": "Explorer aussi",
+    "otherTags": "Étiquettes"
   },
   "search": {
     "placeholder": "Rechercher articles, vidéos, podcasts...",
@@ -174,6 +178,11 @@
     "heading": "#{tag}",
     "contentCount": "{count, plural, one {# contenu} other {# contenus}}",
     "noContent": "Pas encore de contenu pour cette étiquette."
+  },
+  "topics": {
+    "title": "Thèmes",
+    "description": "Les grands thèmes d’UNTOLD.ink. Choisissez-en un et explorez les articles, vidéos, podcasts et pilules qui s’y rapportent.",
+    "empty": "Pas encore de thèmes."
   },
   "create": {
     "pickType": "Que créez-vous ?",

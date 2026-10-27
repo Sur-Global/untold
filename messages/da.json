@@ -71,6 +71,8 @@
     "readMoreBy": "Læs mere af {name}",
     "tagCloudLabel": "Udforsk efter emne",
     "tagCloudAll": "Alle",
+    "topicsExplore": "Udforsk",
+    "allTopics": "Alle emner →",
     "previous": "← Forrige",
     "next": "Næste →",
     "pageOf": "Side {page} af {total}",
@@ -156,7 +158,9 @@
     "carouselNext": "Næste slide",
     "slideOf": "Slide {n} af {total}",
     "imageCredits": "Billedkreditter",
-    "creditSlide": "Slide {n}: {credit}"
+    "creditSlide": "Slide {n}: {credit}",
+    "exploreAlso": "Udforsk også",
+    "otherTags": "Tags"
   },
   "search": {
     "placeholder": "Søg artikler, videoer, podcasts...",
@@ -174,6 +178,11 @@
     "heading": "#{tag}",
     "contentCount": "{count, plural, one {# indhold} other {# indhold}}",
     "noContent": "Intet indhold med dette emne endnu."
+  },
+  "topics": {
+    "title": "Emner",
+    "description": "UNTOLD.inks store emner. Vælg ét og udforsk artikler, videoer, podcasts og videnspiller om det.",
+    "empty": "Ingen emner endnu."
   },
   "create": {
     "pickType": "Hvad opretter du?",

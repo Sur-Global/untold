@@ -71,6 +71,8 @@
     "readMoreBy": "Mehr von {name} lesen",
     "tagCloudLabel": "Nach Thema stöbern",
     "tagCloudAll": "Alle",
+    "topicsExplore": "Entdecken",
+    "allTopics": "Alle Themen →",
     "previous": "← Zurück",
     "next": "Weiter →",
     "pageOf": "Seite {page} von {total}",
@@ -156,7 +158,9 @@
     "carouselNext": "Nächste Folie",
     "slideOf": "Folie {n} von {total}",
     "imageCredits": "Bildnachweise",
-    "creditSlide": "Folie {n}: {credit}"
+    "creditSlide": "Folie {n}: {credit}",
+    "exploreAlso": "Entdecke auch",
+    "otherTags": "Tags"
   },
   "search": {
     "placeholder": "Artikel, Videos, Podcasts suchen...",
@@ -174,6 +178,11 @@
     "heading": "#{tag}",
     "contentCount": "{count, plural, one {# Inhalt} other {# Inhalte}}",
     "noContent": "Noch keine Inhalte für dieses Thema."
+  },
+  "topics": {
+    "title": "Themen",
+    "description": "Die großen Themen von UNTOLD.ink. Wähle eines und entdecke die passenden Artikel, Videos, Podcasts und Wissenspillen.",
+    "empty": "Noch keine Themen."
   },
   "create": {
     "pickType": "Was erstellen Sie?",

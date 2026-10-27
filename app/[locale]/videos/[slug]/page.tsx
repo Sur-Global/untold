@@ -12,6 +12,9 @@ import { Navigation } from '@/components/layout/Navigation'
 import { Footer } from '@/components/layout/Footer'
 import { loadContentMetadata } from '@/lib/data/content-metadata'
 import { RelatedContent } from '@/components/content/RelatedContent'
+import { TopicKicker } from '@/components/content/TopicKicker'
+import { OtherTags } from '@/components/content/OtherTags'
+import { loadContentTopics } from '@/lib/data/topics'
 import { EmbedPlayer } from '@/components/content/EmbedPlayer'
 import { VideoTranslationLoader } from '@/components/content/VideoTranslationLoader'
 import { AuthorBioLoader } from '@/components/content/AuthorBioLoader'
@@ -22,7 +25,6 @@ import type { TranscriptCue } from '@/lib/transcript'
 import Link from 'next/link'
 import { SocialLinks } from '@/components/author/SocialLinks'
 import { EditContentButton } from '@/components/content/EditContentButton'
-import { tagDisplayName } from '@/lib/tag-name'
 
 interface VideoChapter {
   timestamp: string
@@ -53,7 +55,7 @@ export default async function VideoPage({ params }: PageProps) {
         id, slug, author_id, source_locale, single_language, subtitle_locales, likes_count, published_at,
         profiles!author_id ( id, display_name, slug, avatar_url, bio, profile_translations, location_country, social_bluesky, social_linkedin, social_instagram, social_medium, social_custom_url ),
         content_translations ( title, body, description, locale ),
-        content_tags ( tags ( slug, names ) ),
+        content_tags ( tags ( slug, names, is_topic ) ),
         video_meta ( embed_url, thumbnail_url, duration, chapters, chapter_translations, transcript, transcript_translations )
       `)
       .eq('slug', slug)
@@ -78,6 +80,7 @@ export default async function VideoPage({ params }: PageProps) {
   const author = video.profiles
   const authorLocation = locationName(author?.location_country, locale)
   const tags = (video.content_tags ?? []).map((ct: any) => ct.tags).filter(Boolean)
+  const topics = await loadContentTopics(supabase, tags, locale)
   const chapters: VideoChapter[] = Array.isArray(meta?.chapters) ? meta.chapters : []
   const chapterTranslations = meta?.chapter_translations as Record<string, VideoChapter[]> | null
   const sourceLocale: string = video.source_locale ?? 'en'
@@ -165,23 +168,8 @@ export default async function VideoPage({ params }: PageProps) {
             {tContent('back')}
           </Link>
 
-          {/* Tag badges */}
-          {tags.length > 0 && (
-            <div className="flex flex-wrap gap-2 mb-6">
-              {tags.map((tag: any) => (
-                <Link
-                  key={tag.slug}
-                  href={`/tag/${tag.slug}`}
-                  className="inline-flex items-center gap-2 h-9 px-4 rounded-full text-sm text-primary bg-primary/10 hover:bg-primary/15 transition-colors"
-                >
-                  <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden>
-                    <path d="M2 4a2 2 0 012-2h4.586a1 1 0 01.707.293l4.414 4.414a1 1 0 010 1.414l-4.586 4.586a1 1 0 01-1.414 0L3.293 8.293A1 1 0 013 7.586V4z"/>
-                  </svg>
-                  {tagDisplayName(tag.names, locale, tag.slug)}
-                </Link>
-              ))}
-            </div>
-          )}
+          {/* Main topic, and one more to explore */}
+          <TopicKicker primary={topics.primary} related={topics.related} exploreAlso={tContent('exploreAlso')} />
 
           {/* Title */}
           {singleLanguage && <LanguageNotice sourceLocale={sourceLocale} subtitleLocales={video.subtitle_locales} />}
@@ -279,6 +267,8 @@ export default async function VideoPage({ params }: PageProps) {
             contentId={video.id}
             locale={locale}
           />
+
+          <OtherTags tags={topics.others} label={tContent('otherTags')} className="mb-10" />
 
           {/* About the Creator */}
           {author && (

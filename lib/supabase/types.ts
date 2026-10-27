@@ -143,8 +143,10 @@ export interface Database {
           id: string;
           slug: string;
           names: Record<string, string>;
+          is_topic: boolean;
+          descriptions: Record<string, string>;
         };
-        Insert: Omit<Database["public"]["Tables"]["tags"]["Row"], "id">;
+        Insert: Omit<Database["public"]["Tables"]["tags"]["Row"], "id" | "is_topic" | "descriptions"> & { is_topic?: boolean; descriptions?: Record<string, string> };
         Update: Partial<Database["public"]["Tables"]["tags"]["Insert"]>;
       };
       likes: {

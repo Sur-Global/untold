@@ -8,10 +8,11 @@ import { triggerTagTranslations } from '@/lib/trigger-tag-translations'
 import { Navigation } from '@/components/layout/Navigation'
 import { Footer } from '@/components/layout/Footer'
 import { ContentCard } from '@/components/content/ContentCard'
-import { TagCloud } from '@/components/content/TagCloud'
+import { TopicStrip } from '@/components/content/TopicStrip'
 import { contentIdsForTag, loadTagCloud } from '@/lib/data/tag-cloud'
 import { TranslationRefresher } from '@/components/TranslationRefresher'
 import { tagDisplayName } from '@/lib/tag-name'
+import { cardTopic } from '@/lib/topics'
 import { Fragment } from 'react'
 import { Link } from '@/i18n/navigation'
 import { PodcastBanner } from '@/components/podcasts/PodcastBanner'
@@ -25,7 +26,7 @@ const SELECT = `
   id, slug, type, source_locale, single_language, subtitle_locales, is_featured, likes_count, published_at, cover_image_url, read_time_minutes,
   profiles!author_id ( display_name, slug, role, avatar_url ),
   content_translations ( title, excerpt, locale ),
-  content_tags ( tags ( names, slug ) ),
+  content_tags ( tags ( names, slug, is_topic ) ),
   podcast_meta!inner ( duration, episode_number, origin )
 `
 
@@ -111,7 +112,7 @@ export default async function PodcastsPage({ params, searchParams }: PageProps) 
   const renderCard = (item: any) => {
     const t = getTranslation(item.content_translations ?? [], locale)
     const author = item.profiles
-    const firstTag = item.content_tags?.[0]?.tags
+    const firstTag = cardTopic(item.content_tags)
     const categoryTag = firstTag ? tagDisplayName(firstTag.names, locale, firstTag.slug) : null
     const categoryTagSlug = firstTag?.slug ?? null
     return (
@@ -150,7 +151,7 @@ export default async function PodcastsPage({ params, searchParams }: PageProps) 
         <div className="mb-12">
           <h1 className="mb-2">{tNav('podcasts')}</h1>
           <p className="text-[#6B5F58]">{tListings('podcastsDesc')}</p>
-          <TagCloud tags={cloud} activeSlug={activeTag} basePath="/podcasts" label={tListings('tagCloudLabel')} allLabel={tListings('tagCloudAll')} />
+          <TopicStrip tags={cloud} activeSlug={activeTag} basePath="/podcasts" label={tListings('tagCloudLabel')} exploreLabel={tListings('topicsExplore')} allLabel={tListings('tagCloudAll')} allTopicsLabel={tListings('allTopics')} />
         </div>
 
         {activeOrigin && (

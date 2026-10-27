@@ -71,6 +71,8 @@
     "readMoreBy": "Read more by {name}",
     "tagCloudLabel": "Browse by topic",
     "tagCloudAll": "All",
+    "topicsExplore": "Explore",
+    "allTopics": "All topics →",
     "previous": "← Previous",
     "next": "Next →",
     "pageOf": "Page {page} of {total}",
@@ -156,7 +158,9 @@
     "carouselNext": "Next slide",
     "slideOf": "Slide {n} of {total}",
     "imageCredits": "Picture credits",
-    "creditSlide": "Slide {n}: {credit}"
+    "creditSlide": "Slide {n}: {credit}",
+    "exploreAlso": "Explore also",
+    "otherTags": "Tags"
   },
   "search": {
     "placeholder": "Search articles, videos, podcasts...",
@@ -174,6 +178,11 @@
     "heading": "#{tag}",
     "contentCount": "{count, plural, one {# piece of content} other {# pieces of content}}",
     "noContent": "No content for this tag yet."
+  },
+  "topics": {
+    "title": "Topics",
+    "description": "The big themes of UNTOLD.ink. Pick one and explore the articles, videos, podcasts and knowledge pills about it.",
+    "empty": "No topics yet."
   },
   "create": {
     "pickType": "What are you creating?",

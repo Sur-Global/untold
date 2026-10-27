@@ -14,6 +14,7 @@ export const RESERVED_STATIC_PAGE_SLUGS = new Set([
   "search",
   "suspended",
   "tag",
+  "topics",
   "videos",
 ]);
 

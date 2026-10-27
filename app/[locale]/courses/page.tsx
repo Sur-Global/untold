@@ -8,11 +8,12 @@ import { TranslationRefresher } from '@/components/TranslationRefresher'
 import { Navigation } from '@/components/layout/Navigation'
 import { Footer } from '@/components/layout/Footer'
 import { ContentCard } from '@/components/content/ContentCard'
-import { TagCloud } from '@/components/content/TagCloud'
+import { TopicStrip } from '@/components/content/TopicStrip'
 import { contentIdsForTag, loadTagCloud } from '@/lib/data/tag-cloud'
 import { FeaturedSection } from '@/components/content/FeaturedSection'
 import { PAGE_FEATURED_SLOTS } from '@/lib/featured-slots'
 import { tagDisplayName } from '@/lib/tag-name'
+import { cardTopic } from '@/lib/topics'
 
 const PAGE_SIZE = 12
 
@@ -44,7 +45,7 @@ export default async function CoursesPage({ params, searchParams }: PageProps) {
       id, slug, type, source_locale, single_language, subtitle_locales, is_featured, likes_count, published_at, cover_image_url, read_time_minutes,
       profiles!author_id ( display_name, slug, role, avatar_url ),
       content_translations ( title, excerpt, locale ),
-      content_tags ( tags ( names, slug ) ),
+      content_tags ( tags ( names, slug, is_topic ) ),
       course_meta ( price, currency, duration, rating )
     `)
     .eq('type', 'course')
@@ -62,7 +63,7 @@ export default async function CoursesPage({ params, searchParams }: PageProps) {
       id, slug, type, source_locale, single_language, subtitle_locales, is_featured, likes_count, published_at, cover_image_url, read_time_minutes,
       profiles!author_id ( display_name, slug, role, avatar_url ),
       content_translations ( title, excerpt, locale ),
-      content_tags ( tags ( names, slug ) ),
+      content_tags ( tags ( names, slug, is_topic ) ),
       course_meta ( price, currency, duration, rating )
     `, { count: 'exact' })
     .eq('type', 'course')
@@ -100,7 +101,7 @@ export default async function CoursesPage({ params, searchParams }: PageProps) {
   const renderCard = (item: any) => {
     const t = getTranslation(item.content_translations ?? [], locale)
     const author = item.profiles
-    const firstTag = item.content_tags?.[0]?.tags
+    const firstTag = cardTopic(item.content_tags)
     const categoryTag = firstTag ? tagDisplayName(firstTag.names, locale, firstTag.slug) : null
     const categoryTagSlug = firstTag?.slug ?? null
     return (
@@ -141,7 +142,7 @@ export default async function CoursesPage({ params, searchParams }: PageProps) {
         <div className="mb-12">
           <h1 className="mb-2">{tNav('courses')}</h1>
           <p className="text-[#6B5F58]">{tListings('coursesDesc')}</p>
-          <TagCloud tags={cloud} activeSlug={activeTag} basePath="/courses" label={tListings('tagCloudLabel')} allLabel={tListings('tagCloudAll')} />
+          <TopicStrip tags={cloud} activeSlug={activeTag} basePath="/courses" label={tListings('tagCloudLabel')} exploreLabel={tListings('topicsExplore')} allLabel={tListings('tagCloudAll')} allTopicsLabel={tListings('allTopics')} />
         </div>
 
         {page === 1 && featuredItems.length > 0 && (

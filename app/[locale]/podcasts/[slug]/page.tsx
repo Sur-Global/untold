@@ -8,6 +8,9 @@ import { Footer } from '@/components/layout/Footer'
 import type { Metadata } from 'next'
 import { loadContentMetadata } from '@/lib/data/content-metadata'
 import { RelatedContent } from '@/components/content/RelatedContent'
+import { TopicKicker } from '@/components/content/TopicKicker'
+import { OtherTags } from '@/components/content/OtherTags'
+import { loadContentTopics } from '@/lib/data/topics'
 import { EmbedPlayer } from '@/components/content/EmbedPlayer'
 import { BodyTranslationLoader } from '@/components/content/BodyTranslationLoader'
 import { LikeButton } from '@/components/social/LikeButton'
@@ -46,7 +49,8 @@ export default async function PodcastPage({ params }: PageProps) {
       id, slug, author_id, source_locale, single_language, subtitle_locales, likes_count, published_at,
       profiles!author_id ( display_name, slug, avatar_url ),
       content_translations ( title, description, locale ),
-      podcast_meta ( embed_url, cover_image_url, duration, episode_number, origin )
+      podcast_meta ( embed_url, cover_image_url, duration, episode_number, origin ),
+      content_tags ( tags ( slug, names, is_topic ) )
     `)
     .eq('slug', slug)
     .eq('type', 'podcast')
@@ -67,6 +71,8 @@ export default async function PodcastPage({ params }: PageProps) {
   const meta = podcast.podcast_meta
   const author = podcast.profiles
   const originLabel = podcastBadgeLabel(meta?.origin, await getTranslations('listings'))
+  const tContent = await getTranslations('content')
+  const topics = await loadContentTopics(supabase, (podcast.content_tags ?? []).map((ct: any) => ct.tags).filter(Boolean), locale)
 
   const sourceLocale: string = podcast.source_locale ?? 'en'
   const sourceTranslation = (podcast.content_translations ?? []).find((tr: any) => tr.locale === sourceLocale)
@@ -125,6 +131,7 @@ export default async function PodcastPage({ params }: PageProps) {
             {meta?.episode_number && (
               <p className="text-sm font-mono text-[#A0522D] mb-1">{meta.episode_number}</p>
             )}
+            <TopicKicker primary={topics.primary} related={topics.related} exploreAlso={tContent('exploreAlso')} className="mb-3" />
             {originLabel && (
               <p className="mb-2 inline-block rounded-full px-2.5 py-0.5 text-[11px] text-[#5d4e37]" style={{ background: 'rgba(184,134,11,0.14)', fontFamily: 'JetBrains Mono, monospace' }}>
                 {originLabel}
@@ -164,6 +171,8 @@ export default async function PodcastPage({ params }: PageProps) {
             <EmbedPlayer url={meta.embed_url} title={t.title} />
           </div>
         )}
+
+        <OtherTags tags={topics.others} label={tContent('otherTags')} className="mb-8" />
 
         <BodyTranslationLoader
           contentId={podcast.id}

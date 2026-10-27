@@ -1,11 +1,11 @@
 import type { SupabaseClient } from '@supabase/supabase-js'
 import { buildTagCloud, type CloudTag } from '@/lib/tag-cloud'
 
-/** Topics of the published content of one kind ('video', 'podcast'…), with how much content each has */
+/** Tags of the published content of one kind ('video', 'podcast'…), with how much content each has and whether it is a topic */
 export async function loadTagCloud(supabase: SupabaseClient, type: string, locale: string): Promise<CloudTag[]> {
   const { data } = await (supabase as any)
     .from('content_tags')
-    .select('tags ( slug, names ), content!inner ( type, status, is_curated )')
+    .select('tags ( slug, names, is_topic ), content!inner ( type, status, is_curated )')
     .eq('content.type', type)
     .eq('content.status', 'published')
     .eq('content.is_curated', true)

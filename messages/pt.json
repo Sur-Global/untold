@@ -71,6 +71,8 @@
     "readMoreBy": "Ler mais de {name}",
     "tagCloudLabel": "Explore por tema",
     "tagCloudAll": "Todos",
+    "topicsExplore": "Explorar",
+    "allTopics": "Todos os temas →",
     "previous": "← Anterior",
     "next": "Próxima →",
     "pageOf": "Página {page} de {total}",
@@ -156,7 +158,9 @@
     "carouselNext": "Próxima lâmina",
     "slideOf": "Lâmina {n} de {total}",
     "imageCredits": "Créditos das imagens",
-    "creditSlide": "Lâmina {n}: {credit}"
+    "creditSlide": "Lâmina {n}: {credit}",
+    "exploreAlso": "Explore também",
+    "otherTags": "Tags"
   },
   "search": {
     "placeholder": "Pesquisar artigos, vídeos, podcasts...",
@@ -174,6 +178,11 @@
     "heading": "#{tag}",
     "contentCount": "{count, plural, one {# conteúdo} other {# conteúdos}}",
     "noContent": "Ainda não há conteúdo com esta etiqueta."
+  },
+  "topics": {
+    "title": "Temas",
+    "description": "Os grandes temas da UNTOLD.ink. Escolha um e explore os artigos, vídeos, podcasts e pílulas sobre ele.",
+    "empty": "Ainda não há temas."
   },
   "create": {
     "pickType": "O que você está criando?",
