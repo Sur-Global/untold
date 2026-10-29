@@ -613,7 +613,8 @@
   "subscribe": {
     "eyebrow": "Newsletter",
     "title": "Ignite your curiosity, transform the future",
-    "subtitle": "Ideas and voices from the Global South in your inbox. Free, no spam.",
+    "bannerTitle": "Ignite your <hl>curiosity</hl>, transform the future",
+    "subtitle": "Ideas and voices from the South in your inbox. Free, no spam.",
     "emailPlaceholder": "you@email.com",
     "emailLabel": "Email address",
     "namePlaceholder": "First name (optional)",

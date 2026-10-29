@@ -121,7 +121,7 @@ export default async function DashboardArticlesPage({ params }: { params: Promis
           </ul>
         )}
       </main>
-      <Footer />
+      <Footer withNewsletter={false} />
     </>
   )
 }

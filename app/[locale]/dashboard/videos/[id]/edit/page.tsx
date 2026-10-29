@@ -88,7 +88,7 @@ export default async function EditVideoPage({ params }: PageProps) {
         />
         {translationEditor && <TranslationsPanel data={translationEditor} />}
       </main>
-      <Footer />
+      <Footer withNewsletter={false} />
     </>
   )
 }

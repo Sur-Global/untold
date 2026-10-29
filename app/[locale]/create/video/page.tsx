@@ -23,7 +23,7 @@ export default async function CreateVideoPage() {
         <h1 className="mb-8">{t('newVideo')}</h1>
         <CreateVideoForm />
       </main>
-      <Footer />
+      <Footer withNewsletter={false} />
     </>
   )
 }

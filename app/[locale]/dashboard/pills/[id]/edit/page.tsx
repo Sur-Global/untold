@@ -79,7 +79,7 @@ export default async function EditPillPage({ params }: EditPillPageProps) {
         />
         {translationEditor && <TranslationsPanel data={translationEditor} />}
       </main>
-      <Footer />
+      <Footer withNewsletter={false} />
     </>
   )
 }

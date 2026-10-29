@@ -3,9 +3,8 @@ import { createClient } from '@/lib/supabase/server'
 import { Link } from '@/i18n/navigation'
 import { getStaticPagesForFooter } from '@/lib/data/static-pages'
 import { getTrendingTopics } from '@/lib/data/trending-topics'
-import { isSenderConfigured } from '@/lib/sender'
 import { CookieSettingsButton } from '@/components/analytics/CookieSettingsButton'
-import { SubscribeModalButton } from '@/components/layout/SubscribeModalButton'
+import { NewsletterBanner } from '@/components/layout/NewsletterBanner'
 
 const aeonikRegular: React.CSSProperties = {
   fontFamily: 'var(--font-aeonik), Aeonik, sans-serif',
@@ -17,8 +16,11 @@ const aeonikRegularBody: React.CSSProperties = {
   fontWeight: 400,
 }
 
-/** `flushTop` removes the gap above the footer (for pages that end in a full-width band) */
-export async function Footer({ flushTop = false }: { flushTop?: boolean } = {}) {
+/**
+ * `flushTop` removes the gap above the footer (for pages that end in a full-width band).
+ * `withNewsletter={false}` leaves out the newsletter banner (for the pages where people work: creating content, their dashboard, the admin).
+ */
+export async function Footer({ flushTop = false, withNewsletter = true }: { flushTop?: boolean; withNewsletter?: boolean } = {}) {
   const [t, tNav, locale, supabase] = await Promise.all([
     getTranslations('footer'),
     getTranslations('nav'),
@@ -48,8 +50,10 @@ export async function Footer({ flushTop = false }: { flushTop?: boolean } = {}) 
   ])
 
   return (
+    <>
+    {withNewsletter && <NewsletterBanner flushTop={flushTop} />}
     <footer
-      className={`${flushTop ? '' : 'mt-20 '}border-t py-16`}
+      className={`${flushTop || withNewsletter ? '' : 'mt-20 '}border-t py-16`}
       style={{ backgroundColor: '#000', borderColor: 'rgba(255,255,255,0.1)' }}
     >
       <div className="mx-auto max-w-7xl px-4 sm:px-6">
@@ -61,12 +65,6 @@ export async function Footer({ flushTop = false }: { flushTop?: boolean } = {}) 
             <p className="text-sm" style={{ ...aeonikRegularBody, color: '#78716C' }}>
               {t('brandTagline')}
             </p>
-            <SubscribeModalButton
-              label={t('subscribeCta')}
-              closeLabel={t('subscribeClose')}
-              formTitle={t('subscribeFormTitle')}
-              native={isSenderConfigured()}
-            />
           </div>
           <div>
             <p
@@ -141,5 +139,6 @@ export async function Footer({ flushTop = false }: { flushTop?: boolean } = {}) 
         </div>
       </div>
     </footer>
+    </>
   )
 }

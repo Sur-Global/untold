@@ -613,7 +613,8 @@
   "subscribe": {
     "eyebrow": "Newsletter",
     "title": "Éveillez votre curiosité, transformez l'avenir",
-    "subtitle": "Des idées et des voix du Sud global dans votre boîte mail. Gratuit, sans spam.",
+    "bannerTitle": "Éveillez votre <hl>curiosité</hl>, transformez l'avenir",
+    "subtitle": "Des idées et des voix du Sud dans votre boîte mail. Gratuit, sans spam.",
     "emailPlaceholder": "vous@email.com",
     "emailLabel": "Adresse e-mail",
     "namePlaceholder": "Prénom (facultatif)",

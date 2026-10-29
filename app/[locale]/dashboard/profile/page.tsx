@@ -49,7 +49,7 @@ export default async function EditProfilePage() {
           />
         </AdminPanel>
       </main>
-      <Footer />
+      <Footer withNewsletter={false} />
     </>
   )
 }

@@ -233,7 +233,7 @@ export default async function DashboardPage({
           </>
         )}
       </main>
-      <Footer />
+      <Footer withNewsletter={false} />
     </>
   )
 }

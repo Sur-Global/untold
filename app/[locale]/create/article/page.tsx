@@ -23,7 +23,7 @@ export default async function CreateArticlePage() {
         <h1 className="mb-8">{t('newArticle')}</h1>
         <CreateArticleForm />
       </main>
-      <Footer />
+      <Footer withNewsletter={false} />
     </>
   )
 }

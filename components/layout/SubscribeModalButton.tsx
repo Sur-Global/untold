@@ -11,10 +11,12 @@ interface Props {
   formTitle: string
   /** true once Sender's API token is set: show our own form instead of Sender's hosted one */
   native?: boolean
+  /** spacing around the button */
+  className?: string
 }
 
-/** Footer "Subscribe" button: opens the Sender form in a pop-up window over the page. */
-export function SubscribeModalButton({ label, closeLabel, formTitle, native = false }: Props) {
+/** "Subscribe" button: opens the Sender form in a pop-up window over the page. */
+export function SubscribeModalButton({ label, closeLabel, formTitle, native = false, className = 'mt-5' }: Props) {
   const t = useTranslations('subscribe')
   const dialogRef = useRef<HTMLDialogElement>(null)
   const [open, setOpen] = useState(false)
@@ -31,7 +33,7 @@ export function SubscribeModalButton({ label, closeLabel, formTitle, native = fa
       <button
         type="button"
         onClick={() => setOpen(true)}
-        className="mt-5 inline-flex h-10 items-center rounded-full px-6 text-sm text-black transition-opacity hover:opacity-90"
+        className={`${className} inline-flex h-11 items-center rounded-full px-6 text-sm text-black transition-opacity hover:opacity-90`}
         style={{ backgroundColor: '#D2FE73', fontFamily: 'var(--font-aeonik), Aeonik, sans-serif', fontWeight: 400 }}
       >
         {label}

@@ -613,7 +613,8 @@
   "subscribe": {
     "eyebrow": "Newsletter",
     "title": "Acenda sua curiosidade, transforme o futuro",
-    "subtitle": "Ideias e vozes do Sul Global na sua caixa de entrada. Grátis e sem spam.",
+    "bannerTitle": "Acenda sua <hl>curiosidade</hl>, transforme o futuro",
+    "subtitle": "Ideias e vozes do Sul na sua caixa de entrada. Grátis e sem spam.",
     "emailPlaceholder": "voce@email.com",
     "emailLabel": "Endereço de e-mail",
     "namePlaceholder": "Nome (opcional)",

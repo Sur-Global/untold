@@ -77,7 +77,7 @@ export default async function BookmarksPage({ params }: PageProps) {
           </ul>
         )}
       </main>
-      <Footer />
+      <Footer withNewsletter={false} />
     </>
   )
 }

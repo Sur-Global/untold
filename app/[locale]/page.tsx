@@ -1,6 +1,5 @@
 import { after } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
-import { SubscribeSection } from '@/components/layout/SubscribeSection'
 import { getNavProps } from '@/lib/nav'
 import { getPlatformSettings } from '@/lib/data/platform-settings'
 import { getHomeBanners } from '@/lib/data/home-banners'
@@ -868,9 +867,6 @@ export default async function HomePage({ params }: PageProps) {
             </section>
           )}
         </div>
-
-        {/* Newsletter sign-up */}
-        <SubscribeSection />
       </main>
       <Footer flushTop />
     </>

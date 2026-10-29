@@ -613,7 +613,8 @@
   "subscribe": {
     "eyebrow": "Nyhedsbrev",
     "title": "Tænd din nysgerrighed, forandr fremtiden",
-    "subtitle": "Idéer og stemmer fra Det Globale Syd i din indbakke. Gratis og uden spam.",
+    "bannerTitle": "Tænd din <hl>nysgerrighed</hl>, forandr fremtiden",
+    "subtitle": "Idéer og stemmer fra Syd i din indbakke. Gratis og uden spam.",
     "emailPlaceholder": "dig@email.com",
     "emailLabel": "E-mailadresse",
     "namePlaceholder": "Fornavn (valgfrit)",

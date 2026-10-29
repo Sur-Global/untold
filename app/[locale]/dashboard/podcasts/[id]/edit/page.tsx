@@ -86,7 +86,7 @@ export default async function EditPodcastPage({ params }: PageProps) {
         />
         {translationEditor && <TranslationsPanel data={translationEditor} />}
       </main>
-      <Footer />
+      <Footer withNewsletter={false} />
     </>
   )
 }

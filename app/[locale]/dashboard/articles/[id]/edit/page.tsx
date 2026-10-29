@@ -145,7 +145,7 @@ export default async function EditArticlePage({ params }: PageProps) {
         authorName={author?.display_name ?? ''}
         authorBio={author?.bio ?? undefined}
       />
-      <Footer />
+      <Footer withNewsletter={false} />
     </>
   )
 }

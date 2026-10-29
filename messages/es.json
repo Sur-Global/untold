@@ -613,7 +613,8 @@
   "subscribe": {
     "eyebrow": "Boletín",
     "title": "Enciende tu curiosidad, transforma el futuro",
-    "subtitle": "Ideas y voces del Sur Global en tu correo. Gratis y sin spam.",
+    "bannerTitle": "Enciende tu <hl>curiosidad</hl>, transforma el futuro",
+    "subtitle": "Ideas y voces del Sur en tu correo. Gratis y sin spam.",
     "emailPlaceholder": "tu@correo.com",
     "emailLabel": "Correo electrónico",
     "namePlaceholder": "Nombre (opcional)",

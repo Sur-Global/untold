@@ -71,7 +71,7 @@ export default async function AdminEditUserPage({ params }: PageProps) {
           </AdminPanel>
         </div>
       </main>
-      <Footer />
+      <Footer withNewsletter={false} />
     </>
   )
 }

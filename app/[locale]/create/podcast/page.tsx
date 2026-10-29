@@ -24,7 +24,7 @@ export default async function CreatePodcastPage() {
         <h1 className="mb-8">{t('newPodcast')}</h1>
         <CreatePodcastForm canChooseOrigin={isEditorRole(profile.role)} />
       </main>
-      <Footer />
+      <Footer withNewsletter={false} />
     </>
   )
 }

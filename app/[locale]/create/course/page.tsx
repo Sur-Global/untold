@@ -23,7 +23,7 @@ export default async function CreateCoursePage() {
         <h1 className="mb-8">{t('newCourse')}</h1>
         <CreateCourseForm />
       </main>
-      <Footer />
+      <Footer withNewsletter={false} />
     </>
   )
 }

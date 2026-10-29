@@ -613,7 +613,8 @@
   "subscribe": {
     "eyebrow": "Newsletter",
     "title": "Wecken Sie Ihre Neugier, gestalten Sie die Zukunft",
-    "subtitle": "Ideen und Stimmen aus dem Globalen Süden in Ihrem Postfach. Kostenlos, kein Spam.",
+    "bannerTitle": "Wecken Sie Ihre <hl>Neugier</hl>, gestalten Sie die Zukunft",
+    "subtitle": "Ideen und Stimmen aus dem Süden in Ihrem Postfach. Kostenlos, kein Spam.",
     "emailPlaceholder": "sie@email.com",
     "emailLabel": "E-Mail-Adresse",
     "namePlaceholder": "Vorname (optional)",

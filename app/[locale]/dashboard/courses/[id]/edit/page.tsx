@@ -77,7 +77,7 @@ export default async function EditCoursePage({ params }: EditCoursePageProps) {
         />
         {translationEditor && <TranslationsPanel data={translationEditor} />}
       </main>
-      <Footer />
+      <Footer withNewsletter={false} />
     </>
   )
 }

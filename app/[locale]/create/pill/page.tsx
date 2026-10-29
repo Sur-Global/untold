@@ -24,7 +24,7 @@ export default async function CreatePillPage() {
         <h1 className="mb-8">{t('newPill')}</h1>
         <CreatePillForm brandLogos={isEditorRole(profile.role)} />
       </main>
-      <Footer />
+      <Footer withNewsletter={false} />
     </>
   )
 }
