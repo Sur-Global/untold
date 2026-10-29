@@ -80,6 +80,17 @@ describe('NewsletterBanner', () => {
     expect(flush.container.querySelector('section')!.className).not.toContain('mt-20')
   })
 
+  it('is a rounded black card with a lilac border and room below it, so it does not melt into the black footer', async () => {
+    const { container } = render(await NewsletterBanner())
+    const section = container.querySelector('section')!
+    expect(section.className).toContain('pb-12')
+    const card = section.querySelector(':scope > div > div') as HTMLElement
+    expect(card.className).toContain('rounded-2xl')
+    expect(card.className).toContain('border-[#A9A8E9]')
+    expect(card).toHaveStyle({ background: '#000' })
+    expect(section).not.toHaveStyle({ background: '#000' })
+  })
+
   it('the arrow is decoration: hidden from screen readers', async () => {
     const { container } = render(await NewsletterBanner())
     expect(container.querySelector('svg')).toHaveAttribute('aria-hidden', 'true')

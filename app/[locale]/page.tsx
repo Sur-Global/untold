@@ -868,7 +868,7 @@ export default async function HomePage({ params }: PageProps) {
           )}
         </div>
       </main>
-      <Footer flushTop />
+      <Footer />
     </>
   )
 }
