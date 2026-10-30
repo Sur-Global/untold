@@ -1,4 +1,16 @@
 {
+  "footnotes": {
+    "title": "Notas",
+    "back": "Voltar ao texto",
+    "noteLabel": "Nota {n}",
+    "goToNote": "Ir para a nota",
+    "itemTitle": "Nota de rodapé",
+    "itemSubtext": "Um número no texto e a nota no final",
+    "placeholder": "Escreva a nota…",
+    "orphan": "Esta nota não tem número no texto e não será publicada.",
+    "remove": "Excluir nota",
+    "tip": "Nota de rodapé: digite / e escolha “Nota de rodapé”, ou selecione palavras e clique em “Nota de rodapé” (Ctrl ou Cmd + Alt + F). As notas aparecem sempre no final do artigo."
+  },
   "nav": {
     "articles": "Artigos",
     "videos": "Vídeos",

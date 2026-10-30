@@ -1,4 +1,16 @@
 {
+  "footnotes": {
+    "title": "Fußnoten",
+    "back": "Zurück zum Text",
+    "noteLabel": "Fußnote {n}",
+    "goToNote": "Zur Fußnote",
+    "itemTitle": "Fußnote",
+    "itemSubtext": "Eine Zahl im Text und die Anmerkung am Ende",
+    "placeholder": "Fußnote schreiben…",
+    "orphan": "Diese Fußnote hat keine Zahl im Text und wird nicht veröffentlicht.",
+    "remove": "Fußnote löschen",
+    "tip": "Fußnote: Tippe / und wähle „Fußnote“, oder markiere Wörter und klicke auf „Fußnote“ (Strg oder Cmd + Alt + F). Fußnoten erscheinen immer am Ende des Artikels."
+  },
   "nav": {
     "articles": "Artikel",
     "videos": "Videos",

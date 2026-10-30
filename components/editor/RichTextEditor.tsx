@@ -26,8 +26,11 @@ import {
 import { en as aiEn } from '@blocknote/xl-ai/locales'
 import { DefaultChatTransport } from 'ai'
 import { useEffect, useRef, useState } from 'react'
+import { useTranslations } from 'next-intl'
 import { createClient as createBrowserSupabase } from '@/lib/supabase/client'
 import { contentSchema as multiColumnSchema } from '@/lib/blocknote-schema'
+import { footnoteSignature } from '@/lib/footnotes'
+import { FootnoteToolbarButton, insertFootnote, syncFootnotes } from '@/components/editor/footnotes'
 
 const BASE_LOCALES = { en, de, fr, es, pt }
 const LOCALE_MAP: Record<string, keyof typeof BASE_LOCALES> = {
@@ -80,6 +83,8 @@ interface RichTextEditorProps {
   locale?: string
   initialHtml?: string | null
   videos?: VideoMode
+  /** footnotes (a number in the text and its note at the end): on by default, off where they make no sense (pills, short bios) */
+  footnotes?: boolean
 }
 
 async function uploadImageToSupabase(file: File): Promise<string> {
@@ -114,7 +119,9 @@ export function RichTextEditor({
   locale = 'en',
   initialHtml,
   videos,
+  footnotes = true,
 }: RichTextEditorProps) {
+  const tf = useTranslations('footnotes')
   const canUploadVideo = useCanUploadVideo(videos !== undefined)
   const mode: VideoMode = videos ?? (canUploadVideo ? 'upload' : 'embed')
   // The editor is created once; uploads and the slash menu read the current mode through this ref
@@ -142,7 +149,7 @@ export function RichTextEditor({
       if (modeRef.current === 'none' && !file.type.startsWith('image/')) throw new Error('Only images can be added here')
       return uploadImageToSupabase(file)
     },
-    placeholders: { default: placeholder },
+    placeholders: { default: placeholder, footnote: tf('placeholder') },
     dropCursor: multiColumnDropCursor,
     dictionary,
     tables: {
@@ -167,6 +174,21 @@ export function RichTextEditor({
   // each page load even though nothing was actually edited.
   const suppressNextChangeRef = useRef(false)
 
+  // Footnotes: shortly after the numbers or notes change, give every number a note, drop notes whose number was deleted and keep
+  // them in the order of the numbers. Typing inside a note does not count (the signature ignores note text).
+  const footnoteTimer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined)
+  const footnoteSignatureRef = useRef('')
+  useEffect(() => () => clearTimeout(footnoteTimer.current), [])
+  const scheduleFootnoteSync = () => {
+    if (!footnotes) return
+    clearTimeout(footnoteTimer.current)
+    footnoteTimer.current = setTimeout(() => {
+      if (footnoteSignature(editor.document as any) === footnoteSignatureRef.current) return
+      syncFootnotes(editor)
+      footnoteSignatureRef.current = footnoteSignature(editor.document as any)
+    }, 350)
+  }
+
   // Sync external value changes (e.g. locale switch loads different content)
   useEffect(() => {
     if (!editor || !value) return
@@ -186,7 +208,15 @@ export function RichTextEditor({
   }, [editor]) // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
-    <div>
+    <div
+      onKeyDown={(e) => {
+        // Ctrl/Cmd + Alt + F: a footnote, as in Word and Google Docs
+        if (footnotes && (e.ctrlKey || e.metaKey) && e.altKey && (e.code === 'KeyF' || e.key?.toLowerCase() === 'f')) {
+          e.preventDefault()
+          insertFootnote(editor)
+        }
+      }}
+    >
     <div
       className="rounded-lg overflow-hidden bg-white"
       style={{ border: '1px solid rgba(139,69,19,0.25)', minHeight: 320 }}
@@ -201,6 +231,7 @@ export function RichTextEditor({
           const silent = suppressNextChangeRef.current
           suppressNextChangeRef.current = false
           onChange(editor.document as EditorBlock[], { silent })
+          if (!silent) scheduleFootnoteSync()
         }}
       >
         <AIMenuController />
@@ -208,6 +239,7 @@ export function RichTextEditor({
           formattingToolbar={() => (
             <FormattingToolbar>
               {getFormattingToolbarItems()}
+              {footnotes && <FootnoteToolbarButton />}
               <AIToolbarButton />
             </FormattingToolbar>
           )}
@@ -231,6 +263,17 @@ export function RichTextEditor({
                   ]
             // Pills: no video/audio/file at all. Creators: embed only (no file-upload "Video" block).
             const blocked = current === 'none' ? ['video', 'audio', 'file'] : current === 'embed' ? ['video'] : []
+            const footnoteItems = footnotes
+              ? [
+                  {
+                    title: tf('itemTitle'),
+                    subtext: tf('itemSubtext'),
+                    aliases: ['footnote', 'nota', 'nota al pie', 'nota de rodape', 'note', 'fussnote', 'fodnote', 'cita', 'referencia'],
+                    group: dictionary.slash_menu.paragraph.group,
+                    onItemClick: () => insertFootnote(editor),
+                  },
+                ]
+              : []
             const defaults = getDefaultReactSlashMenuItems(editor).filter(
               (item) => !blocked.includes((item as { key?: string }).key ?? ''),
             )
@@ -238,6 +281,7 @@ export function RichTextEditor({
               combineByGroup(
                 defaults,
                 embedItems,
+                footnoteItems,
                 getMultiColumnSlashMenuItems(editor),
                 getAISlashMenuItems(editor),
               ),
@@ -247,6 +291,7 @@ export function RichTextEditor({
         />
       </BlockNoteView>
     </div>
+    {footnotes && <p className="mt-1.5 text-xs text-muted-foreground">{tf('tip')}</p>}
     <p className="mt-1.5 text-xs text-muted-foreground">
       Tip: to add a hyperlink to an image caption, type it as <code>[label](https://...)</code>.
     </p>

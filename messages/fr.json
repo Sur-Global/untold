@@ -1,4 +1,16 @@
 {
+  "footnotes": {
+    "title": "Notes",
+    "back": "Retour au texte",
+    "noteLabel": "Note {n}",
+    "goToNote": "Aller à la note",
+    "itemTitle": "Note de bas de page",
+    "itemSubtext": "Un numéro dans le texte et la note à la fin",
+    "placeholder": "Écrivez la note…",
+    "orphan": "Cette note n’a pas de numéro dans le texte et ne sera pas publiée.",
+    "remove": "Supprimer la note",
+    "tip": "Note de bas de page : tapez / et choisissez « Note de bas de page », ou sélectionnez des mots et cliquez sur « Note de bas de page » (Ctrl ou Cmd + Alt + F). Les notes apparaissent toujours à la fin de l’article."
+  },
   "nav": {
     "articles": "Articles",
     "videos": "Vidéos",

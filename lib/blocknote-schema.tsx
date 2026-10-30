@@ -1,10 +1,11 @@
 'use client'
 
 import { useState } from 'react'
-import { BlockNoteSchema, defaultBlockSpecs } from '@blocknote/core'
+import { BlockNoteSchema, defaultBlockSpecs, defaultInlineContentSpecs } from '@blocknote/core'
 import { createReactBlockSpec } from '@blocknote/react'
 import { withMultiColumn } from '@blocknote/xl-multi-column'
 import { toEmbedSource } from '@/lib/video-embed'
+import { createFootnoteBlock, createFootnoteRef } from '@/components/editor/footnotes'
 
 // Video embed block: paste a YouTube / Vimeo / video-file link, it plays in the article.
 // (BlockNote's own "Video" block only takes direct file links, which YouTube and Vimeo aren't.)
@@ -107,6 +108,8 @@ export const createVideoEmbedBlock = createReactBlockSpec(
 /** The one schema shared by the editor and the reader, so every block type round-trips. */
 export const contentSchema = withMultiColumn(
   BlockNoteSchema.create({
-    blockSpecs: { ...defaultBlockSpecs, videoEmbed: createVideoEmbedBlock() },
+    blockSpecs: { ...defaultBlockSpecs, videoEmbed: createVideoEmbedBlock(), footnote: createFootnoteBlock() },
+    // footnoteRef: the number in the text; the note itself is the `footnote` block (see lib/footnotes.ts)
+    inlineContentSpecs: { ...defaultInlineContentSpecs, footnoteRef: createFootnoteRef },
   }),
 )

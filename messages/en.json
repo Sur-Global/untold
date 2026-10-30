@@ -1,4 +1,16 @@
 {
+  "footnotes": {
+    "title": "Notes",
+    "back": "Back to text",
+    "noteLabel": "Note {n}",
+    "goToNote": "Go to the note",
+    "itemTitle": "Footnote",
+    "itemSubtext": "A number in the text and the note at the end",
+    "placeholder": "Write the note…",
+    "orphan": "This note has no number in the text and will not be published.",
+    "remove": "Delete note",
+    "tip": "Footnote: type / and choose “Footnote”, or select words and click “Footnote” (Ctrl or Cmd + Alt + F). Notes always appear at the end of the article."
+  },
   "nav": {
     "articles": "Articles",
     "videos": "Videos",

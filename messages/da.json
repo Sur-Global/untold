@@ -1,4 +1,16 @@
 {
+  "footnotes": {
+    "title": "Noter",
+    "back": "Tilbage til teksten",
+    "noteLabel": "Note {n}",
+    "goToNote": "Gå til noten",
+    "itemTitle": "Fodnote",
+    "itemSubtext": "Et tal i teksten og noten til sidst",
+    "placeholder": "Skriv noten…",
+    "orphan": "Denne note har intet tal i teksten og bliver ikke udgivet.",
+    "remove": "Slet note",
+    "tip": "Fodnote: skriv / og vælg “Fodnote”, eller markér ord og klik på “Fodnote” (Ctrl eller Cmd + Alt + F). Noter står altid til sidst i artiklen."
+  },
   "nav": {
     "articles": "Artikler",
     "videos": "Videoer",

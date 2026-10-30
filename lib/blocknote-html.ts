@@ -7,7 +7,12 @@
  * headings) are rendered here as proper, collapsed-by-default <details>
  * elements with all their children inside; everything between toggles still
  * goes through BlockNote's converter unchanged.
+ *
+ * Footnotes: the numbers in the text become superscript links, and the notes (wherever they were typed) are laid out in one
+ * section at the very end, in the order of the numbers, each with a link back to its number (see lib/footnotes.ts).
  */
+import { FOOTNOTE, FOOTNOTE_REF, inlineItems, prepareFootnotes, type FnBlock, type ReaderNote } from '@/lib/footnotes'
+
 interface HtmlConverter {
   blocksToHTMLLossy: (blocks: any[]) => string
 }
@@ -50,8 +55,51 @@ export function normalizeBlockColors<T>(node: T): T {
   return node
 }
 
-export function blocksToReaderHtml(editor: HtmlConverter, blocks: any[]): string {
-  return renderBlocks(editor, normalizeBlockColors(blocks))
+/**
+ * True when the body has blocks or inline items that BlockNote draws with React (the video embed, footnotes). Turning those into
+ * HTML renders React inside React, which is not allowed while a component is rendering: the reader waits until it has rendered.
+ * Everything else converts instantly.
+ */
+export function needsReactRender(blocks: FnBlock[]): boolean {
+  return blocks.some(
+    (block) =>
+      block?.type === 'videoEmbed' ||
+      block?.type === FOOTNOTE ||
+      inlineItems(block).some((item) => item?.type === FOOTNOTE_REF) ||
+      (Array.isArray(block?.children) && needsReactRender(block.children)),
+  )
+}
+
+export interface FootnoteLabels {
+  /** heading of the notes section */
+  title: string
+  /** the link from a note back to its number in the text */
+  back: string
+  /** the name of a number for screen readers: "Note 3" */
+  note: (n: number) => string
+}
+
+const DEFAULT_LABELS: FootnoteLabels = { title: 'Notes', back: 'Back to text', note: (n) => `Note ${n}` }
+
+const escapeAttr = (value: string): string => value.replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+
+function renderNotes(editor: HtmlConverter, notes: ReaderNote[], labels: FootnoteLabels): string {
+  if (notes.length === 0) return ''
+  const items = notes.map(({ ref, n, content }) => {
+    const back = `<a class="fn-back" href="#fnref-${escapeAttr(ref)}" role="doc-backlink" aria-label="${escapeAttr(labels.back)}">\u21a9\ufe0e</a>`
+    const html = editor.blocksToHTMLLossy([{ type: 'paragraph', content }]).trim()
+    const inner = /<\/p>$/.test(html) ? html.replace(/<\/p>$/, ` ${back}</p>`) : `<p>${html} ${back}</p>`
+    return `<li id="fn-${escapeAttr(ref)}" value="${n}" role="doc-endnote">${inner}</li>`
+  })
+  return (
+    `<section class="fn-section" role="doc-endnotes" aria-labelledby="fn-title">` +
+    `<h2 id="fn-title" class="fn-title">${escapeAttr(labels.title)}</h2><ol class="fn-list">${items.join('')}</ol></section>`
+  )
+}
+
+export function blocksToReaderHtml(editor: HtmlConverter, blocks: any[], labels: FootnoteLabels = DEFAULT_LABELS): string {
+  const { body, notes } = prepareFootnotes(normalizeBlockColors(blocks), labels.note)
+  return renderBlocks(editor, body) + renderNotes(editor, notes, labels)
 }
 
 function renderBlocks(editor: HtmlConverter, blocks: any[]): string {

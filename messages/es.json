@@ -1,4 +1,16 @@
 {
+  "footnotes": {
+    "title": "Notas",
+    "back": "Volver al texto",
+    "noteLabel": "Nota {n}",
+    "goToNote": "Ir a la nota",
+    "itemTitle": "Nota al pie",
+    "itemSubtext": "Un número en el texto y la nota al final",
+    "placeholder": "Escribe la nota…",
+    "orphan": "Esta nota no tiene número en el texto y no se publicará.",
+    "remove": "Eliminar nota",
+    "tip": "Nota al pie: escribe / y elige «Nota al pie», o selecciona palabras y pulsa «Nota al pie» (Ctrl o Cmd + Alt + F). Las notas salen siempre al final del artículo."
+  },
   "nav": {
     "articles": "Artículos",
     "videos": "Videos",

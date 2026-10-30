@@ -187,6 +187,7 @@ export function EditProfileForm({
           initialHtml={initialBio}
           placeholder={t('bioPlaceholder')}
           videos="none"
+          footnotes={false}
         />
       </div>
 

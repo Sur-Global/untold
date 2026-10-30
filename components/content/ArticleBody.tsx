@@ -56,6 +56,18 @@ const PROSE_CLASS = `
   [&_blockquote_p:first-of-type]:before:content-none
   [&_blockquote_p:last-of-type]:after:content-none
 
+  [&_.fn-ref]:ml-px [&_.fn-ref]:text-[0.75em] [&_.fn-ref]:leading-none
+  [&_.fn-ref_a]:font-semibold [&_.fn-ref_a]:px-[2px] [&_.fn-ref_a]:scroll-mt-24 [&_.fn-ref_a]:no-underline [&_.fn-ref_a]:text-[#3b3680]
+
+  [&_.fn-section]:mt-14 [&_.fn-section]:border-t [&_.fn-section]:border-foreground/15 [&_.fn-section]:pt-6
+  [&_.fn-title]:m-0 [&_.fn-title]:mb-3 [&_.fn-title]:text-xs [&_.fn-title]:font-medium [&_.fn-title]:uppercase
+    [&_.fn-title]:tracking-[0.08em] [&_.fn-title]:text-[#78716c] [&_.fn-title]:font-sans
+  [&_.fn-list]:m-0 [&_.fn-list]:space-y-2 [&_.fn-list]:pl-6
+  [&_.fn-list_li]:scroll-mt-24 [&_.fn-list_li]:rounded-md [&_.fn-list_li:target]:bg-[#EEEDFB]
+  [&_.fn-list_p]:m-0 [&_.fn-list_p]:text-[14px] [&_.fn-list_p]:leading-[1.55] [&_.fn-list_p]:text-[#57534e]
+  [&_.fn-back]:ml-1 [&_.fn-back]:no-underline [&_.fn-back]:text-[#3b3680]
+  [&_.fn-list_li::marker]:text-[#57534e]
+
   prose-a:text-primary prose-a:no-underline hover:prose-a:underline
   prose-code:text-primary prose-code:bg-primary/8
   prose-pre:bg-foreground prose-pre:text-background

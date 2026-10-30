@@ -105,7 +105,7 @@ export function PillContentFields({
           <div className="space-y-2">
             <Label>{t('bodyLabel')}</Label>
             <div className="overflow-hidden rounded-[10px] border border-primary/20">
-              <RichTextEditor value={body} onChange={onBodyChange} placeholder={t('bodyPlaceholder')} locale={locale} videos="none" />
+              <RichTextEditor value={body} onChange={onBodyChange} placeholder={t('bodyPlaceholder')} locale={locale} videos="none" footnotes={false} />
             </div>
             <p className={`text-xs ${tooLong ? 'font-semibold text-red-600' : 'text-muted-foreground'}`} aria-live="polite">
               {t('textCounter', { count: length, max: PILL_TEXT_MAX_CHARS })}{tooLong ? ` — ${t('textTooLong')}` : ''}
