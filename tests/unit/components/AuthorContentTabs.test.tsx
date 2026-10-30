@@ -3,8 +3,8 @@ import { describe, it, expect, vi } from 'vitest'
 import { AuthorContentTabs } from '@/components/author/AuthorContentTabs'
 
 const messages: Record<string, string> = {
-  tabAll: 'Todo', tabEditorials: 'Editoriales', tabArticles: 'Artículos', tabVideos: 'Videos', tabPodcasts: 'Podcasts', tabPills: 'Píldoras',
-  sectionEditorials: 'Editoriales', sectionArticles: 'Artículos', sectionVideos: 'Videos', sectionPodcasts: 'Podcasts', sectionPills: 'Píldoras',
+  tabAll: 'Todo', tabEditorials: 'Editoriales', tabArticles: 'Artículos', tabVideos: 'Videos', tabPodcasts: 'Podcasts', tabPills: 'Píldoras', tabCourses: 'Cursos',
+  sectionEditorials: 'Editoriales', sectionArticles: 'Artículos', sectionVideos: 'Videos', sectionPodcasts: 'Podcasts', sectionPills: 'Píldoras', sectionCourses: 'Cursos',
   featuredSection: 'Destacado', editorialKicker: 'Editorial', readEditorial: 'Leer el editorial', authorBadge: 'Autor', featuredBadge: 'Destacado',
   noContent: 'Aún no hay contenido', moreFrom: 'Más de {name}',
 }
@@ -15,6 +15,11 @@ vi.mock('next/link', () => ({
 vi.mock('@/components/social/LikeButton', () => ({ LikeButton: () => null }))
 vi.mock('@/components/social/BookmarkButton', () => ({ BookmarkButton: () => null }))
 vi.mock('@/lib/actions/author', () => ({ toggleAuthorFeatured: vi.fn() }))
+vi.mock('@/components/content/CourseShowcase', () => ({
+  CourseShowcase: ({ items }: { items: Array<{ slug: string; title: string }> }) => (
+    <ul data-testid="courses">{items.map((i) => <li key={i.slug}>{i.title}</li>)}</ul>
+  ),
+}))
 
 const base = {
   isFeatured: false, coverImageUrl: null, likesCount: 0, publishedAt: '2026-01-01T00:00:00Z', excerpt: null, description: null, tags: [],
@@ -91,3 +96,22 @@ describe('AuthorContentTabs: editorials of an author who is an editor', () => {
     expect(screen.getByText('Editorial · Octubre de 2025')).toBeInTheDocument()
   })
 })
+
+describe('courses on an author page', () => {
+  const course = (n: number) => ({ ...base, id: `c${n}`, type: 'course', slug: `curso-${n}`, title: `Curso ${n}`, coursePrice: 100, courseCurrency: 'USD', courseDuration: '12 semanas' })
+
+  it('shows the courses in their own tab and section, first on the "All" tab', () => {
+    render(<AuthorContentTabs {...props} items={[course(1), article(1), article(2), article(3), article(4)]} />)
+    expect(screen.getByRole('button', { name: 'Cursos (1)' })).toBeInTheDocument()
+    expect(within(screen.getByTestId('courses')).getByText('Curso 1')).toBeInTheDocument()
+    const headings = screen.getAllByRole('heading', { level: 2 }).map((h) => h.textContent)
+    expect(headings.indexOf('Cursos')).toBeLessThan(headings.indexOf('Artículos'))
+  })
+
+  it('has no Courses tab when the author has no courses', () => {
+    render(<AuthorContentTabs {...props} items={[article(1), article(2), article(3), article(4), article(5)]} />)
+    expect(screen.queryByRole('button', { name: /Cursos/ })).not.toBeInTheDocument()
+    expect(screen.queryByTestId('courses')).not.toBeInTheDocument()
+  })
+})
+
