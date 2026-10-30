@@ -7,16 +7,32 @@ interface BlockNoteInlineContent {
   text?: string
   content?: BlockNoteInlineContent[]
 }
+// A table keeps its text in rows of cells instead of a plain list of inline items
+interface BlockNoteTableContent {
+  rows?: { cells?: (BlockNoteInlineContent[] | { content?: BlockNoteInlineContent[] })[] }[]
+}
 interface BlockNoteBlock {
   type?: string
-  content?: BlockNoteInlineContent[]
+  content?: BlockNoteInlineContent[] | BlockNoteTableContent
   children?: BlockNoteBlock[]
+}
+
+const inlineText = (items: BlockNoteInlineContent[]): string => items.map((c) => c.text ?? '').join('')
+
+function contentText(content: BlockNoteBlock['content']): string {
+  if (Array.isArray(content)) return inlineText(content)
+  const rows = content?.rows
+  if (!Array.isArray(rows)) return ''
+  return rows
+    .flatMap((row) => row.cells ?? [])
+    .map((cell) => inlineText(Array.isArray(cell) ? cell : cell?.content ?? []))
+    .join(' ')
 }
 
 function extractBlockNoteText(blocks: BlockNoteBlock[]): string {
   return blocks
     .map((block) => {
-      const inline = (block.content ?? []).map((c) => c.text ?? '').join('')
+      const inline = contentText(block.content)
       const children = block.children ? extractBlockNoteText(block.children) : ''
       return [inline, children].filter(Boolean).join(' ')
     })

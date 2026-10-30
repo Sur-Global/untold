@@ -56,6 +56,13 @@ const PROSE_CLASS = `
   [&_blockquote_p:first-of-type]:before:content-none
   [&_blockquote_p:last-of-type]:after:content-none
 
+  [&_table]:block [&_table]:max-w-full [&_table]:overflow-x-auto [&_table]:my-8 [&_table]:border-collapse
+    [&_table]:text-[14px] [&_table]:leading-[1.45]
+  [&_th]:border [&_th]:border-foreground/15 [&_th]:bg-[rgba(120,113,108,0.1)] [&_th]:px-3 [&_th]:py-2 [&_th]:text-left [&_th]:align-top
+    [&_th]:min-w-[6rem] [&_th]:font-semibold
+  [&_td]:border [&_td]:border-foreground/15 [&_td]:px-3 [&_td]:py-2 [&_td]:align-top [&_td]:min-w-[6rem]
+  [&_th_p]:m-0 [&_th_p]:text-[14px] [&_th_p]:leading-[1.45] [&_td_p]:m-0 [&_td_p]:text-[14px] [&_td_p]:leading-[1.45]
+
   [&_.fn-ref]:ml-px [&_.fn-ref]:text-[0.75em] [&_.fn-ref]:leading-none
   [&_.fn-ref_a]:font-semibold [&_.fn-ref_a]:px-[2px] [&_.fn-ref_a]:scroll-mt-24 [&_.fn-ref_a]:no-underline [&_.fn-ref_a]:text-[#3b3680]
 

@@ -10,11 +10,16 @@ interface InlineContent {
   content?: InlineContent[]
 }
 
+// A table keeps its text in rows of cells; a cell is a list of inline items or an object holding one
+interface TableContent {
+  rows?: { cells?: (InlineContent[] | { content?: InlineContent[] })[] }[]
+}
+
 interface Block {
   id?: string
   type?: string
   props?: Record<string, unknown>
-  content?: InlineContent[]
+  content?: InlineContent[] | TableContent
   children?: Block[]
 }
 
@@ -26,12 +31,24 @@ export interface TextEntry {
 function walkBlocks(blocks: Block[], pathPrefix: string, entries: TextEntry[]): void {
   blocks.forEach((block, bi) => {
     if (block.type === 'codeBlock') return
-    if (block.content) {
+    if (Array.isArray(block.content)) {
       walkInline(block.content, `${pathPrefix}${bi}.content`, entries)
+    } else if (block.content && Array.isArray(block.content.rows)) {
+      walkTable(block.content.rows, `${pathPrefix}${bi}.content.rows`, entries)
     }
     if (block.children) {
       walkBlocks(block.children, `${pathPrefix}${bi}.children.`, entries)
     }
+  })
+}
+
+function walkTable(rows: NonNullable<TableContent['rows']>, pathPrefix: string, entries: TextEntry[]): void {
+  rows.forEach((row, ri) => {
+    row.cells?.forEach((cell, ci) => {
+      const cellPath = `${pathPrefix}.${ri}.cells.${ci}`
+      if (Array.isArray(cell)) walkInline(cell, cellPath, entries)
+      else if (Array.isArray(cell?.content)) walkInline(cell.content, `${cellPath}.content`, entries)
+    })
   })
 }
 

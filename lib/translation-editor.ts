@@ -101,7 +101,17 @@ export function blocksPlainText(body: unknown): string {
     if (Array.isArray(node)) return node.map(inline).join('')
     if (node && typeof node === 'object') {
       const n = node as Record<string, unknown>
-      return typeof n.text === 'string' ? n.text : inline(n.content)
+      if (typeof n.text === 'string') return n.text
+      // a table keeps its text in rows of cells
+      if (Array.isArray(n.rows)) {
+        return n.rows
+          .map((row) => {
+            const cells = (row as Record<string, unknown>)?.cells
+            return Array.isArray(cells) ? cells.map(inline).join(' ') : ''
+          })
+          .join(' ')
+      }
+      return inline(n.content)
     }
     return typeof node === 'string' ? node : ''
   }

@@ -21,6 +21,17 @@ function isToggle(block: any): boolean {
   return block?.type === 'toggleListItem' || (block?.type === 'heading' && block?.props?.isToggleable === true)
 }
 
+/**
+ * An image block with no picture yet (a slot saved with its caption, waiting for the photo) would be drawn as the English
+ * words "Add image". Readers should never see that: until the picture is there, the slot is simply left out.
+ */
+export function dropEmptyImages<T>(blocks: T): T {
+  if (!Array.isArray(blocks)) return blocks
+  return blocks
+    .filter((block: any) => !(block?.type === 'image' && !String(block?.props?.url ?? '').trim()))
+    .map((block: any) => (Array.isArray(block?.children) && block.children.length ? { ...block, children: dropEmptyImages(block.children) } : block)) as unknown as T
+}
+
 // Colors BlockNote's editor knows how to display (and reset with "Default").
 const PALETTE = new Set(['default', 'gray', 'brown', 'red', 'orange', 'yellow', 'green', 'blue', 'purple', 'pink'])
 const COLOR_KEYS = ['backgroundColor', 'textColor']
@@ -98,7 +109,7 @@ function renderNotes(editor: HtmlConverter, notes: ReaderNote[], labels: Footnot
 }
 
 export function blocksToReaderHtml(editor: HtmlConverter, blocks: any[], labels: FootnoteLabels = DEFAULT_LABELS): string {
-  const { body, notes } = prepareFootnotes(normalizeBlockColors(blocks), labels.note)
+  const { body, notes } = prepareFootnotes(normalizeBlockColors(dropEmptyImages(blocks)), labels.note)
   return renderBlocks(editor, body) + renderNotes(editor, notes, labels)
 }
 
