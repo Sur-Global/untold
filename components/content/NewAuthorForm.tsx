@@ -34,6 +34,9 @@ export function NewAuthorForm({ onCreated, onCancel }: Props) {
 
   const [name, setName] = useState('')
   const [avatarUrl, setAvatarUrl] = useState('')
+  // The author has no profile yet, so the photo is stored under an id of its own. Without it the photo would be stored under
+  // the id of whoever is filling in the form, and every author created this way would share (and overwrite) the same file.
+  const [photoOwnerId] = useState(() => crypto.randomUUID())
   const [bioBlocks, setBioBlocks] = useState<EditorBlock[] | null>(null)
   const [locationCountry, setLocationCountry] = useState('')
   const [website, setWebsite] = useState('')
@@ -92,7 +95,7 @@ export function NewAuthorForm({ onCreated, onCancel }: Props) {
 
       <div>
         <label className={labelClass}>{t('authorPhotoLabel')}</label>
-        <CoverImageInput name="new_author_avatar_url" uploadType="avatar" defaultValue={avatarUrl} onChange={setAvatarUrl} />
+        <CoverImageInput name="new_author_avatar_url" uploadType="avatar" ownerId={photoOwnerId} defaultValue={avatarUrl} onChange={setAvatarUrl} />
       </div>
 
       <div>
