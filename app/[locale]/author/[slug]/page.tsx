@@ -73,12 +73,13 @@ export default async function AuthorPage({ params }: PageProps) {
   const { data: content } = await (supabase as any)
     .from('content')
     .select(`
-      id, type, slug, is_featured, is_author_featured, is_editorial, source_locale, cover_image_url, likes_count, published_at,
+      id, type, slug, is_featured, is_author_featured, is_editorial, source_locale, single_language, subtitle_locales, cover_image_url, likes_count, published_at,
       content_translations ( title, excerpt, featured_summary, description, locale ),
       content_tags ( tags ( slug, names ) ),
       video_meta ( thumbnail_url, duration ),
       podcast_meta ( cover_image_url, duration, episode_number ),
-      pill_meta ( accent_color, image_url )
+      pill_meta ( accent_color, image_url ),
+      course_meta ( price, currency, duration, students_count, rating, banner_has_title )
     `)
     .eq('author_id', author.id)
     .eq('status', 'published')
@@ -127,6 +128,15 @@ export default async function AuthorPage({ params }: PageProps) {
       podcastCoverUrl: item.podcast_meta?.cover_image_url ?? null,
       accentColor: item.pill_meta?.accent_color ?? null,
       pillImageUrl: item.pill_meta?.image_url ?? null,
+      sourceLocale: item.source_locale ?? null,
+      singleLanguage: item.single_language ?? false,
+      subtitleLocales: item.subtitle_locales ?? [],
+      coursePrice: item.course_meta?.price ?? null,
+      courseCurrency: item.course_meta?.currency ?? null,
+      courseDuration: item.course_meta?.duration ?? null,
+      courseRating: item.course_meta?.rating ?? null,
+      courseStudents: item.course_meta?.students_count ?? null,
+      bannerHasTitle: !!item.course_meta?.banner_has_title,
     }
   })
 

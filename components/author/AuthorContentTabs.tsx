@@ -6,8 +6,9 @@ import { useTranslations } from 'next-intl'
 import { LikeButton } from '@/components/social/LikeButton'
 import { BookmarkButton } from '@/components/social/BookmarkButton'
 import { toggleAuthorFeatured } from '@/lib/actions/author'
+import { CourseShowcase } from '@/components/content/CourseShowcase'
 
-type Tab = 'all' | 'editorial' | 'article' | 'video' | 'podcast' | 'pill'
+type Tab = 'all' | 'editorial' | 'article' | 'video' | 'podcast' | 'pill' | 'course'
 
 interface ContentItem {
   id: string
@@ -32,6 +33,16 @@ interface ContentItem {
   podcastCoverUrl: string | null
   accentColor: string | null
   pillImageUrl: string | null
+  /** what a course card needs */
+  sourceLocale?: string | null
+  singleLanguage?: boolean
+  subtitleLocales?: string[]
+  coursePrice?: number | null
+  courseCurrency?: string | null
+  courseDuration?: string | null
+  courseRating?: number | null
+  courseStudents?: number | null
+  bannerHasTitle?: boolean
 }
 
 interface Props {
@@ -510,6 +521,7 @@ export function AuthorContentTabs({ items, authorName, authorSlug, authorAvatarU
   const videos = items.filter(i => i.type === 'video')
   const podcasts = items.filter(i => i.type === 'podcast')
   const pills = items.filter(i => i.type === 'pill')
+  const courses = items.filter(i => i.type === 'course')
 
   const allTabs: { id: Tab; label: string; count: number }[] = [
     { id: 'all', label: t('tabAll'), count: items.length },
@@ -517,6 +529,7 @@ export function AuthorContentTabs({ items, authorName, authorSlug, authorAvatarU
     { id: 'video', label: t('tabVideos'), count: videos.length },
     { id: 'podcast', label: t('tabPodcasts'), count: podcasts.length },
     { id: 'pill', label: t('tabPills'), count: pills.length },
+    { id: 'course', label: t('tabCourses'), count: courses.length },
     { id: 'editorial', label: t('tabEditorials'), count: editorials.length },
   ]
   const tabs = allTabs.filter(tab => tab.id === 'all' || tab.count > 0)
@@ -526,6 +539,7 @@ export function AuthorContentTabs({ items, authorName, authorSlug, authorAvatarU
   const showVideos = activeTab === 'all' || activeTab === 'video'
   const showPodcasts = activeTab === 'all' || activeTab === 'podcast'
   const showPills = activeTab === 'all' || activeTab === 'pill'
+  const showCourses = activeTab === 'all' || activeTab === 'course'
 
   // Always feature the most recently published article (DB is ordered by published_at DESC)
   const featuredArticle = starred.length > 0 ? null : (articles[0] ?? null)
@@ -537,6 +551,24 @@ export function AuthorContentTabs({ items, authorName, authorSlug, authorAvatarU
   const listedEditorials = editorials.filter((e) => !(activeTab === 'all' && e.isAuthorFeatured))
 
   const cardProps = { authorName, authorSlug, authorAvatarUrl, isLoggedIn, t }
+  const courseCards = courses.map((i) => ({
+    slug: i.slug,
+    title: i.title,
+    excerpt: i.excerpt ?? i.description,
+    coverImageUrl: i.coverImageUrl,
+    bannerHasTitle: !!i.bannerHasTitle,
+    price: i.coursePrice,
+    currency: i.courseCurrency,
+    rating: i.courseRating,
+    duration: i.courseDuration,
+    studentsCount: i.courseStudents,
+    authorName,
+    authorSlug,
+    authorAvatarUrl,
+    singleLanguage: i.singleLanguage,
+    sourceLocale: i.sourceLocale,
+    subtitleLocales: i.subtitleLocales,
+  }))
 
   // Authors with little content get a compact, contained layout instead of a
   // full-width hero card and a stack of mostly empty sections.
@@ -630,6 +662,14 @@ export function AuthorContentTabs({ items, authorName, authorSlug, authorAvatarU
                 <ContentTile key={item.id} item={item} large={i === 0 && starred.length > 2} canManage={canManage} t={t} />
               ))}
             </div>
+          </section>
+        )}
+
+        {/* Courses */}
+        {showCourses && courses.length > 0 && (
+          <section>
+            <h2 className="text-[28px] leading-[1.3] text-foreground mb-6">{t('sectionCourses')}</h2>
+            <CourseShowcase items={courseCards} />
           </section>
         )}
 
