@@ -25,8 +25,8 @@ import {
   PodcastCard,
   HomePillCard,
   PillsRail,
-  CourseCard,
 } from './_home-cards'
+import { CourseShowcase } from '@/components/content/CourseShowcase'
 import { tagDisplayName } from '@/lib/tag-name'
 import { cardTopic } from '@/lib/topics'
 import { coverSlideFor } from '@/lib/pill-slides'
@@ -173,7 +173,7 @@ export default async function HomePage({ params }: PageProps) {
         profiles!author_id ( display_name, slug, avatar_url ),
         content_translations ( title, excerpt, featured_summary, locale ),
         content_tags ( tags ( names, slug, is_topic ) ),
-        course_meta ( price, currency, duration, students_count, rating )
+        course_meta ( price, currency, duration, students_count, rating, banner_has_title )
       `)
       .eq('type', 'course')
       .eq('status', 'published')
@@ -838,28 +838,30 @@ export default async function HomePage({ params }: PageProps) {
                 viewAllLabel={t('viewAll')}
               />
               {(courses ?? []).length > 0 ? (
-                <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5 mt-6">
-                  {(courses ?? []).map((item: any) => {
-                    const p = getItemProps(item)
-                    const cm = item.course_meta
-                    return (
-                      <CourseCard
-                        key={item.id}
-                        slug={p.slug}
-                        title={p.title}
-                        excerpt={p.excerpt}
-                        coverImageUrl={p.coverImageUrl}
-                        price={p.price}
-                        currency={p.currency}
-                        rating={p.rating}
-                        duration={p.duration}
-                        studentsCount={cm?.students_count}
-                        authorName={p.authorName}
-                        authorSlug={p.authorSlug}
-                        authorAvatarUrl={p.authorAvatarUrl}
-                      />
-                    )
-                  })}
+                <div className="mt-6">
+                  <CourseShowcase
+                    items={(courses ?? []).map((item: any) => {
+                      const p = getItemProps(item)
+                      return {
+                        slug: p.slug,
+                        title: p.title,
+                        excerpt: p.excerpt,
+                        coverImageUrl: p.coverImageUrl,
+                        bannerHasTitle: !!item.course_meta?.banner_has_title,
+                        price: p.price,
+                        currency: p.currency,
+                        rating: p.rating,
+                        duration: p.duration,
+                        studentsCount: p.studentsCount,
+                        authorName: p.authorName,
+                        authorSlug: p.authorSlug,
+                        authorAvatarUrl: p.authorAvatarUrl,
+                        singleLanguage: item.single_language,
+                        sourceLocale: item.source_locale,
+                        subtitleLocales: item.subtitle_locales,
+                      }
+                    })}
+                  />
                 </div>
               ) : (
                 <SectionPlaceholder count={3} layout="courses" label={tContentHome('comingSoon')} />

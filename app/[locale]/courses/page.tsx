@@ -7,7 +7,8 @@ import { triggerListingTranslations } from '@/lib/trigger-listing-translations'
 import { TranslationRefresher } from '@/components/TranslationRefresher'
 import { Navigation } from '@/components/layout/Navigation'
 import { Footer } from '@/components/layout/Footer'
-import { ContentCard } from '@/components/content/ContentCard'
+import { CourseShowcase } from '@/components/content/CourseShowcase'
+import type { CourseCardProps } from '@/components/content/CourseCard'
 import { TopicStrip } from '@/components/content/TopicStrip'
 import { contentIdsForTag, loadTagCloud } from '@/lib/data/tag-cloud'
 import { FeaturedSection } from '@/components/content/FeaturedSection'
@@ -46,7 +47,7 @@ export default async function CoursesPage({ params, searchParams }: PageProps) {
       profiles!author_id ( display_name, slug, role, avatar_url ),
       content_translations ( title, excerpt, locale ),
       content_tags ( tags ( names, slug, is_topic ) ),
-      course_meta ( price, currency, duration, rating )
+      course_meta ( price, currency, duration, rating, banner_has_title )
     `)
     .eq('type', 'course')
     .eq('status', 'published')
@@ -64,7 +65,7 @@ export default async function CoursesPage({ params, searchParams }: PageProps) {
       profiles!author_id ( display_name, slug, role, avatar_url ),
       content_translations ( title, excerpt, locale ),
       content_tags ( tags ( names, slug, is_topic ) ),
-      course_meta ( price, currency, duration, rating )
+      course_meta ( price, currency, duration, rating, banner_has_title )
     `, { count: 'exact' })
     .eq('type', 'course')
     .eq('status', 'published')
@@ -98,40 +99,29 @@ export default async function CoursesPage({ params, searchParams }: PageProps) {
 
   const pageHref = (n: number) => `?page=${n}${activeTag ? `&tag=${encodeURIComponent(activeTag)}` : ''}`
 
-  const renderCard = (item: any) => {
+  const toCardProps = (item: any): CourseCardProps => {
     const t = getTranslation(item.content_translations ?? [], locale)
     const author = item.profiles
     const firstTag = cardTopic(item.content_tags)
-    const categoryTag = firstTag ? tagDisplayName(firstTag.names, locale, firstTag.slug) : null
-    const categoryTagSlug = firstTag?.slug ?? null
-    return (
-      <ContentCard
-        key={item.id}
-        contentId={item.id}
-        type="course"
-        slug={item.slug}
-        title={t?.title ?? 'Untitled'}
-        excerpt={t?.excerpt}
-        coverImageUrl={item.cover_image_url}
-        publishedAt={item.published_at}
-        likesCount={item.likes_count}
-        authorName={author?.display_name}
-        authorSlug={author?.slug}
-        authorAvatarUrl={author?.avatar_url}
-        categoryTag={categoryTag}
-        categoryTagSlug={categoryTagSlug}
-        price={item.course_meta?.price}
-        currency={item.course_meta?.currency}
-        rating={item.course_meta?.rating}
-        duration={item.course_meta?.duration}
-        isBookmarked={bookmarkedIds.has(item.id)}
-        isLoggedIn={navProps.isLoggedIn}
-        isFeatured={item.is_featured}
-        singleLanguage={item.single_language}
-        sourceLocale={item.source_locale}
-        subtitleLocales={item.subtitle_locales}
-      />
-    )
+    return {
+      slug: item.slug,
+      title: t?.title ?? 'Untitled',
+      excerpt: t?.excerpt,
+      coverImageUrl: item.cover_image_url,
+      bannerHasTitle: !!item.course_meta?.banner_has_title,
+      price: item.course_meta?.price,
+      currency: item.course_meta?.currency,
+      rating: item.course_meta?.rating,
+      duration: item.course_meta?.duration,
+      authorName: author?.display_name,
+      authorSlug: author?.slug,
+      authorAvatarUrl: author?.avatar_url,
+      singleLanguage: item.single_language,
+      sourceLocale: item.source_locale,
+      subtitleLocales: item.subtitle_locales,
+      topic: firstTag ? { label: tagDisplayName(firstTag.names, locale, firstTag.slug), slug: firstTag.slug } : null,
+      bookmark: { contentId: item.id, likesCount: item.likes_count ?? 0, isBookmarked: bookmarkedIds.has(item.id), isLoggedIn: navProps.isLoggedIn },
+    }
   }
 
   return (
@@ -146,14 +136,14 @@ export default async function CoursesPage({ params, searchParams }: PageProps) {
         </div>
 
         {page === 1 && featuredItems.length > 0 && (
-          <FeaturedSection label={tListings('filterFeatured')}>{featuredItems.map(renderCard)}</FeaturedSection>
+          <FeaturedSection label={tListings('filterFeatured')} gridClassName="">
+            <CourseShowcase items={featuredItems.map(toCardProps)} />
+          </FeaturedSection>
         )}
 
         {items && items.length > 0 ? (
           <>
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {items.map(renderCard)}
-            </div>
+            <CourseShowcase items={items.map(toCardProps)} />
             {totalPages > 1 && (
               <div className="flex justify-center gap-2 mt-12">
                 {page > 1 && (

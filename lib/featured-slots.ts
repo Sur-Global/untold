@@ -12,7 +12,7 @@ export const HOME_SLOTS: Record<PlacementType, number> = {
   video: 3,
   podcast: 4,
   pill: 6,
-  course: 2,
+  course: 3,
 }
 
 export const TYPE_PLURAL: Record<PlacementType, string> = {

@@ -145,12 +145,12 @@ describe('toggleHomeFeatured (⌂ homepage section)', () => {
     expect(!result.ok && result.error).toContain('homepage podcasts section is full (4 of 4)')
   })
 
-  it('courses only have 2 slots', async () => {
-    const { from } = makePlacementFrom({ ...flags, type: 'course' }, 2)
+  it('courses have 3 slots on the homepage (one, two or three courses)', async () => {
+    const { from } = makePlacementFrom({ ...flags, type: 'course' }, 3)
     vi.mocked(createClient).mockResolvedValue({ from } as any)
 
     const result = await toggleHomeFeatured('content-1')
-    expect(!result.ok && result.error).toContain('(2 of 2)')
+    expect(!result.ok && result.error).toContain('(3 of 3)')
   })
 
   it('turns on under the cap, even without ★', async () => {
