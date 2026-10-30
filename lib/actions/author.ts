@@ -5,7 +5,7 @@ import { createServiceRoleClient } from '@/lib/supabase/service-role'
 import { revalidatePath } from 'next/cache'
 import { requireEditor, isEditorRole } from '@/lib/require-editor'
 import { requireCreator } from '@/lib/require-creator'
-import { assertUploadedAvatar } from '@/lib/avatar-url'
+import { assertUploadedAvatar, avatarFileOwner } from '@/lib/avatar-url'
 import { slugify } from '@/lib/utils'
 import { logActivity } from '@/lib/actions/activity-log'
 import { sanitizeBioHtml } from '@/lib/sanitize-bio-html'
@@ -89,6 +89,14 @@ export async function createAuthor(input: NewAuthorInput): Promise<AuthorOption>
   if (name.length > 120) throw new Error('Author name is too long')
 
   const service = createServiceRoleClient()
+
+  // A new author's photo must be a file of its own. One stored under the id of an existing profile (for example the id of whoever
+  // filled in the form) would be shared, and the next upload there would silently replace this author's photo.
+  const photoOwner = avatarFileOwner(details.avatar_url)
+  if (photoOwner) {
+    const { data: owner } = await (service as any).from('profiles').select('id').eq('id', photoOwner).maybeSingle()
+    if (owner) throw new Error('This photo is stored under another profile. Please upload it again.')
+  }
 
   // Pick a free slug (/author/<slug>)
   const baseSlug = slugify(name) || 'author'
