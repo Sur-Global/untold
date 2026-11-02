@@ -5,7 +5,8 @@
  * Every cover is stored like the editor does it (WebP, 1200px wide, quality 80) under its own new file name — it never reuses or
  * overwrites a file, so no other article's picture can change. A backup of the old addresses is written before the first change.
  *
- * Run: npx tsx --env-file=.env.local scripts/replace-series-covers.ts <folder with the PNG files> <backup file.json> [--apply]
+ * Run: npx tsx --env-file=.env.local scripts/replace-series-covers.ts <folder with the PNG files> <backup file.json> [--only=file1.png,file2.png] [--apply]
+ * (--only changes just those covers; use a new backup file every time so an earlier backup is never overwritten)
  */
 import { readFileSync, writeFileSync } from 'node:fs'
 import { createClient } from '@supabase/supabase-js'
@@ -22,24 +23,31 @@ const COVERS: { file: string; id: string; slug: string; person: string }[] = [
   { file: 'pablo.png', id: 'd8c4c8c0-2a9d-44b4-af28-c5ecd5f78261', slug: 'cartografias-del-desvio-2', person: 'Pablo Ruiz-Múzquiz' },
   { file: 'beatriz.png', id: 'ae5c7559-6cd4-4e7d-8dd9-bc41c17861d5', slug: 'cartografias-del-desvio-beatriz-ricci-desde-el-sur', person: 'Beatriz Ricci' },
   { file: 'lulo.png', id: 'ab702952-a842-4c42-bda2-14d24086d5d3', slug: 'cartografias-del-desvio', person: 'Luis (lulo) López' },
+  // second batch (drawn from the article photos, same style)
+  { file: 'nicolas-madoery.png', id: 'a8b7eaf1-faaf-4b90-8a79-e1295a9cb01f', slug: 'cartografias-del-desvio-4', person: 'Nicolás Madoery' },
+  { file: 'alex-hernandez.png', id: '22f33762-ae15-4198-9240-a2647b19153d', slug: 'cartografias-del-desvio-3', person: 'Álex Hernández' },
+  { file: 'paula-zuccotti.png', id: 'a4745899-8b9c-44a4-9b6b-0c108403561f', slug: 'cartografias-del-desvio-paulazoccotti', person: 'Paula Zuccotti' },
 ]
 
 const [dir, backupFile] = process.argv.slice(2)
 const apply = process.argv.includes('--apply')
+const only = process.argv.find((a) => a.startsWith('--only='))?.slice('--only='.length).split(',')
 const sb = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!, { auth: { autoRefreshToken: false, persistSession: false } })
 
 async function main() {
   if (!dir || !backupFile) throw new Error('usage: replace-series-covers.ts <folder> <backup.json> [--apply]')
   if (COVERS.some((c) => c.id === MARIANA)) throw new Error("Mariana Alegre's cover must not be replaced")
+  const chosen = only ? COVERS.filter((c) => only.includes(c.file)) : COVERS
+  if (only && chosen.length !== only.length) throw new Error(`unknown file in --only: ${only.filter((f) => !COVERS.some((c) => c.file === f)).join(', ')}`)
 
   const { data: rows, error } = await sb
     .from('content')
     .select('id, slug, cover_image_url, author_id, profiles!content_author_id_fkey(display_name)')
-    .in('id', COVERS.map((c) => c.id))
+    .in('id', chosen.map((c) => c.id))
   if (error) throw new Error(error.message)
 
   // 1. every article exists and is the one we think it is
-  const plan = COVERS.map((c) => {
+  const plan = chosen.map((c) => {
     const row: any = rows?.find((r) => r.id === c.id)
     if (!row) throw new Error(`${c.slug}: article not found`)
     if (row.slug !== c.slug) throw new Error(`${c.id}: slug is "${row.slug}", expected "${c.slug}"`)
