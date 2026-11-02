@@ -1,6 +1,12 @@
 # Pipeline de trabajo — UNTOLD
 
-Última actualización: 2026-10-30
+Última actualización: 2026-11-02
+
+## Hecho el 2026-11-02 — el dominio ya es el nuevo (www.untold.ink)
+- **Direcciones del Ghost antiguo:** los 64 artículos (`/<slug>/`) van a `/es/articles/<slug>`, las 7 etiquetas que cambiaron de nombre van a la nueva (`/tag/tech` → `/tag/tecnologia`, etc.), y la paginación, los sitemaps y `/subscribe`, `/signin`, `/signup` de Ghost también tienen destino. Todo es permanente (308). La lista está en `lib/ghost-redirects.json` (la genera `scripts/build-ghost-redirects.ts`, que además comprueba cada dirección contra la base de datos) y las reglas en `next.config.ts`. Antes ya había tres reglas en el panel de Vercel («Ghost legacy URLs 1/3, 2/3, 3/3») que cubren 63 de los 64 artículos: no estorban, y se pueden borrar cuando se quiera porque ahora todo está también en el código.
+- **`/sitemap.xml`, `/robots.txt` y `/rss`** (antes daban 404). El sitemap lista solo lo público, una vez por idioma en el que existe cada página, con los enlaces entre idiomas, y se arma al pedirlo, así que siempre está al día. El robots deja fuera lo privado (admin, panel, crear, acceso, búsqueda). `/rss` es el feed en español (`/rss?lang=en` en inglés) con lo último publicado.
+- **Comprobar las direcciones viejas:** `npx tsx scripts/check-old-urls.ts https://www.untold.ink` visita las 108 direcciones antiguas (como las escribía Ghost) y confirma que cada una termina en su página.
+- **Portadas nuevas de «Cartografías del Desvío»** (7 entrevistas, desde Figma: Chonon Bensho, Mara Gourd-Mercado, Zoila Ochoa, Eduardo Marisca, Pablo Ruiz-Múzquiz, Beatriz Ricci, Lulo López; la de Mariana Alegre ya estaba): `scripts/replace-series-covers.ts`. Quedan con la portada anterior las de Paula Zuccotti, Álex Hernández, Nicolás Madoery y Gonzalo Benavente, que no tienen marco en Figma.
 
 ## Hecho el 2026-10-29 y 30
 - **Banner del boletín** encima del pie de página en todas las páginas públicas (tarjeta negra flotante con borde lila, para que no se confunda con el pie negro).

@@ -83,5 +83,6 @@ export async function proxy(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ['/((?!api|_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)'],
+  // sitemap.xml, robots.txt and the RSS feed are not pages: they have no language and are not rewritten
+  matcher: ['/((?!api|_next/static|_next/image|favicon.ico|sitemap\\.xml$|robots\\.txt$|rss$|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)'],
 }
