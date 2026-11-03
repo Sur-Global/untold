@@ -16,6 +16,7 @@ import { FollowButton } from '@/components/social/FollowButton'
 import { AuthorContentTabs } from '@/components/author/AuthorContentTabs'
 import { SocialLinks } from '@/components/author/SocialLinks'
 import { TranslationRefresher } from '@/components/TranslationRefresher'
+import { TEXT_LINK_CLASSES } from '@/lib/link-style'
 
 interface PageProps {
   params: Promise<{ locale: string; slug: string }>
@@ -253,7 +254,7 @@ export default async function AuthorPage({ params }: PageProps) {
 
               {translatedBio && (
                 <div
-                  className="mb-4 max-w-2xl mx-auto sm:mx-0 [&_a]:underline [&_a]:underline-offset-2 hover:[&_a]:opacity-80"
+                  className={`mb-4 max-w-2xl mx-auto sm:mx-0 ${TEXT_LINK_CLASSES}`}
                   style={{ fontSize: 15, lineHeight: 1.65, color: 'rgba(255,255,255,0.65)' }}
                   dangerouslySetInnerHTML={{ __html: sanitizeBioHtml(translatedBio) }}
                 />

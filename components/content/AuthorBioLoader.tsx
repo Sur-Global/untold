@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { useTranslations } from 'next-intl'
 import { sanitizeBioHtml } from '@/lib/sanitize-bio-html'
+import { TEXT_LINK_CLASSES } from '@/lib/link-style'
 
 interface AuthorBioLoaderProps {
   initialBio: string | null
@@ -60,7 +61,7 @@ export function AuthorBioLoader({ initialBio, needsTranslation, contentId, autho
       )}
       {bio && (
         <p
-          className="text-sm text-muted-foreground leading-relaxed mb-3 [&_a]:text-primary [&_a]:underline [&_a]:underline-offset-2 hover:[&_a]:opacity-80"
+          className={`text-sm text-muted-foreground leading-relaxed mb-3 ${TEXT_LINK_CLASSES}`}
           dangerouslySetInnerHTML={{ __html: sanitizeBioHtml(bio) }}
         />
       )}

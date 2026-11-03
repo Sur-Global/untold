@@ -208,6 +208,14 @@ article:hover .card-image-shine {
   background: #ffffff !important;
 }
 
+/* Links in the editor look like they do on the page (see lib/link-style.ts): brand lilac, bold, underlined */
+.bn-editor a {
+  color: var(--primary);
+  font-weight: 700;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
 /* Footnotes in the editor: the number in the text and the note at the end of the article */
 .bn-fn-ref {
   display: inline-block;

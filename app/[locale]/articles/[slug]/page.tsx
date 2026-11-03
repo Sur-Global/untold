@@ -7,6 +7,7 @@ import { getTranslation } from '@/lib/content'
 import { LanguageNotice } from '@/components/content/LanguageNotice'
 import { readTime } from '@/lib/utils'
 import { renderCreditHtml } from '@/lib/photo-credit'
+import { TEXT_LINK_CLASSES } from '@/lib/link-style'
 import { sanitizeBioHtml } from '@/lib/sanitize-bio-html'
 import { formatDate } from '@/lib/format-date'
 import { Navigation } from '@/components/layout/Navigation'
@@ -263,6 +264,7 @@ export default async function ArticlePage({ params }: PageProps) {
                       >
                         <strong style={{ color: '#78716c', fontFamily: 'var(--font-aeonik), Aeonik, sans-serif', fontWeight: 700 }}>{tContent('credits')}</strong>
                         <span
+                          className={TEXT_LINK_CLASSES}
                           style={{ color: '#78716c', fontFamily: 'var(--font-aeonik), Aeonik, sans-serif' }}
                           dangerouslySetInnerHTML={{ __html: renderCreditHtml(article.image_credits) }}
                         />
@@ -436,7 +438,7 @@ export default async function ArticlePage({ params }: PageProps) {
                           <div className="mb-5">
                             {sourceBioHtml && !translatedBio ? (
                               <div
-                                className="text-sm leading-relaxed [&_a]:text-primary [&_a]:underline [&_a]:hover:opacity-70 [&_a]:transition-opacity"
+                                className={`text-sm leading-relaxed ${TEXT_LINK_CLASSES}`}
                                 style={{ color: '#4b5563' }}
                                 dangerouslySetInnerHTML={{ __html: sanitizeBioHtml(sourceBioHtml) }}
                               />

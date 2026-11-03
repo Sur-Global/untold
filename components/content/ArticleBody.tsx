@@ -5,6 +5,7 @@ import StarterKit from '@tiptap/starter-kit'
 import Link from '@tiptap/extension-link'
 import { Table, TableRow, TableCell, TableHeader } from '@tiptap/extension-table'
 import { ImageWithCredit } from '@/lib/tiptap/image-with-credit'
+import { TEXT_LINK_CLASSES } from '@/lib/link-style'
 
 // Dynamic import prevents BlockNote (which accesses window at module level) from
 // running during SSR, even within a 'use client' component tree
@@ -75,7 +76,7 @@ const PROSE_CLASS = `
   [&_.fn-back]:ml-1 [&_.fn-back]:no-underline [&_.fn-back]:text-[#3b3680]
   [&_.fn-list_li::marker]:text-[#57534e]
 
-  prose-a:text-primary prose-a:no-underline hover:prose-a:underline
+  ${TEXT_LINK_CLASSES} [&_.fn-back]:font-normal
   prose-code:text-primary prose-code:bg-primary/8
   prose-pre:bg-foreground prose-pre:text-background
   prose-strong:text-foreground prose-strong:font-semibold
