@@ -5,7 +5,8 @@
  *   [ { "unit": 12, "old": "exact words now in the translation", "new": "replacement" },
  *     { "field": "title", "old": "…", "new": "…" } ]
  * `unit` is the position in the list of text units (same numbering as scripts/dump-article-units.ts and scripts/audit-translations.ts);
- * `old` must appear exactly once in that unit's mark-up (**bold**, *italic*, [label](url), {{fn:key}}). `field` can be title or excerpt.
+ * `old` must appear exactly once in that unit's mark-up (**bold**, *italic*, [label](url), {{fn:key}}), unless the patch says "all": true
+ * (then every occurrence is replaced). `field` can be title or excerpt.
  *
  * Safe by design: only rows written by hand are touched; the row is copied to .claude/backups/translations-<date>/ first; after the
  * patch every unit must still have the same links and note markers as its Spanish unit and show no raw mark-up.
@@ -20,7 +21,7 @@ const [contentId, locale, patchFile] = process.argv.slice(2)
 const dry = process.argv.includes('--dry')
 const sb = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!, { auth: { autoRefreshToken: false, persistSession: false } })
 
-type Patch = { unit?: number; field?: 'title' | 'excerpt'; old: string; new: string }
+type Patch = { unit?: number; field?: 'title' | 'excerpt'; old: string; new: string; all?: boolean }
 
 const get = (o: any, path: string) => path.split('.').reduce((c, k) => (Array.isArray(c) ? c[Number(k)] : c[k]), o)
 function setAt(root: any, path: string, value: unknown): void {
@@ -34,10 +35,10 @@ function setAt(root: any, path: string, value: unknown): void {
 const textOf = (items: any[]): string => (items ?? []).map((i) => (i.type === 'link' ? textOf(i.content) : i.text ?? '')).join('')
 const fnOf = (items: any[]): string[] => (items ?? []).flatMap((i) => (i.type === 'footnoteRef' ? [String(i.props?.id)] : i.type === 'link' ? fnOf(i.content) : []))
 
-function replaceOnce(text: string, old: string, neu: string, where: string): string {
+function replaceOnce(text: string, old: string, neu: string, where: string, all = false): string {
   const n = text.split(old).length - 1
-  if (n !== 1) throw new Error(`${where}: "${old.slice(0, 60)}" appears ${n} times (must be exactly once)`)
-  return text.replace(old, () => neu)
+  if (all ? n < 1 : n !== 1) throw new Error(`${where}: "${old.slice(0, 60)}" appears ${n} times (${all ? 'at least once' : 'must be exactly once'})`)
+  return all ? text.split(old).join(neu) : text.replace(old, () => neu)
 }
 
 async function main() {
@@ -59,10 +60,10 @@ async function main() {
 
   for (const p of patches) {
     if (p.field) {
-      fields[p.field] = replaceOnce(String(fields[p.field] ?? ''), p.old, p.new, p.field)
+      fields[p.field] = replaceOnce(String(fields[p.field] ?? ''), p.old, p.new, p.field, p.all)
     } else {
       if (p.unit === undefined || !units[p.unit]) throw new Error(`no unit ${p.unit}`)
-      markups[p.unit] = replaceOnce(markups[p.unit], p.old, p.new, `unit ${p.unit}`)
+      markups[p.unit] = replaceOnce(markups[p.unit], p.old, p.new, `unit ${p.unit}`, p.all)
       touched.add(p.unit)
     }
   }
