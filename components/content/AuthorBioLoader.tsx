@@ -60,7 +60,7 @@ export function AuthorBioLoader({ initialBio, needsTranslation, contentId, autho
         </span>
       )}
       {bio && (
-        <p
+        <div
           className={`text-sm text-muted-foreground leading-relaxed mb-3 ${TEXT_LINK_CLASSES}`}
           dangerouslySetInnerHTML={{ __html: sanitizeBioHtml(bio) }}
         />
