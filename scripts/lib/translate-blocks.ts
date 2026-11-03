@@ -19,9 +19,29 @@ export interface Unit {
 
 const esc = (s: string) => s
 
+/** Adjacent text runs with the same bold / italic are one run in the mark-up (a paste can leave "**A****:**", which the mark-up cannot read back) */
+function mergeRuns(items: Inline[]): Inline[] {
+  const out: Inline[] = []
+  for (const i of items ?? []) {
+    const last = out[out.length - 1]
+    const same = (a: Inline, b: Inline) => !!a.styles?.bold === !!b.styles?.bold && !!a.styles?.italic === !!b.styles?.italic
+    if (last && last.type === 'text' && i.type === 'text' && same(last, i)) out[out.length - 1] = { ...last, text: last.text + i.text }
+    else out.push(i)
+  }
+  return out
+}
+
 export function inlineToMarkup(items: Inline[]): string {
   let out = ''
-  for (const i of items ?? []) {
+  // consecutive bold runs share one pair of ** (italic words inside them nest), so "**A *b* c**" is read back exactly as it was written
+  let bold = ''
+  let inBold = false
+  const flush = () => {
+    if (inBold) out += `**${bold}**`
+    bold = ''
+    inBold = false
+  }
+  for (const i of mergeRuns(items)) {
     if (i.type === 'text') {
       const st = i.styles ?? {}
       // Raw colours and underlines come from text pasted out of Google Docs: the reader ignores them, so they are not carried over
@@ -29,14 +49,22 @@ export function inlineToMarkup(items: Inline[]): string {
       if (extra.length) throw new Error(`unsupported style ${extra.join(',')} in "${i.text}"`)
       let t = esc(i.text)
       if (st.italic) t = `*${t}*`
-      if (st.bold) t = `**${t}**`
-      out += t
+      if (st.bold) {
+        bold += t
+        inBold = true
+      } else {
+        flush()
+        out += t
+      }
     } else if (i.type === 'link') {
+      flush()
       out += `[${inlineToMarkup(i.content)}](${i.href})`
     } else if (i.type === 'footnoteRef') {
+      flush()
       out += `{{fn:${i.props?.id}}}`
     } else throw new Error(`unsupported inline item ${i.type}`)
   }
+  flush()
   return out
 }
 
