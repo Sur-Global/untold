@@ -111,6 +111,9 @@ export function BodyTranslationLoader({
   // Translation failed after max attempts — fall back to English
   if (failed && fallback != null) return renderContent(fallback, field, descriptionClassName)
 
+  // No translation and none on its way (translating on visit is off, lib/visit-translation.ts) — show the original
+  if (!isTranslating && fallback != null) return renderContent(fallback, field, descriptionClassName)
+
   // Translation pending — show apology placeholder
   if (isTranslating) {
     return (

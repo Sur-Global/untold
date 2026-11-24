@@ -1,4 +1,7 @@
+import { translateOnVisit } from '@/lib/visit-translation'
+
 export async function triggerTagTranslations(locale: string): Promise<void> {
+  if (!translateOnVisit()) return
   try {
     await fetch(`${process.env.NEXT_PUBLIC_SITE_URL}/api/translate-tags`, {
       method: 'POST',

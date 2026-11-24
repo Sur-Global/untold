@@ -5,6 +5,7 @@ import { getTranslations } from 'next-intl/server'
 import { createClient } from '@/lib/supabase/server'
 import { getTranslation } from '@/lib/content'
 import { LanguageNotice } from '@/components/content/LanguageNotice'
+import { translateOnVisit } from '@/lib/visit-translation'
 import { formatDate } from '@/lib/format-date'
 import { locationName } from '@/lib/countries'
 import { getNavProps } from '@/lib/nav'
@@ -96,12 +97,13 @@ export default async function VideoPage({ params }: PageProps) {
   // Author bio translation
   const authorProfileTrans = author?.profile_translations as Record<string, { bio?: string }> | null
   const translatedAuthorBio = authorProfileTrans?.[locale]?.bio ?? null
-  const needsAuthorBio = locale !== sourceLocale && !!author?.bio && !translatedAuthorBio
+  const needsAuthorBio = translateOnVisit() && locale !== sourceLocale && !!author?.bio && !translatedAuthorBio
 
   // Per-section translation flags
-  const needsBody = contentLocale !== sourceLocale && !!sourceBody && (usingFallback || !body)
-  const needsChapters = contentLocale !== sourceLocale && chapters.length > 0 && !chapterTranslations?.[locale]
+  const needsBody = translateOnVisit() && contentLocale !== sourceLocale && !!sourceBody && (usingFallback || !body)
+  const needsChapters = translateOnVisit() && contentLocale !== sourceLocale && chapters.length > 0 && !chapterTranslations?.[locale]
   const needsTranscript =
+    translateOnVisit() &&
     contentLocale !== sourceLocale &&
     Array.isArray(meta?.transcript) &&
     (meta.transcript as unknown[]).length > 0 &&

@@ -22,6 +22,7 @@ import { assertShortText, readPillFormat } from '@/lib/pill-form'
 import { normalizeAccent } from '@/lib/pill-accent'
 import { markTranslationsStale } from '@/lib/translation-sync'
 import { keepLocales } from '@/lib/pill-slides'
+import { translateOnPublish } from '@/lib/visit-translation'
 
 async function syncTags(supabase: any, contentId: string, formData: FormData, replace: boolean) {
   const raw = formData.get('tag_ids') as string | null
@@ -210,7 +211,8 @@ export async function publishPill(id: string) {
 
   after(async () => {
     await notifyFeatureRequest(id)
-    try {
+    // DeepL on publish is off unless TRANSLATE_ON_PUBLISH=on (lib/visit-translation.ts): new content is translated by hand
+    if (translateOnPublish()) try {
       const res = await fetch(`${process.env.NEXT_PUBLIC_SITE_URL}/api/translate`, {
         method: 'POST',
         headers: {

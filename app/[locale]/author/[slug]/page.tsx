@@ -5,6 +5,7 @@ import { getTranslations } from 'next-intl/server'
 import { createClient } from '@/lib/supabase/server'
 import { getTranslation } from '@/lib/content'
 import { triggerListingTranslations } from '@/lib/trigger-listing-translations'
+import { translateOnVisit } from '@/lib/visit-translation'
 import { formatDate } from '@/lib/format-date'
 import { issueLabel } from '@/lib/issues'
 import { locationName } from '@/lib/countries'
@@ -143,7 +144,7 @@ export default async function AuthorPage({ params }: PageProps) {
 
   // Trigger background translation for untranslated content items on this author page
   let pendingTranslations = false
-  if ((content ?? []).length > 0) {
+  if (translateOnVisit() && (content ?? []).length > 0) {
     const untranslatedIds = (content as any[])
       .filter(i => !(i.content_translations ?? []).some((t: any) => t.locale === locale))
       .map((i: any) => i.id)
@@ -164,7 +165,7 @@ export default async function AuthorPage({ params }: PageProps) {
   // Trigger bio translation on first visit in this language.
   // We need a content_id from one of the author's content items to use the translate route.
   // We reuse the existing translate route which handles author bio as a side effect.
-  if (needsAuthorBio) {
+  if (needsAuthorBio && translateOnVisit()) {
     const { data: anyContent } = await (supabase as any)
       .from('content')
       .select('id')

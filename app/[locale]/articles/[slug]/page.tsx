@@ -5,6 +5,7 @@ import { getTranslations } from 'next-intl/server'
 import { createClient } from '@/lib/supabase/server'
 import { getTranslation } from '@/lib/content'
 import { LanguageNotice } from '@/components/content/LanguageNotice'
+import { translateOnVisit } from '@/lib/visit-translation'
 import { readTime } from '@/lib/utils'
 import { renderCreditHtml } from '@/lib/photo-credit'
 import { TEXT_LINK_CLASSES } from '@/lib/link-style'
@@ -75,8 +76,8 @@ export default async function ArticlePage({ params }: PageProps) {
   // language get the original, with a label (see LanguageNotice)
   const singleLanguage: boolean = !!article.single_language
   const contentLocale: string = singleLanguage ? (article.source_locale ?? 'en') : locale
-  const t = getTranslation(article.content_translations ?? [], contentLocale)
-  if (!t) notFound()
+  const tFound = getTranslation(article.content_translations ?? [], contentLocale)
+  if (!tFound) notFound()
 
   // Is this the editorial of a numbered issue? Then the page looks different: straight to the text,
   // then the issue's articles, and the author's card last.
@@ -99,14 +100,21 @@ export default async function ArticlePage({ params }: PageProps) {
   const sourceBody = sourceTranslation?.body as Record<string, unknown> | null
 
   // getTranslation falls back to source locale when no locale row exists — detect that case
-  const usingFallback = t.locale !== contentLocale
-  const body = usingFallback ? null : (t.body as Record<string, unknown> | null)
-  const needsBody = contentLocale !== sourceLocale && !!sourceBody && (usingFallback || !body)
+  const foundFallback = tFound.locale !== contentLocale
+  const foundBody = foundFallback ? null : (tFound.body as Record<string, unknown> | null)
+  const untranslated = contentLocale !== sourceLocale && !!sourceBody && (foundFallback || !foundBody)
+  // Translating on visit is off (lib/visit-translation.ts): an article without a finished translation is
+  // shown whole in its original language, with the "Only in …" label, instead of waiting for DeepL
+  const showOriginal = untranslated && !translateOnVisit() && !!sourceTranslation
+  const t = showOriginal ? sourceTranslation : tFound
+  const usingFallback = showOriginal ? false : foundFallback
+  const body = showOriginal ? sourceBody : foundBody
+  const needsBody = untranslated && !showOriginal
 
   // Author bio translation
   const profileTrans = author?.profile_translations as Record<string, any> | null
   const translatedBio = profileTrans?.[locale]?.bio ?? null
-  const needsAuthorBio = locale !== sourceLocale && !!author?.bio && !translatedBio
+  const needsAuthorBio = translateOnVisit() && locale !== sourceLocale && !!author?.bio && !translatedBio
 
   // Source-language bio fields extracted from Ghost (stored by import script)
   const sourceBioHtml = profileTrans?._source_bio_html ?? null
@@ -164,7 +172,7 @@ export default async function ArticlePage({ params }: PageProps) {
   const untranslatedIssueIds = issueRows
     .filter((r: any) => !r.single_language && !(r.content_translations ?? []).some((tr: any) => tr.locale === locale))
     .map((r: any) => r.id)
-  if (untranslatedIssueIds.length > 0) after(() => triggerListingTranslations(untranslatedIssueIds, locale))
+  if (untranslatedIssueIds.length > 0 && translateOnVisit()) after(() => triggerListingTranslations(untranslatedIssueIds, locale))
 
   // Reusable action button style using design tokens
   const actionButtonClass = [
@@ -234,7 +242,7 @@ export default async function ArticlePage({ params }: PageProps) {
                     {tIssues('editorialOf', { month: issueMonthLabel(editorialIssue.issue_date, locale) })}
                   </p>
                 )}
-                {singleLanguage && <LanguageNotice sourceLocale={sourceLocale} subtitleLocales={article.subtitle_locales} />}
+                {(singleLanguage || showOriginal) && <LanguageNotice sourceLocale={sourceLocale} subtitleLocales={article.subtitle_locales} />}
                 <h1
                   className="font-heading text-foreground mb-6"
                   style={{ fontSize: 50, lineHeight: '61.6px', letterSpacing: '-0.56px', maxWidth: 752 }}

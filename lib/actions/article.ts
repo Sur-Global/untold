@@ -18,6 +18,7 @@ import { publishNewContent } from '@/lib/publish-new-content'
 import { resolveAuthorId, requestedAuthorId } from '@/lib/resolve-author'
 import { logActivity, getContentLogInfo } from '@/lib/actions/activity-log'
 import { publishErrorMessage } from '@/lib/profile-complete'
+import { translateOnPublish } from '@/lib/visit-translation'
 
 export async function createArticle(formData: FormData) {
   const { user, profile } = await requireCreator()
@@ -234,7 +235,8 @@ export async function publishArticle(id: string, formData: FormData) {
 
   after(async () => {
     await notifyFeatureRequest(id)
-    try {
+    // DeepL on publish is off unless TRANSLATE_ON_PUBLISH=on (lib/visit-translation.ts): new content is translated by hand
+    if (translateOnPublish()) try {
       const res = await fetch(`${process.env.NEXT_PUBLIC_SITE_URL}/api/translate`, {
         method: 'POST',
         headers: {

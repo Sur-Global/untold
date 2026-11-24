@@ -1,6 +1,7 @@
 import { after } from 'next/server'
 import { notifyFeatureRequest } from '@/lib/feature-request'
 import { publishErrorMessage } from '@/lib/profile-complete'
+import { translateOnPublish } from '@/lib/visit-translation'
 
 /**
  * Publishes a just-created content item (the "Publish" button on create forms),
@@ -21,7 +22,8 @@ export async function publishNewContent(
 
   after(async () => {
     await notifyFeatureRequest(contentId)
-    try {
+    // DeepL on publish is off unless TRANSLATE_ON_PUBLISH=on (lib/visit-translation.ts): new content is translated by hand
+    if (translateOnPublish()) try {
       const res = await fetch(`${process.env.NEXT_PUBLIC_SITE_URL}/api/translate`, {
         method: 'POST',
         headers: {

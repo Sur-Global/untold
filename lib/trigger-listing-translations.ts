@@ -5,11 +5,13 @@
  * Uses fieldsOnly=true so only short text fields are translated (no body/transcript).
  * Called via after() so it never blocks page rendering.
  */
+import { translateOnVisit } from '@/lib/visit-translation'
+
 export async function triggerListingTranslations(
   contentIds: string[],
   locale: string,
 ): Promise<void> {
-  if (!contentIds.length) return
+  if (!contentIds.length || !translateOnVisit()) return
   for (const contentId of contentIds) {
     try {
       await fetch(`${process.env.NEXT_PUBLIC_SITE_URL}/api/translate`, {

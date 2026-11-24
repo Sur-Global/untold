@@ -18,6 +18,7 @@ import { logActivity } from '@/lib/actions/activity-log'
 import { publishErrorMessage } from '@/lib/profile-complete'
 import { markTranslationsStale, saveSourceText } from '@/lib/translation-sync'
 import { originForNewPodcast, originForSavedPodcast } from '@/lib/podcast-origin'
+import { translateOnPublish } from '@/lib/visit-translation'
 
 export async function createPodcast(formData: FormData) {
   const { user, profile } = await requireCreator('podcast')
@@ -157,7 +158,8 @@ export async function publishPodcast(id: string) {
 
   after(async () => {
     await notifyFeatureRequest(id)
-    try {
+    // DeepL on publish is off unless TRANSLATE_ON_PUBLISH=on (lib/visit-translation.ts): new content is translated by hand
+    if (translateOnPublish()) try {
       const res = await fetch(`${process.env.NEXT_PUBLIC_SITE_URL}/api/translate`, {
         method: 'POST',
         headers: {

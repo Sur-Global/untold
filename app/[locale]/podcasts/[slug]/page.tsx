@@ -3,6 +3,7 @@ import { after } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
 import { getTranslation } from '@/lib/content'
 import { LanguageNotice } from '@/components/content/LanguageNotice'
+import { translateOnVisit } from '@/lib/visit-translation'
 import { Navigation } from '@/components/layout/Navigation'
 import { Footer } from '@/components/layout/Footer'
 import type { Metadata } from 'next'
@@ -80,7 +81,7 @@ export default async function PodcastPage({ params }: PageProps) {
 
   const usingFallback = t.locale !== contentLocale
   const description = usingFallback ? null : (t.description as string | null)
-  const needsDescription = contentLocale !== sourceLocale && !!sourceDescription && (usingFallback || !description)
+  const needsDescription = translateOnVisit() && contentLocale !== sourceLocale && !!sourceDescription && (usingFallback || !description)
 
   if (needsDescription) {
     after(async () => {

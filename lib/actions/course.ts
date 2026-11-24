@@ -19,6 +19,7 @@ import { logActivity } from '@/lib/actions/activity-log'
 import { publishErrorMessage } from '@/lib/profile-complete'
 import { markTranslationsStale, saveSourceText } from '@/lib/translation-sync'
 import { extrasToColumns, readCourseExtras } from '@/lib/course-page'
+import { translateOnPublish } from '@/lib/visit-translation'
 
 /** The full description (rich text) from a form: a list of blocks, or nothing */
 function readBody(formData: FormData): unknown[] | null {
@@ -169,7 +170,8 @@ export async function publishCourse(id: string) {
 
   after(async () => {
     await notifyFeatureRequest(id)
-    try {
+    // DeepL on publish is off unless TRANSLATE_ON_PUBLISH=on (lib/visit-translation.ts): new content is translated by hand
+    if (translateOnPublish()) try {
       const res = await fetch(`${process.env.NEXT_PUBLIC_SITE_URL}/api/translate`, {
         method: 'POST',
         headers: {

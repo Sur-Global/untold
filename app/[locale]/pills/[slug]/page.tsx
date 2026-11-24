@@ -4,6 +4,7 @@ import { getTranslations } from 'next-intl/server'
 import { createClient } from '@/lib/supabase/server'
 import { getTranslation } from '@/lib/content'
 import { LanguageNotice } from '@/components/content/LanguageNotice'
+import { translateOnVisit } from '@/lib/visit-translation'
 import { Navigation } from '@/components/layout/Navigation'
 import { Footer } from '@/components/layout/Footer'
 import type { Metadata } from 'next'
@@ -79,12 +80,12 @@ export default async function PillPage({ params }: PageProps) {
 
   const usingFallback = t.locale !== contentLocale
   const body = usingFallback ? null : (t.body as Record<string, unknown> | null)
-  const needsBody = contentLocale !== sourceLocale && !!sourceBody && (usingFallback || !body)
+  const needsBody = translateOnVisit() && contentLocale !== sourceLocale && !!sourceBody && (usingFallback || !body)
 
   // Carousel pills: the slides (their texts in the reader's language, where translated)
   const isCarousel = meta?.format === 'carousel'
   const { slides, translated: slidesTranslated } = localizedSlides(parseSlides(meta?.slides), meta?.slide_translations, contentLocale, sourceLocale)
-  const needsSlides = isCarousel && contentLocale !== sourceLocale && !slidesTranslated
+  const needsSlides = translateOnVisit() && isCarousel && contentLocale !== sourceLocale && !slidesTranslated
   const credits = slideCredits(slides)
   const topics = await loadContentTopics(supabase, (pill.content_tags ?? []).map((ct: any) => ct.tags).filter(Boolean), locale)
 
