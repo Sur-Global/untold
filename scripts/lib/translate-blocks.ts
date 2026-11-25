@@ -72,7 +72,7 @@ export function inlineToMarkup(items: Inline[]): string {
 export function markupToInline(src: string, styles: Record<string, boolean> = {}): Inline[] {
   const out: Inline[] = []
   // bold / italic may span several lines; a link's label may hold one level of brackets, e.g. a note marker [[2]](#fn2)
-  const token = /\*\*([\s\S]+?)\*\*(?!\*)|\*([\s\S]+?)\*|\[((?:[^\[\]]|\[[^\]]*\])+)\]\(([^)\s]+)\)|\{\{fn:([A-Za-z0-9-]+)\}\}/g
+  const token = /\*\*([\s\S]+?)\*\*(?!\*)|\*([\s\S]+?)\*|\[((?:[^\[\]]|\[[^\]]*\])+)\]\(((?:[^()\s]|\([^()\s]*\))+)\)|\{\{fn:([A-Za-z0-9-]+)\}\}/g
   let last = 0
   const text = (t: string) => {
     if (t) out.push({ type: 'text', text: t, styles: { ...styles } })
@@ -135,7 +135,7 @@ export function applyUnits(blocks: Block[], units: Unit[], translations: string[
 
 /** Sanity check used before saving: same links, same number of paragraphs/cells, nothing left untranslated by mistake */
 export function linksOf(markup: string): string[] {
-  return [...markup.matchAll(/\]\(([^)\s]+)\)/g)].map((m) => m[1])
+  return [...markup.matchAll(/\]\(((?:[^()\s]|\([^()\s]*\))+)\)/g)].map((m) => m[1])
 }
 
 /** Bold/italic/links/footnote marks of an inline list in a comparable form (adjacent pieces with the same marks are merged; colours and underline are ignored) */
