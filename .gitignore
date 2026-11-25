@@ -44,3 +44,9 @@ next-env.d.ts
 
 # Git worktrees
 .worktrees/
+
+# Claude Code local working files (large, may hold content backups; repo is public)
+.claude/worktrees/
+.claude/tmp/
+.claude/backups/
+.claude/settings.local.json

@@ -2,7 +2,8 @@
  * Saves hand-written translations (en / pt / fr) of one article, made without DeepL.
  *
  * Input: a folder with es.units.json (the Spanish text units the translations were written from, made by
- * scripts/lib/translate-blocks.ts → collectUnits) and out-<locale>.json ({ title, excerpt, units[] }) for each language.
+ * scripts/lib/translate-blocks.ts → collectUnits) and out-<locale>.json ({ title, excerpt, featured_summary?, units[] }) for each language.
+ * featured_summary (the card summary) is saved too: give it when the Spanish has one, so no DeepL summary is left behind.
  * Safe by design: it stops if the Spanish text changed since it was translated, never overwrites a translation that somebody
  * wrote by hand, checks that links, note markers and bold / italic survive, and saves with is_auto_translated = false so the
  * automatic translator never overwrites it. Rows that do not exist yet are created.
@@ -44,7 +45,7 @@ async function main() {
   for (const locale of LOCALES) {
     const file = `${dir}/out-${locale}.json`
     if (!existsSync(file)) continue
-    const t = JSON.parse(readFileSync(file, 'utf8')) as { title: string; excerpt: string | null; units: string[] }
+    const t = JSON.parse(readFileSync(file, 'utf8')) as { title: string; excerpt: string | null; featured_summary?: string | null; units: string[] }
     const body = applyUnits(es.body as any[], units, t.units)
     // every translated unit keeps the links of the Spanish one and shows no raw mark-up
     units.forEach((u, i) => {
@@ -56,7 +57,7 @@ async function main() {
     })
     const { data: row } = await sb.from('content_translations').select('id, body, is_auto_translated').eq('content_id', contentId).eq('locale', locale).maybeSingle()
     if (row?.body && !row.is_auto_translated && !replaceHand) throw new Error(`${locale}: has a text written by hand: not overwriting (use --replace-hand to replace it)`)
-    jobs.push({ locale, id: row?.id ?? null, data: { title: t.title, excerpt: t.excerpt ?? null, body, is_auto_translated: false, needs_review: false } })
+    jobs.push({ locale, id: row?.id ?? null, data: { title: t.title, excerpt: t.excerpt ?? null, featured_summary: t.featured_summary ?? null, body, is_auto_translated: false, needs_review: false } })
     console.log(`${locale}: “${t.title}” — ${collectUnits(body).length} text units, ${(body as any[]).length} blocks — ${row ? (row.body ? 'replaces the existing text' : 'fills the empty row') : 'new row'}`)
   }
   if (dry) return console.log('(dry run: nothing saved)')
