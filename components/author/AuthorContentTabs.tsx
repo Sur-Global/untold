@@ -311,8 +311,10 @@ function PodcastCard({ item, authorName, authorSlug, authorAvatarUrl, t }: {
       style={{ border: '1px solid rgba(0,0,0,0.08)', boxShadow: '0 2px 8px rgba(0,0,0,0.06)', maxWidth: 604 }}
     >
       <div className="flex gap-4 p-5">
-        <div
-          className="rounded-[10px] overflow-hidden shrink-0 size-28"
+        <Link
+          href={`/podcasts/${item.slug}`}
+          aria-label={item.title}
+          className="rounded-[10px] overflow-hidden shrink-0 size-28 block"
           style={{ border: '1px solid rgba(0,0,0,0.1)', boxShadow: '0 2px 8px rgba(0,0,0,0.06)' }}
         >
           {image ? (
@@ -325,12 +327,16 @@ function PodcastCard({ item, authorName, authorSlug, authorAvatarUrl, t }: {
               </svg>
             </div>
           )}
-        </div>
+        </Link>
         <div className="flex flex-col gap-2 flex-1 min-w-0">
           {item.episodeNumber && (
             <p className="text-[12px] font-medium text-foreground/50">{t('episode', { number: item.episodeNumber })}</p>
           )}
-          <h4 className="text-[16px] leading-[1.4] text-foreground">{item.title}</h4>
+          <h4 className="text-[16px] leading-[1.4] text-foreground">
+            <Link href={`/podcasts/${item.slug}`} className="hover:text-primary transition-colors">
+              {item.title}
+            </Link>
+          </h4>
           {(item.excerpt ?? item.description) && (
             <p className="text-[14px] text-foreground/60 leading-[1.43] line-clamp-2">{item.excerpt ?? item.description}</p>
           )}
@@ -372,13 +378,13 @@ function PillCard({ item, authorName, authorSlug, authorAvatarUrl, isLoggedIn, t
       className="rounded-[16px] overflow-hidden bg-white flex flex-col"
       style={{ border: `1px solid ${accent}35`, boxShadow: '0 2px 8px rgba(0,0,0,0.06)' }}
     >
-      <div className="relative h-48 overflow-hidden">
+      <Link href={`/pills/${item.slug}`} aria-label={item.title} className="relative block h-48 overflow-hidden">
         {image ? (
           <img src={image} alt={item.title} className="w-full h-full object-cover" />
         ) : (
           <div className="w-full h-full" style={{ background: `${accent}12` }} />
         )}
-      </div>
+      </Link>
       <div className="p-6 flex flex-col gap-3 flex-1">
         <div className="flex items-center justify-between">
           <span
@@ -392,7 +398,11 @@ function PillCard({ item, authorName, authorSlug, authorAvatarUrl, isLoggedIn, t
             <LikeButton contentId={item.id} initialIsLiked={false} initialCount={item.likesCount} isLoggedIn={isLoggedIn} />
           </div>
         </div>
-        <h4 className="text-[16px] leading-[1.4] text-foreground">{item.title}</h4>
+        <h4 className="text-[16px] leading-[1.4] text-foreground">
+          <Link href={`/pills/${item.slug}`} className="hover:text-primary transition-colors">
+            {item.title}
+          </Link>
+        </h4>
         {(item.excerpt ?? item.description) && (
           <p className="text-[14px] text-foreground/60 leading-[1.43] line-clamp-3">{item.excerpt ?? item.description}</p>
         )}
