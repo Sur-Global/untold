@@ -31,7 +31,37 @@ function mergeRuns(items: Inline[]): Inline[] {
   return out
 }
 
+/**
+ * Inline content → mark-up. Normally **bold** / *italic*; when that cannot be read back exactly (bold inside an italic
+ * sentence gives "****", a literal asterisk in the text pairs up with a real one…), the whole unit is written with tags
+ * instead — <b>bold</b>, <i>italic</i> — and in that form an asterisk is just an asterisk.
+ */
 export function inlineToMarkup(items: Inline[]): string {
+  const stars = starMarkup(items)
+  if (JSON.stringify(inlineShape(markupToInline(stars))) === JSON.stringify(inlineShape(items))) return stars
+  return tagMarkup(items)
+}
+
+/** Tag form: every styled run wrapped on its own (<b> outside <i>), links and note markers as usual. */
+function tagMarkup(items: Inline[]): string {
+  let out = ''
+  for (const i of mergeRuns(items)) {
+    if (i.type === 'text') {
+      const st = i.styles ?? {}
+      let t = i.text as string
+      if (st.italic) t = `<i>${t}</i>`
+      if (st.bold) t = `<b>${t}</b>`
+      out += t
+    } else if (i.type === 'link') out += `[${tagMarkup(i.content)}](${i.href})`
+    else if (i.type === 'footnoteRef') out += `{{fn:${i.props?.id}}}`
+    else throw new Error(`unsupported inline item ${i.type}`)
+  }
+  return out
+}
+
+const TAG = /<\/?[bi]>/
+
+function starMarkup(items: Inline[]): string {
   let out = ''
   // consecutive bold runs share one pair of ** (italic words inside them nest), so "**A *b* c**" is read back exactly as it was written
   let bold = ''
@@ -58,7 +88,7 @@ export function inlineToMarkup(items: Inline[]): string {
       }
     } else if (i.type === 'link') {
       flush()
-      out += `[${inlineToMarkup(i.content)}](${i.href})`
+      out += `[${starMarkup(i.content)}](${i.href})`
     } else if (i.type === 'footnoteRef') {
       flush()
       out += `{{fn:${i.props?.id}}}`
@@ -68,8 +98,9 @@ export function inlineToMarkup(items: Inline[]): string {
   return out
 }
 
-/** Mark-up → inline content. Bold and italic can nest; a link's label can carry styles. */
+/** Mark-up → inline content. Bold and italic can nest; a link's label can carry styles. A unit with <b>/<i> tags is read in tag form. */
 export function markupToInline(src: string, styles: Record<string, boolean> = {}): Inline[] {
+  if (TAG.test(src)) return tagToInline(src, styles)
   const out: Inline[] = []
   // bold / italic may span several lines; a link's label may hold one level of brackets, e.g. a note marker [[2]](#fn2)
   const token = /\*\*([\s\S]+?)\*\*(?!\*)|\*([\s\S]+?)\*|\[((?:[^\[\]]|\[[^\]]*\])+)\]\(((?:[^()\s]|\([^()\s]*\))+)\)|\{\{fn:([A-Za-z0-9-]+)\}\}/g
@@ -86,6 +117,28 @@ export function markupToInline(src: string, styles: Record<string, boolean> = {}
     else out.push({ type: 'footnoteRef', props: { id: m[5] } })
   }
   text(src.slice(last))
+  return out
+}
+
+/** Tag form: <b>, <i> (may nest), links and note markers; asterisks are plain text. */
+function tagToInline(src: string, base: Record<string, boolean> = {}): Inline[] {
+  const out: Inline[] = []
+  const token = /<(\/?)([bi])>|\[((?:[^\[\]]|\[[^\]]*\])+)\]\(((?:[^()\s]|\([^()\s]*\))+)\)|\{\{fn:([A-Za-z0-9-]+)\}\}/g
+  const depth = { b: 0, i: 0 }
+  const cur = () => ({ ...base, ...(depth.b ? { bold: true } : {}), ...(depth.i ? { italic: true } : {}) })
+  let last = 0
+  const text = (t: string) => {
+    if (t) out.push({ type: 'text', text: t, styles: cur() })
+  }
+  for (const m of src.matchAll(token)) {
+    text(src.slice(last, m.index))
+    last = m.index! + m[0].length
+    if (m[2]) depth[m[2] as 'b' | 'i'] += m[1] ? -1 : 1
+    else if (m[3] !== undefined) out.push({ type: 'link', href: m[4], content: tagToInline(m[3], cur()) })
+    else out.push({ type: 'footnoteRef', props: { id: m[5] } })
+  }
+  text(src.slice(last))
+  if (depth.b || depth.i) throw new Error(`unclosed <b>/<i> in: ${src.slice(0, 80)}`)
   return out
 }
 
